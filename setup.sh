@@ -9,6 +9,8 @@ export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> ~/.bashrc
 echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+echo 'alias pm="python manage.py"' >> ~/.bashrc
+echo 'alias activate_env="source venv/bin/activate"' >> ~/.bashrc
 pyenv install $PYTHON_VERSION
 pyenv global $PYTHON_VERSION
 pip install --upgrade pip
