@@ -20,3 +20,4 @@ sudo yum -y install postgresql-server postgresql-contrib postgresql-devel curl
 sudo postgresql-setup initdb
 sudo systemctl start postgresql
 sudo systemctl enable postgresql
+sudo su postgres -c 'psql -c "CREATE USER vagrant WITH PASSWORD '"'"'vagrant'"'"' SUPERUSER;"'
