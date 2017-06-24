@@ -1,4 +1,5 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "centos/7"
-  config.vm.provision "shell", privileged: false, path: "./postgres.sh"
+  config.vm.synced_folder "./", "/home/vagrant/im"
+  config.vm.provision "shell", privileged: false, path: "./setup.sh"
 end
