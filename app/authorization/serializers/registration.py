@@ -1,4 +1,5 @@
 from . import serializers, User
+from django.db import transaction
 
 class RegistrationSerializer(serializers.ModelSerializer):
 
@@ -7,7 +8,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
             email=data['email']
         )
         user.set_password(data['password'])
-        user.save()
+        with transaction.atomic():
+            user.save()
 
         return user
 
