@@ -1,5 +1,6 @@
 from . import serializers, User
 from django.db import transaction
+from django_pglocks import advisory_lock
 
 class RegistrationSerializer(serializers.ModelSerializer):
 
@@ -8,10 +9,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
             email=data['email']
         )
         user.set_password(data['password'])
-        with transaction.atomic():
-            user.save()
 
-        return user
+        with transaction.atomic():
+            with advisory_lock('User'):
+                user.save()
+                return user
 
     class Meta:
         model = User
