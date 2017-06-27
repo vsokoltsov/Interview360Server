@@ -11,4 +11,4 @@ database:
 
 test:
   override:
-    - python ./interview_manager/app/manage.py test
+    - python ./app/manage.py test
