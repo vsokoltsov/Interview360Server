@@ -1,5 +1,4 @@
 from . import forms, transaction, advisory_lock, User, Token
-import ipdb
 
 class RegistrationForm(forms.Form):
     email = forms.CharField(max_length=255, strip=True)

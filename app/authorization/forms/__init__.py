@@ -6,3 +6,4 @@ from rest_framework.authtoken.models import Token
 from authorization.models import User
 
 from .registration import RegistrationForm
+from .authorization import AuthorizationForm
