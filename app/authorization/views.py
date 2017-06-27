@@ -3,7 +3,6 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import viewsets, status
 
-from . import serializers
 from .forms import RegistrationForm
 from . import models
 
@@ -13,9 +12,6 @@ class RegistrationViewSet(viewsets.ViewSet):
         form = RegistrationForm(request.data)
         if form.is_valid():
             token = form.submit()
-            return Response({'token': token.key})
+            return Response({'token': token.key}, status=status.HTTP_201_CREATED)
         else:
-            return Response(
-                        form.errors,
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
+            return Response(form.errors, status=status.HTTP_400_BAD_REQUEST )
