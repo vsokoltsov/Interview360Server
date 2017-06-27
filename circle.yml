@@ -11,4 +11,4 @@ database:
 
 test:
   override:
-    - python app/manage.py test
+    - ./app/manage.py test
