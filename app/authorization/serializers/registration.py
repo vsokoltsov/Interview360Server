@@ -1,6 +1,7 @@
 from . import serializers, User
 from django.db import transaction
 from django_pglocks import advisory_lock
+from rest_framework.authtoken.models import Token
 
 class RegistrationSerializer(serializers.ModelSerializer):
 
@@ -13,7 +14,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             with advisory_lock('User'):
                 user.save()
-                return user
+                token = Token.objects.create(user=user)
+                return token
 
     class Meta:
         model = User

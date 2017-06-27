@@ -14,8 +14,8 @@ class RegistrationViewSet(viewsets.ViewSet):
         serializer = serializers.RegistrationSerializer(data=request.data)
 
         if serializer.is_valid():
-            user = serializer.save()
-            return Response({'user': serializer.data})
+            token = serializer.save()
+            return Response({'token': serializer.instance.key})
         else:
             return Response(
                         serializer.errors,

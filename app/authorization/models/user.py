@@ -12,7 +12,6 @@ class User(AbstractBaseUser):
     objects = BaseUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __str__(self):
         """ String representation of user """
