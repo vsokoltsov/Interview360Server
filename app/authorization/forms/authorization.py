@@ -1,4 +1,4 @@
-from . import forms, User
+from . import forms, User, Token
 
 class AuthorizationForm(forms.Form):
     email = forms.CharField(max_length=255, strip=True)
@@ -6,10 +6,12 @@ class AuthorizationForm(forms.Form):
 
     def submit(self):
         try:
-            user = User.objets.get(email=self['email'].value())
-        except DoesNotExist:
+            user = User.objects.get(email=self['email'].value())
+        except User.DoesNotExist:
             user = None
 
         if user and user.check_password(self['password'].value()):
-            token = Token.objects.get_or_create(user=user)
+            token, _ = Token.objects.get_or_create(user=user)
             return token
+        else:
+            raise ValueError('There is no such user')
