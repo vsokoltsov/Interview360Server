@@ -14,4 +14,4 @@ class AuthorizationForm(forms.Form):
             token, _ = Token.objects.get_or_create(user=user)
             return token
         else:
-            raise ValueError('There is no such user')
+            raise ValueError('Invalid credentials')
