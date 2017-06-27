@@ -1,3 +1,5 @@
+general:
+  build_dir: interview_manager
 machine:
   python:
     version: 3.5.2
