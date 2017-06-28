@@ -8,3 +8,7 @@ database:
   override:
     - createdb interview_manager
     - echo "CREATE USER vagrant WITH PASSWORD 'vagrant' SUPERUSER;" | psql -U postgres
+
+test:
+  override:
+    - python ./app/manage.py test
