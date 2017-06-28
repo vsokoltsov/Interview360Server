@@ -9,7 +9,7 @@ class RegistrationForm(forms.Form):
 
     def submit(self):
         if not self.is_valid(): return False
-        
+
         try:
             user = User.objects.create(email=self['email'].value())
             user.set_password(self['password'].value())
@@ -20,4 +20,5 @@ class RegistrationForm(forms.Form):
                     self.token = Token.objects.create(user=user)
                     return True
         except IntegrityError as e:
+            self.add_error('email', 'Already present')
             return False
