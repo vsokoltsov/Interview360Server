@@ -11,4 +11,6 @@ database:
 
 test:
   override:
-    - python ./app/manage.py test
+    - python manage.py test:
+      pwd:
+        app
