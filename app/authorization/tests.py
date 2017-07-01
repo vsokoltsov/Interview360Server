@@ -69,3 +69,25 @@ class AuthorizationFormTests(TestCase):
 
         form = AuthorizationForm({})
         self.assertEqual(form.is_valid(), False)
+
+    def test_success_authorization(self):
+        """ Test form object success submit() call """
+
+        user = User.objects.create(email="example@mail.com")
+        user.set_password('12345678')
+        user.save()
+
+        form_data = { 'email': 'example@mail.com', 'password': '12345678' }
+        form = AuthorizationForm(form_data)
+        self.assertEqual(form.submit(), True)
+
+    def test_failed_authorization(self):
+        """ Test form object failed submit() call """
+
+        user = User.objects.create(email="example@mail.com")
+        user.set_password('12345678')
+        user.save()
+
+        form_data = { 'email': 'example@mail.com', 'password': '' }
+        form = AuthorizationForm(form_data)
+        self.assertEqual(form.submit(), False)
