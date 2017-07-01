@@ -1,6 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APITestCase
 from .models import User
+from .forms import AuthorizationForm
 # Create your tests here.
 
 class RegistrationViewTests(APITestCase):
@@ -51,3 +52,20 @@ class AuthorizationViewSetTests(APITestCase):
                 'password': ''
         })
         self.assertEqual('errors' in response.data, True)
+
+
+class AuthorizationFormTests(TestCase):
+    """ Tests for AuthorizationForm class """
+
+    def test_success_form_validation(self):
+        """ Test form validation if all necessary parameters are passed. """
+
+        form_data = { 'email': 'example@mail.com', 'password': '12345678' }
+        form = AuthorizationForm(form_data)
+        self.assertEqual(form.is_valid(), True)
+
+    def test_failed_form_validation(self):
+        """ Test form validation if parameters are missing. """
+
+        form = AuthorizationForm({})
+        self.assertEqual(form.is_valid(), False)
