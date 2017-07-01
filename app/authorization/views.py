@@ -21,9 +21,8 @@ class AuthorizationViewSet(viewsets.ViewSet):
 
     def create(self, request):
         form = AuthorizationForm(request.data)
-        if form.is_valid():
-            token = form.submit()
-            return Response({'token': token.key},
+        if form.submit():
+            return Response({'token': form.token.key},
                             status=status.HTTP_202_ACCEPTED)
         else:
             return Response({'errors': form.errors},

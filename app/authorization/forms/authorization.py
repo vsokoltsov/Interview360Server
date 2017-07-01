@@ -7,13 +7,16 @@ class AuthorizationForm(forms.Form):
     password = forms.CharField(max_length=255)
 
     def submit(self):
+        if not self.is_valid(): return False
+
         try:
             user = User.objects.get(email=self['email'].value())
         except User.DoesNotExist:
             user = None
 
         if user and user.check_password(self['password'].value()):
-            token, _ = Token.objects.get_or_create(user=user)
-            return token
+            self.token, _ = Token.objects.get_or_create(user=user)
+            return True
         else:
-            raise ValueError('Invalid credentials')
+            self.add_error('email', 'Invalid credentials')
+            return False
