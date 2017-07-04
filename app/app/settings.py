@@ -28,10 +28,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-with open('app/secrets.yaml') as stream:
-    f = yaml.load(stream)
-    for k, v in f.items():
-        os.environ[k] = v
+if os.path.isfile('app/secrets.yaml'):
+    with open('app/secrets.yaml') as stream:
+        f = yaml.load(stream)
+        for k, v in f.items():
+            os.environ[k] = v
 
 
 # Application definition
