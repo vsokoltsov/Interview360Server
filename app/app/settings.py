@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import yaml
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,6 +27,11 @@ SECRET_KEY = 'nje62b1kyvvc1!g_d@5a5qq!2bs6jl)isr^91cm=gv1&_h6m^5'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+with open('app/secrets.yaml') as stream:
+    f = yaml.load(stream)
+    for k, v in f.items():
+        os.environ[k] = v
 
 
 # Application definition
