@@ -16,6 +16,9 @@ pyenv global $PYTHON_VERSION
 pip install --upgrade pip
 pip install virtualenvwrapper
 
+cd ~
+git clone https://github.com/yyuu/pyenv-virtualenvwrapper.git ~/.pyenv/plugins/pyenv-virtualenvwrapper
+
 sudo yum -y install postgresql-server postgresql-contrib postgresql-devel curl
 sudo postgresql-setup initdb
 sudo systemctl start postgresql
