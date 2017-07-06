@@ -115,7 +115,7 @@ ANYMAIL = {
     "MAILGUN_API_KEY": os.environ.get('MAILGUN_API_KEY'),
     "MAILGUN_SENDER_DOMAIN": os.environ.get('MAILGUN_SERVER_NAME')
 }
-EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"  # or sendgrid.EmailBackend, or...
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')  # or sendgrid.EmailBackend, or...
 DEFAULT_FROM_EMAIL = "you@example.com"  # if you don't already have this in settings
 
 # Internationalization
