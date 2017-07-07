@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from .forms import RegistrationForm, AuthorizationForm
+from .forms import RegistrationForm, AuthorizationForm, RestorePasswordForm
 from . import models
 from .serializers import CurrentUserSerializer
 # from serializers import CurrentUserSerializer
@@ -45,3 +45,15 @@ class CurrentUserView(APIView):
         return Response({
             'current_user': CurrentUserSerializer(request.user).data
         })
+
+class RestorePasswordViewSet(viewsets.ViewSet):
+
+    def create(self, request):
+        form = RestorePasswordForm(request.data)
+
+        if form.submit():
+            return Response({'message': 'Mail was succesfully sended'},
+                            status=status.HTTP_200_OK)
+        else:
+            return Response({'errors': form.errors},
+                            status=status.HTTP_400_BAD_REQUEST )
