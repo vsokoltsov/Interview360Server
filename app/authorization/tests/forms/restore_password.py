@@ -1,5 +1,10 @@
 from . import User, TestCase, RestorePasswordForm
 
+from django.test import override_settings
+import mock
+import ipdb
+import django.core.mail as mail
+
 class RestorePasswordFormTests(TestCase):
     """ Test RestorePasswordForm class """
 
@@ -31,7 +36,21 @@ class RestorePasswordFormTests(TestCase):
 
     def test_failed_submit(self):
         """ Test failed call of submit """
-
-        form_data = { }
+        
+        form_data = {}
         form = RestorePasswordForm(form_data)
         self.assertEqual(form.submit(), False)
+
+    @override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
+    def test_mail_was_sended(self):
+        form_data = { 'email': 'example@mail.com'}
+        form = RestorePasswordForm(form_data)
+        form.submit()
+        self.assertEqual(len(mail.outbox), 1)
+
+    @override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
+    def test_mail_was_not_sended(self):
+        form_data = {}
+        form = RestorePasswordForm(form_data)
+        form.submit()
+        self.assertEqual(len(mail.outbox), 0)
