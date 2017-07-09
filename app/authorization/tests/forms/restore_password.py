@@ -1,6 +1,7 @@
 from . import User, TestCase, RestorePasswordForm
 
 from django.test import override_settings
+from rest_framework.authtoken.models import Token
 import mock
 import ipdb
 import django.core.mail as mail
@@ -43,6 +44,8 @@ class RestorePasswordFormTests(TestCase):
 
     @override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
     def test_mail_was_sended(self):
+        """ Test success mail sending after password restore """
+
         form_data = { 'email': 'example@mail.com'}
         form = RestorePasswordForm(form_data)
         form.submit()
@@ -50,7 +53,29 @@ class RestorePasswordFormTests(TestCase):
 
     @override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
     def test_mail_was_not_sended(self):
+        """ Test mail sending after failed password restore """
+
         form_data = {}
         form = RestorePasswordForm(form_data)
         form.submit()
         self.assertEqual(len(mail.outbox), 0)
+
+    def test_token_success_creation(self):
+        """ Test token creation after success restore password """
+
+        Token.objects.get_or_create = mock.MagicMock(user=self.user, return_value=("12345", 12))
+        form_data = { 'email': 'example@mail.com'}
+        form = RestorePasswordForm(form_data)
+        form.submit()
+
+        Token.objects.get_or_create.assert_called_once()
+
+    def test_token_failed_creation(self):
+        """ Test token creation after failed restore password """
+
+        Token.objects.get_or_create = mock.MagicMock(user=self.user, return_value=("12345", 12))
+        form_data = { }
+        form = RestorePasswordForm(form_data)
+        form.submit()
+
+        self.assertFalse(Token.objects.get_or_create.called)
