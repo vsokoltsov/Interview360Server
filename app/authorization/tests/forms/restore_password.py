@@ -37,7 +37,7 @@ class RestorePasswordFormTests(TestCase):
 
     def test_failed_submit(self):
         """ Test failed call of submit """
-        
+
         form_data = {}
         form = RestorePasswordForm(form_data)
         self.assertEqual(form.submit(), False)
