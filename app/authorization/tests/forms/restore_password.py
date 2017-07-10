@@ -1,9 +1,5 @@
-from . import User, TestCase, RestorePasswordForm
-
-from django.test import override_settings
-from rest_framework.authtoken.models import Token
-import mock
-import ipdb
+from . import (User, TestCase, RestorePasswordForm,
+               override_settings, Token, mock)
 import django.core.mail as mail
 
 class RestorePasswordFormTests(TestCase):
