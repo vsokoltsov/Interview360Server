@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 from authorization.forms import (AuthorizationForm, RestorePasswordForm,
                                  RegistrationForm)
 from authorization.models import User
@@ -8,3 +8,4 @@ import mock
 
 from .authorization import AuthorizationFormTests
 from .restore_password import RestorePasswordFormTests
+from .registration import RegistrationFormTests
