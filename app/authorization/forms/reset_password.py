@@ -5,8 +5,8 @@ import ipdb
 
 class ResetPasswordForm(forms.Form):
     token = forms.CharField(required=True)
-    password = forms.CharField(max_length=255)
-    password_confirmation = forms.CharField(max_length=255)
+    password = forms.CharField(max_length=255, min_length=6)
+    password_confirmation = forms.CharField(max_length=255, min_length=6)
 
     def clean(self):
         """ Clean data and add custom validation """
@@ -25,10 +25,10 @@ class ResetPasswordForm(forms.Form):
         """ Find user by token and change his password """
 
         try:
-            user = User.objects.get(token=self['token'].value())
-            user.set_password(password)
+            user = User.objects.get(auth_token=self['token'].value())
+            user.set_password(self['password'].value())
             user.save()
             return True
         except ObjectDoesNotExist:
-            self.add_error('email', 'There is no such user')
+            self.add_error('password', 'There is no such user')
             return False

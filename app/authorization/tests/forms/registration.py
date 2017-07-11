@@ -8,6 +8,9 @@ import ipdb
 class RegistrationFormTests(TransactionTestCase):
     """ Tests for RegistrationForm object """
 
+    def setUp(self):
+        self.test_user =  User(id=1)
+
     def test_success_form_validation(self):
         """ Test form validation if all necessary parameters are passed. """
 
@@ -37,56 +40,59 @@ class RegistrationFormTests(TransactionTestCase):
 
     @mock.patch.object(User, 'save')
     @mock.patch('django.contrib.auth.models.User')
-    def test_success_user_creation(self, user_class_mock, user_save_mock):
+    @mock.patch('rest_framework.authtoken.models.Token.objects.create')
+    def test_success_user_creation(self, user_save_mock,
+                                   user_class_mock, token_mock):
         """ Test success case of user creation """
-        test_user =  User(id=1)
 
         form_data = { 'email': 'example@mail.com', 'password': '12345678'}
         user_class_mock.objects = mock.MagicMock()
         user_class_mock.objects.create = mock.MagicMock()
-        user_class_mock.objects.create.return_value = test_user
-        Token.objects.create = mock.MagicMock(user=test_user,
-                                                     return_value="12345")
-
+        user_class_mock.objects.create.return_value = self.test_user
+        token_mock.user = self.test_user
+        token_mock.return_value = "12345"
         form = RegistrationForm(form_data)
         form.submit()
         self.assertTrue(user_save_mock.called)
 
     @mock.patch.object(User, 'save')
     @mock.patch('django.contrib.auth.models.User')
-    def test_failed_user_creation(self, user_class_mock, user_save_mock):
+    @mock.patch('rest_framework.authtoken.models.Token.objects.create')
+    def test_failed_user_creation(self, user_save_mock,
+                                   user_class_mock, token_mock):
         """ Test failed case of user creation """
-        test_user =  User(id=1)
 
         form_data = { }
         user_class_mock.objects = mock.MagicMock()
         user_class_mock.objects.create = mock.MagicMock()
-        user_class_mock.objects.create.return_value = test_user
-        Token.objects.create = mock.MagicMock(user=test_user,
-                                                     return_value="12345")
+        user_class_mock.objects.create.return_value = self.test_user
+        token_mock.user = self.test_user
+        token_mock.return_value = "12345"
 
         form = RegistrationForm(form_data)
         form.submit()
         self.assertFalse(user_save_mock.called)
 
-    def test_token_success_creation(self):
+    @mock.patch('rest_framework.authtoken.models.Token.objects.create')
+    def test_token_success_creation(self, mock):
         """ Test token creation after success restore password """
-        test_user =  User(id=1)
 
-        Token.objects.create = mock.MagicMock(user=test_user, return_value=("12345", 12))
+        mock.user = self.test_user
+        mock.return_value = return_value=("12345", 12)
+
         form_data = { 'email': 'example@mail.com', 'password': '12345678'}
         form = RegistrationForm(form_data)
         form.submit()
 
-        self.assertTrue(Token.objects.create.called)
+        self.assertTrue(mock.called)
 
-    def test_token_failed_creation(self):
+    @mock.patch('rest_framework.authtoken.models.Token.objects.create')
+    def test_token_failed_creation(self, mock):
         """ Test token creation after failed restore password """
-        test_user =  User(id=1)
 
-        Token.objects.create = mock.MagicMock(user=test_user, return_value=("12345", 12))
+        mock.user = self.test_user
+        mock.return_value = ("12345", 12)
         form_data = { }
         form = RegistrationForm(form_data)
         form.submit()
-
-        self.assertFalse(Token.objects.create.called)
+        self.assertFalse(mock.called)
