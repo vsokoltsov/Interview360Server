@@ -17,12 +17,14 @@ class ResetPasswordForm(forms.Form):
 
         if password and password_confirmation:
             if password != password_confirmation:
-                raise forms.ValidationError("Password confirmation \
-                                            does not match the password")
+                self.add_error('password_confirmation', 'Does not match password')
+                raise forms.ValidationError("Does not match password")
         return cleaned_data
 
     def submit(self):
         """ Find user by token and change his password """
+
+        if not self.is_valid(): return False
 
         try:
             user = User.objects.get(auth_token=self['token'].value())
