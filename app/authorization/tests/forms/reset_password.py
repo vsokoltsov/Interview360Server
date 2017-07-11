@@ -8,15 +8,14 @@ class ResetPasswordFormTest(TransactionTestCase):
     def setUp(self):
         """ Setting up the test data """
         user_params = {'email': 'example@mail.com', 'password': '12345678' }
-        user = User.objects.create(**user_params).save()
-        # ipdb.set_trace()
-        self.token, _ = Token.objects.create(user=user)
+        user = User.objects.create(**user_params)
+        self.token = Token.objects.create(user=user)
 
     def test_success_form_validation(self):
         """ Test form validation if all necessary parameters are passed. """
 
         form_data = {
-                     'token': self.token,
+                     'token': self.token.key,
                      'password': '12345678',
                      'password_confirmation': '12345678'
                      }
@@ -33,9 +32,8 @@ class ResetPasswordFormTest(TransactionTestCase):
     def test_success_submit(self):
         """ Test success form submit """
 
-        ipdb.set_trace()
         form_data = {
-                     'token': self.token,
+                     'token': self.token.key,
                      'password': 'aaaaaa',
                      'password_confirmation': 'aaaaaa'
                      }
