@@ -7,3 +7,5 @@ from authorization.models import User
 
 from .registration import RegistrationForm
 from .authorization import AuthorizationForm
+from .restore_password import RestorePasswordForm
+from .reset_password import ResetPasswordForm

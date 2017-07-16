@@ -1,6 +1,9 @@
 machine:
   python:
     version: 3.5.2
+  environment:
+    DEFAULT_CLIENT_HOST: 'http://localhost:4200'
+    
 dependencies:
   pre:
     - pip install -r requirements.txt
