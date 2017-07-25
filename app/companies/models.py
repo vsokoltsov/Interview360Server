@@ -10,6 +10,8 @@ class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    employees = models.ManyToManyField('authorization.User', through='CompanyMember')
+
 class CompanyMember(models.Model):
     ROLES = [
         'owner',
