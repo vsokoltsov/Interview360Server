@@ -2,6 +2,7 @@ from . import serializers, User, Company, CompanyMember
 from .company_employee_serializer import CompanyEmployeeSerializer
 
 class CompanySerializer(serializers.Serializer):
+    id = serializers.IntegerField()
     name = serializers.CharField(max_length=255, required=True)
     start_date = serializers.DateField(required=True)
     description = serializers.CharField()
