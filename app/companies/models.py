@@ -18,6 +18,7 @@ class CompanyMember(models.Model):
         'hr',
         'emplotee'
     ]
+    
     user = models.ForeignKey(User)
     company = models.ForeignKey(Company)
     role = models.CharField(max_length=255, null=False)
