@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 
@@ -25,3 +26,9 @@ class CompaniesListViewSet(viewsets.ViewSet):
             return Response({'company': serializer.data}, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def retrieve(self, request, pk=None):
+        queryset = request.user.companies.all()
+        company = get_object_or_404(queryset, pk=pk)
+        serializer = CompanySerializer(company)
+        return Response({ 'company': serializer.data })
