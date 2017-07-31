@@ -8,8 +8,6 @@ from rest_framework.authentication import TokenAuthentication
 from .serializers import CompanySerializer
 from .models import Company
 from .permissions import AllowedToUpdateCompany
-import ipdb
-
 
 # Create your views here.
 class CompaniesListViewSet(viewsets.ViewSet):
@@ -32,25 +30,26 @@ class CompaniesListViewSet(viewsets.ViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk=None):
-        queryset = request.user.companies.all()
-        company = get_object_or_404(queryset, pk=pk)
+        company = get_company(request.user, pk)
         serializer = CompanySerializer(company, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({'company': serializer.data},
-                            status=status.HTTP_201_CREATED)
+                        status=status.HTTP_200_OK)
         else:
             return Response({'errors': serializer.errors},
                             status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, pk=None):
-        queryset = request.user.companies.all()
-        company = get_object_or_404(queryset, pk=pk)
+        company = get_company(request.user, pk)
         serializer = CompanySerializer(company)
         return Response({ 'company': serializer.data })
 
     def destroy(self, request, pk=None):
-        queryset = request.user.companies.all()
-        company = get_object_or_404(queryset, pk=pk)
+        company = get_company(request.user, pk)
         company.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def get_company(user, pk):
+        queryset = user.companies.all()
+        company = get_object_or_404(queryset, pk=pk)
