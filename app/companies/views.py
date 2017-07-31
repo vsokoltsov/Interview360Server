@@ -48,3 +48,9 @@ class CompaniesListViewSet(viewsets.ViewSet):
         company = get_object_or_404(queryset, pk=pk)
         serializer = CompanySerializer(company)
         return Response({ 'company': serializer.data })
+
+    def destroy(self, request, pk=None):
+        queryset = request.user.companies.all()
+        company = get_object_or_404(queryset, pk=pk)
+        company.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

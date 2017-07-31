@@ -4,7 +4,7 @@ from .models import CompanyMember
 class AllowedToUpdateCompany(permissions.BasePermission):
 
     def has_object_permission(self, request, view, obj):
-        if request.method is not 'PUT': return False
+        if request.method not in ['PUT', 'DELETE']: return False
 
         try:
             owner_role = CompanyMember.objects.get(user_id=request.user.id,
