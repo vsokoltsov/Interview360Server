@@ -7,12 +7,14 @@ from rest_framework.authentication import TokenAuthentication
 
 from .serializers import CompanySerializer
 from .models import Company
+from .permissions import AllowedToUpdateCompany
+import ipdb
 
 
 # Create your views here.
 class CompaniesListViewSet(viewsets.ViewSet):
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, AllowedToUpdateCompany, )
 
     def list(self, request):
         queryset = Company.objects.all()
@@ -23,9 +25,23 @@ class CompaniesListViewSet(viewsets.ViewSet):
         serializer = CompanySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({'company': serializer.data}, status=status.HTTP_201_CREATED)
+            return Response({'company': serializer.data},
+                            status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk=None):
+        queryset = request.user.companies.all()
+        company = get_object_or_404(queryset, pk=pk)
+        serializer = CompanySerializer(company, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'company': serializer.data},
+                            status=status.HTTP_201_CREATED)
+        else:
+            return Response({'errors': serializer.errors},
+                            status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, pk=None):
         queryset = request.user.companies.all()

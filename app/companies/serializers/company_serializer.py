@@ -41,3 +41,10 @@ class CompanySerializer(serializers.Serializer):
                                                       company_id=company.id,
                                                       role='owner')
         return company
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.start_date = validated_data.get('start_date', instance.start_date)
+        instance.description = validated_data.get('description', instance.description)
+        instance.city = validated_data.get('city', instance.city)
+        return instance
