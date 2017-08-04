@@ -2,6 +2,8 @@ from . import serializers, User, Company, CompanyMember
 from .company_employee_serializer import CompanyEmployeeSerializer
 
 class CompanySerializer(serializers.Serializer):
+    """ Serialization of Company object """
+
     id = serializers.IntegerField()
     name = serializers.CharField(max_length=255, required=True)
     start_date = serializers.DateField(required=True)
@@ -23,11 +25,15 @@ class CompanySerializer(serializers.Serializer):
         ]
 
     def get_employees(self, obj):
+        """ Receives the list of employees """
+
         return CompanyEmployeeSerializer(obj.employees.all(),
                                          many=True, read_only=True,
                                          context={'company_id': obj.id}).data
 
     def validate_owner_id(self, value):
+        """ Custom validation for owner_id field """
+
         try:
             self.owner = User.objects.get(id=value)
             return value
@@ -35,6 +41,7 @@ class CompanySerializer(serializers.Serializer):
             raise serializers.ValidationError("There is no such user")
 
     def create(self, validated_data):
+        """ Create company method """
         owner_id = validated_data.pop('owner_id', None)
         company = Company.objects.create(**validated_data)
         company_member = CompanyMember.objects.create(user_id=owner_id,
@@ -43,6 +50,8 @@ class CompanySerializer(serializers.Serializer):
         return company
 
     def update(self, instance, validated_data):
+        """ Update company method """
+        
         instance.name = validated_data.get('name', instance.name)
         instance.start_date = validated_data.get('start_date', instance.start_date)
         instance.description = validated_data.get('description', instance.description)
