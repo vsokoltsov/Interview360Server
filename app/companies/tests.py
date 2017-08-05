@@ -23,7 +23,27 @@ class CompaniesListViewSetTests(APITestCase):
 
     def test_list_action(self):
         """ Test receiving of companies list """
-        
+
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         response = self.client.get('/api/v1/companies/')
         self.assertEqual(len(response.data['companies']), 1)
+
+    def test_success_create_action(self):
+        """ Test success option of company's creation """
+        pass
+
+    def test_failed_create_action(self):
+        """ Test failed option of company's creation """
+        pass
+
+    def test_success_update_action(self):
+        """ Test success option of company's update """
+        pass
+
+    def test_failed_update_action(self):
+        """ Test failed option of company's update """
+        pass
+
+    def test_success_delete_action(self):
+        """ Test success company deletion """
+        pass
