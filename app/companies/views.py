@@ -10,6 +10,13 @@ from .models import Company
 from .permissions import AllowedToUpdateCompany
 import ipdb
 
+def get_company(user, pk):
+    """ Helper method; Receives particular company from the queryset """
+
+    queryset = user.companies.all()
+    company = get_object_or_404(queryset, pk=pk)
+    return company
+
 # Create your views here.
 class CompaniesListViewSet(viewsets.ViewSet):
     """ Viewset for company actions """
@@ -51,18 +58,13 @@ class CompaniesListViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         """ Return detail information about company """
 
-        company = self.get_company(request.user, pk)
+        company = get_company(request.user, pk)
         serializer = CompanySerializer(company)
         return Response({ 'company': serializer.data })
 
     def destroy(self, request, pk=None):
         """ Deletes selected company """
 
-        company = self.get_company(request.user, pk)
+        company = get_company(request.user, pk)
         company.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-    def get_company(user, pk):
-        """ Helper method; Receives particular company from the queryset """
-        queryset = user.companies.all()
-        company = get_object_or_404(queryset, pk=pk)

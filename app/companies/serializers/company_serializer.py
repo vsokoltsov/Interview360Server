@@ -45,6 +45,7 @@ class CompanySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """ Create company method """
+        
         try:
             with transaction.atomic():
                 with advisory_lock('Company'):
