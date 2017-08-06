@@ -16,11 +16,11 @@ class CompaniesListViewSetTests(APITestCase):
 
         user = User.objects.create(email="example@mail.com", password="12345678")
         self.token = Token.objects.create(user=user)
-        company = Company.objects.create(name="Test",
+        self.company = Company.objects.create(name="Test",
                                          city="Test",
                                          start_date=datetime.datetime.now())
         company_member = CompanyMember.objects.create(user_id=user.id,
-                                                      company_id=company.id,
+                                                      company_id=self.company.id,
                                                       role='owner')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.company_params = {
@@ -44,17 +44,20 @@ class CompaniesListViewSetTests(APITestCase):
 
     def test_failed_create_action(self):
         """ Test failed option of company's creation """
+
         response = self.client.post('/api/v1/companies/', {})
         self.assertTrue('errors' in response.data)
 
     def test_success_update_action(self):
         """ Test success option of company's update """
-        pass
 
-    def test_failed_update_action(self):
-        """ Test failed option of company's update """
-        pass
+        url = '/api/v1/companies/{}/'.format(self.company.id)
+        response = self.client.put(url, self.company_params)
+        self.assertTrue('company' in response.data)
 
     def test_success_delete_action(self):
         """ Test success company deletion """
-        pass
+
+        url = '/api/v1/companies/{}/'.format(self.company.id)
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, 204)

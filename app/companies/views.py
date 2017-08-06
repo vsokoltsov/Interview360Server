@@ -39,7 +39,7 @@ class CompaniesListViewSet(viewsets.ViewSet):
             return Response({'company': serializer.data},
                             status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors,
+            return Response({'errors': serializer.errors},
                             status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk=None):
