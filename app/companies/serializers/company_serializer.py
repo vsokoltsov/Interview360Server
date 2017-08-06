@@ -9,7 +9,7 @@ class CompanySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=255, required=True)
     start_date = serializers.DateField(required=True)
-    description = serializers.CharField()
+    description = serializers.CharField(required=False)
     city = serializers.CharField(required=True, max_length=255)
     owner_id = serializers.IntegerField(required=True, write_only=True)
     employees = serializers.SerializerMethodField()
@@ -45,7 +45,7 @@ class CompanySerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """ Create company method """
-        
+
         try:
             with transaction.atomic():
                 with advisory_lock('Company'):
