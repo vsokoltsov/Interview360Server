@@ -8,6 +8,7 @@ from rest_framework.authentication import TokenAuthentication
 from .serializers import CompanySerializer
 from .models import Company
 from .permissions import AllowedToUpdateCompany
+import ipdb
 
 # Create your views here.
 class CompaniesListViewSet(viewsets.ViewSet):
@@ -27,8 +28,7 @@ class CompaniesListViewSet(viewsets.ViewSet):
         """ Creates a new company """
 
         serializer = CompanySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
+        if serializer.is_valid() and serializer.save():
             return Response({'company': serializer.data},
                             status=status.HTTP_201_CREATED)
         else:
@@ -51,14 +51,14 @@ class CompaniesListViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         """ Return detail information about company """
 
-        company = get_company(request.user, pk)
+        company = self.get_company(request.user, pk)
         serializer = CompanySerializer(company)
         return Response({ 'company': serializer.data })
 
     def destroy(self, request, pk=None):
         """ Deletes selected company """
 
-        company = get_company(request.user, pk)
+        company = self.get_company(request.user, pk)
         company.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

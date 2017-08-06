@@ -1,10 +1,12 @@
 from . import serializers, User, Company, CompanyMember
 from .company_employee_serializer import CompanyEmployeeSerializer
+from django.db import transaction
+from django_pglocks import advisory_lock
 
-class CompanySerializer(serializers.Serializer):
+class CompanySerializer(serializers.ModelSerializer):
     """ Serialization of Company object """
 
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(max_length=255, required=True)
     start_date = serializers.DateField(required=True)
     description = serializers.CharField()
@@ -21,7 +23,8 @@ class CompanySerializer(serializers.Serializer):
             'description',
             'start_date',
             'created_at',
-            'employees'
+            'employees',
+            'owner_id'
         ]
 
     def get_employees(self, obj):
@@ -42,16 +45,21 @@ class CompanySerializer(serializers.Serializer):
 
     def create(self, validated_data):
         """ Create company method """
-        owner_id = validated_data.pop('owner_id', None)
-        company = Company.objects.create(**validated_data)
-        company_member = CompanyMember.objects.create(user_id=owner_id,
-                                                      company_id=company.id,
-                                                      role='owner')
-        return company
+        try:
+            with transaction.atomic():
+                with advisory_lock('Company'):
+                    owner_id = validated_data.pop('owner_id', None)
+                    company = Company.objects.create(**validated_data)
+                    company_member = CompanyMember.objects.create(user_id=owner_id,
+                                                                  company_id=company.id,
+                                                                  role='owner')
+                    return company
+        except:
+            return False
 
     def update(self, instance, validated_data):
         """ Update company method """
-        
+
         instance.name = validated_data.get('name', instance.name)
         instance.start_date = validated_data.get('start_date', instance.start_date)
         instance.description = validated_data.get('description', instance.description)
