@@ -48,13 +48,12 @@ class CompanySerializer(serializers.ModelSerializer):
 
         try:
             with transaction.atomic():
-                with advisory_lock('Company'):
-                    owner_id = validated_data.pop('owner_id', None)
-                    company = Company.objects.create(**validated_data)
-                    company_member = CompanyMember.objects.create(user_id=owner_id,
-                                                                  company_id=company.id,
-                                                                  role='owner')
-                    return company
+                owner_id = validated_data.pop('owner_id', None)
+                company = Company.objects.create(**validated_data)
+                company_member = CompanyMember.objects.create(user_id=owner_id,
+                                                              company_id=company.id,
+                                                              role='owner')
+                return company
         except:
             return False
 

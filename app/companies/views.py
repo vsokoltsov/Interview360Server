@@ -17,7 +17,6 @@ def get_company(user, pk):
     company = get_object_or_404(queryset, pk=pk)
     return company
 
-# Create your views here.
 class CompaniesListViewSet(viewsets.ViewSet):
     """ Viewset for company actions """
 
