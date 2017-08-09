@@ -4,7 +4,7 @@ from .company_member_serializer import CompanyMemberSerializer
 class CompanyEmployeeSerializer(serializers.ModelSerializer):
     """ Company employee serializer class """
 
-    companymember_set = serializers.SerializerMethodField()
+    company_members = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -13,10 +13,10 @@ class CompanyEmployeeSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'email',
-            'companymember_set'
+            'company_members'
         ]
 
-    def get_companymember_set(self, obj):
+    def get_company_members(self, obj):
         """ Receiving list of CompanyMember objects """
 
         company_id = self.context.get('company_id')
