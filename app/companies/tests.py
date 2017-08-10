@@ -1,4 +1,5 @@
 from django.test import TestCase, TransactionTestCase
+import mock
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from companies.models import Company, CompanyMember
@@ -94,3 +95,44 @@ class CompanySerializerTests(TransactionTestCase):
         self.assertEqual(set(data.keys()), set(['id', 'name', 'city',
                                                 'description', 'start_date',
                                                 'created_at', 'employees']))
+
+    def test_success_validation_of_new_company(self):
+        """ Test success case of creation of the new company """
+
+        serializer = CompanySerializer(data=self.company_params)
+        self.assertTrue(serializer.is_valid())
+
+    def test_failed_validation_of_new_company(self):
+        """ Test failed case of creation of the new company """
+
+        serializer = CompanySerializer(data={})
+        self.assertFalse(serializer.is_valid())
+
+    @mock.patch('companies.models.Company.objects.create')
+    def test_success_company_creation(self, company_class_mock):
+        """ Test success case of saving new Company """
+
+        test_company = Company(id=1)
+        company_class_mock.objects = mock.MagicMock()
+        company_class_mock.objects.create = mock.MagicMock()
+        company_class_mock.objects.create.return_value = test_company
+
+        serializer = CompanySerializer(data=self.company_params)
+        serializer.is_valid()
+        serializer.save()
+        self.assertTrue(company_class_mock.called)
+
+    @mock.patch('companies.models.CompanyMember.objects.create')
+    def test_success_company_member_creation(self, company_member_mock):
+        """ Test that CompanyMember objects was created just after the Company """
+        
+        test_company_member = CompanyMember(1)
+
+        company_member_mock.objects = mock.MagicMock()
+        company_member_mock.objects.create = mock.MagicMock()
+        company_member_mock.objects.create.return_value = test_company_member
+
+        serializer = CompanySerializer(data=self.company_params)
+        serializer.is_valid()
+        serializer.save()
+        self.assertTrue(company_member_mock.called)

@@ -2,6 +2,7 @@ from . import serializers, User, Company, CompanyMember
 from .company_employee_serializer import CompanyEmployeeSerializer
 from django.db import transaction
 from django_pglocks import advisory_lock
+import ipdb
 
 class CompanySerializer(serializers.ModelSerializer):
     """ Serialization of Company object """
