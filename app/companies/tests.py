@@ -1,8 +1,9 @@
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from companies.models import Company, CompanyMember
 from authorization.models import User
+from companies.serializers import CompanySerializer
 import datetime
 import ipdb
 
@@ -61,3 +62,35 @@ class CompaniesListViewSetTests(APITestCase):
         url = '/api/v1/companies/{}/'.format(self.company.id)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
+
+
+class CompanySerializerTests(TransactionTestCase):
+    """ Tests for CompanySerializer class """
+
+    def setUp(self):
+        """ Setting up necessary dependencies """
+
+        user = User.objects.create(email="example@mail.com", password="12345678")
+        self.token = Token.objects.create(user=user)
+        self.company = Company.objects.create(name="Test",
+                                         city="Test",
+                                         start_date=datetime.date.today())
+        company_member = CompanyMember.objects.create(user_id=user.id,
+                                                      company_id=self.company.id,
+                                                      role='owner')
+        self.company_params = {
+            'name': 'NAME',
+            'city': 'City',
+            'start_date': datetime.date.today(),
+            'owner_id': user.id
+        }
+
+        self.serializer = CompanySerializer(instance=self.company)
+
+    def test_contains_expected_field(self):
+        """ Test presence of serializer expected field """
+
+        data = self.serializer.data
+        self.assertEqual(set(data.keys()), set(['id', 'name', 'city',
+                                                'description', 'start_date',
+                                                'created_at', 'employees']))
