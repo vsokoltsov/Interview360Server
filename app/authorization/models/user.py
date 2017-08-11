@@ -9,6 +9,8 @@ class User(AbstractBaseUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    companies = models.ManyToManyField('companies.Company', through='companies.CompanyMember')
+
     objects = BaseUserManager()
 
     USERNAME_FIELD = 'email'
