@@ -1,5 +1,6 @@
 from django.test import TestCase, TransactionTestCase
 import mock
+from rest_framework import serializers
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 from companies.models import Company, CompanyMember
@@ -10,8 +11,6 @@ import ipdb
 
 class CompaniesListViewSetTests(APITestCase):
     """ API View tests for CompaniesListViewSet """
-
-
 
     def setUp(self):
         """ Set up test dependencies """
@@ -125,7 +124,7 @@ class CompanySerializerTests(TransactionTestCase):
     @mock.patch('companies.models.CompanyMember.objects.create')
     def test_success_company_member_creation(self, company_member_mock):
         """ Test that CompanyMember objects was created just after the Company """
-        
+
         test_company_member = CompanyMember(1)
 
         company_member_mock.objects = mock.MagicMock()
@@ -136,3 +135,26 @@ class CompanySerializerTests(TransactionTestCase):
         serializer.is_valid()
         serializer.save()
         self.assertTrue(company_member_mock.called)
+
+    def test_success_company_update(self):
+        """ Test success company updated operation """
+
+        serializer = CompanySerializer(self.company, data=self.company_params)
+
+        self.assertTrue(serializer.is_valid())
+        serializer.save()
+        self.assertEqual(self.company.name, self.company_params['name'])
+
+    def test_validation_user_existance(self):
+        """ Test raising error if user is abscent """
+
+        params = {
+            'name': 'NAME',
+            'city': 'City',
+            'start_date': datetime.date.today(),
+            'owner_id': 15
+        }
+
+        serializer = CompanySerializer(data=params)
+        self.assertFalse(serializer.is_valid())
+        self.assertTrue('owner_id' in serializer.errors)
