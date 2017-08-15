@@ -5,3 +5,4 @@ from authorization.models import User
 import datetime
 
 from .company import CompaniesViewSetTests
+from .employee import EmployeesViewSetTests
