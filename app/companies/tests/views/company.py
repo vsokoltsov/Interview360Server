@@ -2,8 +2,8 @@ from . import (
     APITestCase, Company, CompanyMember, User, Token, datetime
 )
 
-class CompaniesListViewSetTests(APITestCase):
-    """ API View tests for CompaniesListViewSet """
+class CompaniesViewSetTests(APITestCase):
+    """ API View tests for CompaniesViewSet """
 
     def setUp(self):
         """ Set up test dependencies """
