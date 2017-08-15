@@ -67,3 +67,11 @@ class CompaniesListViewSet(viewsets.ViewSet):
         company = get_company(request.user, pk)
         company.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class EmployeesViewSet(viewsets.ViewSet):
+    """ View class for employee's actions """
+
+    def list(self, request, company_pk=None):
+        """ Return list of employees for the company """
+        return Response({'employees': []}, status=status.HTTP_200_OK);
