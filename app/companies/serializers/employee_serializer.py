@@ -1,23 +1,18 @@
 from . import serializers, User, CompanyMember
 from .company_member_serializer import CompanyMemberSerializer
+from authorization.serializers import UserSerializer
 
-class CompanyEmployeeSerializer(serializers.ModelSerializer):
+class EmployeeSerializer(UserSerializer):
     """ Company employee serializer class """
 
-    company_members = serializers.SerializerMethodField()
+    roles = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = [
-            'id',
-            'first_name',
-            'last_name',
-            'email',
-            'company_members'
-        ]
+        fields = UserSerializer.Meta.fields + ('roles',)
 
-    def get_company_members(self, obj):
-        """ Receiving list of CompanyMember objects """
+    def get_roles(self, obj):
+        """ Receiving list of Employee objects """
 
         company_id = self.context.get('company_id')
         queryset = CompanyMember.objects.filter(user_id=obj.id,

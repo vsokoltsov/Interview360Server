@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 
-from companies.serializers import CompanySerializer
+from companies.serializers import CompanySerializer, EmployeeSerializer
 from companies.models import Company
 from companies.permissions import AllowedToUpdateCompany
 
