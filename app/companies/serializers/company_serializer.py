@@ -1,6 +1,5 @@
-from . import serializers, User, Company, CompanyMember
+from . import serializers, User, Company, CompanyMember, transaction
 from .employee_serializer import EmployeeSerializer
-from django.db import transaction
 from django_pglocks import advisory_lock
 import ipdb
 
