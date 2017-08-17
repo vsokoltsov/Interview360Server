@@ -4,13 +4,13 @@ from . import (
 )
 import django.core.mail as mail
 from django.test import override_settings
-import ipdb
 
 class EmployeeSerializerTest(TransactionTestCase):
     """ Test employee serializer class """
 
     def setUp(self):
         """ Test credentials set up """
+
         self.user = User.objects.create(email="example@mail.com")
         self.company = Company.objects.create(name="Test",
                                          city="Test",
@@ -23,6 +23,18 @@ class EmployeeSerializerTest(TransactionTestCase):
             ],
             'company_id': self.company.id
         }
+
+    def test_success_validation(self):
+        """ Tests success serializer validation """
+
+        serializer = EmployeeSerializer(data=self.form_data)
+        self.assertTrue(serializer.is_valid())
+
+    def test_failed_validation(self):
+        """ Test failed serializer validation """
+
+        serializer = EmployeeSerializer(data={})
+        self.assertFalse(serializer.is_valid())
 
     @override_settings(
         EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend'
