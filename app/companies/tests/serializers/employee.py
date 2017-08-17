@@ -17,9 +17,9 @@ class EmployeeSerializerTest(TransactionTestCase):
                                          start_date=datetime.date.today())
         self.form_data = {
             'emails': [
-                'example!@mail.com',
-                'example!@mail.com',
-                'example!@mail.com'
+                'example1@mail.com',
+                'example2@mail.com',
+                'example3@mail.com'
             ],
             'company_id': self.company.id
         }
