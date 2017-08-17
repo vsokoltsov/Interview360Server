@@ -13,10 +13,10 @@ import os
 class EmployeeSerializer(UserSerializer):
     """ Company employee serializer class """
 
+    company_id = serializers.IntegerField(write_only=True, required=True)
     emails = serializers.ListField(write_only=True, required=True,
         max_length=10, child=serializers.CharField()
     )
-    company_id = serializers.IntegerField(write_only=True, required=True)
     roles = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -31,6 +31,16 @@ class EmployeeSerializer(UserSerializer):
         queryset = CompanyMember.objects.filter(user_id=obj.id,
                                                 company_id=company_id)
         return CompanyMemberSerializer(queryset, many=True, read_only=True).data
+
+    def validate_emails(self, value):
+        if not value:
+            raise serializers.ValidationError({'emails': "Can't be blank"})
+
+        if self.context['user'].email in value:
+            raise serializers.ValidationError(
+                "You can't add yourself to the company"
+            )
+        return value
 
     def create(self, data):
         """
