@@ -7,6 +7,7 @@ from rest_framework.authentication import TokenAuthentication
 
 from companies.serializers import CompanySerializer, EmployeeSerializer
 from companies.models import Company
+from authorization.models import User
 from companies.permissions import AllowedToUpdateCompany
 
 from .company import CompaniesViewSet
