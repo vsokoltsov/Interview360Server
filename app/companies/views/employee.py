@@ -20,14 +20,20 @@ class EmployeesViewSet(viewsets.ViewSet):
 
     def create(self, request, company_pk=None):
         """ Create new user and send it a letter """
-        
+
         company = self.get_company(company_pk)
-        serializer = EmployeeSerializer(request.data, context={'user': request.user})
+        serializer = EmployeeSerializer(data=request.data, context={'user': request.user})
 
         if serializer.is_valid() and serializer.save():
-            return Response({ 'message': 'Users were succesfully added as an employee' })
+            return Response(
+                { 'message': 'Users were succesfully added as an employee' },
+                status=status.HTTP_200_OK
+            )
         else:
-            return Response({ 'errors': serializer.error })
+            return Response(
+                { 'errors': serializer.errors },
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
     @list_route(methods=['put'])
     def activate(self, request, company_pk=None):

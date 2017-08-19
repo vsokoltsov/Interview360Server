@@ -18,11 +18,13 @@ class EmployeesViewSetTests(APITestCase):
                                                       company_id=self.company.id,
                                                       role='owner')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        self.company_params = {
-            'name': 'NAME',
-            'city': 'City',
-            'start_date': datetime.date.today(),
-            'owner_id': user.id
+        self.form_data = {
+            'emails': [
+                'example1@mail.com',
+                'example2@mail.com',
+                'example3@mail.com'
+            ],
+            'company_id': self.company.id
         }
 
     def test_employees_list(self):
@@ -31,3 +33,18 @@ class EmployeesViewSetTests(APITestCase):
         url = "/api/v1/companies/{}/employees/".format(self.company.id)
         response = self.client.get(url)
         self.assertEqual(len(response.data['employees']), 1)
+
+    def test_success_employee_creation(self):
+        """ Test success creation of the new employees """
+
+        url = "/api/v1/companies/{}/employees/".format(self.company.id)
+        response = self.client.post(url, self.form_data)
+        self.assertEqual('message' in response.data, True)
+
+    def test_failed_employee_creation(self):
+        """ Test failed creation of the new employees """
+
+        url = "/api/v1/companies/{}/employees/".format(self.company.id)
+        response = self.client.post(url, {})
+        self.assertTrue('errors' in response.data)
+        self.assertEqual(response.status_code, 400)
