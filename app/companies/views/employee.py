@@ -1,6 +1,7 @@
 from . import (
     viewsets, status, Response, Company, get_object_or_404, EmployeeSerializer
 )
+from rest_framework.decorators import list_route
 
 class EmployeesViewSet(viewsets.ViewSet):
     """ View class for employee's actions """
@@ -12,3 +13,11 @@ class EmployeesViewSet(viewsets.ViewSet):
         serializer = EmployeeSerializer(
             company.employees.all(), many=True, context={'company_id': company.id})
         return Response({'employees': serializer.data}, status=status.HTTP_200_OK);
+
+    @list_route(methods=['put'])
+    def activate(self, request):
+        """
+        Activate employee for the company by creating CompanyMember
+        and setting user password
+        """
+        pass
