@@ -9,6 +9,8 @@ from companies.serializers import CompanySerializer, EmployeeSerializer
 from companies.models import Company
 from authorization.models import User
 from companies.permissions import AllowedToUpdateCompany
+from companies.forms import EmployeeForm
 
 from .company import CompaniesViewSet
 from .employee import EmployeesViewSet
+from .employee_activation import EmployeeActivationView
