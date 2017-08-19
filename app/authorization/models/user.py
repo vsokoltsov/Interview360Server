@@ -19,3 +19,6 @@ class User(AbstractBaseUser):
         """ String representation of user """
 
         return self.email
+
+    class Meta:
+        db_table = 'users'
