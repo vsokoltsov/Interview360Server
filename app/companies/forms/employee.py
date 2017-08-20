@@ -1,4 +1,4 @@
-from . import forms, Company, User
+from . import forms, Company, User, CompanyMember
 from django.core.exceptions import ObjectDoesNotExist
 
 class EmployeeForm(forms.Form):

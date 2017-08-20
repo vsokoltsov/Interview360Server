@@ -32,3 +32,24 @@ class EmployeeFormTest(TransactionTestCase):
 
         form = EmployeeForm({})
         self.assertFalse(form.is_valid())
+
+    @mock.patch.object(User, 'save')
+    @mock.patch('django.contrib.auth.models.User')
+    def test_saving_user_information(self, user_class_mock, user_save_mock):
+        """ Test calling save() method on User """
+
+        user_class_mock.objects = mock.MagicMock()
+        user_class_mock.objects.create = mock.MagicMock()
+        user_class_mock.objects.create.return_value = User(id=1)
+
+        form = EmployeeForm(self.form_data)
+        form.submit()
+        self.assertTrue(user_save_mock.called)
+
+    def test_updating_user_password(self):
+        """ Test updating user password """
+
+        form = EmployeeForm(self.form_data)
+        form.submit()
+        self.user.refresh_from_db()
+        self.assertTrue(self.user.check_password(self.form_data['password']))
