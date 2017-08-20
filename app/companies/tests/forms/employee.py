@@ -33,6 +33,19 @@ class EmployeeFormTest(TransactionTestCase):
         form = EmployeeForm({})
         self.assertFalse(form.is_valid())
 
+    def test_failed_password_matching(self):
+        """ Test failed form validation due to different password """
+
+        form_data = {
+            'company_id': self.company.id,
+            'token': self.token.key,
+            'password': 'aaaaaa',
+            'password_confirmation': 'bbbbbb'
+        }
+
+        form = EmployeeForm(form_data)
+        self.assertFalse(form.is_valid())
+
     @mock.patch.object(User, 'save')
     @mock.patch('django.contrib.auth.models.User')
     def test_saving_user_information(self, user_class_mock, user_save_mock):
@@ -53,3 +66,17 @@ class EmployeeFormTest(TransactionTestCase):
         form.submit()
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password(self.form_data['password']))
+
+    @mock.patch('companies.models.CompanyMember.objects.create')
+    def test_company_member_creation(self, company_member_mock):
+        """ Test creation of CompanyMember instance """
+
+        test_company_member = CompanyMember(1)
+        company_member_mock.objects = mock.MagicMock()
+        company_member_mock.objects.create = mock.MagicMock()
+        company_member_mock.objects.create.return_value = test_company_member
+
+        form = EmployeeForm(self.form_data)
+        form.submit()
+
+        self.assertTrue(company_member_mock.called)
