@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 
 from companies.serializers import CompanySerializer, EmployeeSerializer
-from companies.models import Company
+from companies.models import Company, CompanyMember
 from authorization.models import User
 from companies.permissions import AllowedToUpdateCompany
 from companies.forms import EmployeeForm

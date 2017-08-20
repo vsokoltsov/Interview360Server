@@ -9,12 +9,12 @@ class EmployeesViewSetTests(APITestCase):
     def setUp(self):
         """ Set up test dependencies """
 
-        user = User.objects.create(email="example@mail.com", password="12345678")
-        self.token = Token.objects.create(user=user)
+        self.user = User.objects.create(email="example@mail.com", password="12345678")
+        self.token = Token.objects.create(user=self.user)
         self.company = Company.objects.create(name="Test",
                                          city="Test",
                                          start_date=datetime.datetime.now())
-        company_member = CompanyMember.objects.create(user_id=user.id,
+        company_member = CompanyMember.objects.create(user_id=self.user.id,
                                                       company_id=self.company.id,
                                                       role='owner')
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
@@ -48,3 +48,10 @@ class EmployeesViewSetTests(APITestCase):
         response = self.client.post(url, {})
         self.assertTrue('errors' in response.data)
         self.assertEqual(response.status_code, 400)
+
+    def test_success_company_member_deletion(self):
+        """ Test success response of deletion the CompanyMember instance """
+
+        url = "/api/v1/companies/{}/employees/{}/".format(self.company.id, self.user.id)
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, 204)

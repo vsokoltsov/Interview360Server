@@ -1,6 +1,6 @@
 from . import (
-    viewsets, status, Response, Company, get_object_or_404,
-    EmployeeSerializer, User, IsAuthenticated,  TokenAuthentication
+    viewsets, status, Response, Company, CompanyMember, get_object_or_404,
+    EmployeeSerializer, User, IsAuthenticated,  TokenAuthentication, User
 )
 from rest_framework.decorators import list_route
 
@@ -35,13 +35,17 @@ class EmployeesViewSet(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-    @list_route(methods=['put'])
-    def activate(self, request, company_pk=None):
-        """
-        Activate employee for the company by creating CompanyMember
-        and setting user password
-        """
-        pass
+    def destroy(self, request, company_pk=None, pk=None):
+        """ Destroys the CompanyMember object  """
+
+        company = self.get_company(company_pk)
+        employee = get_object_or_404(User, pk=pk)
+        company_member = CompanyMember.objects.get(
+            user_id=employee.id, company_id=company.id
+        )
+        company_member.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
     def get_company(self, id):
         return get_object_or_404(Company, pk=id)
