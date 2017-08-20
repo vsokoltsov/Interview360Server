@@ -9,7 +9,7 @@ class EmployeeActivationView(APIView):
         if form.submit():
             return Response(
                 { 'message': 'You was sucessfully added to the company!' },
-                status=status.HTTTP_200_OK
+                status=status.HTTP_200_OK
             )
         else:
             return Response(

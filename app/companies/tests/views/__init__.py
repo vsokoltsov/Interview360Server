@@ -6,3 +6,4 @@ import datetime
 
 from .company import CompaniesViewSetTests
 from .employee import EmployeesViewSetTests
+from .employee_activation import EmployeeActivationTests
