@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'authorization',
     'anymail',
-    'companies'
+    'companies',
+    'django_nose'
 ]
 
 MIDDLEWARE = [

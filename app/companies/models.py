@@ -14,9 +14,12 @@ class Company(models.Model):
 
     employees = models.ManyToManyField('authorization.User', through='CompanyMember')
 
+    class Meta:
+        db_table = 'companies'
+
 class CompanyMember(models.Model):
     """ CompanyMember model, which is used for `through` association """
-    
+
     ROLES = [
         'owner',
         'hr',
@@ -28,3 +31,6 @@ class CompanyMember(models.Model):
     role = models.CharField(max_length=255, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'company_members'

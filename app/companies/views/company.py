@@ -1,14 +1,8 @@
-from django.shortcuts import render
-from rest_framework import viewsets, status
-from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
-
-from .serializers import CompanySerializer
-from .models import Company
-from .permissions import AllowedToUpdateCompany
-import ipdb
+from . import (
+    render, viewsets, status, Response, get_object_or_404,
+    IsAuthenticated,  TokenAuthentication,
+    CompanySerializer, Company, AllowedToUpdateCompany
+)
 
 def get_company(user, pk):
     """ Helper method; Receives particular company from the queryset """
@@ -17,7 +11,7 @@ def get_company(user, pk):
     company = get_object_or_404(queryset, pk=pk)
     return company
 
-class CompaniesListViewSet(viewsets.ViewSet):
+class CompaniesViewSet(viewsets.ViewSet):
     """ Viewset for company actions """
 
     authentication_classes = (TokenAuthentication,)

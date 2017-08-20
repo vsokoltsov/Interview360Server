@@ -1,6 +1,5 @@
-from . import serializers, User, Company, CompanyMember
-from .company_employee_serializer import CompanyEmployeeSerializer
-from django.db import transaction
+from . import serializers, User, Company, CompanyMember, transaction
+from .employee_serializer import EmployeeSerializer
 from django_pglocks import advisory_lock
 import ipdb
 
@@ -31,7 +30,7 @@ class CompanySerializer(serializers.ModelSerializer):
     def get_employees(self, obj):
         """ Receives the list of employees """
 
-        return CompanyEmployeeSerializer(obj.employees.all(),
+        return EmployeeSerializer(obj.employees.all(),
                                          many=True, read_only=True,
                                          context={'company_id': obj.id}).data
 
