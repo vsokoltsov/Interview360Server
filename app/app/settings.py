@@ -45,10 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
-    'authorization',
     'anymail',
+    'django_nose',
+    'authorization',
     'companies',
-    'django_nose'
+    'roles'
 ]
 
 MIDDLEWARE = [
