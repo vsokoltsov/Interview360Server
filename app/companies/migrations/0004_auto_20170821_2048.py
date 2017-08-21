@@ -9,6 +9,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('roles', '__first__'),
         ('companies', '0003_auto_20170819_0924'),
     ]
 

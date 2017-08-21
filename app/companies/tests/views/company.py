@@ -1,5 +1,5 @@
 from . import (
-    APITestCase, Company, CompanyMember, User, Token, datetime
+    APITestCase, Company, CompanyMember, User, Token, datetime, Role
 )
 
 class CompaniesViewSetTests(APITestCase):
@@ -9,13 +9,14 @@ class CompaniesViewSetTests(APITestCase):
         """ Set up test dependencies """
 
         user = User.objects.create(email="example@mail.com", password="12345678")
+        role = Role.objects.create(name='owner')
         self.token = Token.objects.create(user=user)
         self.company = Company.objects.create(name="Test",
                                          city="Test",
                                          start_date=datetime.datetime.now())
         company_member = CompanyMember.objects.create(user_id=user.id,
                                                       company_id=self.company.id,
-                                                      role='owner')
+                                                      role_id=role.id)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.company_params = {
             'name': 'NAME',

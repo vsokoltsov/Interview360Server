@@ -1,4 +1,4 @@
-from . import forms, Company, User, CompanyMember
+from . import forms, Company, User, CompanyMember, Role
 from django.core.exceptions import ObjectDoesNotExist
 
 class EmployeeForm(forms.Form):
@@ -28,10 +28,11 @@ class EmployeeForm(forms.Form):
             user = User.objects.get(auth_token=self['token'].value())
             user.set_password(self['password'].value())
             user.save()
+            role = Role.objects.first()
             CompanyMember.objects.create(
                 company_id=self['company_id'].value(),
                 user_id=user.id,
-                role='employee'
+                role_id=role.id
             )
             return True
         except ObjectDoesNotExist:
