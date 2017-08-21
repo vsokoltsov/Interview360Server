@@ -1,0 +1,18 @@
+- model: roles.Role
+  pk: 1
+  fields:
+    name: Owner
+    created_at: '2017-08-21 10:15:39.083059'
+    updated_at: '2017-08-21 10:15:39.083059'
+- model: roles.Role
+  pk: 2
+  fields:
+    name: HR
+    created_at: '2017-08-21 10:15:39.083059'
+    updated_at: '2017-08-21 10:15:39.083059'
+- model: roles.Role
+  pk: 3
+  fields:
+    name: Employee
+    created_at: '2017-08-21 10:15:39.083059'
+    updated_at: '2017-08-21 10:15:39.083059'
