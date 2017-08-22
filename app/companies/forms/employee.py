@@ -1,6 +1,5 @@
 from . import forms, Company, User, CompanyMember, Role
 from django.core.exceptions import ObjectDoesNotExist
-import ipdb
 
 class EmployeeForm(forms.Form):
     """
@@ -31,12 +30,18 @@ class EmployeeForm(forms.Form):
             user.save()
             company_member = CompanyMember.objects.get(
                 user_id=user.id, company_id=self['company_id'].value())
-            company_member.active = True
-            company_member.save()
-            return True
+            if not company_member.active:
+                company_member.active = True
+                company_member.save()
+                return True
+            else:
+                raise forms.ValidationError('User member is already activated')
         except User.DoesNotExist as error:
             self.add_error('token', 'There is no such user')
             return False
         except CompanyMember.DoesNotExist as error:
             self.add_error('company_id', 'User does not belong to the company')
+            return False
+        except forms.ValidationError as error:
+            self.add_error('company_id', 'User member is already activated')
             return False
