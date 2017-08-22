@@ -1,5 +1,5 @@
 from . import (
-    APITestCase, Company, CompanyMember, User, Token, datetime
+    APITestCase, Company, CompanyMember, User, Token, datetime, Role
 )
 import ipdb
 
@@ -9,6 +9,7 @@ class EmployeesViewSetTests(APITestCase):
     def setUp(self):
         """ Set up test dependencies """
 
+        role = Role.objects.create(name='owner')
         self.user = User.objects.create(email="example@mail.com", password="12345678")
         self.token = Token.objects.create(user=self.user)
         self.company = Company.objects.create(name="Test",
@@ -16,7 +17,7 @@ class EmployeesViewSetTests(APITestCase):
                                          start_date=datetime.datetime.now())
         company_member = CompanyMember.objects.create(user_id=self.user.id,
                                                       company_id=self.company.id,
-                                                      role='owner')
+                                                      role_id=role.id)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.form_data = {
             'emails': [
@@ -24,7 +25,8 @@ class EmployeesViewSetTests(APITestCase):
                 'example2@mail.com',
                 'example3@mail.com'
             ],
-            'company_id': self.company.id
+            'company_id': self.company.id,
+            'role_id': role.id
         }
 
     def test_employees_list(self):

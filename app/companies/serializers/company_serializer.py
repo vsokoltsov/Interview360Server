@@ -1,4 +1,4 @@
-from . import serializers, User, Company, CompanyMember, transaction
+from . import serializers, User, Company, CompanyMember, Role, transaction
 from .employee_serializer import EmployeeSerializer
 from django_pglocks import advisory_lock
 import ipdb
@@ -50,9 +50,10 @@ class CompanySerializer(serializers.ModelSerializer):
             with transaction.atomic():
                 owner_id = validated_data.pop('owner_id', None)
                 company = Company.objects.create(**validated_data)
+                role = Role.objects.first()
                 company_member = CompanyMember.objects.create(user_id=owner_id,
                                                               company_id=company.id,
-                                                              role='owner')
+                                                              role_id=role.id)
                 return company
         except:
             return False

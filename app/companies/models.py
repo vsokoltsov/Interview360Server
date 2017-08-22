@@ -1,5 +1,6 @@
 from django.db import models
 from authorization.models import User
+from roles.models import Role
 # Create your models here.
 
 class Company(models.Model):
@@ -20,17 +21,15 @@ class Company(models.Model):
 class CompanyMember(models.Model):
     """ CompanyMember model, which is used for `through` association """
 
-    ROLES = [
-        'owner',
-        'hr',
-        'employee'
-    ]
-
     user = models.ForeignKey(User)
     company = models.ForeignKey(Company)
-    role = models.CharField(max_length=255, null=False)
+    role = models.ForeignKey(Role)
+    active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = 'company_members'
+        index_together = unique_together = [
+            ['user', 'company']
+        ]

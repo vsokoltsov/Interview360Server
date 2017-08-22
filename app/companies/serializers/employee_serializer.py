@@ -1,4 +1,4 @@
-from . import serializers, User, Company, CompanyMember
+from . import serializers, User, Company, CompanyMember, Role
 from .company_member_serializer import CompanyMemberSerializer
 from authorization.serializers import UserSerializer
 from django.db.utils import IntegrityError
@@ -9,6 +9,7 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 
 import os
+import ipdb
 
 class EmployeeSerializer(UserSerializer):
     """ Company employee serializer class """
@@ -17,20 +18,28 @@ class EmployeeSerializer(UserSerializer):
     emails = serializers.ListField(write_only=True, required=True,
         max_length=10, child=serializers.CharField()
     )
-    roles = serializers.SerializerMethodField(read_only=True)
+    role_id = serializers.IntegerField(write_only=True, required=True)
+    role = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
-        fields = UserSerializer.Meta.fields + ('emails', 'company_id', 'roles',)
+        fields = UserSerializer.Meta.fields + ('emails', 'company_id', 'role', 'role_id')
         read_only_fields = UserSerializer.Meta.fields
 
-    def get_roles(self, obj):
-        """ Receiving list of Employee objects """
+    def get_role(self, obj):
+        """ Get role for the employee """
 
         company_id = self.context.get('company_id')
-        queryset = CompanyMember.objects.filter(user_id=obj.id,
+        company_member = CompanyMember.objects.get(user_id=obj.id,
                                                 company_id=company_id)
-        return CompanyMemberSerializer(queryset, many=True, read_only=True).data
+        return CompanyMemberSerializer(company_member, read_only=True).data
+
+    def validate_role_id(self, val):
+        """ Set employee role """
+        try:
+            self.role = Role.objects.get(id=val)
+        except Role.DoesNotExist:
+            raise serializers.ValidationError('There is no such role')
 
     def validate_emails(self, value):
         if not value:
@@ -60,9 +69,14 @@ class EmployeeSerializer(UserSerializer):
                 user = self.find_or_create_user(email)
                 token, _ = Token.objects.get_or_create(user=user)
                 company = Company.objects.get(id=data['company_id'])
+                CompanyMember.objects.create(
+                    user_id=user.id, company_id=company.id,
+                    role_id=self.role.id
+                )
                 self.send_invite(user, token, company)
             return True
-        except IntegrityError:
+        except IntegrityError as error:
+            self.errors['emails'] = 'One of these users already belongs to a company'
             return False
 
     def send_invite(self, user, token, company):
