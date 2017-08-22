@@ -1,5 +1,5 @@
 from . import (mock, TransactionTestCase, Token, EmployeeForm,
-               Company, CompanyMember, User, datetime)
+               Company, CompanyMember, User, Role, datetime)
 import ipdb
 
 class EmployeeFormTest(TransactionTestCase):
@@ -13,7 +13,10 @@ class EmployeeFormTest(TransactionTestCase):
                                          city="Test",
                                          start_date=datetime.date.today())
         self.token = Token.objects.create(user=self.user)
-
+        self.role = Role.objects.create(name='owner')
+        self.company_member = CompanyMember.objects.create(
+            user=self.user, company=self.company, role=self.role
+        )
         self.form_data = {
             'company_id': self.company.id,
             'token': self.token.key,
@@ -67,16 +70,26 @@ class EmployeeFormTest(TransactionTestCase):
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password(self.form_data['password']))
 
-    @mock.patch('companies.models.CompanyMember.objects.create')
-    def test_company_member_creation(self, company_member_mock):
-        """ Test creation of CompanyMember instance """
-
-        test_company_member = CompanyMember(1)
-        company_member_mock.objects = mock.MagicMock()
-        company_member_mock.objects.create = mock.MagicMock()
-        company_member_mock.objects.create.return_value = test_company_member
+    def test_company_member_updated(self):
+        """ Test update of CompanyMember instance 'active' field """
 
         form = EmployeeForm(self.form_data)
         form.submit()
 
-        self.assertTrue(company_member_mock.called)
+        self.company_member.refresh_from_db()
+        self.assertTrue(self.company_member.active)
+
+    def test_user_does_not_have_company_member(self):
+        """ Test validation failure if user does not have a company_member instance """
+
+        user = User.objects.create(email="batman@superman.com")
+        token = Token.objects.create(user=user)
+        form_data = {
+            'company_id': self.company.id,
+            'token': token.key,
+            'password': 'aaaaaa',
+            'password_confirmation': 'aaaaaa'
+        }
+
+        form = EmployeeForm(form_data)
+        self.assertFalse(form.submit())
