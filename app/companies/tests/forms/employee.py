@@ -93,3 +93,13 @@ class EmployeeFormTest(TransactionTestCase):
 
         form = EmployeeForm(form_data)
         self.assertFalse(form.submit())
+
+    def test_user_already_activated_in_company(self):
+        """ Test if user already activated in company """
+
+        self.company_member.active = True
+        self.company_member.save()
+        self.company.refresh_from_db()
+
+        form = EmployeeForm(self.form_data)
+        self.assertFalse(form.submit())
