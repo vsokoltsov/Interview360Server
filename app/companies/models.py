@@ -24,9 +24,9 @@ class CompanyMember(models.Model):
     user = models.ForeignKey(User)
     company = models.ForeignKey(Company)
     role = models.ForeignKey(Role)
-    active = models.BooleanField(default=True)
+    active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)        
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = 'company_members'
