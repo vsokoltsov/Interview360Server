@@ -25,7 +25,8 @@ class EmployeesViewSetTests(APITestCase):
                 'example2@mail.com',
                 'example3@mail.com'
             ],
-            'company_id': self.company.id
+            'company_id': self.company.id,
+            'role_id': role.id
         }
 
     def test_employees_list(self):

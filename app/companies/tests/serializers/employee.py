@@ -1,9 +1,10 @@
 from . import (
     TransactionTestCase, serializers, Company, CompanyMember,
-    serializers, User, EmployeeSerializer, datetime, mock, User
+    serializers, User, EmployeeSerializer, datetime, mock, User, Role
 )
 import django.core.mail as mail
 from django.test import override_settings
+import ipdb
 
 class EmployeeSerializerTest(TransactionTestCase):
     """ Test employee serializer class """
@@ -15,13 +16,15 @@ class EmployeeSerializerTest(TransactionTestCase):
         self.company = Company.objects.create(name="Test",
                                          city="Test",
                                          start_date=datetime.date.today())
+        self.role = Role.objects.create(name="CEO")
         self.form_data = {
             'emails': [
                 'example1@mail.com',
                 'example2@mail.com',
                 'example3@mail.com'
             ],
-            'company_id': self.company.id
+            'company_id': self.company.id,
+            'role_id': self.role.id
         }
 
     def test_success_validation(self):
@@ -37,6 +40,23 @@ class EmployeeSerializerTest(TransactionTestCase):
         serializer = EmployeeSerializer(data={},
                                         context={'user': self.user})
         self.assertFalse(serializer.is_valid())
+
+    def test_failed_validation_if_role_does_not_exists(self):
+        """ Test failed validation if role does not exists """
+
+        form_data = {
+            'emails': [
+                'example1@mail.com',
+                'example2@mail.com',
+                'example3@mail.com'
+            ],
+            'company_id': self.company.id,
+            'role_id': 10000
+        }
+        serializer = EmployeeSerializer(data=form_data,
+                                        context={'user': self.user})
+        self.assertFalse(serializer.is_valid())
+
 
     def test_success_email_validation(self):
         """ Validation failed if request.user email is in the emails list """
@@ -65,12 +85,22 @@ class EmployeeSerializerTest(TransactionTestCase):
         self.assertEqual(len(mail.outbox), 3)
 
     @mock.patch('authorization.models.User.objects.create')
-    def test_success_user_creation(self, user_class_mock):
+    @mock.patch('rest_framework.authtoken.models.Token.objects.get_or_create')
+    @mock.patch('companies.models.CompanyMember.objects.create')
+    def test_success_user_creation(self, company_member_mock, token_mock, user_class_mock):
         """ Tests success creation of the user if it does not exists """
 
         user_class_mock.objects = mock.MagicMock()
         user_class_mock.objects.create = mock.MagicMock()
         user_class_mock.objects.create.return_value = User(id=1)
+
+        token_mock.user = User(id=1)
+        token_mock.objects = mock.MagicMock()
+        token_mock.get_or_create = mock.MagicMock()
+        token_mock.return_value = ("12345", 12)
+
+        company_member_mock.objects = mock.MagicMock()
+        company_member_mock.objects.create = mock.MagicMock()
 
         serializer = EmployeeSerializer(data=self.form_data,
                                         context={'user': self.user})
@@ -91,3 +121,22 @@ class EmployeeSerializerTest(TransactionTestCase):
         serializer.save()
 
         self.assertEqual(token_mock.call_count, 3)
+
+    def test_chosen_user_already_belongs_to_company(self):
+        """ Test failed validation if user already belongs to a company """
+
+        new_user = User.objects.create(email="example4@mail.com")
+        CompanyMember.objects.create(user_id=new_user.id, company_id=self.company.id, role_id=self.role.id)
+        form_data = {
+            'emails': [
+                'example4@mail.com',
+                'example2@mail.com',
+                'example3@mail.com'
+            ],
+            'company_id': self.company.id,
+            'role_id': self.role.id
+        }
+        serializer = EmployeeSerializer(data=form_data,
+                                        context={'user': self.user})
+        serializer.is_valid()
+        self.assertFalse(serializer.save())
