@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APITestCase
 from .models import Role
-import ipdb
+
 
 class RolesViewSetTest(APITestCase):
     """ Tests for RoleViewSet class """
