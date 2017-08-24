@@ -6,4 +6,12 @@ class VacancySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Vacancy
-        fields = ('id', 'title', 'description', 'created_at', 'updated_at')
+        fields = [
+            'id',
+            'title',
+            'description',
+            'salary',
+            'created_at',
+            'updated_at',
+            'company_id'
+        ]
