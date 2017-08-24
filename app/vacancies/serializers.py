@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Vacancy
 
-class VacanciesSerializer(serializers.ModelSerializer):
+class VacancySerializer(serializers.ModelSerializer):
     """ Serializer for vacancies object """
 
     class Meta:

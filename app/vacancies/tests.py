@@ -1,3 +1,5 @@
 from django.test import TestCase
-
-# Create your tests here.
+from rest_framework.test import APITestCase
+from .models import Vacancy
+from authorization.models import User
+from rest_framework.authtoken.models import Token
