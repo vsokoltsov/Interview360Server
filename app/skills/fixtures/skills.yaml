@@ -1,0 +1,18 @@
+- model: skills.Skill
+  pk: 1
+  fields:
+    name: Object-Oriented Design
+    created_at: '2017-08-21 10:15:39.083059'
+    updated_at: '2017-08-21 10:15:39.083059'
+- model: skills.Skill
+  pk: 2
+  fields:
+    name: Python
+    created_at: '2017-08-21 10:15:39.083059'
+    updated_at: '2017-08-21 10:15:39.083059'
+- model: skills.Skill
+  pk: 3
+  fields:
+    name: Cooking
+    created_at: '2017-08-21 10:15:39.083059'
+    updated_at: '2017-08-21 10:15:39.083059'
