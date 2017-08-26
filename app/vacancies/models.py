@@ -1,5 +1,6 @@
 from django.db import models
 from companies.models import Company
+from skills.models import Skill
 
 # Create your models here.
 class Vacancy(models.Model):
@@ -12,5 +13,16 @@ class Vacancy(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     company = models.ForeignKey('companies.Company', null=False)
 
+    skills = models.ManyToManyField('skills.Skill', through='vacancies.VacancySkill')
+
     class Meta:
         db_table = 'vacancies'
+
+class VacancySkill(models.Model):
+    """ Throught table for vacancies and skills """
+
+    class Meta:
+        db_table = 'vacancy_skills'
+
+    vacancy = models.ForeignKey(Vacancy)
+    skill = models.ForeignKey(Skill)
