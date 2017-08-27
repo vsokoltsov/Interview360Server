@@ -27,7 +27,7 @@ class VacancyViewSetTests(APITestCase):
             'title': 'Test',
             'description': 'Test',
             'salary': '150.00',
-            'company': self.company.id
+            'company_id': self.company.id
         }
 
 
@@ -39,10 +39,11 @@ class VacancyViewSetTests(APITestCase):
         self.assertEqual(len(response.data), 1)
 
     def test_success_vacancy_creation(self):
-        """ Test success company creation """
+        """ Test success vacancy creation """
 
         response = self.client.post(self.url, self.form_data)
         self.assertEqual(response.status_code, 201)
+        self.assertEqual('vacancy' in response.data, True)
 
     def test_failed_vacancy_creation(self):
         """ Test failed creation of the vacancy """

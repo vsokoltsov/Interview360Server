@@ -55,13 +55,6 @@ class EmployeeSerializer(UserSerializer):
         """
         Creates a new employee if they are do not exist;
         Send invintation emails
-
-        TODO:
-        - Add validation if user already included in company
-        - Rebuild mechanism of adding new person to the company
-            - Add 'active' field to CompanyMember, and after receiving the mail
-            change it to True
-            - Implement permission for active company user
         """
 
         try:
