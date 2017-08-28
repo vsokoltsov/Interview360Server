@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TransactionTestCase
 from rest_framework.test import APITestCase
 from .models import Vacancy
 from authorization.models import User
@@ -7,6 +7,7 @@ from rest_framework.authtoken.models import Token
 from skills.models import Skill
 import datetime
 from decimal import *
+from .serializers import VacancySerializer
 import ipdb
 
 class VacancyViewSetTests(APITestCase):
@@ -14,6 +15,7 @@ class VacancyViewSetTests(APITestCase):
 
     def setUp(self):
         """ Setting up test dependencies """
+
         self.user = User.objects.create(email="example1@mail.com")
         self.company = Company.objects.create(name="Test",
                                          city="Test",
@@ -78,3 +80,41 @@ class VacancyViewSetTests(APITestCase):
 
         response = self.client.delete(self.url + "{}/".format(self.vacancy.id))
         self.assertEqual(response.status_code, 204)
+
+class VacancySerializerTest(TransactionTestCase):
+    """ Test class for VacanciesSerializer """
+
+    def setUp(self):
+        """ Setting up testing dependencies """
+
+        self.user = User.objects.create(email="example1@mail.com")
+        self.company = Company.objects.create(name="Test",
+                                         city="Test",
+                                         start_date=datetime.datetime.now())
+        self.token = Token.objects.create(user=self.user)
+        self.skill = Skill.objects.create(name="Computer Science")
+        self.vacancy = Vacancy.objects.create(
+            title="Vacancy name", description="Description",
+            company_id=self.company.id, salary=120.00)
+        self.url = "/api/v1/companies/{}/vacancies/".format(self.company.id)
+        self.form_data = {
+            'title': 'Test',
+            'description': 'Test',
+            'salary': '150.00',
+            'company_id': self.company.id,
+            'skills': [
+                self.skill.id
+            ]
+        }
+
+    def test_success_validation(self):
+        """ Test that validation successfuly passing """
+
+        serializer = VacancySerializer(data=self.form_data)
+        self.assertTrue(serializer.is_valid())
+
+    def test_failed_validation(self):
+        """ Test that validation fails """
+
+        serializer = VacancySerializer(data={})
+        self.assertFalse(serializer.is_valid())
