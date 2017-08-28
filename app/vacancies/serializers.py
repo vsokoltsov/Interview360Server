@@ -45,21 +45,20 @@ class VacancySerializer(serializers.ModelSerializer):
 
         try:
             with transaction.atomic():
-                vacancy = Vacancy.objects.create(**data)
                 skills = data.pop('skills', None)
-
-                if skills != None:
-                    self.build_skills(vacancy, skills)
-
+                vacancy = Vacancy.objects.create(**data)
+                vacancy.skills.set(skills)
                 return vacancy
         except:
             return False
 
-    def build_skills(self, vacancy, skills):
-        """ Build skills for vacancy """
+    def update(self, instance, data):
+        """ Update vacancy parameters """
 
-        for skill_name in skills:
-            skill = Skill.objects.get(name=skill_name)
-            VacancySkill.objects.create(
-                skill_id=skill.id, vacancy_id=vacancy.id
-            )
+        with transaction.atomic():
+            instance.title = data.get('title', instance.title)
+            instance.description = data.get('description', instance.description)
+            instance.salary = data.get('salary', instance.salary)
+            instance.skills.set(data.get('skills', []))
+
+            return instance

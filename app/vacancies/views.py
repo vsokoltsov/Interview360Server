@@ -17,7 +17,6 @@ class VacancyViewSet(viewsets.ModelViewSet):
         """ POST action for creating a new vacancy """
 
         serializer = self.serializer_class(data=request.data)
-
         if serializer.is_valid() and serializer.save():
             return Response({'vacancy': serializer.data},
                             status=status.HTTP_201_CREATED)

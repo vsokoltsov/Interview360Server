@@ -4,6 +4,7 @@ from .models import Vacancy
 from authorization.models import User
 from companies.models import Company
 from rest_framework.authtoken.models import Token
+from skills.models import Skill
 import datetime
 from decimal import *
 import ipdb
@@ -18,6 +19,7 @@ class VacancyViewSetTests(APITestCase):
                                          city="Test",
                                          start_date=datetime.datetime.now())
         self.token = Token.objects.create(user=self.user)
+        self.skill = Skill.objects.create(name="Computer Science")
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.vacancy = Vacancy.objects.create(
             title="Vacancy name", description="Description",
@@ -27,9 +29,11 @@ class VacancyViewSetTests(APITestCase):
             'title': 'Test',
             'description': 'Test',
             'salary': '150.00',
-            'company_id': self.company.id
+            'company_id': self.company.id,
+            'skills': [
+                self.skill.id
+            ]
         }
-
 
     def test_success_list_receiving(self):
         """ Test success receiving of the vacancies list """
