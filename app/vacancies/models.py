@@ -22,6 +22,7 @@ class VacancySkill(models.Model):
     """ Throught table for vacancies and skills """
 
     class Meta:
+        auto_created = True
         db_table = 'vacancy_skills'
 
     vacancy = models.ForeignKey(Vacancy)

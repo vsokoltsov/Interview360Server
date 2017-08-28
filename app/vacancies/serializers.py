@@ -42,7 +42,7 @@ class VacancySerializer(serializers.ModelSerializer):
 
     def create(self, data):
         """ Create new instance of Vacancy and add Skills objects to it """
-        
+
         try:
             with transaction.atomic():
                 vacancy = Vacancy.objects.create(**data)
@@ -53,7 +53,6 @@ class VacancySerializer(serializers.ModelSerializer):
 
                 return vacancy
         except:
-
             return False
 
     def build_skills(self, vacancy, skills):
