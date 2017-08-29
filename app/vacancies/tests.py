@@ -65,15 +65,7 @@ class VacancyViewSetTests(APITestCase):
             self.form_data
         )
         self.assertEqual(response.status_code, 200)
-
-    def test_failed_vacancy_update(self):
-        """ Test failed update of the vacancy """
-
-        response = self.client.put(
-            self.url + "{}/".format(self.vacancy.id),
-            {}
-        )
-        self.assertEqual(response.status_code, 400)
+        self.assertTrue('vacancy' in response.data)
 
     def test_success_delete_vacancy(self):
         """ Test success vacancy deletion """

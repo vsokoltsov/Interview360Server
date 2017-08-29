@@ -5,9 +5,11 @@ from .serializers import VacancySerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 class VacancyViewSet(viewsets.ModelViewSet):
     """ View class for Vacancy """
+
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, )
     queryset = Vacancy.objects.all()
@@ -23,3 +25,16 @@ class VacancyViewSet(viewsets.ModelViewSet):
         else:
             return Response({'errors': serializer.errors},
                             status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, pk=None, company_pk = None):
+        """ PUT action for updating existent vacancy """
+
+        vacancy = get_object_or_404(Vacancy, pk=pk)
+        serializer = self.serializer_class(vacancy, data=request.data,
+                                           partial=True)
+        if serializer.is_valid() and serializer.save():
+            return Response({'vacancy': serializer.data},
+                             status=status.HTTP_200_OK)
+        else:
+            return Response({'errors': serializer.errors},
+                             status=status.HTTP_400_BAD_REQUEST)
