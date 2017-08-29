@@ -1,23 +1,20 @@
-from django.test import TestCase
-from rest_framework.test import APITestCase
-from .models import Vacancy
-from authorization.models import User
-from companies.models import Company
-from rest_framework.authtoken.models import Token
-import datetime
-from decimal import *
-import ipdb
+from . import (
+    APITestCase, Vacancy, User, Company, Token, Skill, datetime
+)
+
 
 class VacancyViewSetTests(APITestCase):
     """ Tests for VacancyViewSet class """
 
     def setUp(self):
         """ Setting up test dependencies """
+
         self.user = User.objects.create(email="example1@mail.com")
         self.company = Company.objects.create(name="Test",
                                          city="Test",
                                          start_date=datetime.datetime.now())
         self.token = Token.objects.create(user=self.user)
+        self.skill = Skill.objects.create(name="Computer Science")
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.vacancy = Vacancy.objects.create(
             title="Vacancy name", description="Description",
@@ -27,9 +24,11 @@ class VacancyViewSetTests(APITestCase):
             'title': 'Test',
             'description': 'Test',
             'salary': '150.00',
-            'company_id': self.company.id
+            'company_id': self.company.id,
+            'skills': [
+                self.skill.id
+            ]
         }
-
 
     def test_success_list_receiving(self):
         """ Test success receiving of the vacancies list """
@@ -59,15 +58,7 @@ class VacancyViewSetTests(APITestCase):
             self.form_data
         )
         self.assertEqual(response.status_code, 200)
-
-    def test_failed_vacancy_update(self):
-        """ Test failed update of the vacancy """
-
-        response = self.client.put(
-            self.url + "{}/".format(self.vacancy.id),
-            {}
-        )
-        self.assertEqual(response.status_code, 400)
+        self.assertTrue('vacancy' in response.data)
 
     def test_success_delete_vacancy(self):
         """ Test success vacancy deletion """
