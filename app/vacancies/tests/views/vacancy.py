@@ -2,7 +2,6 @@ from . import (
     APITestCase, Vacancy, User, Company, Token, Skill, datetime
 )
 
-
 class VacancyViewSetTests(APITestCase):
     """ Tests for VacancyViewSet class """
 
