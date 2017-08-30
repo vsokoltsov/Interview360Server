@@ -14,7 +14,11 @@ class Interview(models.Model):
     passed = models.NullBooleanField()
     assigned_at = models.DateTimeField(auto_now=True)
 
-    interviewees = models.ManyToManyField('authorization.User', through='InterviewEmployee', related_name='interviewees')
+    interviewees = models.ManyToManyField(
+        'authorization.User',
+        through='InterviewEmployee',
+        related_name='interviewees'
+    )
 
     class Meta:
         db_table = 'interviews'
