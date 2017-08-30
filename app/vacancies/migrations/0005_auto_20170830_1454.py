@@ -20,11 +20,6 @@ class Migration(migrations.Migration):
             model_name='vacancyskill',
             name='vacancy',
         ),
-        # migrations.AlterField(
-        #     model_name='vacancy',
-        #     name='skills',
-        #     field=models.ManyToManyField(to='skills.Skill'),
-        # ),
         migrations.DeleteModel(
             name='VacancySkill',
         ),
