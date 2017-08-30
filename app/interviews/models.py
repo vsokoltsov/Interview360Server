@@ -11,6 +11,8 @@ class Interview(models.Model):
     candidate = models.ForeignKey(User, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    passed = models.NullBooleanField()
+    assigned_at = models.DateTimeField(auto_now=True)
 
     interviewees = models.ManyToManyField('authorization.User', through='InterviewEmployee', related_name='interviewees')
 
