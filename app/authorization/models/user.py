@@ -10,6 +10,7 @@ class User(AbstractBaseUser):
     updated_at = models.DateTimeField(auto_now=True)
 
     companies = models.ManyToManyField('companies.Company', through='companies.CompanyMember')
+    interviews = models.ManyToManyField('interviews.Interview', through='interviews.InterviewEmployee')
 
     objects = BaseUserManager()
 
