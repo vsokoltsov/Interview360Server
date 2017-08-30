@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Vacancy, VacancySkill
+from .models import Vacancy
 from django.db import transaction
 from skills.models import Skill
 from companies.models import Company

@@ -13,16 +13,17 @@ class Vacancy(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     company = models.ForeignKey('companies.Company', null=False)
 
-    skills = models.ManyToManyField('skills.Skill', through='vacancies.VacancySkill')
+    skills = models.ManyToManyField(Skill)
 
     class Meta:
         db_table = 'vacancies'
 
-class VacancySkill(models.Model):
-    """ Throught table for vacancies and skills """
-
-    class Meta:
-        db_table = 'vacancy_skills'
-
-    vacancy = models.ForeignKey(Vacancy)
-    skill = models.ForeignKey(Skill)
+# class VacancySkill(models.Model):
+#     """ Throught table for vacancies and skills """
+#
+#     class Meta:
+#         auto_created = True
+#         db_table = 'vacancy_skills'
+#
+#     vacancy = models.ForeignKey(Vacancy)
+#     skill = models.ForeignKey(Skill)
