@@ -6,9 +6,6 @@ from skills.models import Skill
 class Vacancy(models.Model):
     """ Vacancy representation in our system """
 
-    # TODO
-    # - add active field
-
     title = models.CharField(max_length=255, null=False)
     description = models.TextField(null=False)
     salary = models.DecimalField(max_digits=6, decimal_places=2, null=False)
