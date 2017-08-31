@@ -65,10 +65,6 @@ class InterviewSerializer(serializers.ModelSerializer):
 
 
 
-
     # TODO Validations
-    #   - vacancy is active
-    #   - vacancy is present
     #   - candidate have appropriate role (candidate)
-    #   - assigned_at is not lower that today
     #
