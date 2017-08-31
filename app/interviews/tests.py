@@ -1,6 +1,6 @@
 from django.test import TestCase, TransactionTestCase
 from .serializers import InterviewSerializer
-from .models import Interview
+from .models import Interview, InterviewEmployee
 from authorization.models import User
 from companies.models import Company, CompanyMember
 from vacancies.models import Vacancy
@@ -102,8 +102,13 @@ class InterviewSerializerTests(TransactionTestCase):
         self.assertTrue('assigned_at' in serializer.errors)
 
     @mock.patch('interviews.models.Interview.objects.create')
-    def test_success_interview_creation(self, inteview_class_mock):
-        """ Test success creation of the vacancy """
+    @mock.patch('interviews.models.InterviewEmployee.objects.create')
+    def test_success_interview_creation(self, inteview_employee_class_mock, inteview_class_mock):
+        """ Test success creation of the interview """
+
+        inteview_employee_class_mock.objects = mock.MagicMock()
+        inteview_employee_class_mock.objects.create = mock.MagicMock()
+        inteview_employee_class_mock.objects.create.return_value = InterviewEmployee(id=1)
 
         inteview_class_mock.objects = mock.MagicMock()
         inteview_class_mock.objects.create = mock.MagicMock()
@@ -114,3 +119,26 @@ class InterviewSerializerTests(TransactionTestCase):
 
         serializer.save()
         self.assertTrue(inteview_class_mock.called)
+
+    @mock.patch('interviews.models.InterviewEmployee.objects.create')
+    def test_success_interview_employee_creation(self, inteview_employee_class_mock):
+        """ Test success creation of InterviewEmployee instance """
+
+        inteview_employee_class_mock.objects = mock.MagicMock()
+        inteview_employee_class_mock.objects.create = mock.MagicMock()
+        inteview_employee_class_mock.objects.create.return_value = InterviewEmployee(id=1)
+
+        serializer = InterviewSerializer(data=self.form_data)
+        serializer.is_valid()
+
+        serializer.save()
+        self.assertTrue(inteview_employee_class_mock.called)
+
+    def test_failed_interview_employee_creation(self):
+        """ Test failed creation of Interviewemployee fro the abscent user """
+        self.form_data['interviewees'] = 100
+
+        serializer = InterviewSerializer(data=self.form_data)
+    
+        self.assertFalse(serializer.is_valid())
+        self.assertTrue('interviewees' in serializer.errors)

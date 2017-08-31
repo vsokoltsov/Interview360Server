@@ -19,7 +19,7 @@ class InterviewSerializer(serializers.ModelSerializer):
 
     vacancy_id = serializers.IntegerField(required=True)
     vacancy = serializers.SerializerMethodField(read_only=True)
-
+    interviewees = serializers.ListField(required=True, max_length=10, child=serializers.CharField())
 
     class Meta:
         model = Interview
@@ -66,20 +66,17 @@ class InterviewSerializer(serializers.ModelSerializer):
 
 
     def create(self, data):
-        try:
-            interviewees = data.pop('interviewees', None)
-            interview = Interview.objects.create(**data)
-            if interviewees:
-                role = Role.objects.last()
-                for employee_id in interviewees:
-                    InterviewEmployee.objects.create(
-                        interview_id=interview.id, employee_id=employee_id,
-                        role_id=role.id
-                    )
-            return True
-        except User.DoesNotExist as error:
-            self.errors['interviewees'] = 'Some of the interviewees are not exist'
-            return False
+        interviewees = data.pop('interviewees', None)
+        interview = Interview.objects.create(**data)
+        if interviewees:
+            role = Role.objects.last()
+            for employee_id in interviewees:
+                employee = User.objects.get(id=employee_id)
+                InterviewEmployee.objects.create(
+                    interview_id=interview.id, employee_id=employee.id,
+                    role_id=role.id
+                )
+        return interview
 
 
 
