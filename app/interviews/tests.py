@@ -48,6 +48,11 @@ class InterviewSerializerTests(TransactionTestCase):
             ],
             'assigned_at': date
         }
+        self.interview = Interview.objects.create(
+            candidate_id=self.form_data['candidate_id'],
+            vacancy_id=self.form_data['vacancy_id'],
+            assigned_at=date
+        )
 
     def test_succes_validation(self):
         """ Test that serializer's validation is passed """
@@ -133,12 +138,29 @@ class InterviewSerializerTests(TransactionTestCase):
 
         serializer.save()
         self.assertTrue(inteview_employee_class_mock.called)
+        self.assertTrue(inteview_employee_class_mock.call_count, 1)
 
     def test_failed_interview_employee_creation(self):
         """ Test failed creation of Interviewemployee fro the abscent user """
+
         self.form_data['interviewees'] = 100
 
         serializer = InterviewSerializer(data=self.form_data)
-    
+
         self.assertFalse(serializer.is_valid())
         self.assertTrue('interviewees' in serializer.errors)
+
+    def test_success_update_of_the_interview(self):
+        """ Test success updating of the interview instance """
+
+        date = datetime.datetime.now() + datetime.timedelta(days=31)
+        date = date.replace(second=0, microsecond=0)
+        self.form_data['assigned_at'] = date
+
+        serializer = InterviewSerializer(
+            self.interview, data=self.form_data, partial=True
+        )
+        serializer.is_valid()
+        interview = serializer.save()
+
+        self.assertEqual(interview.assigned_at.replace(second=0, microsecond=0, tzinfo=None), date)

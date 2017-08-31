@@ -66,6 +66,8 @@ class InterviewSerializer(serializers.ModelSerializer):
 
 
     def create(self, data):
+        """ Create a new instance of interview and some of
+            the InterviewEmployee objects """
         interviewees = data.pop('interviewees', None)
         interview = Interview.objects.create(**data)
         if interviewees:
@@ -77,6 +79,14 @@ class InterviewSerializer(serializers.ModelSerializer):
                     role_id=role.id
                 )
         return interview
+
+    def update(self, instance, data):
+        """ Update an existed instance of interview """
+
+        instance.assigned_at = data.get('assigned_at', instance.assigned_at)
+
+        return instance
+
 
 
 
