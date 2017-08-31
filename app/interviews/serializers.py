@@ -2,8 +2,10 @@ from rest_framework import serializers
 from .models import Interview, InterviewEmployee
 from authorization.models import User
 from vacancies.models import Vacancy
+from roles.models import Role
 from authorization.serializers import UserSerializer
 from datetime import datetime
+from django.db import transaction
 import ipdb
 
 class InterviewSerializer(serializers.ModelSerializer):
@@ -45,7 +47,6 @@ class InterviewSerializer(serializers.ModelSerializer):
 
         return value
 
-
     def validate_candidate_id(self, value):
         """ Validation for candidate_id """
 
@@ -62,6 +63,23 @@ class InterviewSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Selected datetime is less than current")
 
         return value
+
+
+    def create(self, data):
+        try:
+            interviewees = data.pop('interviewees', None)
+            interview = Interview.objects.create(**data)
+            if interviewees:
+                role = Role.objects.last()
+                for employee_id in interviewees:
+                    InterviewEmployee.objects.create(
+                        interview_id=interview.id, employee_id=employee_id,
+                        role_id=role.id
+                    )
+            return True
+        except User.DoesNotExist as error:
+            self.errors['interviewees'] = 'Some of the interviewees are not exist'
+            return False
 
 
 

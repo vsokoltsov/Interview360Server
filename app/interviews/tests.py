@@ -1,11 +1,13 @@
 from django.test import TestCase, TransactionTestCase
 from .serializers import InterviewSerializer
+from .models import Interview
 from authorization.models import User
 from companies.models import Company, CompanyMember
 from vacancies.models import Vacancy
 from skills.models import Skill
 from roles.models import Role
 import datetime
+import mock
 import ipdb
 # Create your tests here.
 
@@ -98,3 +100,17 @@ class InterviewSerializerTests(TransactionTestCase):
         serializer = InterviewSerializer(data=self.form_data)
         self.assertFalse(serializer.is_valid())
         self.assertTrue('assigned_at' in serializer.errors)
+
+    @mock.patch('interviews.models.Interview.objects.create')
+    def test_success_interview_creation(self, inteview_class_mock):
+        """ Test success creation of the vacancy """
+
+        inteview_class_mock.objects = mock.MagicMock()
+        inteview_class_mock.objects.create = mock.MagicMock()
+        inteview_class_mock.objects.create.return_value = Interview(id=1)
+
+        serializer = InterviewSerializer(data=self.form_data)
+        serializer.is_valid()
+
+        serializer.save()
+        self.assertTrue(inteview_class_mock.called)
