@@ -15,6 +15,7 @@ class Vacancy(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     company = models.ForeignKey('companies.Company', null=False)
+    active = models.BooleanField(default=True)
 
     skills = models.ManyToManyField(Skill)
 
