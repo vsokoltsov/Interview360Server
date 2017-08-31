@@ -34,11 +34,12 @@ class InterviewSerializerTests(TransactionTestCase):
         self.skill = Skill.objects.create(name="Computer Science")
         self.vacancy = Vacancy.objects.create(
             title="Vacancy name", description="Description",
-            company_id=self.company.id, salary=120.00)
+            company_id=self.company.id, salary=120.00
+        )
         self.vacancy.skills.set([self.skill.id])
         self.form_data = {
-            'candidate': self.candidate.id,
-            'vacancy': self.vacancy.id,
+            'candidate_id': self.candidate.id,
+            'vacancy_id': self.vacancy.id,
             'interviewees': [
                 self.hr.id
             ],
@@ -56,3 +57,23 @@ class InterviewSerializerTests(TransactionTestCase):
 
         serializer = InterviewSerializer(data={})
         self.assertFalse(serializer.is_valid())
+
+    def test_failed_validation_vacancy_is_abscent(self):
+        """ Test that serializer's validation failed if vacancy does not exists """
+
+        self.form_data['vacancy_id'] = 100
+        serializer = InterviewSerializer(data=self.form_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertTrue('vacancy_id' in serializer.errors)
+
+    def test_failed_validation_vacancy_is_unactive(self):
+        """ Test that serializer's validation failed is vacancy is not active """
+
+        vacancy = Vacancy.objects.create(
+            title="Vacancy name", description="Description",
+            company_id=self.company.id, salary=120.00, active=False
+        )
+        self.form_data['vacancy_id'] = vacancy.id
+        serializer = InterviewSerializer(data=self.form_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertTrue('vacancy_id' in serializer.errors)
