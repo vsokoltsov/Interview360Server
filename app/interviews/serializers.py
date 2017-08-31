@@ -38,9 +38,18 @@ class InterviewSerializer(serializers.ModelSerializer):
         try:
             vacancy = Vacancy.objects.get(id=value)
             if not vacancy.active:
-                raise serializers.ValidationError("There is no such user")
+                raise serializers.ValidationError("There is no such vacancy")
         except Vacancy.DoesNotExist:
-            raise serializers.ValidationError("There is no such user")
+            raise serializers.ValidationError("Vacancy is not active")
+
+    def validate_candidate_id(self, value):
+        """ Validation for candidate_id """
+
+        try:
+            candidate = User.objects.get(id=value)
+        except User.DoesNotExist:
+            raise serializers.ValidationError("There is no such candidate")
+
 
     # TODO Validations
     #   - vacancy is active
