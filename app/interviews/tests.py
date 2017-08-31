@@ -89,7 +89,7 @@ class InterviewSerializerTests(TransactionTestCase):
     def test_failed_validation_if_candidate_does_not_exists(self):
         """ Test that serializer's validation failed if candidate is empty """
 
-        self.form_data['candidate_id'] = 100
+        self.form_data['candidate_id'] = 123124124
 
         serializer = InterviewSerializer(data=self.form_data)
         self.assertFalse(serializer.is_valid())
@@ -163,4 +163,6 @@ class InterviewSerializerTests(TransactionTestCase):
         serializer.is_valid()
         interview = serializer.save()
 
-        self.assertEqual(interview.assigned_at.replace(second=0, microsecond=0, tzinfo=None), date)
+        self.assertEqual(interview.assigned_at.replace(
+            second=0, microsecond=0, tzinfo=None), date
+        )
