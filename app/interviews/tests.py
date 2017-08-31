@@ -37,13 +37,14 @@ class InterviewSerializerTests(TransactionTestCase):
             company_id=self.company.id, salary=120.00
         )
         self.vacancy.skills.set([self.skill.id])
+        date = datetime.datetime.now() + datetime.timedelta(days=10)
         self.form_data = {
             'candidate_id': self.candidate.id,
             'vacancy_id': self.vacancy.id,
             'interviewees': [
                 self.hr.id
             ],
-            'assigned_at': datetime.datetime.now()
+            'assigned_at': date
         }
 
     def test_succes_validation(self):
@@ -86,3 +87,14 @@ class InterviewSerializerTests(TransactionTestCase):
         serializer = InterviewSerializer(data=self.form_data)
         self.assertFalse(serializer.is_valid())
         self.assertTrue('candidate_id' in serializer.errors)
+
+    def test_failed_validation_if_assigned_at_less_than_current_date(self):
+        """ Test that serializer's validation failed if assigned_at is
+            less than current time """
+
+        date = datetime.datetime.now() + datetime.timedelta(days=-10)
+        self.form_data['assigned_at'] = date
+
+        serializer = InterviewSerializer(data=self.form_data)
+        self.assertFalse(serializer.is_valid())
+        self.assertTrue('assigned_at' in serializer.errors)

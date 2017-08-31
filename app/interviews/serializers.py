@@ -3,6 +3,7 @@ from .models import Interview, InterviewEmployee
 from authorization.models import User
 from vacancies.models import Vacancy
 from authorization.serializers import UserSerializer
+from datetime import datetime
 import ipdb
 
 class InterviewSerializer(serializers.ModelSerializer):
@@ -42,6 +43,9 @@ class InterviewSerializer(serializers.ModelSerializer):
         except Vacancy.DoesNotExist:
             raise serializers.ValidationError("Vacancy is not active")
 
+        return value
+
+
     def validate_candidate_id(self, value):
         """ Validation for candidate_id """
 
@@ -49,6 +53,17 @@ class InterviewSerializer(serializers.ModelSerializer):
             candidate = User.objects.get(id=value)
         except User.DoesNotExist:
             raise serializers.ValidationError("There is no such candidate")
+        return value
+
+    def validate_assigned_at(self, value):
+        """ Validation for assigned_at field """
+
+        if value.replace(tzinfo=None) < datetime.now():
+            raise serializers.ValidationError("Selected datetime is less than current")
+
+        return value
+
+
 
 
     # TODO Validations
