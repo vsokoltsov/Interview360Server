@@ -224,12 +224,41 @@ class InterviewViewSetTests(APITestCase):
             interview_id=self.interview.id, employee_id=self.hr.id,
             role_id=self.hr_role.id
         )
+        self.url = "/api/v1/companies/{}/vacancies/{}/interviews/".format(
+            self.company.id, self.vacancy.id
+        )
 
     def test_success_list_receiving(self):
         """ Test success receiving list of the interviews """
-        url = "/api/v1/companies/{}/vacancies/{}/interviews/".format(
-            self.company.id, self.vacancy.id
-        )
-        response = self.client.get(url)
+
+        response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
+
+    def test_success_interview_creation(self):
+        """ Test success creation of the interview """
+
+        response = self.client.post(self.url, self.form_data)
+        self.assertEqual(response.status_code, 201)
+
+    def test_failed_interview_creation(self):
+        """ Test failed creation of the interview """
+
+        response = self.client.post(self.url, {})
+        self.assertEqual(response.status_code, 400)
+
+    def test_success_interview_update(self):
+        """ Test success Interview's instance update """
+
+        response = self.client.put(
+            self.url + "{}/".format(self.interview.id), self.form_data
+        )
+        self.assertEqual(response.status_code, 200)
+
+    def test_success_interview_delete(self):
+        """ Test success Interview's instance delete """
+
+        response = self.client.delete(
+            self.url + "{}/".format(self.interview.id)
+        )
+        self.assertEqual(response.status_code, 204)
