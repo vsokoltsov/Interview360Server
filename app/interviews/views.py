@@ -25,3 +25,18 @@ class InterviewViewSet(viewsets.ModelViewSet):
         vacancy = get_object_or_404(Vacancy, pk=params['vacancy_pk'])
         queryset = vacancy.interview_set.all()
         return queryset
+
+    def create(self, request, company_pk=None, vacancy_pk=None):
+        """ POST action for create a new interview """
+
+        company = get_object_or_404(Company, pk=company_pk)
+        vacancy = get_object_or_404(Vacancy, pk=vacancy_pk)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid() and serializer.save():
+            return Response(
+                { 'interview': serializer.data }, status=status.HTTP_201_CREATED
+            )
+        else:
+            return Response(
+                { 'errors': serializer.errors }, status=status.HTTP_400_BAD_REQUEST
+            )
