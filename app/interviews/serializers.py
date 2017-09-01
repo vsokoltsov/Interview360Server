@@ -6,10 +6,33 @@ from roles.models import Role
 from authorization.serializers import UserSerializer
 from datetime import datetime
 from django.db import transaction
+from authorization.serializers import UserSerializer
+from vacancies.serializers import VacancySerializer
+from companies.models import CompanyMember
+from companies.serializers import CompanyMemberSerializer
 import ipdb
+
+class InterviewEmployeeSerializer(UserSerializer):
+    role = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = UserSerializer.Meta.model
+        fields = UserSerializer.Meta.fields + ('role', )
+
+    def get_role(self, employee):
+        """ Get role for the employee """
+
+        company_id = self.context.get('company_id')
+        company_member = CompanyMember.objects.get(user_id=employee.id,
+                                                company_id=company_id)
+        return CompanyMemberSerializer(company_member, read_only=True).data
+
 
 class InterviewSerializer(serializers.ModelSerializer):
     """ Class for serialization of Interviews """
+
+    # TODO Validations
+    #   - candidate have appropriate role (candidate)
 
     passed = serializers.BooleanField(read_only=True)
     assigned_at = serializers.DateTimeField(required=True)
@@ -19,7 +42,9 @@ class InterviewSerializer(serializers.ModelSerializer):
 
     vacancy_id = serializers.IntegerField(required=True)
     vacancy = serializers.SerializerMethodField(read_only=True)
-    interviewees = serializers.ListField(required=True, max_length=10, child=serializers.CharField())
+    interviewees = serializers.ListField(required=True, max_length=10, write_only=True)
+    interviewees = serializers.SerializerMethodField(read_only=True)
+
 
     class Meta:
         model = Interview
@@ -64,6 +89,30 @@ class InterviewSerializer(serializers.ModelSerializer):
 
         return value
 
+    def get_candidate(self, interview):
+        """ Retrieve candidate serializer """
+
+        serializer = InterviewEmployeeSerializer(
+            interview.candidate, read_only=True,
+            context={'company_id': interview.vacancy.company.id }
+        )
+        return serializer.data
+
+    def get_interviewees(self, interview):
+        """ Retrieve candidate interviewees list """
+
+        serializer = InterviewEmployeeSerializer(
+            interview.interviewees.all(), read_only=True, many=True,
+            context={'company_id': interview.vacancy.company.id }
+        )
+
+        return serializer.data
+
+    def get_vacancy(self, interview):
+        """ Rertrieve vacancy serializer """
+
+        serializer = VacancySerializer(interview.vacancy, read_only=True)
+        return serializer.data
 
     def create(self, data):
         """ Create a new instance of interview and some of
@@ -86,10 +135,3 @@ class InterviewSerializer(serializers.ModelSerializer):
         instance.assigned_at = data.get('assigned_at', instance.assigned_at)
 
         return instance
-
-
-
-
-    # TODO Validations
-    #   - candidate have appropriate role (candidate)
-    #
