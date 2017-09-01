@@ -42,9 +42,8 @@ class InterviewSerializer(serializers.ModelSerializer):
 
     vacancy_id = serializers.IntegerField(required=True)
     vacancy = serializers.SerializerMethodField(read_only=True)
-    interviewees = serializers.ListField(required=True, max_length=10, write_only=True)
     interviewees = serializers.SerializerMethodField(read_only=True)
-
+    interviewees = serializers.ListField(required=True, max_length=10, child=serializers.CharField(), write_only=True)
 
     class Meta:
         model = Interview
@@ -117,6 +116,7 @@ class InterviewSerializer(serializers.ModelSerializer):
     def create(self, data):
         """ Create a new instance of interview and some of
             the InterviewEmployee objects """
+
         interviewees = data.pop('interviewees', None)
         interview = Interview.objects.create(**data)
         if interviewees:

@@ -145,7 +145,7 @@ class InterviewSerializerTests(TransactionTestCase):
         self.assertTrue(inteview_employee_class_mock.call_count, 1)
 
     def test_failed_interview_employee_creation(self):
-        """ Test failed creation of Interviewemployee fro the abscent user """
+        """ Test failed creation of Interviewemployee for the abscent user """
 
         self.form_data['interviewees'] = 100
 
