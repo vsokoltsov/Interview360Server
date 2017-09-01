@@ -240,6 +240,7 @@ class InterviewViewSetTests(APITestCase):
 
         response = self.client.post(self.url, self.form_data)
         self.assertEqual(response.status_code, 201)
+        self.assertTrue('interview' in response.data)
 
     def test_failed_interview_creation(self):
         """ Test failed creation of the interview """
@@ -254,6 +255,7 @@ class InterviewViewSetTests(APITestCase):
             self.url + "{}/".format(self.interview.id), self.form_data
         )
         self.assertEqual(response.status_code, 200)
+        self.assertTrue('interview' in response.data)
 
     def test_success_interview_delete(self):
         """ Test success Interview's instance delete """

@@ -7,6 +7,8 @@ from django.shortcuts import get_object_or_404
 from .serializers import InterviewSerializer
 from companies.models import Company
 from vacancies.models import Vacancy
+from .models import Interview
+
 import ipdb
 
 class InterviewViewSet(viewsets.ModelViewSet):
@@ -35,6 +37,24 @@ class InterviewViewSet(viewsets.ModelViewSet):
         if serializer.is_valid() and serializer.save():
             return Response(
                 { 'interview': serializer.data }, status=status.HTTP_201_CREATED
+            )
+        else:
+            return Response(
+                { 'errors': serializer.errors }, status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def update(self, request, pk=None, company_pk=None, vacancy_pk=None):
+        """ PUT action for update the interview instance """
+
+        company = get_object_or_404(Company, pk=company_pk)
+        vacancy = get_object_or_404(Vacancy, pk=vacancy_pk)
+        interview = get_object_or_404(Interview, pk=pk)
+        serializer = self.serializer_class(
+            interview, data=request.data, partial=True
+        )
+        if serializer.is_valid() and serializer.save():
+            return Response(
+                { 'interview': serializer.data }, status=status.HTTP_200_OK
             )
         else:
             return Response(
