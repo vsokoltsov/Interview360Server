@@ -3,6 +3,8 @@ from . import (
     InterviewSerializer, mock, Company, Vacancy, InterviewEmployee, Interview
 )
 
+import ipdb
+
 class InterviewSerializerTests(TransactionTestCase):
     """ Tests for InterviewSerializer serializer """
 
@@ -25,7 +27,7 @@ class InterviewSerializerTests(TransactionTestCase):
         self.hr = hr_scope.last().user
         self.vacancy = self.company.vacancy_set.first()
         self.candidate = candidate_scope.last().user
-        self.interview = self.vacancy.interview_set.first()
+        self.interview = self.vacancy.interviews.first()
         date = datetime.datetime.now() + datetime.timedelta(days=10)
         self.form_data = {
             'candidate_id': self.candidate.id,

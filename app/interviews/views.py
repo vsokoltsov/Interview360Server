@@ -27,15 +27,13 @@ class InterviewViewSet(viewsets.ModelViewSet):
 
         params = self.kwargs
         company = get_object_or_404(Company, pk=params['company_pk'])
-        vacancy = get_object_or_404(Vacancy, pk=params['vacancy_pk'])
-        queryset = vacancy.interview_set.all()
+        queryset = Interview.objects.filter(vacancy__company__id=company.id)
         return queryset
 
-    def create(self, request, company_pk=None, vacancy_pk=None):
+    def create(self, request, company_pk=None):
         """ POST action for create a new interview """
 
         company = get_object_or_404(Company, pk=company_pk)
-        vacancy = get_object_or_404(Vacancy, pk=vacancy_pk)
 
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid() and serializer.save():
@@ -47,11 +45,10 @@ class InterviewViewSet(viewsets.ModelViewSet):
                 { 'errors': serializer.errors }, status=status.HTTP_400_BAD_REQUEST
             )
 
-    def update(self, request, pk=None, company_pk=None, vacancy_pk=None):
+    def update(self, request, pk=None, company_pk=None):
         """ PUT action for update the interview instance """
 
         company = get_object_or_404(Company, pk=company_pk)
-        vacancy = get_object_or_404(Vacancy, pk=vacancy_pk)
         interview = get_object_or_404(Interview, pk=pk)
 
         serializer = self.serializer_class(

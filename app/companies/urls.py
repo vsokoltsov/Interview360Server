@@ -16,11 +16,8 @@ nested_router.register('employees', EmployeesViewSet, base_name="company-employe
 vacancies_router = routers.NestedSimpleRouter(router, r'v1/companies', lookup='company')
 vacancies_router.register('vacancies', VacancyViewSet, base_name="company-vacancies")
 
-# TODO
-# make this router inherited from the company router, not the vacancies_one
-
-interviews_router = routers.NestedSimpleRouter(vacancies_router, r'vacancies', lookup='vacancy')
-interviews_router.register('interviews', InterviewViewSet, base_name="vacancy-interviews")
+interviews_router = routers.NestedSimpleRouter(router, r'v1/companies', lookup='company')
+interviews_router.register('interviews', InterviewViewSet, base_name="company-interviews")
 
 urlpatterns = [
         url(r'', include(router.urls) ),

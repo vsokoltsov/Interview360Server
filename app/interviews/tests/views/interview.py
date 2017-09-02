@@ -23,7 +23,7 @@ class InterviewViewSetTests(APITestCase):
         self.hr = hr_scope.last().user
         self.vacancy = self.company.vacancy_set.first()
         self.candidate = candidate_scope.last().user
-        self.interview = self.vacancy.interview_set.first()
+        self.interview = self.vacancy.interviews.first()
         self.token = Token.objects.get(user=self.hr)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
@@ -35,9 +35,7 @@ class InterviewViewSetTests(APITestCase):
             ],
             'assigned_at': date
         }
-        self.url = "/api/v1/companies/{}/vacancies/{}/interviews/".format(
-            self.company.id, self.vacancy.id
-        )
+        self.url = "/api/v1/companies/{}/interviews/".format(self.company.id)
 
     def test_success_list_receiving(self):
         """ Test success receiving list of the interviews """

@@ -7,7 +7,7 @@ from roles.models import Role
 class Interview(models.Model):
     """ Interview object representation """
 
-    vacancy = models.ForeignKey(Vacancy, null=False)
+    vacancy = models.ForeignKey(Vacancy, null=False, related_name='interviews')
     candidate = models.ForeignKey(User, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
