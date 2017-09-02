@@ -1,0 +1,30 @@
+- model: authtoken.token
+  pk: 65057f8d11ed3a8ab028f0e27d553e0ece873b9e
+  fields:
+    user: !!int 13
+    created: '2017-09-15T22:17:44+00:00'
+- model: authtoken.token
+  pk: 700c044773f539a7bd70f222b9004a04624f6533
+  fields:
+    user: !!int 3
+    created: '2017-09-15T22:17:44+00:00'
+- model: authtoken.token
+  pk: 852ffb35b88f621c352322a68748a3086088de41
+  fields:
+    user: !!int 8
+    created: '2017-09-15T22:17:44+00:00'
+- model: authtoken.token
+  pk: b813622db23fa02ecc68339fc81d9ec3c47695fb
+  fields:
+    user: !!int 4
+    created: '2017-09-15T22:17:44+00:00'
+- model: authtoken.token
+  pk: cb2f5f90effa68aa6795c34c5603ce7e14a79695
+  fields:
+    user: !!int 2
+    created: '2017-09-15T22:17:44+00:00'
+- model: authtoken.token
+  pk: dbdb6373928ec7ebeb97fe8a82ff706bebe53876
+  fields:
+    user: !!int 1
+    created: '2017-09-15T22:17:44+00:00'

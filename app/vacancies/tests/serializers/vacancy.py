@@ -13,7 +13,6 @@ class VacancySerializerTest(TransactionTestCase):
         self.company = Company.objects.create(name="Test",
                                          city="Test",
                                          start_date=datetime.datetime.now())
-        self.token = Token.objects.create(user=self.user)
         self.skill = Skill.objects.create(name="Computer Science")
         self.vacancy = Vacancy.objects.create(
             title="Vacancy name", description="Description",

@@ -1,0 +1,50 @@
+- model: interviews.interview
+  pk: 1
+  fields:
+    vacancy: 1
+    candidate: 5
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+    assigned_at: '2017-09-15T22:17:44+00:00'
+    passed: false
+- model: interviews.interview
+  pk: 2
+  fields:
+    vacancy: 1
+    candidate: 6
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+    assigned_at: '2017-09-15T22:17:44+00:00'
+    passed: false
+
+- model: interviews.interviewemployee
+  pk: 1
+  fields:
+    interview: 1
+    employee: 5
+    role: 4
+    created_at: '2017-09-15T22:17:44+00:00'
+
+- model: interviews.interviewemployee
+  pk: 2
+  fields:
+    interview: 1
+    employee: 1
+    role: 2
+    created_at: '2017-09-15T22:17:44+00:00'
+
+- model: interviews.interviewemployee
+  pk: 3
+  fields:
+    interview: 2
+    employee: 4
+    role: 4
+    created_at: '2017-09-15T22:17:44+00:00'
+
+- model: interviews.interviewemployee
+  pk: 4
+  fields:
+    interview: 2
+    employee: 1
+    role: 2
+    created_at: '2017-09-15T22:17:44+00:00'

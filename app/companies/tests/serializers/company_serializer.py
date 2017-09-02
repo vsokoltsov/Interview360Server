@@ -17,7 +17,6 @@ class CompanySerializerTests(TransactionTestCase):
         company_member = CompanyMember.objects.create(user_id=user.id,
                                                       company_id=self.company.id,
                                                       role_id=role.id)
-
         self.company_params = {
             'name': 'NAME',
             'city': 'City',

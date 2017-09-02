@@ -18,6 +18,16 @@ class Company(models.Model):
     class Meta:
         db_table = 'companies'
 
+    def get_employees_with_role(self, role_id):
+        """
+        Return list of employees who are belonging to the company
+        and have the pointed role
+        """
+
+        return CompanyMember.objects.filter(
+                company_id=self.id, role_id=role_id
+            ).prefetch_related('user')
+
 class CompanyMember(models.Model):
     """ CompanyMember model, which is used for `through` association """
 

@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'companies',
     'roles',
     'skills',
-    'vacancies'
+    'vacancies',
+    'interviews'
 ]
 
 MIDDLEWARE = [
@@ -147,3 +148,5 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'authorization.User'
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = ['--with-spec', '--spec-color']
+PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+FIXTURE_DIRS = (os.path.join(PROJECT_ROOT, 'fixtures'),)

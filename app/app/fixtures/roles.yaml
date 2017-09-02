@@ -1,18 +1,24 @@
-- model: roles.Role
+- model: roles.role
   pk: 1
   fields:
     name: Owner
     created_at: '2017-09-15T22:17:44+00:00'
     updated_at: '2017-09-15T22:17:44+00:00'
-- model: roles.Role
+- model: roles.role
   pk: 2
   fields:
     name: HR
     created_at: '2017-09-15T22:17:44+00:00'
     updated_at: '2017-09-15T22:17:44+00:00'
-- model: roles.Role
+- model: roles.role
   pk: 3
   fields:
     name: Employee
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+- model: roles.role
+  pk: 4
+  fields:
+    name: Candidate
     created_at: '2017-09-15T22:17:44+00:00'
     updated_at: '2017-09-15T22:17:44+00:00'
