@@ -1,0 +1,110 @@
+- model: authorization.user
+  pk: 1
+  fields: {password: '', last_login: null, email: sokol1@gmail.com, first_name: '',
+    last_name: '', created_at: !!timestamp '2017-06-27 11:29:16.380980+00:00', updated_at: !!timestamp '2017-06-27
+      11:29:16.381010+00:00'}
+- model: authorization.user
+  pk: 2
+  fields: {password: '', last_login: null, email: sokol2@gmail.com, first_name: '',
+    last_name: '', created_at: !!timestamp '2017-06-27 11:29:51.914744+00:00', updated_at: !!timestamp '2017-06-27
+      11:29:51.914779+00:00'}
+- model: authorization.user
+  pk: 3
+  fields: {password: pbkdf2_sha256$36000$bShjogVUA98z$bF7bu+Y/Hfs7o804DCF1RmoqhsmEMSRpaMfWgX3QkAY=,
+    last_login: null, email: sokol3@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-06-27
+      11:30:06.703808+00:00', updated_at: !!timestamp '2017-06-27 11:30:06.792945+00:00'}
+- model: authorization.user
+  pk: 4
+  fields: {password: pbkdf2_sha256$36000$ml5SIOGjOgRH$0vgwcj/uJicAi5lc5ZROL2wMaN34YPV3tEBXUZUIIDA=,
+    last_login: null, email: sokol4@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-06-27
+      11:31:30.023025+00:00', updated_at: !!timestamp '2017-06-27 11:31:30.083218+00:00'}
+- model: authorization.user
+  pk: 5
+  fields: {password: pbkdf2_sha256$36000$suP2LGUK7Zzb$c0P5ORVhv6gYiY419aE1jvM3+s1+UOPRiF5KypoSLIs=,
+    last_login: null, email: sokol5@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-06-27
+      11:31:39.480037+00:00', updated_at: !!timestamp '2017-06-27 11:31:39.542918+00:00'}
+- model: authorization.user
+  pk: 6
+  fields: {password: pbkdf2_sha256$36000$YmyPafdLl58s$EMO+o5jFCOwNW+42nnHhWNBjHcbJA86jzdgJckHX2qw=,
+    last_login: null, email: sokol6@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-06-27
+      11:32:25.175991+00:00', updated_at: !!timestamp '2017-06-27 11:32:25.233302+00:00'}
+- model: authorization.user
+  pk: 7
+  fields: {password: Altair_69, last_login: null, email: sokol8@gmail.com, first_name: '',
+    last_name: '', created_at: !!timestamp '2017-06-27 12:05:54.195202+00:00', updated_at: !!timestamp '2017-06-27
+      12:05:54.195232+00:00'}
+- model: authorization.user
+  pk: 8
+  fields: {password: pbkdf2_sha256$36000$dA1bdm38j3zM$66CcGrWWLxZd2f5JAhTQQxyIxpoLnMFZjpA+YKMiDK8=,
+    last_login: null, email: sokol9@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-06-27
+      12:21:05.173245+00:00', updated_at: !!timestamp '2017-06-27 12:21:05.231677+00:00'}
+- model: authorization.user
+  pk: 13
+  fields: {password: pbkdf2_sha256$36000$74kIB8f9DHQy$LVfTZsJTaZ83yftqgrwCEkHR34wu26FrSOPtivgHyfI=,
+    last_login: null, email: vforvad@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-07-25
+      20:17:59.174331+00:00', updated_at: !!timestamp '2017-07-25 20:17:59.257791+00:00'}
+- model: authorization.user
+  pk: 14
+  fields: {password: '', last_login: null, email: aaa@mail.ru, first_name: '', last_name: '',
+    created_at: !!timestamp '2017-08-15 13:46:15.478886+00:00', updated_at: !!timestamp '2017-08-15
+      13:46:15.478913+00:00'}
+- model: companies.company
+  pk: 33
+  fields: {name: Test, start_date: 2017-08-21, description: Test, city: Spb, created_at: !!timestamp '2017-08-21
+      21:32:30.563155+00:00', updated_at: !!timestamp '2017-08-21 21:32:30.563178+00:00'}
+- model: companies.companymember
+  pk: 24
+  fields: {user: 13, company: 33, role: 1, active: true, created_at: !!timestamp '2017-08-21
+      21:33:57.978602+00:00', updated_at: !!timestamp '2017-08-21 21:33:57.978635+00:00'}
+- model: roles.role
+  pk: 1
+  fields: {name: Owner, created_at: !!timestamp '2017-08-21 10:15:39.083059+00:00',
+    updated_at: !!timestamp '2017-08-21 10:15:39.083059+00:00'}
+- model: roles.role
+  pk: 2
+  fields: {name: HR, created_at: !!timestamp '2017-08-21 10:15:39.083059+00:00', updated_at: !!timestamp '2017-08-21
+      10:15:39.083059+00:00'}
+- model: roles.role
+  pk: 3
+  fields: {name: Employee, created_at: !!timestamp '2017-08-21 10:15:39.083059+00:00',
+    updated_at: !!timestamp '2017-08-21 10:15:39.083059+00:00'}
+- model: vacancies.vacancy
+  pk: 1
+  fields:
+    title: SI
+    description: AAA
+    salary: '120.00'
+    created_at: 2017-08-28 11:26:12.987378+00:00
+    updated_at: 2017-08-28 11:26:12.987416+00:00
+    company: 33
+    active: true
+    skills: []
+- model: vacancies.vacancy
+  pk: 2
+  fields:
+    title: AAA
+    description: BBB
+    salary: '150.00'
+    created_at: 2017-08-30 12:28:53.966284+00:00
+    updated_at: 2017-08-30 12:28:53.966320+00:00
+    company: 33
+    active: true
+    skills: []
+- model: authtoken.token
+  pk: 65057f8d11ed3a8ab028f0e27d553e0ece873b9e
+  fields: {user: 13, created: !!timestamp '2017-07-25 20:17:59.262172+00:00'}
+- model: authtoken.token
+  pk: 700c044773f539a7bd70f222b9004a04624f6533
+  fields: {user: 3, created: !!timestamp '2017-06-27 11:30:06.797812+00:00'}
+- model: authtoken.token
+  pk: 852ffb35b88f621c352322a68748a3086088de41
+  fields: {user: 8, created: !!timestamp '2017-06-27 12:21:05.234725+00:00'}
+- model: authtoken.token
+  pk: b813622db23fa02ecc68339fc81d9ec3c47695fb
+  fields: {user: 4, created: !!timestamp '2017-06-27 11:31:30.088882+00:00'}
+- model: authtoken.token
+  pk: cb2f5f90effa68aa6795c34c5603ce7e14a79695
+  fields: {user: 5, created: !!timestamp '2017-06-27 11:31:39.548447+00:00'}
+- model: authtoken.token
+  pk: dbdb6373928ec7ebeb97fe8a82ff706bebe53876
+  fields: {user: 6, created: !!timestamp '2017-06-27 11:32:25.237546+00:00'}
