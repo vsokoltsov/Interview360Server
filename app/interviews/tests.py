@@ -14,7 +14,6 @@ import ipdb
 from .views import InterviewViewSet, InterviewEmployeeView
 
 
-
 class InterviewSerializerTests(TransactionTestCase):
     """ Tests for InterviewSerializer serializer """
 
@@ -31,8 +30,8 @@ class InterviewSerializerTests(TransactionTestCase):
         """ Setting up test dependencies """
 
         self.company = Company.objects.last()
-        hr_scope = CompanyMember.objects.filter(company_id=self.company.id, role_id=2)
-        candidate_scope = CompanyMember.objects.filter(company_id=self.company.id, role_id=4)
+        hr_scope = self.company.get_employees_with_role(2)
+        candidate_scope = self.company.get_employees_with_role(4)
         date = datetime.datetime.now() + datetime.timedelta(days=10)
         self.hr = hr_scope.last().user
         self.vacancy = self.company.vacancy_set.first()
@@ -177,8 +176,8 @@ class InterviewViewSetTests(APITestCase):
         """ Setting up test dependencies """
 
         self.company = Company.objects.last()
-        hr_scope = CompanyMember.objects.filter(company_id=self.company.id, role_id=2)
-        candidate_scope = CompanyMember.objects.filter(company_id=self.company.id, role_id=4)
+        hr_scope = self.company.get_employees_with_role(2)
+        candidate_scope = self.company.get_employees_with_role(4)
         date = datetime.datetime.now() + datetime.timedelta(days=10)
         self.hr = hr_scope.last().user
         self.vacancy = self.company.vacancy_set.first()
