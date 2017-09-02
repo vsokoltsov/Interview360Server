@@ -9,7 +9,7 @@ class CompaniesViewSetTests(APITestCase):
         """ Set up test dependencies """
 
         user = User.objects.create(email="example@mail.com", password="12345678")
-        role = Role.objects.create(name='owner')
+        role = Role.objects.create(name='Owner')
         self.token = Token.objects.create(user=user)
         self.company = Company.objects.create(name="Test",
                                          city="Test",

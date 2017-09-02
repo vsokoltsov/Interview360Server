@@ -1,5 +1,8 @@
-from . import AbstractBaseUser, BaseUserManager, PermissionsMixin
-from . import models
+from . import (
+    models, AbstractBaseUser,
+    BaseUserManager, PermissionsMixin,
+    apps
+)
 
 class User(AbstractBaseUser, PermissionsMixin):
     """ Represents a user object in our system """
@@ -15,6 +18,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = BaseUserManager()
 
     USERNAME_FIELD = 'email'
+
+    def get_role_for_company(self, company):
+        """ Return user's role in the company """
+        
+        model = apps.get_model('companies', 'CompanyMember')
+        return model.objects.get(
+            user_id=self.id, company_id=company.id
+        ).role
 
     def __str__(self):
         """ String representation of user """

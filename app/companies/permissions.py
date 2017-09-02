@@ -10,7 +10,7 @@ class AllowedToUpdateCompany(permissions.BasePermission):
         try:
             owner_role = CompanyMember.objects.get(user_id=request.user.id,
                                                    company_id=obj.id,
-                                                   role='owner')
+                                                   role='Owner')
         except CompanyMember.DoesNotExist:
             owner_role = None
 
