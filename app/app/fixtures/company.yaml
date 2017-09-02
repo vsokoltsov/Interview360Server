@@ -1,0 +1,28 @@
+- model: companies.company
+  pk: 33
+  fields: {name: Test, start_date: 2017-08-21, description: Test, city: Spb, created_at: !!timestamp '2017-08-21
+      21:32:30.563155+00:00', updated_at: !!timestamp '2017-08-21 21:32:30.563178+00:00'}
+- model: companies.companymember
+  pk: 24
+  fields: {user: 13, company: 33, role: 1, active: true, created_at: !!timestamp '2017-08-21
+      21:33:57.978602+00:00', updated_at: !!timestamp '2017-08-21 21:33:57.978635+00:00'}
+- model: companies.companymember
+  pk: 25
+  fields: {user: 1, company: 33, role: 2, active: true, created_at: !!timestamp '2017-08-21
+      21:33:57.978602+00:00', updated_at: !!timestamp '2017-08-21 21:33:57.978635+00:00'}
+- model: companies.companymember
+  pk: 26
+  fields: {user: 2, company: 33, role: 3, active: true, created_at: !!timestamp '2017-08-21
+      21:33:57.978602+00:00', updated_at: !!timestamp '2017-08-21 21:33:57.978635+00:00'}
+- model: companies.companymember
+  pk: 27
+  fields: {user: 4, company: 33, role: 4, active: true, created_at: !!timestamp '2017-08-21
+      21:33:57.978602+00:00', updated_at: !!timestamp '2017-08-21 21:33:57.978635+00:00'}
+- model: companies.companymember
+  pk: 28
+  fields: {user: 5, company: 33, role: 4, active: true, created_at: !!timestamp '2017-08-21
+      21:33:57.978602+00:00', updated_at: !!timestamp '2017-08-21 21:33:57.978635+00:00'}
+- model: companies.companymember
+  pk: 29
+  fields: {user: 6, company: 33, role: 4, active: true, created_at: !!timestamp '2017-08-21
+      21:33:57.978602+00:00', updated_at: !!timestamp '2017-08-21 21:33:57.978635+00:00'}

@@ -1,0 +1,16 @@
+- model: roles.role
+  pk: 1
+  fields: {name: Owner, created_at: !!timestamp '2017-08-21 10:15:39.083059+00:00',
+    updated_at: !!timestamp '2017-08-21 10:15:39.083059+00:00'}
+- model: roles.role
+  pk: 2
+  fields: {name: HR, created_at: !!timestamp '2017-08-21 10:15:39.083059+00:00', updated_at: !!timestamp '2017-08-21
+      10:15:39.083059+00:00'}
+- model: roles.role
+  pk: 3
+  fields: {name: Employee, created_at: !!timestamp '2017-08-21 10:15:39.083059+00:00',
+    updated_at: !!timestamp '2017-08-21 10:15:39.083059+00:00'}
+- model: roles.role
+  pk: 4
+  fields: {name: Candidate, created_at: !!timestamp '2017-08-21 10:15:39.083059+00:00',
+    updated_at: !!timestamp '2017-08-21 10:15:39.083059+00:00'}

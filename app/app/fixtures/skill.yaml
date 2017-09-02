@@ -1,0 +1,16 @@
+- model: skills.skill
+  pk: 1
+  fields: {name: Computer Science, created_at: !!timestamp '2017-08-21 10:15:39.083059+00:00',
+    updated_at: !!timestamp '2017-08-21 10:15:39.083059+00:00'}
+- model: skills.skill
+  pk: 2
+  fields: {name: Python, created_at: !!timestamp '2017-08-21 10:15:39.083059+00:00', updated_at: !!timestamp '2017-08-21
+      10:15:39.083059+00:00'}
+- model: skills.skill
+  pk: 3
+  fields: {name: Data Science, created_at: !!timestamp '2017-08-21 10:15:39.083059+00:00',
+    updated_at: !!timestamp '2017-08-21 10:15:39.083059+00:00'}
+- model: skills.skill
+  pk: 4
+  fields: {name: Math, created_at: !!timestamp '2017-08-21 10:15:39.083059+00:00',
+    updated_at: !!timestamp '2017-08-21 10:15:39.083059+00:00'}
