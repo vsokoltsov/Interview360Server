@@ -1,7 +1,7 @@
-from . import AbstractBaseUser, BaseUserManager
+from . import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from . import models
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     """ Represents a user object in our system """
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
