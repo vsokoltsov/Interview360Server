@@ -4,20 +4,20 @@
     title: SI
     description: AAA
     salary: '120.00'
-    created_at: 2017-08-28 11:26:12.987378+00:00
-    updated_at: 2017-08-28 11:26:12.987416+00:00
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
     company: 33
     active: true
     skills: [1, 2, 3, 4]
-    
+
 - model: vacancies.vacancy
   pk: 2
   fields:
     title: AAA
     description: BBB
     salary: '150.00'
-    created_at: 2017-08-30 12:28:53.966284+00:00
-    updated_at: 2017-08-30 12:28:53.966320+00:00
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
     company: 33
     active: true
     skills: [1, 2, 3, 4]

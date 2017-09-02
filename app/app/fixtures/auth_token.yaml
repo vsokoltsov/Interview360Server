@@ -1,18 +1,30 @@
 - model: authtoken.token
   pk: 65057f8d11ed3a8ab028f0e27d553e0ece873b9e
-  fields: {user: 13, created: !!timestamp '2017-07-25 20:17:59.262172+00:00'}
+  fields:
+    user: !!int 13
+    created: '2017-09-15T22:17:44+00:00'
 - model: authtoken.token
   pk: 700c044773f539a7bd70f222b9004a04624f6533
-  fields: {user: 3, created: !!timestamp '2017-06-27 11:30:06.797812+00:00'}
+  fields:
+    user: !!int 3
+    created: '2017-09-15T22:17:44+00:00'
 - model: authtoken.token
   pk: 852ffb35b88f621c352322a68748a3086088de41
-  fields: {user: 8, created: !!timestamp '2017-06-27 12:21:05.234725+00:00'}
+  fields:
+    user: !!int 8
+    created: '2017-09-15T22:17:44+00:00'
 - model: authtoken.token
   pk: b813622db23fa02ecc68339fc81d9ec3c47695fb
-  fields: {user: 4, created: !!timestamp '2017-06-27 11:31:30.088882+00:00'}
+  fields:
+    user: !!int 4
+    created: '2017-09-15T22:17:44+00:00'
 - model: authtoken.token
   pk: cb2f5f90effa68aa6795c34c5603ce7e14a79695
-  fields: {user: 2, created: !!timestamp '2017-06-27 11:31:39.548447+00:00'}
+  fields:
+    user: !!int 2
+    created: '2017-09-15T22:17:44+00:00'
 - model: authtoken.token
   pk: dbdb6373928ec7ebeb97fe8a82ff706bebe53876
-  fields: {user: 1, created: !!timestamp '2017-06-27 11:32:25.237546+00:00'}
+  fields:
+    user: !!int 1
+    created: '2017-09-15T22:17:44+00:00'

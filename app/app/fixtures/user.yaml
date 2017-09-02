@@ -1,50 +1,46 @@
 - model: authorization.user
   pk: 1
   fields: {password: '', last_login: null, email: sokol1@gmail.com, first_name: '',
-    last_name: '', created_at: !!timestamp '2017-06-27 11:29:16.380980+00:00', updated_at: !!timestamp '2017-06-27
-      11:29:16.381010+00:00'}
+    last_name: '', created_at:  '2017-09-15T22:17:44+00:00', updated_at:  '2017-09-15T22:17:44+00:00'}
 - model: authorization.user
   pk: 2
   fields: {password: '', last_login: null, email: sokol2@gmail.com, first_name: '',
-    last_name: '', created_at: !!timestamp '2017-06-27 11:29:51.914744+00:00', updated_at: !!timestamp '2017-06-27
-      11:29:51.914779+00:00'}
+    last_name: '', created_at:  '2017-09-15T22:17:44+00:00', updated_at:  '2017-09-15T22:17:44+00:00'}
 - model: authorization.user
   pk: 3
   fields: {password: pbkdf2_sha256$36000$bShjogVUA98z$bF7bu+Y/Hfs7o804DCF1RmoqhsmEMSRpaMfWgX3QkAY=,
-    last_login: null, email: sokol3@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-06-27
-      11:30:06.703808+00:00', updated_at: !!timestamp '2017-06-27 11:30:06.792945+00:00'}
+    last_login: null, email: sokol3@gmail.com, first_name: '', last_name: '',
+    created_at:  '2017-09-15T22:17:44+00:00', updated_at:  '2017-09-15T22:17:44+00:00'}
 - model: authorization.user
   pk: 4
   fields: {password: pbkdf2_sha256$36000$ml5SIOGjOgRH$0vgwcj/uJicAi5lc5ZROL2wMaN34YPV3tEBXUZUIIDA=,
-    last_login: null, email: sokol4@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-06-27
-      11:31:30.023025+00:00', updated_at: !!timestamp '2017-06-27 11:31:30.083218+00:00'}
+    last_login: null, email: sokol4@gmail.com, first_name: '', last_name: '',
+    created_at:  '2017-09-15T22:17:44+00:00', updated_at:  '2017-09-15T22:17:44+00:00'}
 - model: authorization.user
   pk: 5
   fields: {password: pbkdf2_sha256$36000$suP2LGUK7Zzb$c0P5ORVhv6gYiY419aE1jvM3+s1+UOPRiF5KypoSLIs=,
-    last_login: null, email: sokol5@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-06-27
-      11:31:39.480037+00:00', updated_at: !!timestamp '2017-06-27 11:31:39.542918+00:00'}
+    last_login: null, email: sokol5@gmail.com, first_name: '', last_name: '',
+    created_at:  '2017-09-15T22:17:44+00:00', updated_at:  '2017-09-15T22:17:44+00:00'}
 - model: authorization.user
   pk: 6
   fields: {password: pbkdf2_sha256$36000$YmyPafdLl58s$EMO+o5jFCOwNW+42nnHhWNBjHcbJA86jzdgJckHX2qw=,
-    last_login: null, email: sokol6@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-06-27
-      11:32:25.175991+00:00', updated_at: !!timestamp '2017-06-27 11:32:25.233302+00:00'}
+    last_login: null, email: sokol6@gmail.com, first_name: '', last_name: '',
+    created_at:  '2017-09-15T22:17:44+00:00', updated_at:  '2017-09-15T22:17:44+00:00'}
 - model: authorization.user
   pk: 7
   fields: {password: Altair_69, last_login: null, email: sokol8@gmail.com, first_name: '',
-    last_name: '', created_at: !!timestamp '2017-06-27 12:05:54.195202+00:00', updated_at: !!timestamp '2017-06-27
-      12:05:54.195232+00:00'}
+    last_name: '', created_at:  '2017-09-15T22:17:44+00:00', updated_at:  '2017-09-15T22:17:44+00:00'}
 - model: authorization.user
   pk: 8
   fields: {password: pbkdf2_sha256$36000$dA1bdm38j3zM$66CcGrWWLxZd2f5JAhTQQxyIxpoLnMFZjpA+YKMiDK8=,
-    last_login: null, email: sokol9@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-06-27
-      12:21:05.173245+00:00', updated_at: !!timestamp '2017-06-27 12:21:05.231677+00:00'}
+    last_login: null, email: sokol9@gmail.com, first_name: '', last_name: '',
+    created_at:  '2017-09-15T22:17:44+00:00', updated_at:  '2017-09-15T22:17:44+00:00'}
 - model: authorization.user
   pk: 13
   fields: {password: pbkdf2_sha256$36000$74kIB8f9DHQy$LVfTZsJTaZ83yftqgrwCEkHR34wu26FrSOPtivgHyfI=,
-    last_login: null, email: vforvad@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-07-25
-      20:17:59.174331+00:00', updated_at: !!timestamp '2017-07-25 20:17:59.257791+00:00'}
+    last_login: null, email: vforvad@gmail.com, first_name: '', last_name: '',
+    created_at:  '2017-09-15T22:17:44+00:00', updated_at:  '2017-09-15T22:17:44+00:00'}
 - model: authorization.user
   pk: 14
   fields: {password: '', last_login: null, email: aaa@mail.ru, first_name: '', last_name: '',
-    created_at: !!timestamp '2017-08-15 13:46:15.478886+00:00', updated_at: !!timestamp '2017-08-15
-      13:46:15.478913+00:00'}
+    created_at:  '2017-09-15T22:17:44+00:00', updated_at:  '2017-09-15T22:17:44+00:00'}
