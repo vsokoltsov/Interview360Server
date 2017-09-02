@@ -18,31 +18,26 @@ from .views import InterviewViewSet, InterviewEmployeeView
 class InterviewSerializerTests(TransactionTestCase):
     """ Tests for InterviewSerializer serializer """
 
+    fixtures = [
+        "roles.yaml",
+        "skill.yaml",
+        "user.yaml",
+        "company.yaml",
+        "vacancy.yaml",
+        "interview.yaml"
+    ]
+
     def setUp(self):
         """ Setting up test dependencies """
 
-        self.owner = User.objects.create(email="example1@mail.com")
-        self.hr = User.objects.create(email="example2@mail.com")
-        self.candidate = User.objects.create(email="example3@mail.com")
-        self.company = Company.objects.create(name="Test",
-                                         city="Test",
-                                         start_date=datetime.datetime.now())
-        self.role = Role.objects.create(name='CEO')
-        self.hr_role = Role.objects.create(name='HR')
-        self.company_member = CompanyMember.objects.create(
-            company_id=self.company.id, user_id=self.owner.id,
-            role_id=self.hr_role.id
-        )
-        self.company_member = CompanyMember.objects.create(
-            company_id=self.company.id, user_id=self.hr.id,
-            role_id=self.role.id
-        )
-        self.skill = Skill.objects.create(name="Computer Science")
-        self.vacancy = Vacancy.objects.create(
-            title="Vacancy name", description="Description",
-            company_id=self.company.id, salary=120.00
-        )
-        self.vacancy.skills.set([self.skill.id])
+        self.company = Company.objects.last()
+        hr_scope = CompanyMember.objects.filter(company_id=self.company.id, role_id=2)
+        candidate_scope = CompanyMember.objects.filter(company_id=self.company.id, role_id=4)
+        date = datetime.datetime.now() + datetime.timedelta(days=10)
+        self.hr = hr_scope.last().user
+        self.vacancy = self.company.vacancy_set.first()
+        self.candidate = candidate_scope.last().user
+        self.interview = self.vacancy.interview_set.first()
         date = datetime.datetime.now() + datetime.timedelta(days=10)
         self.form_data = {
             'candidate_id': self.candidate.id,
@@ -52,11 +47,6 @@ class InterviewSerializerTests(TransactionTestCase):
             ],
             'assigned_at': date
         }
-        self.interview = Interview.objects.create(
-            candidate_id=self.form_data['candidate_id'],
-            vacancy_id=self.form_data['vacancy_id'],
-            assigned_at=date
-        )
 
     def test_succes_validation(self):
         """ Test that serializer's validation is passed """
@@ -173,40 +163,30 @@ class InterviewSerializerTests(TransactionTestCase):
 
 class InterviewViewSetTests(APITestCase):
     """ Tests for InterviewViewSet class """
+    fixtures = [
+        "roles.yaml",
+        "skill.yaml",
+        "user.yaml",
+        "auth_token.yaml",
+        "company.yaml",
+        "vacancy.yaml",
+        "interview.yaml"
+    ]
 
     def setUp(self):
         """ Setting up test dependencies """
 
-        self.owner = User.objects.create(email="example1@mail.com")
-        self.hr = User.objects.create(email="example2@mail.com")
-        self.token = Token.objects.create(user=self.hr)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        self.candidate = User.objects.create(email="example3@mail.com")
-        self.company = Company.objects.create(name="Test",
-                                         city="Test",
-                                         start_date=datetime.datetime.now())
-        self.role = Role.objects.create(name='CEO')
-        self.hr_role = Role.objects.create(name='HR')
-        self.candidate_role = Role.objects.create(name='Candidate')
-        self.company_member = CompanyMember.objects.create(
-            company_id=self.company.id, user_id=self.owner.id,
-            role_id=self.hr_role.id
-        )
-        self.company_member = CompanyMember.objects.create(
-            company_id=self.company.id, user_id=self.hr.id,
-            role_id=self.role.id
-        )
-        self.company_member = CompanyMember.objects.create(
-            company_id=self.company.id, user_id=self.candidate.id,
-            role_id=self.candidate_role.id
-        )
-        self.skill = Skill.objects.create(name="Computer Science")
-        self.vacancy = Vacancy.objects.create(
-            title="Vacancy name", description="Description",
-            company_id=self.company.id, salary=120.00
-        )
-        self.vacancy.skills.set([self.skill.id])
+        self.company = Company.objects.last()
+        hr_scope = CompanyMember.objects.filter(company_id=self.company.id, role_id=2)
+        candidate_scope = CompanyMember.objects.filter(company_id=self.company.id, role_id=4)
         date = datetime.datetime.now() + datetime.timedelta(days=10)
+        self.hr = hr_scope.last().user
+        self.vacancy = self.company.vacancy_set.first()
+        self.candidate = candidate_scope.last().user
+        self.interview = self.vacancy.interview_set.first()
+        self.token = Token.objects.get(user=self.hr)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
         self.form_data = {
             'candidate_id': self.candidate.id,
             'vacancy_id': self.vacancy.id,
@@ -215,15 +195,6 @@ class InterviewViewSetTests(APITestCase):
             ],
             'assigned_at': date
         }
-        self.interview = Interview.objects.create(
-            candidate_id=self.form_data['candidate_id'],
-            vacancy_id=self.form_data['vacancy_id'],
-            assigned_at=date
-        )
-        self.interview_employee = InterviewEmployee.objects.create(
-            interview_id=self.interview.id, employee_id=self.hr.id,
-            role_id=self.hr_role.id
-        )
         self.url = "/api/v1/companies/{}/vacancies/{}/interviews/".format(
             self.company.id, self.vacancy.id
         )
@@ -233,7 +204,7 @@ class InterviewViewSetTests(APITestCase):
 
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data), 2)
 
     def test_success_interview_creation(self):
         """ Test success creation of the interview """
