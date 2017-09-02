@@ -11,7 +11,7 @@ from roles.models import Role
 import datetime
 import mock
 import ipdb
-from .views import InterviewViewSet
+from .views import InterviewViewSet, InterviewEmployeeView
 # Create your tests here.
 
 
@@ -263,4 +263,73 @@ class InterviewViewSetTests(APITestCase):
         response = self.client.delete(
             self.url + "{}/".format(self.interview.id)
         )
+        self.assertEqual(response.status_code, 204)
+
+class InterviewEmployeeTest(APITestCase):
+    """ Tests for InterviewEmployee view class """
+
+    def setUp(self):
+        """ Setting up test dependencies """
+
+        self.owner = User.objects.create(email="example1@mail.com")
+        self.hr = User.objects.create(email="example2@mail.com")
+        self.token = Token.objects.create(user=self.hr)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.candidate = User.objects.create(email="example3@mail.com")
+        self.company = Company.objects.create(name="Test",
+                                         city="Test",
+                                         start_date=datetime.datetime.now())
+        self.role = Role.objects.create(name='CEO')
+        self.hr_role = Role.objects.create(name='HR')
+        self.candidate_role = Role.objects.create(name='Candidate')
+        self.company_member = CompanyMember.objects.create(
+            company_id=self.company.id, user_id=self.owner.id,
+            role_id=self.hr_role.id
+        )
+        self.company_member = CompanyMember.objects.create(
+            company_id=self.company.id, user_id=self.hr.id,
+            role_id=self.role.id
+        )
+        self.company_member = CompanyMember.objects.create(
+            company_id=self.company.id, user_id=self.candidate.id,
+            role_id=self.candidate_role.id
+        )
+        self.skill = Skill.objects.create(name="Computer Science")
+        self.vacancy = Vacancy.objects.create(
+            title="Vacancy name", description="Description",
+            company_id=self.company.id, salary=120.00
+        )
+        self.vacancy.skills.set([self.skill.id])
+        date = datetime.datetime.now() + datetime.timedelta(days=10)
+        self.form_data = {
+            'candidate_id': self.candidate.id,
+            'vacancy_id': self.vacancy.id,
+            'interviewees': [
+                self.hr.id
+            ],
+            'assigned_at': date
+        }
+        self.interview = Interview.objects.create(
+            candidate_id=self.form_data['candidate_id'],
+            vacancy_id=self.form_data['vacancy_id'],
+            assigned_at=date
+        )
+        self.interview_employee_1 = InterviewEmployee.objects.create(
+            interview_id=self.interview.id, employee_id=self.hr.id,
+            role_id=self.hr_role.id
+        )
+        self.interview_employee_2 = InterviewEmployee.objects.create(
+            interview_id=self.interview.id, employee_id=self.owner.id,
+            role_id=self.role.id
+        )
+        self.url = "/api/v1/companies/{}/vacancies/{}/interviews/".format(
+            self.company.id, self.vacancy.id
+        )
+
+    def test_success_delete_interview_employee(self):
+        """ Test success deletion of the interview employee """
+        url = "/api/v1/interviews/{}/employees/{}/".format(
+            self.interview.id, self.owner.id
+        )
+        response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
