@@ -9,6 +9,7 @@
     company: 33
     active: true
     skills: [1, 2, 3, 4]
+    
 - model: vacancies.vacancy
   pk: 2
   fields:
