@@ -4,7 +4,6 @@ class InterviewViewSetTests(APITestCase):
     """ Tests for InterviewViewSet class """
 
     fixtures = [
-        "roles.yaml",
         "skill.yaml",
         "user.yaml",
         "auth_token.yaml",

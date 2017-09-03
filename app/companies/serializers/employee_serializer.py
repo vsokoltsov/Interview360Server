@@ -1,4 +1,4 @@
-from . import serializers, User, Company, CompanyMember, Role
+from . import serializers, User, Company, CompanyMember
 from .company_member_serializer import CompanyMemberSerializer
 from authorization.serializers import UserSerializer
 from django.db.utils import IntegrityError
@@ -18,7 +18,9 @@ class EmployeeSerializer(UserSerializer):
     emails = serializers.ListField(write_only=True, required=True,
         max_length=10, child=serializers.CharField()
     )
-    role_id = serializers.IntegerField(write_only=True, required=True)
+    role = serializers.IntegerField(
+        write_only=True, required=True, max_value=4, min_value=1
+    )
     role = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -33,13 +35,6 @@ class EmployeeSerializer(UserSerializer):
         company_member = CompanyMember.objects.get(user_id=obj.id,
                                                 company_id=company_id)
         return CompanyMemberSerializer(company_member, read_only=True).data
-
-    def validate_role_id(self, val):
-        """ Set employee role """
-        try:
-            self.role = Role.objects.get(id=val)
-        except Role.DoesNotExist:
-            raise serializers.ValidationError('There is no such role')
 
     def validate_emails(self, value):
         if not value:
@@ -64,7 +59,7 @@ class EmployeeSerializer(UserSerializer):
                 company = Company.objects.get(id=data['company_id'])
                 CompanyMember.objects.create(
                     user_id=user.id, company_id=company.id,
-                    role_id=self.role.id
+                    role=data['role']
                 )
                 self.send_invite(user, token, company)
             return True

@@ -1,6 +1,5 @@
 from . import (mock, TransactionTestCase, Token, EmployeeForm,
-               Company, CompanyMember, User, Role, datetime)
-import ipdb
+               Company, CompanyMember, User, datetime, HR)
 
 class EmployeeFormTest(TransactionTestCase):
     """ Tests for the EmployeeFormTest class """
@@ -13,9 +12,8 @@ class EmployeeFormTest(TransactionTestCase):
                                          city="Test",
                                          start_date=datetime.date.today())
         self.token = Token.objects.create(user=self.user)
-        self.role = Role.objects.create(name='owner')
         self.company_member = CompanyMember.objects.create(
-            user=self.user, company=self.company, role=self.role
+            user=self.user, company=self.company, role=HR
         )
         self.form_data = {
             'company_id': self.company.id,

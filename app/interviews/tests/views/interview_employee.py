@@ -1,10 +1,9 @@
-from . import APITestCase, datetime, Interview, InterviewEmployee
+from . import APITestCase, datetime, Interview, InterviewEmployee, EMPLOYEE
 
 class InterviewEmployeeViewTest(APITestCase):
     """ Tests for InterviewEmployee view class """
 
     fixtures = [
-        "roles.yaml",
         "skill.yaml",
         "user.yaml",
         "auth_token.yaml",
@@ -18,7 +17,7 @@ class InterviewEmployeeViewTest(APITestCase):
 
         self.interview = Interview.objects.last()
         self.employee = InterviewEmployee.objects.get(
-            interview_id=self.interview.id, role_id=4).employee
+            interview_id=self.interview.id, role=EMPLOYEE).employee
 
     def test_success_delete_interview_employee(self):
         """ Test success deletion of the interview employee """

@@ -1,8 +1,6 @@
 from django.db import models
 from vacancies.models import Vacancy
 from authorization.models import User
-from roles.models import Role
-# Create your models here.
 
 class Interview(models.Model):
     """ Interview object representation """

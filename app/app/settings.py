@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'django_nose',
     'authorization',
     'companies',
-    'roles',
     'skills',
     'vacancies',
     'interviews'

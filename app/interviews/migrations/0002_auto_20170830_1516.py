@@ -11,7 +11,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('roles', '0001_initial'),
         ('interviews', '0001_initial'),
     ]
 
@@ -23,7 +22,6 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
                 ('interview', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='interviews.Interview')),
-                ('role', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='roles.Role')),
             ],
             options={
                 'db_table': 'interview_employees',

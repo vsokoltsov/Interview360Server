@@ -1,8 +1,6 @@
 from django.db import models
 from authorization.models import User
-from roles.models import Role
 from django.core.validators import MaxValueValidator, MinValueValidator
-# Create your models here.
 
 class Company(models.Model):
     """ Base company model """
@@ -26,7 +24,7 @@ class Company(models.Model):
         """
 
         return CompanyMember.objects.filter(
-                company_id=self.id, role_id=role_id
+                company_id=self.id, role=role_id
             ).prefetch_related('user')
 
 class CompanyMember(models.Model):

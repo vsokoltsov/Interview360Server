@@ -1,6 +1,6 @@
 from . import (
-    TransactionTestCase, serializers, Company, CompanyMember, Role,
-    serializers, User, CompanySerializer, datetime, mock
+    TransactionTestCase, serializers, Company, CompanyMember,
+    serializers, User, CompanySerializer, datetime, mock, HR
 )
 
 class CompanySerializerTests(TransactionTestCase):
@@ -10,13 +10,12 @@ class CompanySerializerTests(TransactionTestCase):
         """ Setting up necessary dependencies """
 
         user = User.objects.create(email="example@mail.com", password="12345678")
-        role = Role.objects.create(name='owner')
         self.company = Company.objects.create(name="Test",
                                          city="Test",
                                          start_date=datetime.date.today())
         company_member = CompanyMember.objects.create(user_id=user.id,
                                                       company_id=self.company.id,
-                                                      role_id=role.id)
+                                                      role=HR)
         self.company_params = {
             'name': 'NAME',
             'city': 'City',

@@ -9,7 +9,6 @@ class InterviewSerializerTests(TransactionTestCase):
     """ Tests for InterviewSerializer serializer """
 
     fixtures = [
-        "roles.yaml",
         "skill.yaml",
         "user.yaml",
         "company.yaml",
