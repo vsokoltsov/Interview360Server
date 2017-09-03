@@ -1,5 +1,7 @@
 from rest_framework import permissions
 from .models import CompanyMember
+from roles.constants import COMPANY_OWNER
+from roles.models import get_role
 
 class AllowedToUpdateCompany(permissions.BasePermission):
     """ Custom permission class; Check if user is company's owner """
@@ -10,7 +12,7 @@ class AllowedToUpdateCompany(permissions.BasePermission):
         try:
             owner_role = CompanyMember.objects.get(user_id=request.user.id,
                                                    company_id=obj.id,
-                                                   role='Owner')
+                                                   role=COMPANY_OWNER)
         except CompanyMember.DoesNotExist:
             owner_role = None
 
