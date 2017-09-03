@@ -133,7 +133,7 @@ class EmployeeSerializerTest(TransactionTestCase):
                 'example3@mail.com'
             ],
             'company_id': self.company.id,
-            'role_id': EMPLOYEE
+            'role': EMPLOYEE
         }
         serializer = EmployeeSerializer(data=form_data,
                                         context={'user': self.user})

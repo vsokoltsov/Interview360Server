@@ -1,5 +1,5 @@
 from . import APITestCase, datetime, Interview, InterviewEmployee, EMPLOYEE
-
+import ipdb
 class InterviewEmployeeViewTest(APITestCase):
     """ Tests for InterviewEmployee view class """
 
@@ -16,8 +16,9 @@ class InterviewEmployeeViewTest(APITestCase):
         """ Setting up test dependencies """
 
         self.interview = Interview.objects.last()
-        self.employee = InterviewEmployee.objects.get(
-            interview_id=self.interview.id, role=EMPLOYEE).employee
+        self.employee = InterviewEmployee.objects.filter(
+            interview_id=self.interview.id
+        ).last().employee
 
     def test_success_delete_interview_employee(self):
         """ Test success deletion of the interview employee """
