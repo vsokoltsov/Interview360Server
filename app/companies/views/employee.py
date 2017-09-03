@@ -1,6 +1,7 @@
 from . import (
     viewsets, status, Response, Company, CompanyMember, get_object_or_404,
-    EmployeeSerializer, User, IsAuthenticated,  TokenAuthentication, User
+    EmployeeSerializer, User, IsAuthenticated,  TokenAuthentication, User,
+    EmployeePermission
 )
 from rest_framework.decorators import list_route
 
@@ -8,7 +9,7 @@ class EmployeesViewSet(viewsets.ViewSet):
     """ View class for employee's actions """
 
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, EmployeePermission, )
 
     def list(self, request, company_pk=None):
         """ Return list of employees for the company """

@@ -27,6 +27,7 @@ CREATE_INTERVIEW = 'create_interview'
 UPDATE_INTERVIEW = 'update_interview'
 DELETE_INTERVIEW = 'delete_interview'
 PARTICIPATE_INTERVIEW = 'participate_interview'
+ADD_EMPLOYEE_TO_INTERVIEW = 'add_employee_to_interview'
 
 CREATE_FEEDBACK = 'create_feedback'
 UPDATE_FEEDBACK = 'update_feedback'
