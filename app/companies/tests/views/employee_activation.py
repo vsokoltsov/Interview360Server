@@ -1,5 +1,5 @@
 from . import (
-    APITestCase, Company, CompanyMember, User, Token, datetime
+    APITestCase, Company, CompanyMember, User, Token, datetime, EMPLOYEE
 )
 
 class EmployeeActivationTests(APITestCase):
@@ -12,6 +12,9 @@ class EmployeeActivationTests(APITestCase):
         self.company = Company.objects.create(name="Test",
                                          city="Test",
                                          start_date=datetime.date.today())
+        self.company_member = CompanyMember.objects.create(
+            user_id=self.user.id, company_id=self.company.id, role=EMPLOYEE
+        )
         self.token = Token.objects.create(user=self.user)
 
         self.form_data = {
@@ -21,17 +24,16 @@ class EmployeeActivationTests(APITestCase):
             'password_confirmation': 'aaaaaa'
         }
 
-    # TODO: rebuild this tests
-    # def test_success_employee_activation(self):
-    #     """ Test success response for route """
-    #
-    #     url = "/api/v1/companies/{}/activate_member/".format(self.company.id)
-    #     response = self.client.put(url, self.form_data)
-    #     self.assertTrue('message' in response.data)
-    #
-    # def test_failed_employee_activation(self):
-    #     """ Test failed response for route """
-    #
-    #     url = "/api/v1/companies/{}/activate_member/".format(self.company.id)
-    #     response = self.client.put(url, {})
-    #     self.assertTrue('errors' in response.data)
+    def test_success_employee_activation(self):
+        """ Test success response for route """
+
+        url = "/api/v1/companies/{}/activate_member/".format(self.company.id)
+        response = self.client.put(url, self.form_data)
+        self.assertTrue('message' in response.data)
+
+    def test_failed_employee_activation(self):
+        """ Test failed response for route """
+
+        url = "/api/v1/companies/{}/activate_member/".format(self.company.id)
+        response = self.client.put(url, {})
+        self.assertTrue('errors' in response.data)

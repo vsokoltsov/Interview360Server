@@ -3,7 +3,7 @@ from rest_framework.authtoken.models import Token
 from companies.models import Company, CompanyMember
 from authorization.models import User
 import datetime
-from roles.constants import COMPANY_OWNER, HR
+from roles.constants import COMPANY_OWNER, HR, EMPLOYEE
 
 from .company import CompaniesViewSetTests
 from .employee import EmployeesViewSetTests

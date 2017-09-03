@@ -11,18 +11,18 @@ def get_company(user, pk):
     company = get_object_or_404(queryset, pk=pk)
     return company
 
-class CompaniesViewSet(viewsets.ViewSet):
+class CompaniesViewSet(viewsets.ModelViewSet):
     """ Viewset for company actions """
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, AllowedToUpdateCompany, )
+    serializer_class = CompanySerializer
 
-    def list(self, request):
-        """ Receive a list of companies """
-
-        queryset = Company.objects.all()
-        serializer = CompanySerializer(queryset, many=True)
-        return Response({'companies': serializer.data})
+    def get_queryset(self):
+        """
+        Return scope of companies which current user belongs to
+        """
+        return self.request.user.companies.all()
 
     def create(self, request):
         """ Creates a new company """
@@ -40,20 +40,12 @@ class CompaniesViewSet(viewsets.ViewSet):
 
         company = get_company(request.user, pk)
         serializer = CompanySerializer(company, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
+        if serializer.is_valid() and serializer.save():
             return Response({'company': serializer.data},
                         status=status.HTTP_200_OK)
         else:
             return Response({'errors': serializer.errors},
                             status=status.HTTP_400_BAD_REQUEST)
-
-    def retrieve(self, request, pk=None):
-        """ Return detail information about company """
-
-        company = get_company(request.user, pk)
-        serializer = CompanySerializer(company)
-        return Response({ 'company': serializer.data })
 
     def destroy(self, request, pk=None):
         """ Deletes selected company """
