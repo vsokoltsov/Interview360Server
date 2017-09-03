@@ -9,6 +9,7 @@ from authorization.serializers import UserSerializer
 from vacancies.serializers import VacancySerializer
 from companies.models import CompanyMember
 from companies.serializers import CompanyMemberSerializer
+from roles.constants import CANDIDATE
 import ipdb
 
 class InterviewEmployeeSerializer(UserSerializer):

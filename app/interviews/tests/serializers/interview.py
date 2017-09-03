@@ -1,6 +1,6 @@
 from . import (
     TransactionTestCase, datetime, Company,
-    InterviewSerializer, mock, Company, Vacancy, InterviewEmployee, Interview
+    InterviewSerializer, mock, CompanyMember, Vacancy, InterviewEmployee, Interview
 )
 
 import ipdb
