@@ -1,6 +1,7 @@
 from django.db import models
 from authorization.models import User
 from roles.models import Role
+from django.core.validators import MaxValueValidator, MinValueValidator
 # Create your models here.
 
 class Company(models.Model):
@@ -33,7 +34,9 @@ class CompanyMember(models.Model):
 
     user = models.ForeignKey(User)
     company = models.ForeignKey(Company)
-    role = models.ForeignKey(Role)
+    role = models.IntegerField(
+        validators=[MaxValueValidator(4), MinValueValidator(1)]
+    )
     active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

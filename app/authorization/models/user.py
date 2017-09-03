@@ -21,9 +21,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_role_for_company(self, company):
         """ Return user's role in the company """
+
         
-        model = apps.get_model('companies', 'CompanyMember')
-        return model.objects.get(
+        company_member_class = apps.get_model('companies', 'CompanyMember')
+        role = company_member_class.objects.get(
             user_id=self.id, company_id=company.id
         ).role
 

@@ -28,7 +28,6 @@ class InterviewEmployee(models.Model):
 
     employee = models.ForeignKey(User, null=False)
     interview = models.ForeignKey(Interview, null=False)
-    role = models.ForeignKey(Role, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

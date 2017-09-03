@@ -1,4 +1,5 @@
 from django.db import models
+from django.apps import apps
 
 ROLE_IDENTIFIERS = {
     '1': 'CompanyOwner',
@@ -24,11 +25,18 @@ CREATE_FEEDBACK = 'create_feedback'
 UPDATE_FEEDBACK = 'update_feedback'
 DELETE_FEEDBACK = 'delete_feedback'
 
-def get_user_role_in_company():
-    pass
+def get_role(role):
+    try:
+        return apps.get_model('roles', ROLE_IDENTIFIERS[role])
+    except KeyError:
+        return None
 
 class RoleManager:
-    pass
+
+    def has_permission(self, permission):
+        """ Return boolean value for user access to operation """
+
+        return permission in permissions
 
 class Candidate(RoleManager):
     permissions = [
