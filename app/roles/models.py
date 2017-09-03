@@ -47,7 +47,6 @@ class Hr(Employee):
 
 class CompanyOwner(Hr):
     permissions = Hr.permissions + [
-        CREATE_COMPANY,
         UPDATE_COMPANY,
         DELETE_COMPANY
     ]

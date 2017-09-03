@@ -10,7 +10,6 @@ ROLE_IDENTIFIERS = {
     "{}".format(EMPLOYEE): 'Employee'
 }
 
-CREATE_COMPANY = 'create_company'
 UPDATE_COMPANY = 'update_company'
 DELETE_COMPANY = 'delete_company'
 ADD_EMPLOYEE_TO_COMPANY = 'add_employee_to_company'
