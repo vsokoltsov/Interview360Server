@@ -1,5 +1,6 @@
 from django.db import models
-from django.apps import apps
+from importlib import import_module
+import ipdb
 
 ROLE_IDENTIFIERS = {
     '1': 'CompanyOwner',
@@ -27,7 +28,8 @@ DELETE_FEEDBACK = 'delete_feedback'
 
 def get_role(role):
     try:
-        return apps.get_model('roles', ROLE_IDENTIFIERS[role])
+        module = import_module(__name__)
+        return getattr(module, ROLE_IDENTIFIERS[role])()
     except KeyError:
         return None
 
@@ -35,8 +37,8 @@ class RoleManager:
 
     def has_permission(self, permission):
         """ Return boolean value for user access to operation """
-
-        return permission in permissions
+        
+        return permission in self.permissions
 
 class Candidate(RoleManager):
     permissions = [

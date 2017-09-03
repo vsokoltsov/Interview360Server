@@ -1,7 +1,7 @@
 from . import (
     models, AbstractBaseUser,
     BaseUserManager, PermissionsMixin,
-    apps
+    apps, get_role
 )
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -22,11 +22,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_role_for_company(self, company):
         """ Return user's role in the company """
 
-        
         company_member_class = apps.get_model('companies', 'CompanyMember')
         role = company_member_class.objects.get(
             user_id=self.id, company_id=company.id
         ).role
+        return get_role(str(role))
 
     def __str__(self):
         """ String representation of user """
