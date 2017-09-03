@@ -22,7 +22,8 @@ class RoleManager:
 class Candidate(RoleManager):
     permissions = [
         RECEIVE_VACANCY,
-        RECEIVE_INTERVIEW
+        RECEIVE_INTERVIEW,
+        RECEIVE_COMPANY
     ]
 
 class Employee(Candidate):

@@ -1,7 +1,7 @@
 from . import (
     render, viewsets, status, Response, get_object_or_404,
     IsAuthenticated,  TokenAuthentication,
-    CompanySerializer, Company, AllowedToUpdateCompany
+    CompanySerializer, Company, CompanyPermissions
 )
 
 def get_company(user, pk):
@@ -15,7 +15,7 @@ class CompaniesViewSet(viewsets.ModelViewSet):
     """ Viewset for company actions """
 
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated, AllowedToUpdateCompany, )
+    permission_classes = (IsAuthenticated, CompanyPermissions, )
     serializer_class = CompanySerializer
 
     def get_queryset(self):
@@ -38,7 +38,7 @@ class CompaniesViewSet(viewsets.ModelViewSet):
     def update(self, request, pk=None):
         """ Update an existent company """
 
-        company = get_company(request.user, pk)
+        company = self.get_object()
         serializer = CompanySerializer(company, data=request.data, partial=True)
         if serializer.is_valid() and serializer.save():
             return Response({'company': serializer.data},
@@ -50,6 +50,6 @@ class CompaniesViewSet(viewsets.ModelViewSet):
     def destroy(self, request, pk=None):
         """ Deletes selected company """
 
-        company = get_company(request.user, pk)
+        company = self.get_object()
         company.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

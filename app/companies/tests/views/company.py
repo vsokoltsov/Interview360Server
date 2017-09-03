@@ -30,6 +30,12 @@ class CompaniesViewSetTests(APITestCase):
         response = self.client.get('/api/v1/companies/')
         self.assertEqual(len(response.data), 1)
 
+    def test_success_retrieve_action(self):
+        """ Test receiving of particular company """
+
+        response = self.client.get('/api/v1/companies/{}/'.format(self.company.id))
+        self.assertEqual(response.status_code, 200)
+
     def test_success_create_action(self):
         """ Test success option of company's creation """
 

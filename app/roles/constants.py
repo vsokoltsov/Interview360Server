@@ -9,7 +9,7 @@ ROLE_IDENTIFIERS = {
     "{}".format(CANDIDATE): 'Candidate',
     "{}".format(EMPLOYEE): 'Employee'
 }
-
+RECEIVE_COMPANY = 'receive_company'
 UPDATE_COMPANY = 'update_company'
 DELETE_COMPANY = 'delete_company'
 ADD_EMPLOYEE_TO_COMPANY = 'add_employee_to_company'

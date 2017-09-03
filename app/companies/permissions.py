@@ -1,20 +1,25 @@
 from rest_framework import permissions
-from .models import CompanyMember
-from roles.constants import COMPANY_OWNER
+from .models import Company, CompanyMember
+from roles.constants import (
+    COMPANY_OWNER, RECEIVE_COMPANY, DELETE_COMPANY, UPDATE_COMPANY
+)
 from roles.models import get_role
+import ipdb
 
-class AllowedToUpdateCompany(permissions.BasePermission):
+class CompanyPermissions(permissions.BasePermission):
     """ Custom permission class; Check if user is company's owner """
 
+    def has_permission(self, request, view):
+        return True
+
+
     def has_object_permission(self, request, view, obj):
-        if request.method not in ['PUT', 'DELETE']: return False
-
-        try:
-            owner_role = CompanyMember.objects.get(user_id=request.user.id,
-                                                   company_id=obj.id,
-                                                   role=COMPANY_OWNER)
-        except CompanyMember.DoesNotExist:
-            owner_role = None
-
-        if owner_role != None:
-            return True
+        role = request.user.get_role_for_company(obj)
+        if view.action == 'retrieve':
+            return role.has_permission(RECEIVE_COMPANY)
+        elif view.action == 'destroy':
+            return role.has_permission(DELETE_COMPANY)
+        elif view.action == 'update':
+            return role.has_permission(UPDATE_COMPANY)
+        else:
+            return False
