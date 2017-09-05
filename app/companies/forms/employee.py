@@ -43,5 +43,5 @@ class EmployeeForm(forms.Form):
             self.add_error('company_pk', 'User does not belong to the company')
             return False
         except forms.ValidationError as error:
-            self.add_error('company_id', 'User member is already activated')
+            self.add_error('company_pk', 'User member is already activated')
             return False

@@ -16,7 +16,7 @@ class EmployeeFormTest(TransactionTestCase):
             user=self.user, company=self.company, role=HR
         )
         self.form_data = {
-            'company_id': self.company.id,
+            'company_pk': self.company.id,
             'token': self.token.key,
             'password': 'aaaaaa',
             'password_confirmation': 'aaaaaa'
@@ -38,7 +38,7 @@ class EmployeeFormTest(TransactionTestCase):
         """ Test failed form validation due to different password """
 
         form_data = {
-            'company_id': self.company.id,
+            'company_pk': self.company.id,
             'token': self.token.key,
             'password': 'aaaaaa',
             'password_confirmation': 'bbbbbb'
