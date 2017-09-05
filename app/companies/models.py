@@ -23,9 +23,10 @@ class Company(models.Model):
         and have the pointed role
         """
 
-        return CompanyMember.objects.filter(
+        objects = CompanyMember.objects.filter(
                 company_id=self.id, role=role
             ).prefetch_related('user')
+        return list(map(lambda member: member.user, objects))
 
 class CompanyMember(models.Model):
     """ CompanyMember model, which is used for `through` association """
