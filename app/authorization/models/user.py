@@ -1,5 +1,5 @@
 from . import (
-    models, AbstractBaseUser,
+    models, AbstractBaseUser, GenericRelation,
     BaseUserManager, apps, get_role
 )
 
@@ -13,6 +13,7 @@ class User(AbstractBaseUser):
 
     companies = models.ManyToManyField('companies.Company', through='companies.CompanyMember')
     interviews = models.ManyToManyField('interviews.Interview', through='interviews.InterviewEmployee')
+    feedbacks = GenericRelation('feedbacks.Feedback')
 
     objects = BaseUserManager()
 
