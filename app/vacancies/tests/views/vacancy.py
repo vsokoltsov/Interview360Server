@@ -5,22 +5,23 @@ from . import (
 class VacancyViewSetTests(APITestCase):
     """ Tests for VacancyViewSet class """
 
+    fixtures = [
+        'skill.yaml',
+        'user.yaml',
+        'auth_token.yaml',
+        'company.yaml',
+        'vacancy.yaml'
+    ]
+
     def setUp(self):
         """ Setting up test dependencies """
 
-        self.user = User.objects.create(email="example1@mail.com")
-        self.company = Company.objects.create(name="Test",
-                                         city="Test",
-                                         start_date=datetime.datetime.now())
-        self.company_member = CompanyMember.objects.create(
-            company_id=self.company.id, user_id=self.user.id, role=HR
-        )
-        self.token = Token.objects.create(user=self.user)
-        self.skill = Skill.objects.create(name="Computer Science")
+        self.company = Company.objects.first()
+        self.user = self.company.get_employees_with_role(HR)[0]
+        self.token = Token.objects.get(user=self.user)
+        self.skill = Skill.objects.first()
+        self.vacancy = Vacancy.objects.filter(company_id=self.company.id).first()
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        self.vacancy = Vacancy.objects.create(
-            title="Vacancy name", description="Description",
-            company_id=self.company.id, salary=120.00)
         self.url = "/api/v1/companies/{}/vacancies/".format(self.company.id)
         self.form_data = {
             'title': 'Test',
@@ -37,7 +38,7 @@ class VacancyViewSetTests(APITestCase):
 
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
+        self.assertEqual(len(response.data), 2)
 
     def test_success_retrieve_action(self):
         """ Success receivinf of the detail vacancy information """
