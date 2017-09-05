@@ -32,6 +32,9 @@ class EmployeePermission(permissions.BasePermission):
     def has_permission(self, request, view, obj=None):
         company = Company.objects.get(id=view.kwargs['company_pk'])
         role = request.user.get_role_for_company(company)
+        
+        if request.method == 'PUT': return True
+
         if view.action == 'list':
             return role.has_permission(RECEIVE_EMPLOYEES)
         elif view.action == 'create':

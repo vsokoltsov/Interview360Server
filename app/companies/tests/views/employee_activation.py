@@ -16,9 +16,9 @@ class EmployeeActivationTests(APITestCase):
             user_id=self.user.id, company_id=self.company.id, role=EMPLOYEE
         )
         self.token = Token.objects.create(user=self.user)
-
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.form_data = {
-            'company_id': self.company.id,
+            'company_pk': self.company.id,
             'token': self.token.key,
             'password': 'aaaaaa',
             'password_confirmation': 'aaaaaa'

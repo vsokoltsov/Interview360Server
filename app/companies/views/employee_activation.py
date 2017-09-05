@@ -1,9 +1,14 @@
-from . import Response, get_object_or_404, User, Company, EmployeeForm, status
+from . import (Response, get_object_or_404, User, Company, EmployeeForm, status,
+               IsAuthenticated, TokenAuthentication, EmployeePermission)
 from rest_framework.views import APIView
 
 class EmployeeActivationView(APIView):
+    """ View class responsible for activation of the new user """
 
-    def put(self, request, company_id):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated, EmployeePermission, )
+
+    def put(self, request, company_pk=None):
         form = EmployeeForm(request.data)
 
         if form.submit():
