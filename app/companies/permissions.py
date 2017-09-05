@@ -1,18 +1,45 @@
 from rest_framework import permissions
-from .models import CompanyMember
+from .models import Company, CompanyMember
+from roles.constants import (
+    COMPANY_OWNER, RECEIVE_COMPANY, DELETE_COMPANY, UPDATE_COMPANY,
+    RECEIVE_EMPLOYEES, ADD_EMPLOYEE_TO_COMPANY, DELETE_EMPLOYEES
+)
+from roles.models import get_role
+import ipdb
 
-class AllowedToUpdateCompany(permissions.BasePermission):
+class CompanyPermissions(permissions.BasePermission):
     """ Custom permission class; Check if user is company's owner """
 
+    def has_permission(self, request, view):
+        return True
+
+
     def has_object_permission(self, request, view, obj):
-        if request.method not in ['PUT', 'DELETE']: return False
-
-        try:
-            owner_role = CompanyMember.objects.get(user_id=request.user.id,
-                                                   company_id=obj.id,
-                                                   role='owner')
-        except CompanyMember.DoesNotExist:
-            owner_role = None
-
-        if owner_role != None:
+        role = request.user.get_role_for_company(obj)
+        if view.action == 'retrieve':
+            return role.has_permission(RECEIVE_COMPANY)
+        elif view.action == 'destroy':
+            return role.has_permission(DELETE_COMPANY)
+        elif view.action == 'update':
+            return role.has_permission(UPDATE_COMPANY)
+        else:
             return True
+
+
+class EmployeePermission(permissions.BasePermission):
+    """ Permissions for EmployeeViewSet """
+
+    def has_permission(self, request, view, obj=None):
+        company = Company.objects.get(id=view.kwargs['company_pk'])
+        role = request.user.get_role_for_company(company)
+        
+        if request.method == 'PUT': return True
+
+        if view.action == 'list':
+            return role.has_permission(RECEIVE_EMPLOYEES)
+        elif view.action == 'create':
+            return role.has_permission(ADD_EMPLOYEE_TO_COMPANY)
+        elif view.action == 'destroy':
+            return role.has_permission(DELETE_EMPLOYEES)
+        else:
+            return False

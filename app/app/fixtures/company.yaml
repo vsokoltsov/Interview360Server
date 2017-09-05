@@ -8,6 +8,16 @@
     created_at: '2017-09-15T22:17:44+00:00'
     updated_at: '2017-09-15T22:17:44+00:00'
 
+- model: companies.company
+  pk: 34
+  fields:
+    name: Another test,
+    start_date: '2012-04-13'
+    description: Another description
+    city: New York
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
 - model: companies.companymember
   pk: 24
   fields:
@@ -57,7 +67,7 @@
     active: true
     created_at: '2017-09-15T22:17:44+00:00'
     updated_at: '2017-09-15T22:17:44+00:00'
-    
+
 - model: companies.companymember
   pk: 29
   fields:
@@ -65,5 +75,55 @@
     company: !!int 33
     role: !!int 4
     active: true
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.companymember
+  pk: 30
+  fields:
+    user: !!int 3
+    company: !!int 34
+    role: !!int 2
+    active: true
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.companymember
+  pk: 31
+  fields:
+    user: !!int 4
+    company: !!int 34
+    role: !!int 3
+    active: false
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.companymember
+  pk: 32
+  fields:
+    user: !!int 5
+    company: !!int 34
+    role: !!int 3
+    active: false
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.companymember
+  pk: 33
+  fields:
+    user: !!int 7
+    company: !!int 33
+    role: !!int 3
+    active: false
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.companymember
+  pk: 34
+  fields:
+    user: !!int 8
+    company: !!int 33
+    role: !!int 4
+    active: false
     created_at: '2017-09-15T22:17:44+00:00'
     updated_at: '2017-09-15T22:17:44+00:00'

@@ -24,7 +24,7 @@ urlpatterns = [
         url(r'', include(nested_router.urls) ),
         url(r'', include(vacancies_router.urls) ),
         url(r'', include(interviews_router.urls) ),
-        url(r'^v1/companies/(?P<company_id>[A-Za-z0-9]*)/activate_member',
+        url(r'^v1/companies/(?P<company_pk>[A-Za-z0-9]*)/activate_member',
             EmployeeActivationView.as_view()),
         url(r'^v1/interviews/(?P<interview_id>[A-Za-z0-9]*)/employees/(?P<employee_id>[A-Za-z0-9]*)',
             InterviewEmployeeView.as_view()),

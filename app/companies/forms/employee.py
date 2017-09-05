@@ -1,4 +1,4 @@
-from . import forms, Company, User, CompanyMember, Role
+from . import forms, Company, User, CompanyMember
 from django.core.exceptions import ObjectDoesNotExist
 
 class EmployeeForm(forms.Form):
@@ -10,7 +10,7 @@ class EmployeeForm(forms.Form):
     token = forms.CharField(required=True)
     password = forms.CharField(max_length=255, min_length=6)
     password_confirmation = forms.CharField(max_length=255, min_length=6)
-    company_id = forms.IntegerField(required=True)
+    company_pk = forms.IntegerField(required=True)
 
     def clean_password_confirmation(self):
         """ Check matching of password and password confirmation """
@@ -29,7 +29,7 @@ class EmployeeForm(forms.Form):
             user.set_password(self['password'].value())
             user.save()
             company_member = CompanyMember.objects.get(
-                user_id=user.id, company_id=self['company_id'].value())
+                user_id=user.id, company_id=self['company_pk'].value())
             if not company_member.active:
                 company_member.active = True
                 company_member.save()
@@ -40,8 +40,8 @@ class EmployeeForm(forms.Form):
             self.add_error('token', 'There is no such user')
             return False
         except CompanyMember.DoesNotExist as error:
-            self.add_error('company_id', 'User does not belong to the company')
+            self.add_error('company_pk', 'User does not belong to the company')
             return False
         except forms.ValidationError as error:
-            self.add_error('company_id', 'User member is already activated')
+            self.add_error('company_pk', 'User member is already activated')
             return False

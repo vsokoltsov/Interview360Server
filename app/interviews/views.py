@@ -10,14 +10,14 @@ from companies.models import Company
 from vacancies.models import Vacancy
 from authorization.models import User
 from .models import Interview, InterviewEmployee
-
+from .permissions import InterviewPermission
 import ipdb
 
 class InterviewViewSet(viewsets.ModelViewSet):
     """ View class for Interviews """
 
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, InterviewPermission, )
     serializer_class = InterviewSerializer
 
     def get_queryset(self):
@@ -68,6 +68,8 @@ class InterviewEmployeeView(APIView):
 
     def delete(self, request, interview_id=None, employee_id=None):
         """ Delete InterviewEmployee instance  """
+        authentication_classes = (TokenAuthentication,)
+        permission_classes = (IsAuthenticated, InterviewPermission, )
 
         try:
             interview = get_object_or_404(Interview, pk=interview_id)

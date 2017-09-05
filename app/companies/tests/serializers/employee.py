@@ -1,6 +1,6 @@
 from . import (
     TransactionTestCase, serializers, Company, CompanyMember,
-    serializers, User, EmployeeSerializer, datetime, mock, User, Role
+    serializers, User, EmployeeSerializer, datetime, mock, User, HR, EMPLOYEE
 )
 import django.core.mail as mail
 from django.test import override_settings
@@ -9,14 +9,16 @@ import ipdb
 class EmployeeSerializerTest(TransactionTestCase):
     """ Test employee serializer class """
 
+    fixtures = [
+        'user.yaml',
+        'company.yaml'
+    ]
+
     def setUp(self):
         """ Test credentials set up """
 
-        self.user = User.objects.create(email="example@mail.com")
-        self.company = Company.objects.create(name="Test",
-                                         city="Test",
-                                         start_date=datetime.date.today())
-        self.role = Role.objects.create(name="CEO")
+        self.company = Company.objects.last()
+        self.user = self.company.get_employees_with_role(HR)[0]
         self.form_data = {
             'emails': [
                 'example1@mail.com',
@@ -24,7 +26,7 @@ class EmployeeSerializerTest(TransactionTestCase):
                 'example3@mail.com'
             ],
             'company_id': self.company.id,
-            'role_id': self.role.id
+            'role': HR
         }
 
     def test_success_validation(self):
@@ -51,7 +53,7 @@ class EmployeeSerializerTest(TransactionTestCase):
                 'example3@mail.com'
             ],
             'company_id': self.company.id,
-            'role_id': 10000
+            'role': 10000
         }
         serializer = EmployeeSerializer(data=form_data,
                                         context={'user': self.user})
@@ -62,7 +64,7 @@ class EmployeeSerializerTest(TransactionTestCase):
         """ Validation failed if request.user email is in the emails list """
 
         self.form_data['emails'] = [
-            'example@mail.com',
+            self.user.email,
             'example2@mail.com',
             'example3@mail.com'
         ]
@@ -126,7 +128,7 @@ class EmployeeSerializerTest(TransactionTestCase):
         """ Test failed validation if user already belongs to a company """
 
         new_user = User.objects.create(email="example4@mail.com")
-        CompanyMember.objects.create(user_id=new_user.id, company_id=self.company.id, role_id=self.role.id)
+        CompanyMember.objects.create(user_id=new_user.id, company_id=self.company.id, role=EMPLOYEE)
         form_data = {
             'emails': [
                 'example4@mail.com',
@@ -134,7 +136,7 @@ class EmployeeSerializerTest(TransactionTestCase):
                 'example3@mail.com'
             ],
             'company_id': self.company.id,
-            'role_id': self.role.id
+            'role': EMPLOYEE
         }
         serializer = EmployeeSerializer(data=form_data,
                                         context={'user': self.user})

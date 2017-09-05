@@ -1,7 +1,6 @@
 from django.db import models
 from authorization.models import User
-from roles.models import Role
-# Create your models here.
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Company(models.Model):
     """ Base company model """
@@ -18,22 +17,25 @@ class Company(models.Model):
     class Meta:
         db_table = 'companies'
 
-    def get_employees_with_role(self, role_id):
+    def get_employees_with_role(self, role):
         """
         Return list of employees who are belonging to the company
         and have the pointed role
         """
 
-        return CompanyMember.objects.filter(
-                company_id=self.id, role_id=role_id
+        objects = CompanyMember.objects.filter(
+                company_id=self.id, role=role
             ).prefetch_related('user')
+        return list(map(lambda member: member.user, objects))
 
 class CompanyMember(models.Model):
     """ CompanyMember model, which is used for `through` association """
 
     user = models.ForeignKey(User)
     company = models.ForeignKey(Company)
-    role = models.ForeignKey(Role)
+    role = models.IntegerField(
+        validators=[MaxValueValidator(4), MinValueValidator(1)]
+    )
     active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

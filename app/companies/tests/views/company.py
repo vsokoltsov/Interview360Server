@@ -1,35 +1,44 @@
 from . import (
-    APITestCase, Company, CompanyMember, User, Token, datetime, Role
+    APITestCase, Company, CompanyMember, User, Token, datetime, COMPANY_OWNER
 )
 
 class CompaniesViewSetTests(APITestCase):
     """ API View tests for CompaniesViewSet """
 
+    fixtures = [
+        'user.yaml',
+        'auth_token.yaml',
+        'company.yaml'
+    ]
+
     def setUp(self):
         """ Set up test dependencies """
 
-        user = User.objects.create(email="example@mail.com", password="12345678")
-        role = Role.objects.create(name='owner')
-        self.token = Token.objects.create(user=user)
-        self.company = Company.objects.create(name="Test",
-                                         city="Test",
-                                         start_date=datetime.datetime.now())
-        company_member = CompanyMember.objects.create(user_id=user.id,
-                                                      company_id=self.company.id,
-                                                      role_id=role.id)
+        self.company = Company.objects.first()
+        self.user = self.company.get_employees_with_role(COMPANY_OWNER)[0]
+        self.token = Token.objects.get(user=self.user)
+        company_member = CompanyMember.objects.get(
+            user_id=self.user.id, company_id=self.company.id
+        )
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.company_params = {
             'name': 'NAME',
             'city': 'City',
             'start_date': datetime.date.today(),
-            'owner_id': user.id
+            'owner_id': self.user.id
         }
 
     def test_list_action(self):
         """ Test receiving of companies list """
 
         response = self.client.get('/api/v1/companies/')
-        self.assertEqual(len(response.data['companies']), 1)
+        self.assertEqual(len(response.data), 1)
+
+    def test_success_retrieve_action(self):
+        """ Test receiving of particular company """
+
+        response = self.client.get('/api/v1/companies/{}/'.format(self.company.id))
+        self.assertEqual(response.status_code, 200)
 
     def test_success_create_action(self):
         """ Test success option of company's creation """

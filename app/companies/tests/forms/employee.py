@@ -1,24 +1,27 @@
 from . import (mock, TransactionTestCase, Token, EmployeeForm,
-               Company, CompanyMember, User, Role, datetime)
-import ipdb
+               Company, CompanyMember, User, datetime, HR, CANDIDATE)
 
 class EmployeeFormTest(TransactionTestCase):
     """ Tests for the EmployeeFormTest class """
+    
+    fixtures = [
+        'user.yaml',
+        'auth_token.yaml',
+        'company.yaml'
+    ]
 
     def setUp(self):
         """ Set up test dependencies """
 
-        self.user = User.objects.create(email="example@mail.com")
-        self.company = Company.objects.create(name="Test",
-                                         city="Test",
-                                         start_date=datetime.date.today())
-        self.token = Token.objects.create(user=self.user)
-        self.role = Role.objects.create(name='owner')
-        self.company_member = CompanyMember.objects.create(
-            user=self.user, company=self.company, role=self.role
+        self.company = Company.objects.first()
+        self.hr = self.company.get_employees_with_role(HR)[0]
+        self.user = self.company.get_employees_with_role(CANDIDATE)[-1]
+        self.token = Token.objects.get(user=self.user)
+        self.company_member = CompanyMember.objects.get(
+            user_id=self.user.id, company_id=self.company.id
         )
         self.form_data = {
-            'company_id': self.company.id,
+            'company_pk': self.company.id,
             'token': self.token.key,
             'password': 'aaaaaa',
             'password_confirmation': 'aaaaaa'
@@ -40,7 +43,7 @@ class EmployeeFormTest(TransactionTestCase):
         """ Test failed form validation due to different password """
 
         form_data = {
-            'company_id': self.company.id,
+            'company_pk': self.company.id,
             'token': self.token.key,
             'password': 'aaaaaa',
             'password_confirmation': 'bbbbbb'

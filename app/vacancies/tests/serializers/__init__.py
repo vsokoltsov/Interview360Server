@@ -6,6 +6,7 @@ from rest_framework.authtoken.models import Token
 from skills.models import Skill
 import datetime
 from vacancies.serializers import VacancySerializer
+from roles.constants import HR, EMPLOYEE
 import mock
 
 from .vacancy import VacancySerializerTest

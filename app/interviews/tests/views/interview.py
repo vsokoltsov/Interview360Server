@@ -1,10 +1,9 @@
-from . import APITestCase, datetime, Token, Company
+from . import APITestCase, datetime, Token, Company, HR, CANDIDATE
 
 class InterviewViewSetTests(APITestCase):
     """ Tests for InterviewViewSet class """
 
     fixtures = [
-        "roles.yaml",
         "skill.yaml",
         "user.yaml",
         "auth_token.yaml",
@@ -16,14 +15,13 @@ class InterviewViewSetTests(APITestCase):
     def setUp(self):
         """ Setting up test dependencies """
 
-        self.company = Company.objects.last()
-        hr_scope = self.company.get_employees_with_role(2)
-        candidate_scope = self.company.get_employees_with_role(4)
+        self.company = Company.objects.first()
         date = datetime.datetime.now() + datetime.timedelta(days=10)
-        self.hr = hr_scope.last().user
+        self.hr = self.company.get_employees_with_role(HR)[-1]
         self.vacancy = self.company.vacancy_set.first()
-        self.candidate = candidate_scope.last().user
+        self.candidate = self.company.get_employees_with_role(CANDIDATE)[-1]
         self.interview = self.vacancy.interviews.first()
+        date = datetime.datetime.now() + datetime.timedelta(days=10)
         self.token = Token.objects.get(user=self.hr)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
@@ -43,6 +41,12 @@ class InterviewViewSetTests(APITestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 2)
+
+    def test_success_retrieve_action(self):
+        """ Test success receiving detail interview """
+
+        response = self.client.get(self.url + "{}/".format(self.interview.id))
+        self.assertEqual(response.status_code, 200)
 
     def test_success_interview_creation(self):
         """ Test success creation of the interview """

@@ -1,23 +1,26 @@
 from . import (
-    APITestCase, Company, CompanyMember, User, Token, datetime, Role
+    APITestCase, Company, CompanyMember, User, Token, datetime,
+    COMPANY_OWNER, HR
 )
-import ipdb
 
 class EmployeesViewSetTests(APITestCase):
     """ API View tests for EmployeeViewSet """
 
+    fixtures = [
+        'user.yaml',
+        'auth_token.yaml',
+        'company.yaml'
+    ]
+
     def setUp(self):
         """ Set up test dependencies """
 
-        role = Role.objects.create(name='owner')
-        self.user = User.objects.create(email="example@mail.com", password="12345678")
-        self.token = Token.objects.create(user=self.user)
-        self.company = Company.objects.create(name="Test",
-                                         city="Test",
-                                         start_date=datetime.datetime.now())
-        company_member = CompanyMember.objects.create(user_id=self.user.id,
-                                                      company_id=self.company.id,
-                                                      role_id=role.id)
+        self.company = Company.objects.first()
+        self.user = self.company.get_employees_with_role(COMPANY_OWNER)[0]
+        self.token = Token.objects.get(user=self.user)
+        company_member = CompanyMember.objects.get(
+            user_id=self.user.id, company_id=self.company.id
+        )
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.form_data = {
             'emails': [
@@ -26,7 +29,7 @@ class EmployeesViewSetTests(APITestCase):
                 'example3@mail.com'
             ],
             'company_id': self.company.id,
-            'role_id': role.id
+            'role': HR
         }
 
     def test_employees_list(self):
@@ -34,7 +37,7 @@ class EmployeesViewSetTests(APITestCase):
 
         url = "/api/v1/companies/{}/employees/".format(self.company.id)
         response = self.client.get(url)
-        self.assertEqual(len(response.data['employees']), 1)
+        self.assertEqual(len(response.data['employees']), 8)
 
     def test_success_employee_creation(self):
         """ Test success creation of the new employees """

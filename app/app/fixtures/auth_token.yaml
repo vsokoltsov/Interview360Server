@@ -28,3 +28,14 @@
   fields:
     user: !!int 1
     created: '2017-09-15T22:17:44+00:00'
+- model: authtoken.token
+  pk: dbdb6373928ec7ebeb97fe8a82ff706bebw53876
+  fields:
+    user: !!int 7
+    created: '2017-09-15T22:17:44+00:00'
+
+- model: authtoken.token
+  pk: dbdb6373928ec7ebeb97fe8w82ff706bebw53876
+  fields:
+    user: !!int 6
+    created: '2017-09-15T22:17:44+00:00'

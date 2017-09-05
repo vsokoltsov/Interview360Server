@@ -1,22 +1,26 @@
 from . import (
     TransactionTestCase, Vacancy, User, Company, Token, Skill, datetime, mock,
-    VacancySerializer
+    VacancySerializer, HR
 )
 
 class VacancySerializerTest(TransactionTestCase):
     """ Test class for VacanciesSerializer """
 
+    fixtures = [
+        'skill.yaml',
+        'user.yaml',
+        'company.yaml',
+        'vacancy.yaml'
+    ]
+
     def setUp(self):
         """ Setting up testing dependencies """
 
-        self.user = User.objects.create(email="example1@mail.com")
-        self.company = Company.objects.create(name="Test",
-                                         city="Test",
-                                         start_date=datetime.datetime.now())
-        self.skill = Skill.objects.create(name="Computer Science")
-        self.vacancy = Vacancy.objects.create(
-            title="Vacancy name", description="Description",
-            company_id=self.company.id, salary=120.00)
+        self.company = Company.objects.first()
+        self.user = self.company.get_employees_with_role(HR)[0]
+        self.skill = Skill.objects.first()
+        self.vacancy = Vacancy.objects.filter(company_id=self.company.id).first()
+
         self.url = "/api/v1/companies/{}/vacancies/".format(self.company.id)
         self.form_data = {
             'title': 'Test',

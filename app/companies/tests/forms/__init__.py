@@ -6,6 +6,6 @@ import datetime
 from companies.forms import EmployeeForm
 from companies.models import Company, CompanyMember
 from authorization.models import User
-from roles.models import Role
+from roles.constants import HR, CANDIDATE
 
 from .employee import EmployeeFormTest

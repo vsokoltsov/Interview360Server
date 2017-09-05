@@ -2,7 +2,6 @@ from rest_framework import serializers
 from .models import Interview, InterviewEmployee
 from authorization.models import User
 from vacancies.models import Vacancy
-from roles.models import Role
 from authorization.serializers import UserSerializer
 from datetime import datetime
 from django.db import transaction
@@ -10,6 +9,7 @@ from authorization.serializers import UserSerializer
 from vacancies.serializers import VacancySerializer
 from companies.models import CompanyMember
 from companies.serializers import CompanyMemberSerializer
+from roles.constants import CANDIDATE
 import ipdb
 
 class InterviewEmployeeSerializer(UserSerializer):
@@ -123,12 +123,10 @@ class InterviewSerializer(serializers.ModelSerializer):
         interviewees = data.pop('interviewees', None)
         interview = Interview.objects.create(**data)
         if interviewees:
-            role = Role.objects.last()
             for employee_id in interviewees:
                 employee = User.objects.get(id=employee_id)
                 InterviewEmployee.objects.create(
-                    interview_id=interview.id, employee_id=employee.id,
-                    role_id=role.id
+                    interview_id=interview.id, employee_id=employee.id
                 )
         return interview
 
