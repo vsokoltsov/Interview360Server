@@ -43,6 +43,12 @@ class InterviewViewSetTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 2)
 
+    def test_success_retrieve_action(self):
+        """ Test success receiving detail interview """
+
+        response = self.client.get(self.url + "{}/".format(self.interview.id))
+        self.assertEqual(response.status_code, 200)
+
     def test_success_interview_creation(self):
         """ Test success creation of the interview """
 
