@@ -1,0 +1,303 @@
+]0;IPython: im/app]0;IPython: im/app- model: contenttypes.contenttype
+  pk: 1
+  fields: {app_label: admin, model: logentry}
+- model: contenttypes.contenttype
+  pk: 2
+  fields: {app_label: auth, model: permission}
+- model: contenttypes.contenttype
+  pk: 3
+  fields: {app_label: auth, model: group}
+- model: contenttypes.contenttype
+  pk: 4
+  fields: {app_label: contenttypes, model: contenttype}
+- model: contenttypes.contenttype
+  pk: 5
+  fields: {app_label: sessions, model: session}
+- model: contenttypes.contenttype
+  pk: 6
+  fields: {app_label: authtoken, model: token}
+- model: contenttypes.contenttype
+  pk: 7
+  fields: {app_label: authorization, model: user}
+- model: contenttypes.contenttype
+  pk: 8
+  fields: {app_label: companies, model: company}
+- model: contenttypes.contenttype
+  pk: 9
+  fields: {app_label: companies, model: companymember}
+- model: contenttypes.contenttype
+  pk: 10
+  fields: {app_label: roles, model: role}
+- model: contenttypes.contenttype
+  pk: 11
+  fields: {app_label: skills, model: skill}
+- model: contenttypes.contenttype
+  pk: 12
+  fields: {app_label: vacancies, model: vacancy}
+- model: contenttypes.contenttype
+  pk: 13
+  fields: {app_label: vacancies, model: vacancyskill}
+- model: contenttypes.contenttype
+  pk: 14
+  fields: {app_label: interviews, model: interview}
+- model: contenttypes.contenttype
+  pk: 15
+  fields: {app_label: interviews, model: interviewemployee}
+- model: contenttypes.contenttype
+  pk: 16
+  fields: {app_label: feedbacks, model: feedback}
+- model: authorization.user
+  pk: 1
+  fields: {password: '', last_login: null, email: sokol1@gmail.com, first_name: '',
+    last_name: '', created_at: !!timestamp '2017-06-27 11:29:16.380980+00:00', updated_at: !!timestamp '2017-06-27
+      11:29:16.381010+00:00'}
+- model: authorization.user
+  pk: 2
+  fields: {password: '', last_login: null, email: sokol2@gmail.com, first_name: '',
+    last_name: '', created_at: !!timestamp '2017-06-27 11:29:51.914744+00:00', updated_at: !!timestamp '2017-06-27
+      11:29:51.914779+00:00'}
+- model: authorization.user
+  pk: 3
+  fields: {password: pbkdf2_sha256$36000$bShjogVUA98z$bF7bu+Y/Hfs7o804DCF1RmoqhsmEMSRpaMfWgX3QkAY=,
+    last_login: null, email: sokol3@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-06-27
+      11:30:06.703808+00:00', updated_at: !!timestamp '2017-06-27 11:30:06.792945+00:00'}
+- model: authorization.user
+  pk: 4
+  fields: {password: pbkdf2_sha256$36000$ml5SIOGjOgRH$0vgwcj/uJicAi5lc5ZROL2wMaN34YPV3tEBXUZUIIDA=,
+    last_login: null, email: sokol4@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-06-27
+      11:31:30.023025+00:00', updated_at: !!timestamp '2017-06-27 11:31:30.083218+00:00'}
+- model: authorization.user
+  pk: 5
+  fields: {password: pbkdf2_sha256$36000$suP2LGUK7Zzb$c0P5ORVhv6gYiY419aE1jvM3+s1+UOPRiF5KypoSLIs=,
+    last_login: null, email: sokol5@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-06-27
+      11:31:39.480037+00:00', updated_at: !!timestamp '2017-06-27 11:31:39.542918+00:00'}
+- model: authorization.user
+  pk: 6
+  fields: {password: pbkdf2_sha256$36000$YmyPafdLl58s$EMO+o5jFCOwNW+42nnHhWNBjHcbJA86jzdgJckHX2qw=,
+    last_login: null, email: sokol6@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-06-27
+      11:32:25.175991+00:00', updated_at: !!timestamp '2017-06-27 11:32:25.233302+00:00'}
+- model: authorization.user
+  pk: 7
+  fields: {password: Altair_69, last_login: null, email: sokol8@gmail.com, first_name: '',
+    last_name: '', created_at: !!timestamp '2017-06-27 12:05:54.195202+00:00', updated_at: !!timestamp '2017-06-27
+      12:05:54.195232+00:00'}
+- model: authorization.user
+  pk: 8
+  fields: {password: pbkdf2_sha256$36000$dA1bdm38j3zM$66CcGrWWLxZd2f5JAhTQQxyIxpoLnMFZjpA+YKMiDK8=,
+    last_login: null, email: sokol9@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-06-27
+      12:21:05.173245+00:00', updated_at: !!timestamp '2017-06-27 12:21:05.231677+00:00'}
+- model: authorization.user
+  pk: 13
+  fields: {password: pbkdf2_sha256$36000$74kIB8f9DHQy$LVfTZsJTaZ83yftqgrwCEkHR34wu26FrSOPtivgHyfI=,
+    last_login: null, email: vforvad@gmail.com, first_name: '', last_name: '', created_at: !!timestamp '2017-07-25
+      20:17:59.174331+00:00', updated_at: !!timestamp '2017-07-25 20:17:59.257791+00:00'}
+- model: authorization.user
+  pk: 14
+  fields: {password: '', last_login: null, email: aaa@mail.ru, first_name: '', last_name: '',
+    created_at: !!timestamp '2017-08-15 13:46:15.478886+00:00', updated_at: !!timestamp '2017-08-15
+      13:46:15.478913+00:00'}
+- model: companies.company
+  pk: 33
+  fields: {name: Test, start_date: 2017-08-21, description: Test, city: Spb, created_at: !!timestamp '2017-08-21
+      21:32:30.563155+00:00', updated_at: !!timestamp '2017-08-21 21:32:30.563178+00:00'}
+- model: companies.companymember
+  pk: 24
+  fields: {user: 13, company: 33, role: 1, active: true, created_at: !!timestamp '2017-08-21
+      21:33:57.978602+00:00', updated_at: !!timestamp '2017-08-21 21:33:57.978635+00:00'}
+- model: skills.skill
+  pk: 1
+  fields: {name: aaa, created_at: !!timestamp '2017-09-02 17:36:44.697822+00:00',
+    updated_at: !!timestamp '2017-09-02 17:36:44.697868+00:00'}
+- model: vacancies.vacancy
+  pk: 1
+  fields:
+    title: SI
+    description: AAA
+    salary: '120.00'
+    created_at: 2017-08-28 11:26:12.987378+00:00
+    updated_at: 2017-08-28 11:26:12.987416+00:00
+    company: 33
+    active: true
+    skills: []
+- model: vacancies.vacancy
+  pk: 2
+  fields:
+    title: AAA
+    description: BBB
+    salary: '150.00'
+    created_at: 2017-08-30 12:28:53.966284+00:00
+    updated_at: 2017-09-02 17:37:06.635066+00:00
+    company: 33
+    active: true
+    skills: []
+- model: feedbacks.feedback
+  pk: 1
+  fields: {user: 14, description: aaaa, created_at: !!timestamp '2017-09-05 21:40:38.923626+00:00',
+    content_type: 7, object_id: 13}
+- model: authtoken.token
+  pk: 65057f8d11ed3a8ab028f0e27d553e0ece873b9e
+  fields: {user: 13, created: !!timestamp '2017-07-25 20:17:59.262172+00:00'}
+- model: authtoken.token
+  pk: 700c044773f539a7bd70f222b9004a04624f6533
+  fields: {user: 3, created: !!timestamp '2017-06-27 11:30:06.797812+00:00'}
+- model: authtoken.token
+  pk: 852ffb35b88f621c352322a68748a3086088de41
+  fields: {user: 8, created: !!timestamp '2017-06-27 12:21:05.234725+00:00'}
+- model: authtoken.token
+  pk: b813622db23fa02ecc68339fc81d9ec3c47695fb
+  fields: {user: 4, created: !!timestamp '2017-06-27 11:31:30.088882+00:00'}
+- model: authtoken.token
+  pk: cb2f5f90effa68aa6795c34c5603ce7e14a79695
+  fields: {user: 5, created: !!timestamp '2017-06-27 11:31:39.548447+00:00'}
+- model: authtoken.token
+  pk: dbdb6373928ec7ebeb97fe8a82ff706bebe53876
+  fields: {user: 6, created: !!timestamp '2017-06-27 11:32:25.237546+00:00'}
+- model: auth.permission
+  pk: 1
+  fields: {name: Can add log entry, content_type: 1, codename: add_logentry}
+- model: auth.permission
+  pk: 2
+  fields: {name: Can change log entry, content_type: 1, codename: change_logentry}
+- model: auth.permission
+  pk: 3
+  fields: {name: Can delete log entry, content_type: 1, codename: delete_logentry}
+- model: auth.permission
+  pk: 4
+  fields: {name: Can add permission, content_type: 2, codename: add_permission}
+- model: auth.permission
+  pk: 5
+  fields: {name: Can change permission, content_type: 2, codename: change_permission}
+- model: auth.permission
+  pk: 6
+  fields: {name: Can delete permission, content_type: 2, codename: delete_permission}
+- model: auth.permission
+  pk: 7
+  fields: {name: Can add group, content_type: 3, codename: add_group}
+- model: auth.permission
+  pk: 8
+  fields: {name: Can change group, content_type: 3, codename: change_group}
+- model: auth.permission
+  pk: 9
+  fields: {name: Can delete group, content_type: 3, codename: delete_group}
+- model: auth.permission
+  pk: 10
+  fields: {name: Can add content type, content_type: 4, codename: add_contenttype}
+- model: auth.permission
+  pk: 11
+  fields: {name: Can change content type, content_type: 4, codename: change_contenttype}
+- model: auth.permission
+  pk: 12
+  fields: {name: Can delete content type, content_type: 4, codename: delete_contenttype}
+- model: auth.permission
+  pk: 13
+  fields: {name: Can add session, content_type: 5, codename: add_session}
+- model: auth.permission
+  pk: 14
+  fields: {name: Can change session, content_type: 5, codename: change_session}
+- model: auth.permission
+  pk: 15
+  fields: {name: Can delete session, content_type: 5, codename: delete_session}
+- model: auth.permission
+  pk: 16
+  fields: {name: Can add Token, content_type: 6, codename: add_token}
+- model: auth.permission
+  pk: 17
+  fields: {name: Can change Token, content_type: 6, codename: change_token}
+- model: auth.permission
+  pk: 18
+  fields: {name: Can delete Token, content_type: 6, codename: delete_token}
+- model: auth.permission
+  pk: 19
+  fields: {name: Can add user, content_type: 7, codename: add_user}
+- model: auth.permission
+  pk: 20
+  fields: {name: Can change user, content_type: 7, codename: change_user}
+- model: auth.permission
+  pk: 21
+  fields: {name: Can delete user, content_type: 7, codename: delete_user}
+- model: auth.permission
+  pk: 22
+  fields: {name: Can add company, content_type: 8, codename: add_company}
+- model: auth.permission
+  pk: 23
+  fields: {name: Can change company, content_type: 8, codename: change_company}
+- model: auth.permission
+  pk: 24
+  fields: {name: Can delete company, content_type: 8, codename: delete_company}
+- model: auth.permission
+  pk: 25
+  fields: {name: Can add company member, content_type: 9, codename: add_companymember}
+- model: auth.permission
+  pk: 26
+  fields: {name: Can change company member, content_type: 9, codename: change_companymember}
+- model: auth.permission
+  pk: 27
+  fields: {name: Can delete company member, content_type: 9, codename: delete_companymember}
+- model: auth.permission
+  pk: 28
+  fields: {name: Can add role, content_type: 10, codename: add_role}
+- model: auth.permission
+  pk: 29
+  fields: {name: Can change role, content_type: 10, codename: change_role}
+- model: auth.permission
+  pk: 30
+  fields: {name: Can delete role, content_type: 10, codename: delete_role}
+- model: auth.permission
+  pk: 31
+  fields: {name: Can add skill, content_type: 11, codename: add_skill}
+- model: auth.permission
+  pk: 32
+  fields: {name: Can change skill, content_type: 11, codename: change_skill}
+- model: auth.permission
+  pk: 33
+  fields: {name: Can delete skill, content_type: 11, codename: delete_skill}
+- model: auth.permission
+  pk: 34
+  fields: {name: Can add vacancy, content_type: 12, codename: add_vacancy}
+- model: auth.permission
+  pk: 35
+  fields: {name: Can change vacancy, content_type: 12, codename: change_vacancy}
+- model: auth.permission
+  pk: 36
+  fields: {name: Can delete vacancy, content_type: 12, codename: delete_vacancy}
+- model: auth.permission
+  pk: 37
+  fields: {name: Can add vacancy skill, content_type: 13, codename: add_vacancyskill}
+- model: auth.permission
+  pk: 38
+  fields: {name: Can change vacancy skill, content_type: 13, codename: change_vacancyskill}
+- model: auth.permission
+  pk: 39
+  fields: {name: Can delete vacancy skill, content_type: 13, codename: delete_vacancyskill}
+- model: auth.permission
+  pk: 40
+  fields: {name: Can add interview, content_type: 14, codename: add_interview}
+- model: auth.permission
+  pk: 41
+  fields: {name: Can change interview, content_type: 14, codename: change_interview}
+- model: auth.permission
+  pk: 42
+  fields: {name: Can delete interview, content_type: 14, codename: delete_interview}
+- model: auth.permission
+  pk: 43
+  fields: {name: Can add interview employee, content_type: 15, codename: add_interviewemployee}
+- model: auth.permission
+  pk: 44
+  fields: {name: Can change interview employee, content_type: 15, codename: change_interviewemployee}
+- model: auth.permission
+  pk: 45
+  fields: {name: Can delete interview employee, content_type: 15, codename: delete_interviewemployee}
+- model: auth.permission
+  pk: 46
+  fields: {name: Can add feedback, content_type: 16, codename: add_feedback}
+- model: auth.permission
+  pk: 47
+  fields: {name: Can change feedback, content_type: 16, codename: change_feedback}
+- model: auth.permission
+  pk: 48
+  fields: {name: Can delete feedback, content_type: 16, codename: delete_feedback}
+- model: auth.group
+  pk: 1
+  fields:
+    name: employees
+    permissions: []

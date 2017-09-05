@@ -1,0 +1,7 @@
+- model: feedbacks.feedback
+  pk: 1
+  fields:
+    user: !!int 1
+    object_id: !!int 1
+    content_type: ['interviews', 'interview']
+    created_at: '2017-09-15T22:17:44+00:00'

@@ -15,4 +15,4 @@ class FeedbackViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """ Return scope of connected feedbacks for the current user """
 
-        return request.user.feedback_set
+        return self.request.user.feedback_set
