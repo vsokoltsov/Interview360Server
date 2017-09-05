@@ -68,6 +68,8 @@ class InterviewEmployeeView(APIView):
 
     def delete(self, request, interview_id=None, employee_id=None):
         """ Delete InterviewEmployee instance  """
+        authentication_classes = (TokenAuthentication,)
+        permission_classes = (IsAuthenticated, InterviewPermission, )
 
         try:
             interview = get_object_or_404(Interview, pk=interview_id)

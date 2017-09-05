@@ -23,7 +23,7 @@ class InterviewPermission(BasePermission):
     def has_object_permission(self, request, view, obj=None):
         company = obj.vacancy.company
         role = request.user.get_role_for_company(company)
-        if view.action == 'destroy':
+        if view.action == 'destroy' or request.method == 'DELETE':
             return role.has_permission(DELETE_INTERVIEW)
         elif view.action == 'update':
             return role.has_permission(UPDATE_INTERVIEW)
