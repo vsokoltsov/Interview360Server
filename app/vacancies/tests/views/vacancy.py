@@ -1,5 +1,5 @@
 from . import (
-    APITestCase, Vacancy, User, Company, Token, Skill, datetime
+    APITestCase, Vacancy, User, Company, CompanyMember, HR, Token, Skill, datetime
 )
 
 class VacancyViewSetTests(APITestCase):
@@ -12,6 +12,9 @@ class VacancyViewSetTests(APITestCase):
         self.company = Company.objects.create(name="Test",
                                          city="Test",
                                          start_date=datetime.datetime.now())
+        self.company_member = CompanyMember.objects.create(
+            company_id=self.company.id, user_id=self.user.id, role=HR
+        )
         self.token = Token.objects.create(user=self.user)
         self.skill = Skill.objects.create(name="Computer Science")
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
@@ -35,6 +38,12 @@ class VacancyViewSetTests(APITestCase):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 1)
+
+    def test_success_retrieve_action(self):
+        """ Success receivinf of the detail vacancy information """
+
+        response = self.client.get(self.url + "{}/".format(self.vacancy.id))
+        self.assertEqual(response.status_code, 200)
 
     def test_success_vacancy_creation(self):
         """ Test success vacancy creation """

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, status
 from .models import Vacancy
 from .serializers import VacancySerializer
+from .permissions import VacancyPermission
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
@@ -11,7 +12,7 @@ class VacancyViewSet(viewsets.ModelViewSet):
     """ View class for Vacancy """
 
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, VacancyPermission, )
     queryset = Vacancy.objects.all()
     serializer_class = VacancySerializer
 
