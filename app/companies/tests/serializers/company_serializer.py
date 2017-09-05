@@ -6,16 +6,19 @@ from . import (
 class CompanySerializerTests(TransactionTestCase):
     """ Tests for CompanySerializer class """
 
+    fixtures = [
+        'user.yaml',
+        'company.yaml'
+    ]
+
     def setUp(self):
         """ Setting up necessary dependencies """
 
-        user = User.objects.create(email="example@mail.com", password="12345678")
-        self.company = Company.objects.create(name="Test",
-                                         city="Test",
-                                         start_date=datetime.date.today())
-        company_member = CompanyMember.objects.create(user_id=user.id,
-                                                      company_id=self.company.id,
-                                                      role=HR)
+        self.company = Company.objects.first()
+        user = self.company.get_employees_with_role(HR)[0]
+        company_member = CompanyMember.objects.get(
+            user_id=user.id, company_id=self.company.id
+        )
         self.company_params = {
             'name': 'NAME',
             'city': 'City',

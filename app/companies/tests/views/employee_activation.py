@@ -5,17 +5,19 @@ from . import (
 class EmployeeActivationTests(APITestCase):
     """ Tests for EmployeeActivationTests """
 
+    fixtures = [
+        'user.yaml',
+        'auth_token.yaml',
+        'company.yaml'
+    ]
+
     def setUp(self):
         """ Setting up test credentials """
 
-        self.user = User.objects.create(email="example@mail.com")
-        self.company = Company.objects.create(name="Test",
-                                         city="Test",
-                                         start_date=datetime.date.today())
-        self.company_member = CompanyMember.objects.create(
-            user_id=self.user.id, company_id=self.company.id, role=EMPLOYEE
-        )
-        self.token = Token.objects.create(user=self.user)
+        self.company = Company.objects.first()
+        self.user = self.company.get_employees_with_role(EMPLOYEE)[-1]
+        self.token = Token.objects.get(user=self.user)
+        company_member = CompanyMember.objects.get(user_id=self.user.id, company_id=self.company.id)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.form_data = {
             'company_pk': self.company.id,

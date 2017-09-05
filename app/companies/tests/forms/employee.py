@@ -3,6 +3,7 @@ from . import (mock, TransactionTestCase, Token, EmployeeForm,
 
 class EmployeeFormTest(TransactionTestCase):
     """ Tests for the EmployeeFormTest class """
+    
     fixtures = [
         'user.yaml',
         'auth_token.yaml',

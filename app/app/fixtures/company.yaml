@@ -117,3 +117,13 @@
     active: false
     created_at: '2017-09-15T22:17:44+00:00'
     updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.companymember
+  pk: 34
+  fields:
+    user: !!int 8
+    company: !!int 33
+    role: !!int 4
+    active: false
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'

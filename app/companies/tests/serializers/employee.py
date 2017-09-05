@@ -9,13 +9,16 @@ import ipdb
 class EmployeeSerializerTest(TransactionTestCase):
     """ Test employee serializer class """
 
+    fixtures = [
+        'user.yaml',
+        'company.yaml'
+    ]
+
     def setUp(self):
         """ Test credentials set up """
 
-        self.user = User.objects.create(email="example@mail.com")
-        self.company = Company.objects.create(name="Test",
-                                         city="Test",
-                                         start_date=datetime.date.today())
+        self.company = Company.objects.last()
+        self.user = self.company.get_employees_with_role(HR)[0]
         self.form_data = {
             'emails': [
                 'example1@mail.com',
@@ -61,7 +64,7 @@ class EmployeeSerializerTest(TransactionTestCase):
         """ Validation failed if request.user email is in the emails list """
 
         self.form_data['emails'] = [
-            'example@mail.com',
+            self.user.email,
             'example2@mail.com',
             'example3@mail.com'
         ]
