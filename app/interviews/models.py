@@ -1,6 +1,7 @@
 from django.db import models
 from vacancies.models import Vacancy
 from authorization.models import User
+from django.contrib.contenttypes.fields import GenericRelation
 
 class Interview(models.Model):
     """ Interview object representation """
@@ -17,6 +18,8 @@ class Interview(models.Model):
         through='InterviewEmployee',
         related_name='interviewees'
     )
+    feedbacks = GenericRelation('feedbacks.Feedback')
+
 
     class Meta:
         db_table = 'interviews'

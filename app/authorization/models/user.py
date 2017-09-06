@@ -1,5 +1,5 @@
 from . import (
-    models, AbstractBaseUser,
+    models, AbstractBaseUser, GenericRelation,
     BaseUserManager, apps, get_role
 )
 
@@ -13,6 +13,7 @@ class User(AbstractBaseUser):
 
     companies = models.ManyToManyField('companies.Company', through='companies.CompanyMember')
     interviews = models.ManyToManyField('interviews.Interview', through='interviews.InterviewEmployee')
+    feedbacks = GenericRelation('feedbacks.Feedback')
 
     objects = BaseUserManager()
 
@@ -26,6 +27,16 @@ class User(AbstractBaseUser):
             user_id=self.id, company_id=company.id
         ).role
         return get_role(str(role))
+
+    def has_role(self, company, role_id):
+        """ Return matching user's role in company to specific role """
+        
+        company_member_class = apps.get_model('companies', 'CompanyMember')
+        role = company_member_class.objects.get(
+            user_id=self.id, company_id=company.id
+        ).role
+        return int(role) == int(role_id)
+
 
     def __str__(self):
         """ String representation of user """

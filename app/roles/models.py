@@ -29,6 +29,7 @@ class Candidate(RoleManager):
 class Employee(Candidate):
     permissions = Candidate.permissions + [
         PARTICIPATE_INTERVIEW,
+        RECEIVE_FEEDBACK,
         CREATE_FEEDBACK,
         UPDATE_FEEDBACK,
         DELETE_FEEDBACK
