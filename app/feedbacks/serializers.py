@@ -17,3 +17,9 @@ class FeedbackSerializer(serializers.ModelSerializer):
             'object_id',
             'content_type'
         ]
+
+    def create(self, data):
+        """ creates new instance of the Feedback """
+        
+        feedback = Feedback.objects.create(**data)
+        return feedback

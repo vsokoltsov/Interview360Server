@@ -41,3 +41,25 @@ class FeedbackSerializerTest(TransactionTestCase):
 
         serializer = FeedbackSerializer(data={})
         self.assertFalse(serializer.is_valid())
+
+    @mock.patch('feedbacks.models.Feedback.objects.create')
+    def test_success_feedback_creation(self, feedback_class_mock):
+        """ Test success feedback creation """
+
+        feedback_class_mock.objects = mock.MagicMock()
+        feedback_class_mock.objects.create = mock.MagicMock()
+        feedback_class_mock.objects.create.return_value = Feedback(id=1)
+
+        serializer = FeedbackSerializer(data=self.form_data)
+        serializer.is_valid()
+        serializer.save()
+
+        self.assertTrue(feedback_class_mock.called)
+
+    def test_success_feedback_update(self):
+        """ Test success feedback update """
+
+        serializer = FeedbackSerializer(self.feedback, data=self.form_data, partial=True)
+        serializer.is_valid()
+        feedback = serializer.save()
+        self.assertEqual(feedback.description, self.form_data['description'])
