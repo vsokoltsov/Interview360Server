@@ -1,12 +1,7 @@
-from django.test import TestCase
-from .views import FeedbackViewSet
-from rest_framework.test import APITestCase
-from .models import Feedback
-from interviews.models import Interview
-from roles.constants import HR, EMPLOYEE, CANDIDATE
-from companies.models import Company
-from rest_framework.authtoken.models import Token
-# Create your tests here.
+from . import (
+    FeedbackViewSet, APITestCase, Feedback, Interview,
+    HR, EMPLOYEE, CANDIDATE, Company, Token
+)
 
 class FeedbackViewSetTest(APITestCase):
     """ Tests for the FeedbackViewSet """
