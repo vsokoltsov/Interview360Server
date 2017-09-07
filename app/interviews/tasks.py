@@ -7,7 +7,7 @@ from notifications.models import Notification, EMAIL
 
 CONTENT_TYPE = ContentType.objects.get_for_model(Interview)
 
-@periodic_task(run_every=crontab())
+@periodic_task(run_every=crontab(minute=0, hour='*'))
 def remind_about_interview():
     """ Test for the celery task """
 
