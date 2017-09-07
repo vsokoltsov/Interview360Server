@@ -2,6 +2,7 @@ from django.db import models
 from vacancies.models import Vacancy
 from authorization.models import User
 from django.contrib.contenttypes.fields import GenericRelation
+from datetime import datetime, timedelta
 
 class Interview(models.Model):
     """ Interview object representation """
@@ -20,6 +21,17 @@ class Interview(models.Model):
     )
     feedbacks = GenericRelation('feedbacks.Feedback')
 
+    @classmethod
+    def in_range_of_days(cls, days):
+        """
+        Return scope of objects which 'assigned_at' attribute belongs to range
+        """
+        
+        start_date = datetime.now()
+        end_date = start_date + timedelta(days=days)
+        return cls.objects.filter(
+            assigned_at__range=[str(start_date), str(end_date)]
+        )
 
     class Meta:
         db_table = 'interviews'
