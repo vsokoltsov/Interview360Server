@@ -4,6 +4,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.validators import MaxValueValidator, MinValueValidator
 from authorization.models import User
 
+EMAIL = 1
+BROWSER = 2
+
 class Notification(models.Model):
     """ Notification representation in the system """
 
