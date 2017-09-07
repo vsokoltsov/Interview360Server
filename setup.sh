@@ -24,3 +24,22 @@ sudo postgresql-setup initdb
 sudo systemctl start postgresql
 sudo systemctl enable postgresql
 sudo su postgres -c 'psql -c "CREATE USER vagrant WITH PASSWORD '"'"'vagrant'"'"' SUPERUSER;"'
+
+# ERLANG
+cd ~
+wget http://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm
+sudo rpm -Uvh erlang-solutions-1.0-1.noarch.rpm
+sudo yum install erlang
+
+# RABBIT MQ
+
+cd ~
+wget https://www.rabbitmq.com/releases/rabbitmq-server/v3.6.1/rabbitmq-server-3.6.1-1.noarch.rpm
+sudo rpm --import https://www.rabbitmq.com/rabbitmq-signing-key-public.asc
+sudo yum install rabbitmq-server-3.6.1-1.noarch.rpm
+sudo systemctl start rabbitmq-server.service
+sudo systemctl enable rabbitmq-server.service
+
+sudo rabbitmqctl add_user admin admin
+sudo rabbitmqctl set_user_tags admin administrator
+sudo rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
