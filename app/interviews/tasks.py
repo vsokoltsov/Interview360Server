@@ -6,12 +6,13 @@ from django.contrib.contenttypes.models import ContentType
 from notifications.models import Notification, EMAIL
 
 CONTENT_TYPE = ContentType.objects.get_for_model(Interview)
+ONE_DAY = 1
 
 @periodic_task(run_every=crontab(minute=0, hour='*'))
 def remind_about_interview():
     """ Test for the celery task """
 
-    for interview in Interview.in_range_of_days(15):
+    for interview in Interview.in_range_of_days(ONE_DAY):
         users = interview.interviewees.all()
         for user in users:
             notification = get_notification(user, interview)
