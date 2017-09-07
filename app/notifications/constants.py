@@ -1,0 +1,2 @@
+EMAIL = 1
+BROWSER = 2
