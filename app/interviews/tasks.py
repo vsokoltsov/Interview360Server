@@ -1,4 +1,5 @@
-from celery import shared_task
+from celery.task import periodic_task
+from celery.task.schedules import crontab
 from .models import Interview
 from .emails import send_interview_reminder
 from django.contrib.contenttypes.models import ContentType
@@ -6,7 +7,7 @@ from notifications.models import Notification, EMAIL
 
 CONTENT_TYPE = ContentType.objects.get_for_model(Interview)
 
-@shared_task
+@periodic_task(run_every=crontab())
 def remind_about_interview():
     """ Test for the celery task """
 
