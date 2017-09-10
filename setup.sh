@@ -31,14 +31,14 @@ sudo su postgres -c 'psql -c "GRANT ALL PRIVELEGES ON DATABASE interview_manager
 cd ~
 wget http://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm
 sudo rpm -Uvh erlang-solutions-1.0-1.noarch.rpm
-sudo yum install erlang
+sudo yum -y install erlang
 
 # RABBIT MQ
 
 cd ~
 wget https://www.rabbitmq.com/releases/rabbitmq-server/v3.6.1/rabbitmq-server-3.6.1-1.noarch.rpm
 sudo rpm --import https://www.rabbitmq.com/rabbitmq-signing-key-public.asc
-sudo yum install rabbitmq-server-3.6.1-1.noarch.rpm
+sudo yum -y install rabbitmq-server-3.6.1-1.noarch.rpm
 sudo systemctl start rabbitmq-server.service
 sudo systemctl enable rabbitmq-server.service
 
