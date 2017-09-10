@@ -10,6 +10,6 @@ env.home_dir = '/root'
 def pull_remote():
     with cd(env.home_dir):
         if exists("{}/{}".format(env.home_dir, PROJECT_NAME)):
-            run('ls')
+            run('cd {}/{} && git pull && git checkout add-deploy'.format(env.home_dir, PROJECT_NAME))
         else:
             run("git clone {} {}".format(GITHUB_PROJECT, PROJECT_NAME))

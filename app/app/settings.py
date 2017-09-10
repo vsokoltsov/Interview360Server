@@ -99,6 +99,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'interview_manager',
+        'HOST':'localhost',
         'USER': 'vagrant',
         'PASSWORD': 'vagrant'
     }
