@@ -24,6 +24,8 @@ sudo postgresql-setup initdb
 sudo systemctl start postgresql
 sudo systemctl enable postgresql
 sudo su postgres -c 'psql -c "CREATE USER vagrant WITH PASSWORD '"'"'vagrant'"'"' SUPERUSER;"'
+sudo su postgres -c 'psql -c "CREATE DATABASE interview_manager;"'
+sudo su postgres -c 'psql -c "GRANT ALL PRIVELEGES ON DATABASE interview_manager TO vagrant;"'
 
 # ERLANG
 cd ~
