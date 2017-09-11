@@ -7,6 +7,7 @@ env.home_dir = '/root'
 
 PROJECT_NAME = 'interview_manager'
 PG_HBA_PATH = '/var/lib/pgsql/data/'
+SELINUX_PATH = '/etc/sysconfig'
 PROJECT_PATH = "{}/{}".format(env.home_dir, PROJECT_NAME)
 GITHUB_PROJECT = 'https://github.com/vforvad/InterviewManager.git'
 
@@ -32,6 +33,13 @@ def set_virtualenvwrapper():
         run('pyenv virtualenvwrapper')
         with prefix('. $(pyenv which virtualenvwrapper.sh)'):
             run('mkvirtualenv interview_manager')
+
+def disable_selinux():
+    """ Disable selinux and firewalld """
+
+    with cd(env.home_dir):
+        sudo('setenforce 0')
+        sudo('firewall-cmd --zone=public --add-port=80/tcp --permanent')
 
 def pull_remote(branch):
     """ Pull app from the repo or change the branch """
