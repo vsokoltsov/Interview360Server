@@ -98,3 +98,8 @@ def provision():
     set_up_project_dependencies()
     configure_gunicorn_service()
     configure_nginx_service()
+
+def deploy(branch='master'):
+    with cd(PROJECT_PATH):
+        run('git checkout {} && git pull origin {}'.format(branch))
+        sudo('systemctl restart gunicorn')
