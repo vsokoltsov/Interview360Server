@@ -9,6 +9,7 @@ PROJECT_NAME = 'interview_manager'
 PG_HBA_PATH = '/var/lib/pgsql/data/'
 SELINUX_PATH = '/etc/sysconfig'
 GUNICORN_SERVICE_PATH = '/etc/systemd/system/'
+NGINX_CONFIG_PATH = '/etc/nginx/'
 PROJECT_PATH = "{}/{}".format(env.home_dir, PROJECT_NAME)
 GITHUB_PROJECT = 'https://github.com/vforvad/InterviewManager.git'
 
@@ -41,6 +42,7 @@ def disable_selinux():
     with cd(env.home_dir):
         sudo('setenforce 0')
         sudo('firewall-cmd --zone=public --add-port=80/tcp --permanent')
+        sudo('systemctl restart firewalld')
 
 def clone_project():
     """ Clone project from the GitHub """
@@ -69,6 +71,15 @@ def configure_gunicorn_service():
         sudo('systemctl start gunicorn')
         sudo('systemctl enable gunicorn')
 
+def configure_nginx_service():
+    """ Configureing the nginx service """
+
+    with cd(NGINX_CONFIG_PATH):
+        put('./deploy/nginx.conf', NGINX_CONFIG_PATH)
+        sudo('usermod -a -G {} nginx'.format(env.user))
+        sudo('chmod 710 {}'.format(env.home_dir))
+        sudo('systemctl start nginx')
+        sudo('systemctl enable nginx')
 
 def pull_remote(branch):
     """ Pull app from the repo or change the branch """
