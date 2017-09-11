@@ -6,6 +6,7 @@ env.hosts = ['root@95.213.194.196']
 env.home_dir = '/root'
 
 PROJECT_NAME = 'interview_manager'
+PG_HBA_PATH = '/var/lib/pgsql/data/'
 PROJECT_PATH = "{}/{}".format(env.home_dir, PROJECT_NAME)
 GITHUB_PROJECT = 'https://github.com/vforvad/InterviewManager.git'
 
@@ -17,6 +18,14 @@ def set_up():
     with cd(env.home_dir):
         put('setup.sh', '{}'.format(env.home_dir))
         run('bash setup.sh')
+
+def replace_hba_conf():
+    """ Replace ph_hba.conf file on server with the current one"""
+
+    with cd(PG_HBA_PATH):
+        put('./deploy/pg_hba.conf', PG_HBA_PATH)
+        sudo('systemctl restart postgresql')
+        sudo('systemctl enable postgresql')
 
 def pull_remote(branch):
     """ Pull app from the repo or change the branch """
