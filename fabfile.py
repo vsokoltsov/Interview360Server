@@ -1,4 +1,4 @@
-from fabric.api import cd, run, sudo, env, put
+from fabric.api import cd, run, sudo, env, put, prefix
 from fabric.contrib.files import exists
 
 env.user = 'root'
@@ -9,8 +9,6 @@ PROJECT_NAME = 'interview_manager'
 PG_HBA_PATH = '/var/lib/pgsql/data/'
 PROJECT_PATH = "{}/{}".format(env.home_dir, PROJECT_NAME)
 GITHUB_PROJECT = 'https://github.com/vforvad/InterviewManager.git'
-
-
 
 def set_up():
     """ Setting up all dependencies """
@@ -26,6 +24,14 @@ def replace_hba_conf():
         put('./deploy/pg_hba.conf', PG_HBA_PATH)
         sudo('systemctl restart postgresql')
         sudo('systemctl enable postgresql')
+
+def set_virtualenvwrapper():
+    """ Setting up virtual env wrapper """
+
+    with cd(env.home_dir):
+        run('pyenv virtualenvwrapper')
+        with prefix('. $(pyenv which virtualenvwrapper.sh)'):
+            run('mkvirtualenv interview_manager')
 
 def pull_remote(branch):
     """ Pull app from the repo or change the branch """
