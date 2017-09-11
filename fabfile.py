@@ -33,7 +33,7 @@ def set_virtualenvwrapper():
 
     with cd(env.home_dir):
         run('pyenv virtualenvwrapper')
-        with prefix('. $(pyenv which virtualenvwrapper.sh)'):
+        with prefix('source $(pyenv which virtualenvwrapper.sh)'):
             run('mkvirtualenv interview_manager')
 
 def disable_selinux():
@@ -53,15 +53,21 @@ def clone_project():
 def set_up_project_dependencies():
     """ Set up all project dependencies """
 
-    with prefix('. $(pyenv which virtualenvwrapper.sh)'):
-        run('workon interview_manager')
+    run('pyenv virtualenvwrapper')
+    with prefix('source $(pyenv which virtualenvwrapper.sh)'):
+        with prefix('workon interview_manager'):
+            with cd(PROJECT_PATH):
+                run('pip install -r requirements.txt')
 
-        with cd(PROJECT_PATH):
-            run('pip install -r requirements.txt')
+                with cd(PROJECT_PATH + '/app'):
+                    run('./manage.py migrate')
+                    run('./manage.py collectstatic')
 
-            with cd(PROJECT_PATH + '/app'):
-                run('./manage.py migrate')
-                run('./manage.py collectstatic')
+def set_secrets_file():
+    """ Put file with secrets to app folder """
+
+    with cd(PROJECT_PATH + '/app/app'):
+        put('./deploy/secrets.yaml', PROJECT_PATH + '/app/app')
 
 def configure_gunicorn_service():
     """ Configure gunicorn service """
@@ -81,25 +87,14 @@ def configure_nginx_service():
         sudo('systemctl start nginx')
         sudo('systemctl enable nginx')
 
-def pull_remote(branch):
-    """ Pull app from the repo or change the branch """
+def provision():
+    """ Implement provisioning of the new server """
 
-    with cd(env.home_dir):
-        if exists(PROJECT_PATH):
-            run('cd {}/{} && git pull && git checkout {}'.format(env.home_dir, PROJECT_NAME, branch))
-        else:
-            run("git clone {} {}".format(GITHUB_PROJECT, PROJECT_NAME))
-
-def restart_gunicorn():
-    """ Restart gunicorn service """
-
-    with cd(env.home_dir):
-        sudo('systemctl restart gunicorn', pty=False)
-        put('deploy/gunicorn.service', '{}'.format(env.home_dir))
-
-
-def deploy(branch='master'):
-    """ Base deploy method """
-
-    pull_remote(branch)
-    restart_gunicorn()
+    set_up()
+    replace_hba_conf()
+    set_virtualenvwrapper()
+    disable_selinux()
+    clone_project()
+    set_up_project_dependencies()
+    configure_gunicorn_service()
+    configure_nginx_service()
