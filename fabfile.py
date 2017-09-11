@@ -41,6 +41,25 @@ def disable_selinux():
         sudo('setenforce 0')
         sudo('firewall-cmd --zone=public --add-port=80/tcp --permanent')
 
+def clone_project():
+    """ Clone project from the GitHub """
+
+    with cd(env.home_dir):
+        run("git clone {} {}".format(GITHUB_PROJECT, PROJECT_NAME))
+
+def set_up_project_dependencies():
+    """ Set up all project dependencies """
+
+    with prefix('. $(pyenv which virtualenvwrapper.sh)'):
+        run('workon interview_manager')
+
+        with cd(PROJECT_PATH):
+            run('pip install -r requirements.txt')
+
+            with cd(PROJECT_PATH + '/app'):
+                run('./manage.py migrate')
+                run('./manage.py collectstatic')
+
 def pull_remote(branch):
     """ Pull app from the repo or change the branch """
 
