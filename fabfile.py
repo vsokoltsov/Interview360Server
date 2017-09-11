@@ -8,6 +8,7 @@ env.home_dir = '/root'
 PROJECT_NAME = 'interview_manager'
 PG_HBA_PATH = '/var/lib/pgsql/data/'
 SELINUX_PATH = '/etc/sysconfig'
+GUNICORN_SERVICE_PATH = '/etc/systemd/system/'
 PROJECT_PATH = "{}/{}".format(env.home_dir, PROJECT_NAME)
 GITHUB_PROJECT = 'https://github.com/vforvad/InterviewManager.git'
 
@@ -59,6 +60,15 @@ def set_up_project_dependencies():
             with cd(PROJECT_PATH + '/app'):
                 run('./manage.py migrate')
                 run('./manage.py collectstatic')
+
+def configure_gunicorn_service():
+    """ Configure gunicorn service """
+
+    with cd(GUNICORN_SERVICE_PATH):
+        put('./deploy/gunicorn.service', GUNICORN_SERVICE_PATH)
+        sudo('systemctl start gunicorn')
+        sudo('systemctl enable gunicorn')
+
 
 def pull_remote(branch):
     """ Pull app from the repo or change the branch """
