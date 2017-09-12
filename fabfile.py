@@ -101,5 +101,12 @@ def provision():
 
 def deploy(branch='master'):
     with cd(PROJECT_PATH):
-        run('git checkout {} && git pull origin {}'.format(branch))
+        run('git checkout {} && git pull origin {}'.format(branch, branch))
+
+        with prefix('source $(pyenv which virtualenvwrapper.sh)'):
+            with prefix('workon interview_manager'):
+                run('pip install -r requirements.txt')
+
+                with cd(PROJECT_PATH + '/app'):
+                    run('./manage.py migrate')
         sudo('systemctl restart gunicorn')
