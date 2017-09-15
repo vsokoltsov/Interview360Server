@@ -10,6 +10,7 @@ class ResetPasswordForm(forms.Form):
 
     def clean(self):
         """ Clean data and add custom validation """
+        
         cleaned_data = super(ResetPasswordForm, self).clean()
 
         password = cleaned_data.get('password')
