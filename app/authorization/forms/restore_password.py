@@ -18,7 +18,7 @@ class RestorePasswordForm(forms.Form):
             user = User.objects.get(email=self['email'].value())
             auth_token, _ = Token.objects.get_or_create(user=user)
             msg = render_to_string('reset_password.html', {
-                              'reset_link_url': '{}/reset-password'.format(os.environ['DEFAULT_CLIENT_HOST']),
+                              'reset_link_url': '{}/auth/reset-password'.format(os.environ['DEFAULT_CLIENT_HOST']),
                               'token': auth_token }
                              )
             send_mail("Reset password mail", msg, "Anymail Sender <from@example.com>", [user.email])
