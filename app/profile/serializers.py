@@ -2,7 +2,7 @@ from rest_framework import serializers
 from authorization.serializers import UserSerializer
 
 class ProfileSerializer(UserSerializer):
-    email = serializers.EmailField(requred=True)
+    email = serializers.EmailField(required=True)
     first_name = serializers.CharField(max_length=255, required=True)
     last_name = serializers.CharField(max_length=255, required=True)
 
