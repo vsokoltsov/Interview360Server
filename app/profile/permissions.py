@@ -6,7 +6,6 @@ class UserProfilePermission(permissions.BasePermission):
     def has_permission(self, request, view):
         return True
 
-
     def has_object_permission(self, request, view, obj):
         current_user = request.user
         if view.action == 'retrieve':
