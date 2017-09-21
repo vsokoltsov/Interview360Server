@@ -20,12 +20,15 @@ class ProfileViewSetTest(APITestCase):
     def test_success_receiving_of_profile(self):
         """ Test success receiving current user information """
 
-        response = self.client.get('/api/v1/profile/')
+        response = self.client.get('/api/v1/users/{}/'.format(self.user.id))
         assert response.status_code, 200
 
     def test_success_update_profile(self):
         """ Test success update of the profile information """
 
-        response = self.client.put('/api/v1/profile/', self.form_data)
+        response = self.client.put(
+            '/api/v1/users/{}/'.format(self.user.id),
+            self.form_data
+        )
         user = User.objects.get(id=self.user.id)
         assert user.email, self.form_data['email']

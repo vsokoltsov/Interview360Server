@@ -4,27 +4,30 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import list_route
+from authorization.models import User
 
 from .serializers import ProfileSerializer
 
-class ProfileAPIView(APIView):
+class ProfileViewSet(viewsets.ViewSet):
     """ ViewSet for profile operations """
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, )
 
-    def get(self, request):
+    def retrieve(self, request, pk=None):
         """ Return a current user profile information """
 
-        serializer = ProfileSerializer(request.user)
+        user = User.objects.get(pk=pk)
+        serializer = ProfileSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-    def put(self, request):
+    def put(self, request, pk=None):
         """ Update current user information """
 
+        user = User.objects.get(pk=pk)
         serializer = ProfileSerializer(
-            request.user, data=request.data, partial=True
+            user, data=request.data, partial=True
         )
         if serializer.is_valid() and serializer.save():
             return Response(
