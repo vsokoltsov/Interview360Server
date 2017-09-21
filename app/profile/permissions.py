@@ -1,4 +1,5 @@
 from rest_framework import permissions
+import ipdb
 
 class UserProfilePermission(permissions.BasePermission):
     """ Permissions for accessing to user profile """
@@ -10,9 +11,11 @@ class UserProfilePermission(permissions.BasePermission):
         current_user = request.user
         if view.action == 'retrieve':
             return True
-        elif view.action == 'update' and current_user.id == user.id:
+        elif view.action == 'update' and current_user.id == obj.id:
             return True
-        elif view.action == 'destroy' and current_user.id == user.id:
+        elif view.action == 'change_password' and current_user.id == obj.id:
+            return True
+        elif view.action == 'destroy' and current_user.id == obj.id:
             return True
         else:
             return False

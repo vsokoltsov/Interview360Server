@@ -1,6 +1,7 @@
 from rest_framework.test import APITestCase
 from authorization.models import User
 from rest_framework.authtoken.models import Token
+import ipdb
 
 class ProfileViewSetTest(APITestCase):
     """ Tests for ProfileViewSet class """
@@ -32,3 +33,11 @@ class ProfileViewSetTest(APITestCase):
         )
         user = User.objects.get(id=self.user.id)
         assert user.email, self.form_data['email']
+
+    def test_success_change_password_route(self):
+        """ Test success password change """
+        
+        response = self.client.put(
+            '/api/v1/users/{}/change_password/'.format(self.user.id),
+            self.form_data
+        )

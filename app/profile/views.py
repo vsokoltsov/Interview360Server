@@ -1,9 +1,11 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.decorators import list_route
+from rest_framework.decorators import detail_route
+from .permissions import UserProfilePermission
 from authorization.models import User
 
 from .serializers import ProfileSerializer
@@ -12,20 +14,19 @@ class ProfileViewSet(viewsets.ViewSet):
     """ ViewSet for profile operations """
 
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, UserProfilePermission, )
 
     def retrieve(self, request, pk=None):
         """ Return a current user profile information """
 
-        user = User.objects.get(pk=pk)
+        user = self.get_object(pk)
         serializer = ProfileSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-    def put(self, request, pk=None):
+    def update(self, request, pk=None):
         """ Update current user information """
 
-        user = User.objects.get(pk=pk)
+        user = self.get_object(pk)
         serializer = ProfileSerializer(
             user, data=request.data, partial=True
         )
@@ -37,3 +38,16 @@ class ProfileViewSet(viewsets.ViewSet):
             return Response(
                 { 'errors': serializer.errors }, status=status.HTTP_400_BAD_REQUEST
             )
+
+    @detail_route(methods=['put'], permission_classes=(IsAuthenticated, UserProfilePermission, ))
+    def change_password(self, request, pk=None):
+        """ Handle password update """
+        user = self.get_object(pk)
+        return Response(
+            { 'errors': 'errors' }, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    def get_object(self, pk):
+        obj = get_object_or_404(User, pk=pk)
+        self.check_object_permissions(self.request, obj)
+        return obj
