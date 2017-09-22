@@ -26,6 +26,7 @@ class ChangePasswordForm(forms.Form):
             self.add_error('current_password', current_password_error)
             raise forms.ValidationError(current_password_error)
 
+        print(password)
         if password and password_confirmation:
             if password != password_confirmation:
                 password_match_error = 'Does not match password'
