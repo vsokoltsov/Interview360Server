@@ -21,7 +21,7 @@ class ChangePasswordForm(forms.Form):
         password = cleaned_data.get('password')
         password_confirmation = cleaned_data.get('password_confirmation')
 
-        if not user.check_password(current_password):
+        if not self.user.check_password(current_password):
             current_password_error = 'Does not match current password'
             self.add_error('current_password', current_password_error)
             raise forms.ValidationError(current_password_error)

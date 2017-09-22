@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import detail_route
 from .permissions import UserProfilePermission
+from .forms import ChangePasswordForm
 from authorization.models import User
 
 from .serializers import ProfileSerializer
@@ -41,11 +42,18 @@ class ProfileViewSet(viewsets.ViewSet):
 
     @detail_route(methods=['put'], permission_classes=(IsAuthenticated, UserProfilePermission, ))
     def change_password(self, request, pk=None):
-        """ Handle password update """
+        """ Handle change password update """
+
         user = self.get_object(pk)
-        return Response(
-            { 'errors': 'errors' }, status=status.HTTP_400_BAD_REQUEST
-        )
+        form = ChangePasswordForm(user, request.data)
+        if form.submit():
+            return Response(
+                {'message': 'Password was succesfully updated'}
+            )
+        else:
+            return Response(
+                { 'errors': form.errors }, status=status.HTTP_400_BAD_REQUEST
+            )
 
     def get_object(self, pk):
         obj = get_object_or_404(User, pk=pk)
