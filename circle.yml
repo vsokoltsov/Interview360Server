@@ -1,13 +1,12 @@
 machine:
-  post:
-    - pyenv global 3.5.2
+  python:
+    version: 3.5.2
 
   environment:
     DEFAULT_CLIENT_HOST: 'http://localhost:4200'
 
 dependencies:
   pre:
-    - pyenv global 3.5.2
     - pip install -r requirements.txt
 
 
@@ -18,14 +17,13 @@ database:
 
 test:
   override:
-    - pyenv global 3.5.2
-    - pip install -r requirements.txt
     - cd ./app && python manage.py test
 
 deployment:
   production:
     branch: master
     commands:
+      - deactivate
       - pyenv global 2.7.12
       - pip install -r requirements.txt
       - pip install fabric fabtools
