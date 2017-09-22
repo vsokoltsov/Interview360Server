@@ -19,6 +19,10 @@ test:
   override:
     - cd ./app && python manage.py test
 
+add_ssh_keys:
+    fingerprints:
+      - "cb:95:2d:0e:0a:7e:18:ae:a0:ff:50:0c:ea:83:03:23"
+
 deployment:
   production:
     branch: master
