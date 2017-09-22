@@ -27,4 +27,4 @@ database:
 test:
   override:
     - pyenv global 3.5.2
-    - cd ./app && python3 manage.py test
+    - cd ./app && python manage.py test
