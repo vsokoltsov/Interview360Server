@@ -12,4 +12,6 @@ class ProfileSerializer(UserSerializer):
         instance.email = data.get('email', instance.email)
         instance.first_name = data.get('first_name', instance.first_name)
         instance.last_name = data.get('last_name', instance.last_name)
+        instance.save()
+        
         return instance
