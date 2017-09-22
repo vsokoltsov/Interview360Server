@@ -7,8 +7,6 @@ machine:
 
 dependencies:
   pre:
-    - pyenv global 2.7.11
-    - pip install -r requirements.txt
     - pyenv global 3.5.2
     - pip install -r requirements.txt
 
