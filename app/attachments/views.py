@@ -6,6 +6,8 @@ from .serializers import AttachmentSerializer
 import ipdb
 
 class AttachmentViewSet(viewsets.ViewSet):
+    """ Attachment view class """
+
     serializer_class = AttachmentSerializer
     parser_classes = (MultiPartParser, FormParser,)
 

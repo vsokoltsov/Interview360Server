@@ -4,10 +4,12 @@ from feedbacks.fields import ContentTypeField
 import ipdb
 
 class AttachmentSerializer(serializers.ModelSerializer):
+    """ Serializer for Attachment """
+
     content_type = ContentTypeField(required=True)
     url = serializers.SerializerMethodField('get_attachment_url', read_only=True)
     data = serializers.FileField(write_only=True)
-
+    object_id = serializers.IntegerField(required=False, min_value=1)
 
     class Meta:
         model = Attachment
@@ -21,5 +23,4 @@ class AttachmentSerializer(serializers.ModelSerializer):
         ]
 
     def get_attachment_url(self, obj):
-        request = self.context['request']
-        return request.build_absolute_uri(obj.data.url)
+        return obj.data.url
