@@ -1,3 +1,12 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
-# Create your models here.
+class Attachment(models.Model):
+    """ Uploaded file model representation """
+
+    content_type = models.ForeignKey(ContentType, null=False)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+    data = models.FileField()
+    created_at = models.DateTimeField(auto_now_add=True)
