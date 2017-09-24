@@ -1,4 +1,5 @@
 import app
+import os
 from os.path import abspath, join, dirname
 from tempfile import mkdtemp
 from shutil import rmtree
@@ -16,12 +17,16 @@ class AttachmentViewSet(APITestCase):
 
     def setUp(self):
         """ Setting up testing dependencies """
+
         self.media_folder = mkdtemp()
 
     def tearDown(self):
         """ Removing all dependencies after test """
 
-        rmtree(self.media_folder)
+        dir_path = app.settings.MEDIA_ROOT
+        for f in os.listdir(dir_path):
+            file_path = "{}/{}".format(dir_path, f)
+            os.remove(file_path)
 
     @mock.patch('storages.backends.s3boto3.S3Boto3Storage', FileSystemStorage)
     def test_success_photo_upload(self):
