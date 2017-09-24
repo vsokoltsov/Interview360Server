@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^api/', include('companies.urls')),
     url(r'^api/', include('skills.urls')),
     url(r'^api/', include('feedbacks.urls')),
-    url(r'^api/', include('profile.urls'))
+    url(r'^api/', include('profile.urls')),
+    url(r'^api/', include('attachments.urls'))
 ]
