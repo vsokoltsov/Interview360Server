@@ -8,5 +8,7 @@ class ContentTypeField(serializers.Field):
         return obj.model
 
     def to_internal_value(self, data):
+        if not data:
+            raise serializers.ValidationError('Can\'t be blank')
         app_label, model = data.split('.')
         return ContentType.objects.get(app_label=app_label, model=model)

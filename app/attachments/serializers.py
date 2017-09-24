@@ -4,7 +4,7 @@ from feedbacks.fields import ContentTypeField
 import ipdb
 
 class AttachmentSerializer(serializers.ModelSerializer):
-    content_type = ContentTypeField()
+    content_type = ContentTypeField(required=True)
     url = serializers.SerializerMethodField('get_attachment_url', read_only=True)
     data = serializers.FileField(write_only=True)
 
