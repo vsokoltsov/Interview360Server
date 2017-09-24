@@ -5,13 +5,20 @@ from rest_framework.response import Response
 from .serializers import AttachmentSerializer
 import ipdb
 
-class AttachmentViewSet(viewsets.ModelViewSet):
+class AttachmentViewSet(viewsets.ViewSet):
     serializer_class = AttachmentSerializer
     parser_classes = (MultiPartParser, FormParser,)
 
     def create(self, request):
-        serializer = self.serializer_class(data=request.data)
+        serializer = self.serializer_class(
+            data=request.data, context={'request': request}
+        )
         if serializer.is_valid() and serializer.save():
-            return Response(status=status.HTTP_200_OK)
+            return Response(
+            { 'attachment': serializer.data }, status=status.HTTP_200_OK
+        )
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                { 'errors': serializer.errors },
+                status=status.HTTP_400_BAD_REQUEST
+            )
