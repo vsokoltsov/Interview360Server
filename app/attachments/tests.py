@@ -19,6 +19,8 @@ class AttachmentViewSet(APITestCase):
         """ Setting up testing dependencies """
 
         self.media_folder = mkdtemp()
+        if not os.path.exists(app.settings.MEDIA_ROOT):
+            os.makedirs(app.settings.MEDIA_ROOT)
 
     def tearDown(self):
         """ Removing all dependencies after test """
