@@ -14,6 +14,7 @@ class User(AbstractBaseUser):
     companies = models.ManyToManyField('companies.Company', through='companies.CompanyMember')
     interviews = models.ManyToManyField('interviews.Interview', through='interviews.InterviewEmployee')
     feedbacks = GenericRelation('feedbacks.Feedback')
+    attachments = GenericRelation('attachments.Attachment')
 
     objects = BaseUserManager()
 
@@ -30,7 +31,7 @@ class User(AbstractBaseUser):
 
     def has_role(self, company, role_id):
         """ Return matching user's role in company to specific role """
-        
+
         company_member_class = apps.get_model('companies', 'CompanyMember')
         role = company_member_class.objects.get(
             user_id=self.id, company_id=company.id

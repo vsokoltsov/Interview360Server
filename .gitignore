@@ -6,3 +6,4 @@ secrets.yaml
 celerybeat*
 .python-version
 *.pyc
+uploads
