@@ -3,24 +3,33 @@ from .models import Attachment
 from feedbacks.fields import ContentTypeField
 import ipdb
 
-class AttachmentSerializer(serializers.ModelSerializer):
-    """ Serializer for Attachment """
+class AttachmentBaseSerializer(serializers.ModelSerializer):
+    """ Base attachment serializer """
 
-    content_type = ContentTypeField(required=True)
     url = serializers.SerializerMethodField('get_attachment_url', read_only=True)
-    data = serializers.FileField(write_only=True)
-    object_id = serializers.IntegerField(required=False, min_value=1)
 
     class Meta:
         model = Attachment
         fields = [
             'id',
-            'object_id',
-            'content_type',
-            'data',
-            'url',
-            'created_at'
+            'url'
         ]
 
     def get_attachment_url(self, obj):
         return obj.data.url
+
+class AttachmentSerializer(AttachmentBaseSerializer):
+    """ Serializer for Attachment """
+
+    content_type = ContentTypeField(required=True)
+    data = serializers.FileField(write_only=True)
+    object_id = serializers.IntegerField(required=False, min_value=1)
+
+    class Meta:
+        model = AttachmentBaseSerializer.Meta.model
+        fields = AttachmentBaseSerializer.Meta.fields + [
+            'object_id',
+            'content_type',
+            'data',
+            'created_at'
+        ]
