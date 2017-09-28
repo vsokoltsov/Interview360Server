@@ -6,6 +6,7 @@ import ipdb
 class AttachmentBaseSerializer(serializers.ModelSerializer):
     """ Base attachment serializer """
 
+    id = serializers.IntegerField(read_only=True)
     url = serializers.SerializerMethodField('get_attachment_url', read_only=True)
 
     class Meta:
