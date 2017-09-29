@@ -38,12 +38,6 @@ class User(AbstractBaseUser):
         ).role
         return int(role) == int(role_id)
 
-    # @propety
-    # def attachment(self):
-    #     """ returns user's last updated attachment """
-    #
-    #     return self.attachments.last()
-
     def __str__(self):
         """ String representation of user """
 
