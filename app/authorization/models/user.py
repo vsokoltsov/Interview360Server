@@ -38,7 +38,6 @@ class User(AbstractBaseUser):
         ).role
         return int(role) == int(role_id)
 
-
     def __str__(self):
         """ String representation of user """
 
