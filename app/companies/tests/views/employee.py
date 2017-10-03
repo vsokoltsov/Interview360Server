@@ -1,6 +1,6 @@
 from . import (
     APITestCase, Company, CompanyMember, User, Token, datetime,
-    COMPANY_OWNER, HR
+    COMPANY_OWNER, HR, FileSystemStorage
 )
 
 class EmployeesViewSetTests(APITestCase):

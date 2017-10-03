@@ -7,7 +7,10 @@ class AttachmentField(serializers.Field):
     """ Custom field for 'attachment' attribute in request """
 
     def get_attribute(self, obj):
-        return AttachmentBaseSerializer(obj.attachments.last()).data
+        if obj.attachments.last():
+            return AttachmentBaseSerializer(obj.attachments.last()).data
+        else:
+            return None
 
     def to_representation(self, obj):
         return obj

@@ -1,6 +1,7 @@
 from django.db import models
 from authorization.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.contrib.contenttypes.fields import GenericRelation
 
 class Company(models.Model):
     """ Base company model """
@@ -13,6 +14,7 @@ class Company(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     employees = models.ManyToManyField('authorization.User', through='CompanyMember')
+    attachments = GenericRelation('attachments.Attachment')
 
     class Meta:
         db_table = 'companies'
