@@ -5,6 +5,7 @@ from .employee_serializer import EmployeeSerializer
 from attachments.models import Attachment
 from django_pglocks import advisory_lock
 from roles.constants import COMPANY_OWNER
+import ipdb
 
 class CompanySerializer(serializers.ModelSerializer):
     """ Serialization of Company object """
@@ -34,7 +35,7 @@ class CompanySerializer(serializers.ModelSerializer):
 
     def get_employees(self, obj):
         """ Receives the list of employees """
-
+        
         return EmployeeSerializer(obj.employees.all(),
                                          many=True, read_only=True,
                                          context={'company_id': obj.id}).data
