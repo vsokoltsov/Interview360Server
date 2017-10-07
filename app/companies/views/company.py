@@ -1,7 +1,7 @@
 from . import (
     render, viewsets, status, Response, get_object_or_404,
-    IsAuthenticated,  TokenAuthentication,
-    CompanySerializer, Company, CompanyPermissions
+    IsAuthenticated,  TokenAuthentication, Count,
+    CompanySerializer, CompaniesSerializer, Company, CompanyPermissions
 )
 
 def get_company(user, pk):
@@ -16,13 +16,27 @@ class CompaniesViewSet(viewsets.ModelViewSet):
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, CompanyPermissions, )
-    serializer_class = CompanySerializer
+
+    def get_serializer_class(self):
+        """ Return specific serializer for action """
+
+        if self.action == 'list':
+            return CompaniesSerializer
+        else:
+            return CompanySerializer
 
     def get_queryset(self):
         """
         Return scope of companies which current user belongs to
         """
-        return self.request.user.companies.all()
+
+        companies = self.request.user.companies.all().prefetch_related('vacancy_set')
+        companies = (
+            companies
+                .annotate(Count('employees', distinct=True))
+                .annotate(Count('vacancy', distinct=True))
+        )
+        return companies
 
     def create(self, request):
         """ Creates a new company """

@@ -6,4 +6,5 @@ from profile.fields import AttachmentField
 
 from .company_member_serializer import CompanyMemberSerializer
 from .company_serializer import CompanySerializer
+from .companies_serializer import CompaniesSerializer
 from .employee_serializer import EmployeeSerializer

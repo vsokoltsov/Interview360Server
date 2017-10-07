@@ -7,6 +7,17 @@ from django_pglocks import advisory_lock
 from roles.constants import COMPANY_OWNER
 import ipdb
 
+BASE_FIELDS = [
+    'id',
+    'name',
+    'city',
+    'description',
+    'start_date',
+    'created_at',
+    'owner_id',
+    'attachment'
+]
+
 class CompanySerializer(serializers.ModelSerializer):
     """ Serialization of Company object """
 
@@ -21,21 +32,11 @@ class CompanySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Company
-        fields = [
-            'id',
-            'name',
-            'city',
-            'description',
-            'start_date',
-            'created_at',
-            'employees',
-            'owner_id',
-            'attachment'
-        ]
+        fields = BASE_FIELDS + [ 'employees' ]
 
     def get_employees(self, obj):
         """ Receives the list of employees """
-        
+
         return EmployeeSerializer(obj.employees.all(),
                                          many=True, read_only=True,
                                          context={'company_id': obj.id}).data
