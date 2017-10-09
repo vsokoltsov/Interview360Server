@@ -28,7 +28,7 @@ class CompanySerializer(serializers.ModelSerializer):
     city = serializers.CharField(required=True, max_length=255)
     owner_id = serializers.IntegerField(required=True, write_only=True)
     employees = serializers.SerializerMethodField()
-    attachment = AttachmentField(required=False)
+    attachment = AttachmentField(allow_null=True)
 
     class Meta:
         model = Company
@@ -69,13 +69,13 @@ class CompanySerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         """ Update company method """
 
-
         attachment_json = validated_data.pop('attachment', None)
         instance.name = validated_data.get('name', instance.name)
         instance.start_date = validated_data.get('start_date', instance.start_date)
         instance.description = validated_data.get('description', instance.description)
         instance.city = validated_data.get('city', instance.city)
         self._create_attachment(attachment_json, instance)
+        instance.save()
         return instance
 
     def _create_attachment(self, attachment_json, instance):
