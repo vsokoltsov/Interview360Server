@@ -28,7 +28,7 @@ class CompanySerializer(serializers.ModelSerializer):
     city = serializers.CharField(required=True, max_length=255)
     owner_id = serializers.IntegerField(required=True, write_only=True)
     employees = serializers.SerializerMethodField()
-    attachment = AttachmentField(allow_null=True)
+    attachment = AttachmentField(allow_null=True, required=False)
 
     class Meta:
         model = Company
