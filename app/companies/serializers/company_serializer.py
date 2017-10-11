@@ -15,7 +15,9 @@ BASE_FIELDS = [
     'start_date',
     'created_at',
     'owner_id',
-    'attachment'
+    'attachment',
+    'employees_count',
+    'vacancy_count'
 ]
 
 class CompanySerializer(serializers.ModelSerializer):
@@ -30,6 +32,9 @@ class CompanySerializer(serializers.ModelSerializer):
     employees = serializers.SerializerMethodField()
     attachment = AttachmentField(allow_null=True, required=False)
 
+    employees_count = serializers.SerializerMethodField()
+    vacancy_count = serializers.SerializerMethodField()
+
     class Meta:
         model = Company
         fields = BASE_FIELDS + [ 'employees' ]
@@ -41,6 +46,16 @@ class CompanySerializer(serializers.ModelSerializer):
                                          many=True, read_only=True,
                                          context={'company_id': obj.id}).data
 
+    def get_employees_count(self, obj):
+        """ Receive number of employees for company """
+
+        return obj.employees.count()
+
+    def get_vacancy_count(self, obj):
+        """ Receive number of vacancies for company """
+
+        return obj.vacancy_set.count()
+
     def validate_owner_id(self, value):
         """ Custom validation for owner_id field """
 
@@ -49,6 +64,7 @@ class CompanySerializer(serializers.ModelSerializer):
             return value
         except User.DoesNotExist:
             raise serializers.ValidationError("There is no such user")
+
 
     def create(self, validated_data):
         """ Create company method """
