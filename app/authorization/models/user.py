@@ -38,6 +38,15 @@ class User(AbstractBaseUser):
         ).role
         return int(role) == int(role_id)
 
+    def get_roles_for_companies(self):
+        """
+        Return dictionary of company id's with role id's
+        """
+
+        return {
+            item.company_id: item.role for item in  self.companymember_set.all()
+        }
+
     def __str__(self):
         """ String representation of user """
 

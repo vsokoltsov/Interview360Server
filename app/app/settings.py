@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'anymail',
     'corsheaders',
     'django_nose',
+    'easy_thumbnails',
     'authorization',
     'companies',
     'skills',
@@ -74,6 +75,22 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'app.urls'
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        }
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    }
+}
 
 TEMPLATES = [
     {
@@ -176,6 +193,19 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
 # AWS_LOCATION = 'static'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+THUMBNAIL_DEFAULT_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+THUMBNAIL_BASEDIR = 'thumbs'
 # STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 
 DEFAULT_FILE_STORAGE = 'app.storage_backends.MediaStorage'
+
+THUMBNAIL_ALIASES = {
+    '': {
+        'small_thumb': {'size': (50, 50) },
+        'thumb': {'size': (100, 100) },
+        'medium': {'size': (200, 200) },
+        'medium_large': {'size': (250, 250) },
+        'large': {'size': (350, 350) }
+    },
+}
+THUMBNAIL_FORCE_OVERWRITE = True

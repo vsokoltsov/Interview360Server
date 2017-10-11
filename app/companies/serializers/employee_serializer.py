@@ -18,17 +18,17 @@ class EmployeeSerializer(UserSerializer):
     emails = serializers.ListField(write_only=True, required=True,
         max_length=10, child=serializers.CharField()
     )
-    role = serializers.SerializerMethodField(read_only=True)
+    member_role = serializers.SerializerMethodField(read_only=True)
     role = serializers.IntegerField(
         write_only=True, required=True, max_value=4, min_value=1
     )
 
     class Meta:
         model = User
-        fields = UserSerializer.Meta.fields + ('emails', 'company_id', 'role')
+        fields = UserSerializer.Meta.fields + ('emails', 'company_id', 'role', 'member_role')
         read_only_fields = UserSerializer.Meta.fields
 
-    def get_role(self, obj):
+    def get_member_role(self, obj):
         """ Get role for the employee """
 
         company_id = self.context.get('company_id')
@@ -57,7 +57,7 @@ class EmployeeSerializer(UserSerializer):
                 user = self.find_or_create_user(email)
                 token, _ = Token.objects.get_or_create(user=user)
                 company = Company.objects.get(id=data['company_id'])
-                
+
                 CompanyMember.objects.create(
                     user_id=user.id, company_id=company.id,
                     role=data['role']

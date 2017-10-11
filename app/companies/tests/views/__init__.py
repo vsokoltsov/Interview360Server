@@ -1,4 +1,5 @@
 from rest_framework.test import APITestCase
+from django.core.files.storage import FileSystemStorage
 from rest_framework.authtoken.models import Token
 from companies.models import Company, CompanyMember
 from authorization.models import User

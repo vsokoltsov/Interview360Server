@@ -1,4 +1,11 @@
+from . import serializers
 from .user import UserSerializer
 
 class CurrentUserSerializer(UserSerializer):
-    pass
+    roles = serializers.SerializerMethodField()
+
+    class Meta(UserSerializer.Meta):
+        fields = UserSerializer.Meta.fields + ('roles', )
+
+    def get_roles(self, obj):
+        return obj.get_roles_for_companies()
