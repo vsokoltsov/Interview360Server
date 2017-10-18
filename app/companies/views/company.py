@@ -30,7 +30,9 @@ class CompaniesViewSet(viewsets.ModelViewSet):
         Return scope of companies which current user belongs to
         """
 
-        companies = self.request.user.companies.all().prefetch_related('vacancy_set')
+        companies = self.request.user.companies.prefetch_related(
+            'vacancy_set', 'attachments', 'employees'
+        )
         companies = (
             companies
                 .annotate(Count('employees', distinct=True))

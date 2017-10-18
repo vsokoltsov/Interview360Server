@@ -42,7 +42,7 @@ class CompanySerializer(serializers.ModelSerializer):
     def get_employees(self, obj):
         """ Receives the list of employees """
 
-        return EmployeeSerializer(obj.employees.all(),
+        return EmployeeSerializer(obj.employees.all()[:5],
                                          many=True, read_only=True,
                                          context={'company_id': obj.id}).data
 

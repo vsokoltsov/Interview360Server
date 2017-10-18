@@ -16,6 +16,12 @@ class VacancyViewSet(viewsets.ModelViewSet):
     queryset = Vacancy.objects.all()
     serializer_class = VacancySerializer
 
+    def get_queryset(self):
+        """ Return queryset for vacancies """
+
+        vacancies = Vacancy.objects.prefetch_related('skills', 'company')
+        return vacancies
+
     def create(self, request, company_pk=None):
         """ POST action for creating a new vacancy """
 
