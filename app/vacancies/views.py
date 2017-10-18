@@ -13,7 +13,6 @@ class VacancyViewSet(viewsets.ModelViewSet):
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, VacancyPermission, )
-    queryset = Vacancy.objects.all()
     serializer_class = VacancySerializer
 
     def get_queryset(self):

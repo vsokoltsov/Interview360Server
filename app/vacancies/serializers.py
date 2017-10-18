@@ -4,7 +4,8 @@ from django.db import transaction
 from skills.models import Skill
 from companies.models import Company
 from companies.serializers import CompanySerializer
-import ipdb
+from .fields import SkillsField
+
 
 class VacancyCompanySerializer(CompanySerializer):
     class Meta(CompanySerializer.Meta):
@@ -21,6 +22,7 @@ class VacancySerializer(serializers.ModelSerializer):
     salary = serializers.DecimalField(max_digits=6, decimal_places=2, required=True)
     company_id = serializers.IntegerField(required=True, write_only=True)
     company = serializers.SerializerMethodField(read_only=True)
+    skills = SkillsField()
 
     class Meta:
         model = Vacancy
@@ -35,6 +37,10 @@ class VacancySerializer(serializers.ModelSerializer):
             'updated_at',
             'skills'
         ]
+
+    def get_skills(self, obj):
+        skills = obj.skills.all()
+        return SkillSerializer(skills, many=True, read_only=True).data
 
     def get_company(self, vacancy):
         company = Company.objects.get(id=vacancy.company_id)

@@ -30,6 +30,18 @@ class Company(models.Model):
             ).prefetch_related('user')
         return list(map(lambda member: member.user, objects))
 
+    @classmethod
+    def prefetch_for_list(cls):
+        objects = cls.objects.prefetch_related(
+            'vacancy_set', 'attachments', 'employees'
+        )
+        objects = (
+            objects
+                .annotate(Count('employees', distinct=True))
+                .annotate(Count('vacancy', distinct=True))
+        )
+        return objects
+
 class CompanyMember(models.Model):
     """ CompanyMember model, which is used for `through` association """
 
