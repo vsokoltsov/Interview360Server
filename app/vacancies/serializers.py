@@ -3,18 +3,24 @@ from .models import Vacancy
 from django.db import transaction
 from skills.models import Skill
 from companies.models import Company
-from companies.serializers import CompanySerializer
+from companies.serializers import BaseCompanySerializer
 from .fields import SkillsField
 
+class BaseVacancySerializer(serializers.ModelSerializer):
+    """ Base vacancy objects serializer """
 
-class VacancyCompanySerializer(CompanySerializer):
-    class Meta(CompanySerializer.Meta):
+    class Meta:
+        model = Vacancy
         fields = [
-            field for field in CompanySerializer.Meta.fields if field not in ['employees']
+            'id',
+            'title',
+            'description',
+            'salary',
+            'created_at',
+            'updated_at'
         ]
-        read_only_fields = ('__all__',)
 
-class VacancySerializer(serializers.ModelSerializer):
+class VacancySerializer(BaseVacancySerializer):
     """ Serializer for vacancies object """
 
     title = serializers.CharField(max_length=255, required=True)
@@ -25,26 +31,20 @@ class VacancySerializer(serializers.ModelSerializer):
     skills = SkillsField()
 
     class Meta:
-        model = Vacancy
-        fields = [
-            'id',
-            'title',
-            'description',
-            'salary',
+        model = BaseVacancySerializer.Meta.model
+        fields = BaseVacancySerializer.Meta.fields + [
             'company',
             'company_id',
-            'created_at',
-            'updated_at',
             'skills'
         ]
-
+        
     def get_skills(self, obj):
         skills = obj.skills.all()
         return SkillSerializer(skills, many=True, read_only=True).data
 
     def get_company(self, vacancy):
         company = Company.objects.get(id=vacancy.company_id)
-        return VacancyCompanySerializer(company, read_only=True).data
+        return BaseCompanySerializer(company, read_only=True).data
 
     def create(self, data):
         """ Create new instance of Vacancy and add Skills objects to it """
