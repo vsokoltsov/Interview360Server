@@ -1,7 +1,9 @@
 from . import (
     serializers, User, Company, CompanyMember, transaction, AttachmentField
 )
+from .companies_serializer import CompaniesSerializer
 from .employee_serializer import EmployeeSerializer
+# from vacancies.serializers import VacancySerializer
 from attachments.models import Attachment
 from django_pglocks import advisory_lock
 from roles.constants import COMPANY_OWNER
@@ -20,7 +22,7 @@ BASE_FIELDS = [
     'vacancy_count'
 ]
 
-class CompanySerializer(serializers.ModelSerializer):
+class CompanySerializer(CompaniesSerializer):
     """ Serialization of Company object """
 
     id = serializers.IntegerField(read_only=True)
@@ -30,21 +32,23 @@ class CompanySerializer(serializers.ModelSerializer):
     city = serializers.CharField(required=True, max_length=255)
     owner_id = serializers.IntegerField(required=True, write_only=True)
     employees = serializers.SerializerMethodField()
-    attachment = AttachmentField(allow_null=True, required=False)
-
-    employees_count = serializers.SerializerMethodField()
-    vacancy_count = serializers.SerializerMethodField()
 
     class Meta:
-        model = Company
-        fields = BASE_FIELDS + [ 'employees' ]
+        model = CompaniesSerializer.Meta.model
+        fields = CompaniesSerializer.Meta.fields + [ 'owner_id', 'employees' ]
 
     def get_employees(self, obj):
         """ Receives the list of employees """
 
-        return EmployeeSerializer(obj.employees.all()[:5],
+        employees_list = obj.employees.prefetch_related('attachments')[:5]
+        return EmployeeSerializer(employees_list,
                                          many=True, read_only=True,
                                          context={'company_id': obj.id}).data
+    # def get_vacancies(self, object):
+    #     """ Receive a list of vacancies for company """
+    #
+    #     vacancies_list = obj.vacancy_set.prefetch_related('skills', 'company')[:5]
+    #     return VacancySerializer(vacancies_list, many=True, read_only=True).data
 
     def get_employees_count(self, obj):
         """ Receive number of employees for company """

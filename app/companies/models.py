@@ -2,6 +2,24 @@ from django.db import models
 from authorization.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.contenttypes.fields import GenericRelation
+from django.db.models import Count
+import ipdb
+
+class CompanyManager(models.Manager):
+    """ Custom manager for Company model """
+
+    def prefetched_base(self, **kwargs):
+        """ Prefetch all necessary objects """
+
+        objects = self.prefetch_related(
+            'vacancy_set', 'attachments'
+        )
+        objects = (
+            objects
+                .annotate(Count('employees', distinct=True))
+                .annotate(Count('vacancy', distinct=True))
+        )
+        return objects
 
 class Company(models.Model):
     """ Base company model """
@@ -15,6 +33,8 @@ class Company(models.Model):
 
     employees = models.ManyToManyField('authorization.User', through='CompanyMember')
     attachments = GenericRelation('attachments.Attachment')
+
+    objects = CompanyManager()
 
     class Meta:
         db_table = 'companies'
