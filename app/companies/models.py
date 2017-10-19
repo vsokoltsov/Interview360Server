@@ -8,7 +8,7 @@ import ipdb
 class CompanyManager(models.Manager):
     """ Custom manager for Company model """
 
-    def prefetched_base(self, **kwargs):
+    def prefetched_list(self, **kwargs):
         """ Prefetch all necessary objects """
 
         objects = self.prefetch_related(
