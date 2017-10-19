@@ -29,8 +29,10 @@ class CompaniesViewSet(viewsets.ModelViewSet):
         """
         Return scope of companies which current user belongs to
         """
-        
-        return self.request.user.companies.prefetched_list()
+        if self.action == 'list':
+            return self.request.user.companies.prefetched_list()
+        else:
+            return self.request.user.companies.prefetched_detail()
 
     def create(self, request):
         """ Creates a new company """
