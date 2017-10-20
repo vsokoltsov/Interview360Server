@@ -5,9 +5,12 @@ from skills.models import Skill
 from companies.models import Company
 from companies.serializers import BaseCompanySerializer
 from .fields import SkillsField
+import ipdb
 
 class BaseVacancySerializer(serializers.ModelSerializer):
     """ Base vacancy objects serializer """
+
+    company_id = serializers.SerializerMethodField()
 
     class Meta:
         model = Vacancy
@@ -16,9 +19,15 @@ class BaseVacancySerializer(serializers.ModelSerializer):
             'title',
             'description',
             'salary',
+            'company_id',
             'created_at',
             'updated_at'
         ]
+
+    def get_company_id(self, obj):
+        """ Receive id of the company """
+
+        return obj.company.id
 
 class VacancySerializer(BaseVacancySerializer):
     """ Serializer for vacancies object """
@@ -34,10 +43,9 @@ class VacancySerializer(BaseVacancySerializer):
         model = BaseVacancySerializer.Meta.model
         fields = BaseVacancySerializer.Meta.fields + [
             'company',
-            'company_id',
             'skills'
         ]
-        
+
     def get_skills(self, obj):
         skills = obj.skills.all()
         return SkillSerializer(skills, many=True, read_only=True).data
