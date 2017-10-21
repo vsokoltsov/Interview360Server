@@ -1,25 +1,36 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status
 from .models import Vacancy
-from .serializers import VacancySerializer
+from companies.models import Company
+from .serializers import VacancySerializer, BaseVacancySerializer
 from .permissions import VacancyPermission
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+import ipdb
 
 class VacancyViewSet(viewsets.ModelViewSet):
     """ View class for Vacancy """
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, VacancyPermission, )
-    serializer_class = VacancySerializer
 
     def get_queryset(self):
         """ Return queryset for vacancies """
 
-        vacancies = Vacancy.objects.prefetch_related('skills', 'company')
+        vacancies = Vacancy.objects.prefetch_related(
+            'skills', 'company', 'company__attachments'
+        ).filter(company_id=self.kwargs['company_pk'])
         return vacancies
+
+    def get_serializer_class(self):
+        """ Return serializer for specific action """
+
+        if self.action == 'list':
+            return BaseVacancySerializer
+        else:
+            return VacancySerializer
 
     def create(self, request, company_pk=None):
         """ POST action for creating a new vacancy """
