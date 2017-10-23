@@ -35,7 +35,7 @@ class VacancyViewSet(viewsets.ModelViewSet):
     def create(self, request, company_pk=None):
         """ POST action for creating a new vacancy """
 
-        serializer = self.serializer_class(data=request.data)
+        serializer = VacancySerializer(data=request.data)
         if serializer.is_valid() and serializer.save():
             return Response({'vacancy': serializer.data},
                             status=status.HTTP_201_CREATED)
@@ -47,7 +47,7 @@ class VacancyViewSet(viewsets.ModelViewSet):
         """ PUT action for updating existent vacancy """
 
         vacancy = get_object_or_404(Vacancy, pk=pk)
-        serializer = self.serializer_class(vacancy, data=request.data,
+        serializer = VacancySerializer(vacancy, data=request.data,
                                            partial=True)
         if serializer.is_valid() and serializer.save():
             return Response({'vacancy': serializer.data},
