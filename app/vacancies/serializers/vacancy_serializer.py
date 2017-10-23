@@ -1,33 +1,11 @@
-from rest_framework import serializers
-from .models import Vacancy
+from . import serializers, Vacancy, BaseVacancySerializer
 from django.db import transaction
 from skills.models import Skill
 from companies.models import Company
 from companies.serializers import BaseCompanySerializer
-from .fields import SkillsField
-import ipdb
+from interviews.serializers import BaseInterviewSerializer
 
-class BaseVacancySerializer(serializers.ModelSerializer):
-    """ Base vacancy objects serializer """
-
-    company_id = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Vacancy
-        fields = [
-            'id',
-            'title',
-            'description',
-            'salary',
-            'company_id',
-            'created_at',
-            'updated_at'
-        ]
-
-    def get_company_id(self, obj):
-        """ Receive id of the company """
-
-        return obj.company.id
+from vacancies.fields import SkillsField
 
 class VacancySerializer(BaseVacancySerializer):
     """ Serializer for vacancies object """
@@ -37,13 +15,15 @@ class VacancySerializer(BaseVacancySerializer):
     salary = serializers.DecimalField(max_digits=6, decimal_places=2, required=True)
     company_id = serializers.IntegerField(required=True, write_only=True)
     company = serializers.SerializerMethodField(read_only=True)
+    interviews = serializers.SerializerMethodField(read_only=True)
     skills = SkillsField()
 
     class Meta:
         model = BaseVacancySerializer.Meta.model
         fields = BaseVacancySerializer.Meta.fields + [
             'company',
-            'skills'
+            'skills',
+            'interviews'
         ]
 
     def get_skills(self, obj):
@@ -53,6 +33,13 @@ class VacancySerializer(BaseVacancySerializer):
     def get_company(self, vacancy):
         company = Company.objects.get(id=vacancy.company_id)
         return BaseCompanySerializer(company, read_only=True).data
+
+    def get_interviews(self, vacancy):
+        """ Receive list of vacancies interviews """
+
+        interviews = vacancy.interviews.all()
+        return BaseInterviewSerializer(interviews, many=True).data
+
 
     def create(self, data):
         """ Create new instance of Vacancy and add Skills objects to it """

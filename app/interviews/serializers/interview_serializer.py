@@ -1,31 +1,13 @@
-from rest_framework import serializers
-from .models import Interview, InterviewEmployee
+from . import serializers, Interview, InterviewEmployee
+
 from authorization.models import User
 from vacancies.models import Vacancy
-from authorization.serializers import UserSerializer
 from datetime import datetime
 from django.db import transaction
 from authorization.serializers import UserSerializer
-from vacancies.serializers import VacancySerializer
-from companies.models import CompanyMember
-from companies.serializers import CompanyMemberSerializer
+from vacancies.serializers import BaseVacancySerializer
+from .interview_employee_serializer import InterviewEmployeeSerializer
 from roles.constants import CANDIDATE
-import ipdb
-
-class InterviewEmployeeSerializer(UserSerializer):
-    role = serializers.SerializerMethodField(read_only=True)
-
-    class Meta:
-        model = UserSerializer.Meta.model
-        fields = UserSerializer.Meta.fields + ('role', )
-
-    def get_role(self, employee):
-        """ Get role for the employee """
-
-        company_id = self.context.get('company_id')
-        company_member = CompanyMember.objects.get(user_id=employee.id,
-                                                company_id=company_id)
-        return CompanyMemberSerializer(company_member, read_only=True).data
 
 
 class InterviewSerializer(serializers.ModelSerializer):
@@ -113,7 +95,7 @@ class InterviewSerializer(serializers.ModelSerializer):
     def get_vacancy(self, interview):
         """ Rertrieve vacancy serializer """
 
-        serializer = VacancySerializer(interview.vacancy, read_only=True)
+        serializer = BaseVacancySerializer(interview.vacancy, read_only=True)
         return serializer.data
 
     def create(self, data):
