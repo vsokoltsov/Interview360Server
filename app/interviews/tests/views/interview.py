@@ -28,7 +28,7 @@ class InterviewViewSetTests(APITestCase):
         self.form_data = {
             'candidate_id': self.candidate.id,
             'vacancy_id': self.vacancy.id,
-            'interviewees': [
+            'interviewee_ids': [
                 self.hr.id
             ],
             'assigned_at': date

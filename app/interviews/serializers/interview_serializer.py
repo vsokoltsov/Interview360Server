@@ -25,7 +25,7 @@ class InterviewSerializer(serializers.ModelSerializer):
     vacancy_id = serializers.IntegerField(required=True)
     vacancy = serializers.SerializerMethodField(read_only=True)
     interviewees = serializers.SerializerMethodField(read_only=True)
-    interviewees = serializers.ListField(
+    interviewee_ids = serializers.ListField(
         required=True, max_length=10,
         child=serializers.CharField(), write_only=True
     )
@@ -41,7 +41,8 @@ class InterviewSerializer(serializers.ModelSerializer):
             'passed',
             'assigned_at',
             'created_at',
-            'interviewees'
+            'interviewees',
+            'interviewee_ids'
         ]
 
     def validate_vacancy_id(self, value):
@@ -102,7 +103,7 @@ class InterviewSerializer(serializers.ModelSerializer):
         """ Create a new instance of interview and some of
             the InterviewEmployee objects """
 
-        interviewees = data.pop('interviewees', None)
+        interviewees = data.pop('interviewee_ids', None)
         interview = Interview.objects.create(**data)
         if interviewees:
             for employee_id in interviewees:

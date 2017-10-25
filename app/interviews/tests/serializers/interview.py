@@ -30,7 +30,7 @@ class InterviewSerializerTests(TransactionTestCase):
         self.form_data = {
             'candidate_id': self.candidate.id,
             'vacancy_id': self.vacancy.id,
-            'interviewees': [
+            'interviewee_ids': [
                 self.hr.id
             ],
             'assigned_at': date
@@ -125,12 +125,12 @@ class InterviewSerializerTests(TransactionTestCase):
     def test_failed_interview_employee_creation(self):
         """ Test failed creation of Interviewemployee for the abscent user """
 
-        self.form_data['interviewees'] = 100
+        self.form_data['interviewee_ids'] = 100
 
         serializer = InterviewSerializer(data=self.form_data)
 
         self.assertFalse(serializer.is_valid())
-        self.assertTrue('interviewees' in serializer.errors)
+        self.assertTrue('interviewee_ids' in serializer.errors)
 
     def test_success_update_of_the_interview(self):
         """ Test success updating of the interview instance """
