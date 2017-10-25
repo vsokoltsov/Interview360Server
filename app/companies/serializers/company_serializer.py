@@ -3,7 +3,7 @@ from . import (
 )
 from .companies_serializer import CompaniesSerializer
 from .employee_serializer import EmployeeSerializer
-from vacancies.serializers import BaseVacancySerializer
+from common.serializers.base_vacancy_serializer import BaseVacancySerializer
 from attachments.models import Attachment
 from django_pglocks import advisory_lock
 from roles.constants import COMPANY_OWNER
@@ -50,7 +50,7 @@ class CompanySerializer(CompaniesSerializer):
 
     def get_vacancy_count(self, obj):
         """ Receive number of vacancies for company """
-        
+
         try:
             return obj.vacancy__count
         except AttributeError:

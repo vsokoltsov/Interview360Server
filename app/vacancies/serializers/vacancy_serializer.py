@@ -1,9 +1,10 @@
-from . import serializers, Vacancy, BaseVacancySerializer
+from . import serializers, Vacancy
+from common.serializers.base_vacancy_serializer import BaseVacancySerializer
 from django.db import transaction
 from skills.models import Skill
 from companies.models import Company
 from companies.serializers import BaseCompanySerializer
-from interviews.serializers import BaseInterviewSerializer
+from common.serializers.base_interview_serializer import BaseInterviewSerializer
 
 from vacancies.fields import SkillsField
 

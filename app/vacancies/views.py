@@ -2,7 +2,8 @@ from django.shortcuts import render
 from rest_framework import viewsets, status
 from .models import Vacancy
 from companies.models import Company
-from .serializers import VacancySerializer, BaseVacancySerializer
+from .serializers import VacancySerializer
+from common.serializers.base_vacancy_serializer import BaseVacancySerializer
 from .permissions import VacancyPermission
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication

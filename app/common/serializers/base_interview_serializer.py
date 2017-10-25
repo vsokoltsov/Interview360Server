@@ -1,4 +1,5 @@
-from . import serializers, InterviewEmployeeSerializer, Interview
+from . import serializers, Interview
+from interviews.serializers.interview_employee_serializer import InterviewEmployeeSerializer
 
 class BaseInterviewSerializer(serializers.ModelSerializer):
     class Meta:

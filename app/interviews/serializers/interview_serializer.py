@@ -5,10 +5,10 @@ from vacancies.models import Vacancy
 from datetime import datetime
 from django.db import transaction
 from authorization.serializers import UserSerializer
-from vacancies.serializers import BaseVacancySerializer
+from common.serializers.base_vacancy_serializer import BaseVacancySerializer
 from .interview_employee_serializer import InterviewEmployeeSerializer
 from roles.constants import CANDIDATE
-
+import ipdb
 
 class InterviewSerializer(serializers.ModelSerializer):
     """ Class for serialization of Interviews """
