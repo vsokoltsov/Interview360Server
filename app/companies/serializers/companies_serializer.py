@@ -1,5 +1,5 @@
 from . import serializers
-from .base_company_serializer import BaseCompanySerializer
+from common.serializers.base_company_serializer import BaseCompanySerializer
 
 class CompaniesSerializer(BaseCompanySerializer):
     """ Serializer for companies list """
