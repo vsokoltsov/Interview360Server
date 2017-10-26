@@ -2,6 +2,9 @@ from . import serializers, Interview
 from interviews.serializers.interview_employee_serializer import InterviewEmployeeSerializer
 
 class BaseInterviewSerializer(serializers.ModelSerializer):
+
+    candidate = serializers.SerializerMethodField()
+
     class Meta:
         model = Interview
         fields = [

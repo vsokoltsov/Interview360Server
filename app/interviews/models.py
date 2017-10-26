@@ -26,7 +26,7 @@ class Interview(models.Model):
         """
         Return scope of objects which 'assigned_at' attribute belongs to range
         """
-        
+
         start_date = datetime.now()
         end_date = start_date + timedelta(days=days)
         return cls.objects.filter(
