@@ -33,6 +33,11 @@ class Interview(models.Model):
             assigned_at__range=[str(start_date), str(end_date)]
         )
 
+    @classmethod
+    def for_company(cls, company_id):
+        """ Receive list of interviews for particular company """
+        return cls.objects.filter(vacancy__company__id=company_id)
+
     class Meta:
         db_table = 'interviews'
 

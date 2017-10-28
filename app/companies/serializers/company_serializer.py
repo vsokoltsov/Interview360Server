@@ -4,7 +4,9 @@ from . import (
 from .companies_serializer import CompaniesSerializer
 from .employee_serializer import EmployeeSerializer
 from common.serializers.base_vacancy_serializer import BaseVacancySerializer
+from common.serializers.base_interview_serializer import BaseInterviewSerializer
 from attachments.models import Attachment
+from interviews.models import Interview
 from django_pglocks import advisory_lock
 from roles.constants import COMPANY_OWNER
 import ipdb
@@ -20,11 +22,12 @@ class CompanySerializer(CompaniesSerializer):
     owner_id = serializers.IntegerField(required=True, write_only=True)
     employees = serializers.SerializerMethodField()
     vacancies = serializers.SerializerMethodField()
+    interviews = serializers.SerializerMethodField()
 
     class Meta:
         model = CompaniesSerializer.Meta.model
         fields = CompaniesSerializer.Meta.fields + [
-            'owner_id', 'employees', 'vacancies'
+            'owner_id', 'employees', 'vacancies', 'interviews'
         ]
 
     def get_employees(self, obj):
@@ -39,6 +42,12 @@ class CompanySerializer(CompaniesSerializer):
 
         vacancies_list = obj.vacancy_set.all()[:5]
         return BaseVacancySerializer(vacancies_list, many=True, read_only=True).data
+
+    def get_interviews(self, obj):
+        """ Receive a list of interviews for company """
+
+        interviews = Interview.for_company(obj.id)
+        return BaseInterviewSerializer(interviews, many=True, read_only=True).data
 
     def get_employees_count(self, obj):
         """ Receive number of employees for company """
