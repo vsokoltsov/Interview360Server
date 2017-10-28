@@ -9,4 +9,8 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'first_name', 'last_name', 'email', 'attachment')
 
     def get_attachment(self, obj):
-        return AttachmentBaseSerializer(obj.attachments.last()).data
+        last_attachment = obj.attachments.last()
+        if last_attachment:
+            return AttachmentBaseSerializer(last_attachment).data
+        else:
+            return None
