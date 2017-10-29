@@ -17,10 +17,10 @@ class EmailService:
         msg = render_to_string('interview_reminder.html', params)
         topic = 'Upcoming interview notification'
         emails = [user]
-        cls._send_default_mail(topic, msg, cls.SENDER, emails)
+        cls._send_default_mail(topic, msg, emails)
 
     @classmethod
-    def _send_default_mail(cls, topic, message, sender, mails):
+    def _send_default_mail(cls, topic, message,mails):
         """ Base mail send function """
 
-        send_mail(topic, message, sender, mails)
+        send_mail(topic, message, cls.SENDER, mails)

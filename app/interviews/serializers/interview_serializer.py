@@ -20,7 +20,9 @@ class InterviewSerializer(serializers.ModelSerializer):
     passed = serializers.BooleanField(read_only=True)
     assigned_at = serializers.DateTimeField(required=True)
 
-    candidate_email = serializers.CharField(required=True, max_length=255)
+    candidate_email = serializers.CharField(
+        required=True, max_length=255, write_only=True
+    )
     candidate = serializers.SerializerMethodField(read_only=True)
 
     vacancy_id = serializers.IntegerField(required=True)
