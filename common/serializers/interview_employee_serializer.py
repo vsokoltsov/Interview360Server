@@ -1,5 +1,4 @@
-from . import serializers
-
+from rest_framework import serializers
 from authorization.serializers import UserSerializer
 from companies.models import CompanyMember
 from companies.serializers import CompanyMemberSerializer

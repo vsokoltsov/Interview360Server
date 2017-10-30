@@ -1,5 +1,7 @@
 from . import serializers, Interview, InterviewEmployee
 
+import re
+import ipdb
 from authorization.models import User
 from companies.models import Company, CompanyMember
 from vacancies.models import Vacancy
@@ -7,15 +9,15 @@ from datetime import datetime
 from django.db import transaction
 from authorization.serializers import UserSerializer
 from common.serializers.base_vacancy_serializer import BaseVacancySerializer
-from .interview_employee_serializer import InterviewEmployeeSerializer
+from common.serializers.interview_employee_serializer import InterviewEmployeeSerializer
 from roles.constants import CANDIDATE
-import ipdb
+
+
+
+pattern = re.compile(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
 
 class InterviewSerializer(serializers.ModelSerializer):
     """ Class for serialization of Interviews """
-
-    # TODO Validations
-    #   - candidate have appropriate role (candidate)
 
     passed = serializers.BooleanField(read_only=True)
     assigned_at = serializers.DateTimeField(required=True)
@@ -59,15 +61,14 @@ class InterviewSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("There is no such vacancy")
 
         return value
-    #
-    # def validate_candidate_id(self, value):
-    #     """ Validation for candidate_id """
-    #
-    #     try:
-    #         candidate = User.objects.get(id=value)
-    #     except User.DoesNotExist:
-    #         raise serializers.ValidationError("There is no such candidate")
-    #     return value
+
+    def validate_candidate_email(self, value):
+        """ Validation for candidate_email """
+
+        if not pattern.match(value):
+            raise serializers.ValidationError("Is not email")
+
+        return value
 
     def validate_assigned_at(self, value):
         """ Validation for assigned_at field """
@@ -109,6 +110,7 @@ class InterviewSerializer(serializers.ModelSerializer):
         interviewees = data.pop('interviewee_ids', None)
         candidate_email = data.pop('candidate_email', None)
         candidate_id = self._get_or_create_candidate(candidate_email, data)
+
         interview = Interview.objects.create(**data, candidate_id=candidate_id)
         if interviewees:
             for employee_id in interviewees:
@@ -128,8 +130,10 @@ class InterviewSerializer(serializers.ModelSerializer):
     def _get_or_create_candidate(self, email, data):
         """ Get or create a new user object for a candidate based on the email """
 
-        candidate = User.objects.get_or_create(email=email)
-        vacancy_id = data.pop('vacancy_id')
+        result = User.objects.get_or_create(email=email)
+
+        candidate = result[0] if isinstance(result, tuple) else result
+        vacancy_id = data.get('vacancy_id')
         vacancy = Vacancy.objects.get(pk=vacancy_id)
         try:
             candidate.companies.get(id=vacancy.company_id)

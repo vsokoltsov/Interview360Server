@@ -1,5 +1,6 @@
 from django.test import TransactionTestCase
 
+from authorization.models import User
 from companies.models import Company, CompanyMember
 from interviews.models import Interview, InterviewEmployee
 from vacancies.models import Vacancy

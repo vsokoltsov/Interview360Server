@@ -1,7 +1,7 @@
 from . import (
     TransactionTestCase, datetime, Company,
     InterviewSerializer, mock, CompanyMember, Vacancy, InterviewEmployee,
-    Interview, HR, CANDIDATE
+    Interview, HR, CANDIDATE, User
 )
 
 import ipdb
@@ -28,7 +28,7 @@ class InterviewSerializerTests(TransactionTestCase):
         self.interview = self.vacancy.interviews.first()
         date = datetime.datetime.now() + datetime.timedelta(days=10)
         self.form_data = {
-            'candidate_id': self.candidate.id,
+            'candidate_email': self.candidate.email,
             'vacancy_id': self.vacancy.id,
             'interviewee_ids': [
                 self.hr.id
@@ -68,14 +68,21 @@ class InterviewSerializerTests(TransactionTestCase):
         self.assertFalse(serializer.is_valid())
         self.assertTrue('vacancy_id' in serializer.errors)
 
-    def test_failed_validation_if_candidate_does_not_exists(self):
-        """ Test that serializer's validation failed if candidate is empty """
+    @mock.patch('authorization.models.User.objects.get_or_create')
+    def test_create_new_candidate_if_there_are_no_such_candidate(self, user_mock):
+        """ Test creating the new candidate if it is not abscent """
 
-        self.form_data['candidate_id'] = 123124124
+        user_mock.objects = mock.MagicMock()
+        user_mock.objects = mock.MagicMock()
+        user_mock.get_or_create = mock.MagicMock()
+        user_mock.return_value = User(id=1)
 
+        self.form_data['candidate_email'] = 'ololosh@gmail.com'
         serializer = InterviewSerializer(data=self.form_data)
-        self.assertFalse(serializer.is_valid())
-        self.assertTrue('candidate_id' in serializer.errors)
+        serializer.is_valid()
+        serializer.save()
+        assert user_mock.called, True
+        # self.assertTrue(serializer.is_valid())
 
     def test_failed_validation_if_assigned_at_less_than_current_date(self):
         """ Test that serializer's validation failed if assigned_at is

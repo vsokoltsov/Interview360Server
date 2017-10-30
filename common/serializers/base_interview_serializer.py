@@ -1,5 +1,6 @@
 from . import serializers, Interview
-from interviews.serializers.interview_employee_serializer import InterviewEmployeeSerializer
+# import ipdb; ipdb.set_trace()
+# from .interview_employee_serializer import InterviewEmployeeSerializer
 
 class BaseInterviewSerializer(serializers.ModelSerializer):
 
@@ -18,6 +19,7 @@ class BaseInterviewSerializer(serializers.ModelSerializer):
     def get_candidate(self, interview):
         """ Receive candidate information """
 
+        import ipdb; ipdb.set_trace()
         serializer = InterviewEmployeeSerializer(
             interview.candidate, read_only=True,
             context={'company_id': interview.vacancy.company.id }
