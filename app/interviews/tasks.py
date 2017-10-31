@@ -1,7 +1,7 @@
 from celery.task import periodic_task
 from celery.task.schedules import crontab
 from .models import Interview
-from .emails import send_interview_reminder
+from common.services import EmailService
 from django.contrib.contenttypes.models import ContentType
 from notifications.models import Notification, EMAIL
 
@@ -19,7 +19,7 @@ def remind_about_interview():
 
             if notification is None:
                 vacancy = interview.vacancy
-                send_interview_reminder(user, vacancy, interview)
+                EmailService.send_interview_reminder(user, vacancy, interview)
                 Notification.objects.create(
                     user_id=user.id, object_id=interview.id, type=EMAIL,
                     content_type=CONTENT_TYPE
