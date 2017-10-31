@@ -1,6 +1,6 @@
 from . import serializers, User, Company, CompanyMember
 from .company_member_serializer import CompanyMemberSerializer
-from authorization.serializers import UserSerializer
+from common.serializers.user_serializer import UserSerializer
 from django.db.utils import IntegrityError
 from rest_framework.authtoken.models import Token
 

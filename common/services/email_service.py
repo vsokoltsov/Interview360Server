@@ -19,6 +19,17 @@ class EmailService:
         emails = [user]
         cls._send_default_mail(topic, msg, emails)
 
+    def send_interview_invintation(cls, users, vacancy, interview):
+        """ Send email with interview invintation """
+
+        params = {
+            'vacancy': vacancy,
+            'interview': interview
+        }
+        msg = render_to_string('interview_invintation.html', params)
+        topic = 'Interview invintation'
+        cls._send_default_mail(topic, msg, users)
+
     @classmethod
     def _send_default_mail(cls, topic, message,mails):
         """ Base mail send function """

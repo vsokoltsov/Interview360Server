@@ -2,17 +2,16 @@ from . import serializers, Interview, InterviewEmployee
 
 import re
 import ipdb
+
 from authorization.models import User
 from companies.models import Company, CompanyMember
 from vacancies.models import Vacancy
 from datetime import datetime
 from django.db import transaction
-from authorization.serializers import UserSerializer
+from common.serializers.user_serializer import UserSerializer
 from common.serializers.base_vacancy_serializer import BaseVacancySerializer
-from common.serializers.interview_employee_serializer import InterviewEmployeeSerializer
+from common.serializers.base_employee_serializer import BaseEmployeeSerializer
 from roles.constants import CANDIDATE
-
-
 
 pattern = re.compile(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
 
@@ -81,7 +80,7 @@ class InterviewSerializer(serializers.ModelSerializer):
     def get_candidate(self, interview):
         """ Retrieve candidate serializer """
 
-        serializer = InterviewEmployeeSerializer(
+        serializer = BaseEmployeeSerializer(
             interview.candidate, read_only=True,
             context={'company_id': interview.vacancy.company.id }
         )
@@ -90,7 +89,7 @@ class InterviewSerializer(serializers.ModelSerializer):
     def get_interviewees(self, interview):
         """ Retrieve candidate interviewees list """
 
-        serializer = InterviewEmployeeSerializer(
+        serializer = BaseEmployeeSerializer(
             interview.interviewees.all(), read_only=True, many=True,
             context={'company_id': interview.vacancy.company.id }
         )

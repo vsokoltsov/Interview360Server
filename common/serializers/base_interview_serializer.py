@@ -1,4 +1,5 @@
-from . import serializers, Interview, InterviewEmployeeSerializer
+from . import serializers, Interview
+from .base_employee_serializer import BaseEmployeeSerializer
 
 class BaseInterviewSerializer(serializers.ModelSerializer):
 
@@ -17,7 +18,7 @@ class BaseInterviewSerializer(serializers.ModelSerializer):
     def get_candidate(self, interview):
         """ Receive candidate information """
 
-        serializer = InterviewEmployeeSerializer(
+        serializer = BaseEmployeeSerializer(
             interview.candidate, read_only=True,
             context={'company_id': interview.vacancy.company.id }
         )

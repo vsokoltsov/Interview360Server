@@ -1,6 +1,3 @@
 from rest_framework import serializers
 from interviews.models import Interview
 from vacancies.models import Vacancy
-
-from .interview_employee_serializer import InterviewEmployeeSerializer
-from .base_interview_serializer import BaseInterviewSerializer

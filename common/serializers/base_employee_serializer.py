@@ -1,10 +1,11 @@
 from rest_framework import serializers
-from authorization.serializers import UserSerializer
+from .user_serializer import UserSerializer
+from .base_company_member_serializer import BaseCompanyMemberSerializer
 from companies.models import CompanyMember
-from companies.serializers import CompanyMemberSerializer
 
-class InterviewEmployeeSerializer(UserSerializer):
-    """ Serializer for interview's employee """
+
+class BaseEmployeeSerializer(UserSerializer):
+    """ Base serializer for employee """
 
     role = serializers.SerializerMethodField(read_only=True)
 
@@ -18,4 +19,4 @@ class InterviewEmployeeSerializer(UserSerializer):
         company_id = self.context.get('company_id')
         company_member = CompanyMember.objects.get(user_id=employee.id,
                                                 company_id=company_id)
-        return CompanyMemberSerializer(company_member, read_only=True).data
+        return BaseCompanyMemberSerializer(company_member, read_only=True).data

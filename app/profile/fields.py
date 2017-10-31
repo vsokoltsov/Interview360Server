@@ -1,6 +1,6 @@
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
-from attachments.serializers import AttachmentBaseSerializer
+from common.serializers.base_attachment_serializer import BaseAttachmentSerializer
 import ipdb
 
 class AttachmentField(serializers.Field):
@@ -8,7 +8,7 @@ class AttachmentField(serializers.Field):
 
     def get_attribute(self, obj):
         if obj.attachments.last():
-            return AttachmentBaseSerializer(obj.attachments.last()).data
+            return BaseAttachmentSerializer(obj.attachments.last()).data
         else:
             return None
 
