@@ -1,12 +1,5 @@
-from . import serializers, CompanyMember
+from common.serializers.base_company_member_serializer import BaseCompanyMemberSerializer
 
-class CompanyMemberSerializer(serializers.ModelSerializer):
+class CompanyMemberSerializer(BaseCompanyMemberSerializer):
     """ CompanyMember serializer class """
-    
-    class Meta:
-        model = CompanyMember
-        fields = [
-            'id',
-            'role',
-            'created_at'
-        ]
+    pass

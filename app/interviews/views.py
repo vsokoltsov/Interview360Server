@@ -6,6 +6,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .serializers import InterviewSerializer
+from common.serializers.base_interview_serializer import BaseInterviewSerializer
 from companies.models import Company
 from vacancies.models import Vacancy
 from authorization.models import User
@@ -20,6 +21,14 @@ class InterviewViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, InterviewPermission, )
     serializer_class = InterviewSerializer
 
+    def get_serializer_class(self):
+        """ Get serializer class base on action """
+
+        if self.action == 'list':
+            return BaseInterviewSerializer
+        else:
+            return InterviewSerializer
+
     def get_queryset(self):
         """
         Return scope of interviews where current user is participated
@@ -28,6 +37,12 @@ class InterviewViewSet(viewsets.ModelViewSet):
         params = self.kwargs
         company = get_object_or_404(Company, pk=params['company_pk'])
         queryset = Interview.objects.filter(vacancy__company__id=company.id)
+
+        if self.action == 'list':
+            queryset = queryset.prefetch_related(
+                'candidate', 'candidate__attachments'
+            )
+
         return queryset
 
     def create(self, request, company_pk=None):

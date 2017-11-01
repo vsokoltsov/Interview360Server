@@ -11,12 +11,15 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import sys
 import yaml
 from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BASE_DIR = os.path.join(PROJECT_ROOT, 'app')
+if PROJECT_ROOT not in sys.path:
+    sys.path.insert(1, PROJECT_ROOT)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -96,7 +99,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            '/templates'
+            'app/templates'
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -174,8 +177,7 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'authorization.User'
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = ['--with-spec', '--spec-color']
-PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
-FIXTURE_DIRS = (os.path.join(PROJECT_ROOT, 'fixtures'),)
+FIXTURE_DIRS = (os.path.join(BASE_DIR, 'app', 'fixtures'),)
 CELERY_BROKER_URL = 'amqp://localhost'
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 MEDIA_URL = '/uploads/'

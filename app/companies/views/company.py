@@ -29,14 +29,10 @@ class CompaniesViewSet(viewsets.ModelViewSet):
         """
         Return scope of companies which current user belongs to
         """
-
-        companies = self.request.user.companies.all().prefetch_related('vacancy_set')
-        companies = (
-            companies
-                .annotate(Count('employees', distinct=True))
-                .annotate(Count('vacancy', distinct=True))
-        )
-        return companies
+        if self.action == 'list':
+            return self.request.user.companies.prefetched_list()
+        else:
+            return self.request.user.companies.prefetched_detail()
 
     def create(self, request):
         """ Creates a new company """

@@ -2,7 +2,7 @@ from django.db import models
 from companies.models import Company
 from skills.models import Skill
 
-# Create your models here.
+
 class Vacancy(models.Model):
     """ Vacancy representation in our system """
 

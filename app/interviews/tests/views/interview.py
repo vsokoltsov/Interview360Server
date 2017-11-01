@@ -26,9 +26,9 @@ class InterviewViewSetTests(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
 
         self.form_data = {
-            'candidate_id': self.candidate.id,
+            'candidate_email': self.candidate.email,
             'vacancy_id': self.vacancy.id,
-            'interviewees': [
+            'interviewee_ids': [
                 self.hr.id
             ],
             'assigned_at': date

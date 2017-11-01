@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from attachments.models import Attachment
 from drf_writable_nested import WritableNestedModelSerializer
-from authorization.serializers import UserSerializer
+from common.serializers.user_serializer import UserSerializer
 from .fields import AttachmentField
 import ipdb
 

@@ -2,6 +2,7 @@ from django.db import models
 from authorization.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.contenttypes.fields import GenericRelation
+from .managers import CompanyManager
 
 class Company(models.Model):
     """ Base company model """
@@ -16,6 +17,8 @@ class Company(models.Model):
     employees = models.ManyToManyField('authorization.User', through='CompanyMember')
     attachments = GenericRelation('attachments.Attachment')
 
+    objects = CompanyManager()
+
     class Meta:
         db_table = 'companies'
 
@@ -29,6 +32,18 @@ class Company(models.Model):
                 company_id=self.id, role=role
             ).prefetch_related('user')
         return list(map(lambda member: member.user, objects))
+
+    @classmethod
+    def prefetch_for_list(cls):
+        objects = cls.objects.prefetch_related(
+            'vacancy_set', 'attachments', 'employees'
+        )
+        objects = (
+            objects
+                .annotate(Count('employees', distinct=True))
+                .annotate(Count('vacancy', distinct=True))
+        )
+        return objects
 
 class CompanyMember(models.Model):
     """ CompanyMember model, which is used for `through` association """
