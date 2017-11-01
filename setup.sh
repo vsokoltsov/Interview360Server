@@ -1,5 +1,5 @@
 PYTHON_VERSION=3.5.2
-
+JAVA_VERSION=jdk-8u131-linux-x64.rpm
 sudo yum -y update
 
 # PYTHON 3.5.2
@@ -45,3 +45,9 @@ sudo systemctl enable rabbitmq-server.service
 sudo rabbitmqctl add_user admin admin
 sudo rabbitmqctl set_user_tags admin administrator
 sudo rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
+
+# JAVA
+wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
+"http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/$JAVA_VERSION"
+sudo yum -y localinstall $JAVA_VERSION
+rm "~/$JAVA_VERSION"
