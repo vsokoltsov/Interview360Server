@@ -51,3 +51,13 @@ wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2F
 "http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/$JAVA_VERSION"
 sudo yum -y localinstall $JAVA_VERSION
 rm "~/$JAVA_VERSION"
+
+#ELASTICSEARCH
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.3.rpm
+sha1sum elasticsearch-5.6.3.rpm
+sudo rpm --install elasticsearch-5.6.3.rpm
+
+#KIBANA
+wget https://artifacts.elastic.co/downloads/kibana/kibana-5.6.3-x86_64.rpm
+sha1sum kibana-5.6.3-x86_64.rpm
+sudo rpm --install kibana-5.6.3-x86_64.rpm
