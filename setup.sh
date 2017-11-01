@@ -61,3 +61,9 @@ sudo rpm --install elasticsearch-5.6.3.rpm
 wget https://artifacts.elastic.co/downloads/kibana/kibana-5.6.3-x86_64.rpm
 sha1sum kibana-5.6.3-x86_64.rpm
 sudo rpm --install kibana-5.6.3-x86_64.rpm
+
+#MAKE ELASTICSEARCH AND KIBANA VISIBLE FROM THE VM
+
+echo 'network.host: 0.0.0.0' >> /etc/elasticsearch/elasticsearch.yml
+echo 'server.host: 0.0.0.0' >> /etc/kibana/kibana.yml
+echo 'elasticsearch.url: "http://localhost:9200"' >> /etc/kibana/kibana.yml
