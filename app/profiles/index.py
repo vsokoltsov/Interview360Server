@@ -14,17 +14,15 @@ class UserIndex(DocType):
     class Meta:
         index = 'users'
 
-def rebuild_index():
-    """ Rebuild index for the users """
+    @classmethod
+    def store_index(cls, user):
+        """ Create or update user's index """
 
-    UserIndex.init()
-    users = User.objects.prefetch_related('companies', 'attachments')
-    for user in users:
         company_ids = list(
             map(lambda c: c.id, user.companies.all())
         )
         attachment = user.attachments.last()
-        obj = UserIndex(
+        obj = cls(
             meta={'id': user.id},
             id=user.id,
             email=user.email,
@@ -34,4 +32,12 @@ def rebuild_index():
             attachment=attachment.full_urls() if attachment else None
         )
         obj.save()
-        print(obj.to_dict(include_meta=True))
+        return obj.to_dict(include_meta=True)
+
+def rebuild_index():
+    """ Rebuild index for the users """
+
+    UserIndex.init()
+    users = User.objects.prefetch_related('companies', 'attachments')
+    for user in users:
+        print(UserIndex.store_index(user))
