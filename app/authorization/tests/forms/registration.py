@@ -57,10 +57,11 @@ class RegistrationFormTests(TransactionTestCase):
         last_user = User.objects.last()
         assert last_user.email == self.form_data['email']
 
+    @mock.patch('profiles.index.UserIndex.store_index')
     @mock.patch.object(User, 'save')
     @mock.patch('django.contrib.auth.models.User')
     @mock.patch('rest_framework.authtoken.models.Token.objects.create')
-    def test_failed_user_creation(self, user_save_mock,
+    def test_failed_user_creation(self, index_mock, user_save_mock,
                                    user_class_mock, token_mock):
         """ Test failed case of user creation """
 
@@ -76,8 +77,9 @@ class RegistrationFormTests(TransactionTestCase):
         form.submit()
         self.assertFalse(user_save_mock.called)
 
+    @mock.patch('profiles.index.UserIndex.store_index')
     @mock.patch('rest_framework.authtoken.models.Token.objects.create')
-    def test_token_success_creation(self, mock):
+    def test_token_success_creation(self, index_mock, mock):
         """ Test token creation after success restore password """
 
         mock.user = self.test_user
@@ -88,8 +90,9 @@ class RegistrationFormTests(TransactionTestCase):
 
         self.assertTrue(mock.called)
 
+    @mock.patch('profiles.index.UserIndex.store_index')
     @mock.patch('rest_framework.authtoken.models.Token.objects.create')
-    def test_token_failed_creation(self, mock):
+    def test_token_failed_creation(self, index_mock, mock):
         """ Test token creation after failed restore password """
 
         mock.user = self.test_user
@@ -99,12 +102,11 @@ class RegistrationFormTests(TransactionTestCase):
         form.submit()
         self.assertFalse(mock.called)
 
-    def test_index_success_creation(self):
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_index_success_creation(self, index_mock):
         """ Test success indexing of user information """
 
         form = RegistrationForm(self.form_data)
         form.submit()
-        last_user = User.objects.last()
-        last_index = UserIndex.get(id=last_user.id)
 
-        self.assertTrue(last_index)
+        self.assertTrue(index_mock.called)
