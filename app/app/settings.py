@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'django_nose',
     'easy_thumbnails',
     'authorization',
+    'profiles',
     'companies',
     'skills',
     'vacancies',

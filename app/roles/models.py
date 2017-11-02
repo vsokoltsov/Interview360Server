@@ -1,6 +1,5 @@
 from django.db import models
 from importlib import import_module
-import ipdb
 from .constants import *
 
 def get_role(role):

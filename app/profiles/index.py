@@ -4,6 +4,7 @@ from elasticsearch_dsl import DocType, Date, Integer, Keyword, Text
 class UserIndex(DocType):
     """ User class index """
 
+    id = Integer()
     first_name = Text(analyzer='snowball')
     last_name = Text(analyzer='snowball')
     email = Text(analyzer='snowball')
@@ -23,6 +24,7 @@ def rebuild_index():
         )
         obj = UserIndex(
             meta={'id': user.id},
+            id=user.id,
             email=user.email,
             first_name=user.first_name,
             last_name=user.last_name,
