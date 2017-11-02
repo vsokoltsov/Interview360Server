@@ -7,7 +7,7 @@ class UsersSearch:
 
     INDEX_NAME='users'
 
-    def find_users(self, query_string):
+    def find_users(self, query_string, *companies):
         """ Find users inside given values """
 
         search = Search(using=ES_CLIENT, index=self.INDEX_NAME)
@@ -15,6 +15,6 @@ class UsersSearch:
             query=query_string, fuzziness="6", operator="and",
             fields=['email', 'first_name', 'last_name']
         )
-        search = search.query(query)
+        search = search.query(query).filter('terms', company_ids=companies)
         response = search.execute()
         return [hit.to_dict() for hit in response.hits]
