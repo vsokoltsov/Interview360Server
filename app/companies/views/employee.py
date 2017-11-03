@@ -1,10 +1,9 @@
 from . import (
     viewsets, status, Response, Company, CompanyMember, get_object_or_404,
     EmployeeSerializer, User, IsAuthenticated,  TokenAuthentication, User,
-    EmployeePermission
+    EmployeePermission, list_route, UsersSearch
 )
-from rest_framework.decorators import list_route
-
+import ipdb
 class EmployeesViewSet(viewsets.ViewSet):
     """ View class for employee's actions """
 
@@ -50,3 +49,12 @@ class EmployeesViewSet(viewsets.ViewSet):
 
     def get_company(self, id):
         return get_object_or_404(Company, pk=id)
+
+    @list_route(methods=['get'])
+    def search(self, request, company_pk=None):
+        """ Action for user search """
+
+        query = request.query_params.get('q')
+        search = UsersSearch()
+        results = search.find_users(query, company_pk)
+        return  Response({ 'users': results })

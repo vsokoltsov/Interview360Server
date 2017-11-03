@@ -5,6 +5,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from django.db.models import Count
+from rest_framework.decorators import detail_route, list_route
+from profiles.search import UsersSearch
 
 from companies.serializers import (
     CompanySerializer, EmployeeSerializer, CompaniesSerializer
