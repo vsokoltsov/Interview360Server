@@ -1,5 +1,6 @@
 from . import (
-    APITestCase, Company, CompanyMember, User, Token, datetime, COMPANY_OWNER
+    APITestCase, Company, CompanyMember, User,
+    Token, datetime, COMPANY_OWNER, mock
 )
 
 class CompaniesViewSetTests(APITestCase):
@@ -40,7 +41,8 @@ class CompaniesViewSetTests(APITestCase):
         response = self.client.get('/api/v1/companies/{}/'.format(self.company.id))
         self.assertEqual(response.status_code, 200)
 
-    def test_success_create_action(self):
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_create_action(self, index_mock):
         """ Test success option of company's creation """
 
         response = self.client.post('/api/v1/companies/', self.company_params)

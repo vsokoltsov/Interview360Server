@@ -50,8 +50,9 @@ class CompanySerializerTests(TransactionTestCase):
         serializer = CompanySerializer(data={})
         self.assertFalse(serializer.is_valid())
 
+    @mock.patch('profiles.index.UserIndex.store_index')
     @mock.patch('companies.models.Company.objects.create')
-    def test_success_company_creation(self, company_class_mock):
+    def test_success_company_creation(self, company_class_mock, index_mock):
         """ Test success case of saving new Company """
 
         test_company = Company(id=1)
@@ -64,8 +65,9 @@ class CompanySerializerTests(TransactionTestCase):
         serializer.save()
         self.assertTrue(company_class_mock.called)
 
+    @mock.patch('profiles.index.UserIndex.store_index')
     @mock.patch('companies.models.CompanyMember.objects.create')
-    def test_success_company_member_creation(self, company_member_mock):
+    def test_success_company_member_creation(self, company_member_mock, user_index_mock):
         """ Test that CompanyMember objects was created just after the Company """
 
         test_company_member = CompanyMember(1)

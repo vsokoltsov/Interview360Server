@@ -9,6 +9,7 @@ from attachments.models import Attachment
 from interviews.models import Interview
 from django_pglocks import advisory_lock
 from roles.constants import COMPANY_OWNER
+from profiles.index import UserIndex
 import ipdb
 
 class CompanySerializer(CompaniesSerializer):
@@ -87,6 +88,7 @@ class CompanySerializer(CompaniesSerializer):
                                                               company_id=company.id,
                                                               role=COMPANY_OWNER)
                 self._create_attachment(attachment_json, company)
+                UserIndex.store_index(User.objects.get(id=owner_id))
                 return company
         except:
             return False
