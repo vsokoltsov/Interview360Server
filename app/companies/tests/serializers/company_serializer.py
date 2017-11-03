@@ -103,3 +103,12 @@ class CompanySerializerTests(TransactionTestCase):
         serializer = CompanySerializer(data=params)
         self.assertFalse(serializer.is_valid())
         self.assertTrue('owner_id' in serializer.errors)
+
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_user_indexing_after_company_creation(self, user_index):
+        """ Test success indexing of user after company creation """
+
+        serializer = CompanySerializer(data=self.company_params)
+        serializer.is_valid()
+        serializer.save()
+        self.assertTrue(user_index.called)
