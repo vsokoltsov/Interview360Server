@@ -9,7 +9,8 @@ dependencies:
   pre:
     - pip install -r requirements.txt
   post:
-    - wget https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/5.6.3/elasticsearch-5.6.3.tar.gz
+    - wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.3.tar.gz
+    - sha1sum elasticsearch-5.6.3.tar.gz
     - tar -xvf elasticsearch-5.6.3.tar.gz
     - elasticsearch-5.6.3/bin/elasticsearch: {background: true}
 
