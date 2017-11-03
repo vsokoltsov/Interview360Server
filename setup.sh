@@ -56,11 +56,13 @@ rm "~/$JAVA_VERSION"
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.3.rpm
 sha1sum elasticsearch-5.6.3.rpm
 sudo rpm --install elasticsearch-5.6.3.rpm
+sudo service elasticsearch start
 
 #KIBANA
 wget https://artifacts.elastic.co/downloads/kibana/kibana-5.6.3-x86_64.rpm
 sha1sum kibana-5.6.3-x86_64.rpm
 sudo rpm --install kibana-5.6.3-x86_64.rpm
+sudo service kibana start
 
 #MAKE ELASTICSEARCH AND KIBANA VISIBLE FROM THE VM
 
