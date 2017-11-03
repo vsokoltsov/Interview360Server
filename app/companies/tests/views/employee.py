@@ -1,6 +1,6 @@
 from . import (
     APITestCase, Company, CompanyMember, User, Token, datetime,
-    COMPANY_OWNER, HR, FileSystemStorage
+    COMPANY_OWNER, HR, FileSystemStorage, mock
 )
 
 class EmployeesViewSetTests(APITestCase):
@@ -60,3 +60,18 @@ class EmployeesViewSetTests(APITestCase):
         url = "/api/v1/companies/{}/employees/{}/".format(self.company.id, self.user.id)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
+
+    @mock.patch('profiles.search.UsersSearch.find_users')
+    def test_search_action(self, search_mock):
+        """ Test success search of user inside particular company """
+
+        search_mock.return_value = [
+            { 'id': 1 },
+            { 'id': 2 },
+            { 'id': 3 }
+        ]
+        url = "/api/v1/companies/{}/employees/search/?q={}".format(
+            self.company.id, 'buzzword'
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
