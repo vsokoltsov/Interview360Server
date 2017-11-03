@@ -1,4 +1,3 @@
-# from authorization.models import User
 from elasticsearch_dsl import DocType, Date, Integer, Keyword, Text, Object
 
 class UserIndex(DocType):
@@ -33,11 +32,3 @@ class UserIndex(DocType):
         )
         obj.save()
         return obj.to_dict(include_meta=True)
-
-# def rebuild_index():
-#     """ Rebuild index for the users """
-#
-#     UserIndex.init()
-#     users = User.objects.prefetch_related('companies', 'attachments')
-#     for user in users:
-#         print(UserIndex.store_index(user))
