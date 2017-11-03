@@ -1,4 +1,4 @@
-from . import serializers, User, Company, CompanyMember
+from . import serializers, User, Company, CompanyMember, transaction
 from .company_member_serializer import CompanyMemberSerializer
 from common.serializers.user_serializer import UserSerializer
 from django.db.utils import IntegrityError
@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
-
+from profiles.index import UserIndex
 import os
 import ipdb
 
@@ -51,19 +51,20 @@ class EmployeeSerializer(UserSerializer):
         Creates a new employee if they are do not exist;
         Send invintation emails
         """
-
         try:
-            for email in data['emails']:
-                user = self.find_or_create_user(email)
-                token, _ = Token.objects.get_or_create(user=user)
-                company = Company.objects.get(id=data['company_id'])
+            with transaction.atomic():
+                for email in data['emails']:
+                    user = self.find_or_create_user(email)
+                    token, _ = Token.objects.get_or_create(user=user)
+                    company = Company.objects.get(id=data['company_id'])
 
-                CompanyMember.objects.create(
-                    user_id=user.id, company_id=company.id,
-                    role=data['role']
-                )
-                self.send_invite(user, token, company)
-            return True
+                    CompanyMember.objects.create(
+                        user_id=user.id, company_id=company.id,
+                        role=data['role']
+                    )
+                    UserIndex.store_index(user)
+                    self.send_invite(user, token, company)
+                return True
         except IntegrityError as error:
             self.errors['emails'] = 'One of these users already belongs to a company'
             return False

@@ -39,7 +39,8 @@ class EmployeesViewSetTests(APITestCase):
         response = self.client.get(url)
         self.assertEqual(len(response.data['employees']), 8)
 
-    def test_success_employee_creation(self):
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_employee_creation(self, user_index):
         """ Test success creation of the new employees """
 
         url = "/api/v1/companies/{}/employees/".format(self.company.id)
@@ -54,7 +55,8 @@ class EmployeesViewSetTests(APITestCase):
         self.assertTrue('errors' in response.data)
         self.assertEqual(response.status_code, 400)
 
-    def test_success_company_member_deletion(self):
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_company_member_deletion(self, user_index):
         """ Test success response of deletion the CompanyMember instance """
 
         url = "/api/v1/companies/{}/employees/{}/".format(self.company.id, self.user.id)
