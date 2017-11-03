@@ -1,9 +1,10 @@
-from . import APITestCase, User
+from . import APITestCase, User, mock
 
 class RegistrationViewTests(APITestCase):
     """ Test of RegistrationViewSet class """
 
-    def test_success_sign_up(self):
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_sign_up(self, index_mock):
         """ Test success sign up with valid attributes """
 
         response = self.client.post('/api/v1/sign_up/', {
