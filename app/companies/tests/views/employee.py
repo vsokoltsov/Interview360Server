@@ -65,13 +65,15 @@ class EmployeesViewSetTests(APITestCase):
     def test_search_action(self, search_mock):
         """ Test success search of user inside particular company """
 
-        search_mock.return_value = [
+        user_index = [
             { 'id': 1 },
             { 'id': 2 },
             { 'id': 3 }
         ]
+        search_mock.return_value = user_index
         url = "/api/v1/companies/{}/employees/search/?q={}".format(
             self.company.id, 'buzzword'
         )
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['users'], user_index)
