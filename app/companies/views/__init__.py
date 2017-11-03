@@ -7,6 +7,7 @@ from rest_framework.authentication import TokenAuthentication
 from django.db.models import Count
 from rest_framework.decorators import detail_route, list_route
 from profiles.search import UsersSearch
+from profiles.index import UserIndex
 
 from companies.serializers import (
     CompanySerializer, EmployeeSerializer, CompaniesSerializer

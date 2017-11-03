@@ -1,9 +1,9 @@
 from . import (
     viewsets, status, Response, Company, CompanyMember, get_object_or_404,
     EmployeeSerializer, User, IsAuthenticated,  TokenAuthentication, User,
-    EmployeePermission, list_route, UsersSearch
+    EmployeePermission, list_route, UsersSearch, UserIndex
 )
-import ipdb
+
 class EmployeesViewSet(viewsets.ViewSet):
     """ View class for employee's actions """
 
@@ -44,6 +44,7 @@ class EmployeesViewSet(viewsets.ViewSet):
             user_id=employee.id, company_id=company.id
         )
         company_member.delete()
+        UserIndex.get(id=employee.id).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

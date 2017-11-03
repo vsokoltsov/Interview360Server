@@ -2,6 +2,7 @@ from . import (
     APITestCase, Company, CompanyMember, User, Token, datetime,
     COMPANY_OWNER, HR, FileSystemStorage, mock
 )
+from profiles.index import UserIndex
 
 class EmployeesViewSetTests(APITestCase):
     """ API View tests for EmployeeViewSet """
@@ -55,8 +56,9 @@ class EmployeesViewSetTests(APITestCase):
         self.assertTrue('errors' in response.data)
         self.assertEqual(response.status_code, 400)
 
-    @mock.patch('profiles.index.UserIndex.store_index')
-    def test_success_company_member_deletion(self, user_index):
+    @mock.patch.object(UserIndex, 'get')
+    @mock.patch.object(UserIndex, 'delete')
+    def test_success_company_member_deletion(self, user_index, get_mock):
         """ Test success response of deletion the CompanyMember instance """
 
         url = "/api/v1/companies/{}/employees/{}/".format(self.company.id, self.user.id)
