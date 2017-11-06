@@ -1,20 +1,10 @@
 from app.settings import ES_CLIENT
 from elasticsearch_dsl.query import MultiMatch
 from elasticsearch_dsl import Search
+from common.services import SearchService
 
-class UsersSearch:
+class UsersSearch(SearchService):
     """ Class for user search methods """
 
     INDEX_NAME='users'
-
-    def find_users(self, query_string, *companies):
-        """ Find users inside given values """
-
-        search = Search(using=ES_CLIENT, index=self.INDEX_NAME)
-        query =  MultiMatch(
-            query=query_string, fuzziness="6", operator="and",
-            fields=['email', 'first_name', 'last_name']
-        )
-        search = search.query(query).filter('terms', company_ids=companies)
-        response = search.execute()
-        return [hit.to_dict() for hit in response.hits]
+    FIELDS=['email', 'first_name', 'last_name']

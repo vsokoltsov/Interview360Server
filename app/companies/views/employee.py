@@ -57,5 +57,5 @@ class EmployeesViewSet(viewsets.ViewSet):
 
         query = request.query_params.get('q')
         search = UsersSearch()
-        results = search.find_users(query, company_pk)
+        results = search.find(query, company_pk)
         return  Response({ 'users': results })

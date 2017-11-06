@@ -65,7 +65,7 @@ class EmployeesViewSetTests(APITestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
 
-    @mock.patch('profiles.search.UsersSearch.find_users')
+    @mock.patch('profiles.search.UsersSearch.find')
     def test_search_action(self, search_mock):
         """ Test success search of user inside particular company """
 
