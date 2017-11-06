@@ -105,27 +105,33 @@ class InterviewSerializer(serializers.ModelSerializer):
     def create(self, data):
         """ Create a new instance of interview and some of
             the InterviewEmployee objects """
+        try:
+            with transaction.atomic():
+                interviewees = data.pop('interviewee_ids', None)
+                candidate_email = data.pop('candidate_email', None)
+                candidate_id = self._get_or_create_candidate(candidate_email, data)
 
-        with transaction.atomic():
-            interviewees = data.pop('interviewee_ids', None)
-            candidate_email = data.pop('candidate_email', None)
-            candidate_id = self._get_or_create_candidate(candidate_email, data)
-
-            interview = Interview.objects.create(**data, candidate_id=candidate_id)
-            if interviewees:
-                for employee_email in interviewees:
-                    employee = User.objects.get(email=employee_email)
-                    InterviewEmployee.objects.create(
-                        interview_id=interview.id, employee_id=employee.id
-                    )
-            return interview
+                interview = Interview.objects.create(**data, candidate_id=candidate_id)
+                if interviewees:
+                    for employee_email in interviewees:
+                        employee = User.objects.get(email=employee_email)
+                        InterviewEmployee.objects.create(
+                            interview_id=interview.id, employee_id=employee.id
+                        )
+                return interview
+        except Interview.DoesNotExist:
+            self.errors['interviewees'] = ['There is no such interviewee']
+            return False
 
     def update(self, instance, data):
         """ Update an existed instance of interview """
+        try:
+            instance.assigned_at = data.get('assigned_at', instance.assigned_at)
 
-        instance.assigned_at = data.get('assigned_at', instance.assigned_at)
-
-        return instance
+            instance.save()
+            return instance
+        except Exception as e:
+            return False
 
     def _get_or_create_candidate(self, email, data):
         """ Get or create a new user object for a candidate based on the email """

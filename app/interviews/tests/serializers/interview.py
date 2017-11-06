@@ -31,7 +31,7 @@ class InterviewSerializerTests(TransactionTestCase):
             'candidate_email': self.candidate.email,
             'vacancy_id': self.vacancy.id,
             'interviewee_ids': [
-                self.hr.id
+                self.hr.email
             ],
             'assigned_at': date
         }
@@ -143,15 +143,17 @@ class InterviewSerializerTests(TransactionTestCase):
         """ Test success updating of the interview instance """
 
         date = datetime.datetime.now() + datetime.timedelta(days=31)
-        date = date.replace(second=0, microsecond=0)
-        self.form_data['assigned_at'] = date
+        date = date.replace(second=0, microsecond=0, tzinfo=None)
+        self.form_data['assigned_at'] = str(date)
+
 
         serializer = InterviewSerializer(
             self.interview, data=self.form_data, partial=True
         )
-        serializer.is_valid()
-        interview = serializer.save()
 
-        self.assertEqual(interview.assigned_at.replace(
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        self.interview.refresh_from_db()
+        self.assertEqual(self.interview.assigned_at.replace(
             second=0, microsecond=0, tzinfo=None), date
         )

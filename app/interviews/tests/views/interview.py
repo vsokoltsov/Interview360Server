@@ -29,7 +29,7 @@ class InterviewViewSetTests(APITestCase):
             'candidate_email': self.candidate.email,
             'vacancy_id': self.vacancy.id,
             'interviewee_ids': [
-                self.hr.id
+                self.hr.email
             ],
             'assigned_at': date
         }
