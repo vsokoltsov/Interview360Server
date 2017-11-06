@@ -106,18 +106,19 @@ class InterviewSerializer(serializers.ModelSerializer):
         """ Create a new instance of interview and some of
             the InterviewEmployee objects """
 
-        interviewees = data.pop('interviewee_ids', None)
-        candidate_email = data.pop('candidate_email', None)
-        candidate_id = self._get_or_create_candidate(candidate_email, data)
+        with transaction.atomic():
+            interviewees = data.pop('interviewee_ids', None)
+            candidate_email = data.pop('candidate_email', None)
+            candidate_id = self._get_or_create_candidate(candidate_email, data)
 
-        interview = Interview.objects.create(**data, candidate_id=candidate_id)
-        if interviewees:
-            for employee_id in interviewees:
-                employee = User.objects.get(id=employee_id)
-                InterviewEmployee.objects.create(
-                    interview_id=interview.id, employee_id=employee.id
-                )
-        return interview
+            interview = Interview.objects.create(**data, candidate_id=candidate_id)
+            if interviewees:
+                for employee_email in interviewees:
+                    employee = User.objects.get(email=employee_email)
+                    InterviewEmployee.objects.create(
+                        interview_id=interview.id, employee_id=employee.id
+                    )
+            return interview
 
     def update(self, instance, data):
         """ Update an existed instance of interview """
