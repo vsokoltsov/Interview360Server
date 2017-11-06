@@ -26,6 +26,6 @@ class SearchService:
         )
         search = search.query(query)
         if companies != None:
-            search = search.filter('terms', company_ids=companies)
+            search = search.filter('terms', company_id=companies)
         response = search.execute()
         return [hit.to_dict() for hit in response.hits]

@@ -15,6 +15,8 @@ class VacancyPermission(BasePermission):
             return role.has_permission(RECEIVE_VACANCY)
         elif view.action == 'create':
             return role.has_permission(CREATE_VACANCY)
+        elif view.action == 'search':
+            return role.has_permission(RECEIVE_VACANCY)
         else:
             return True
 

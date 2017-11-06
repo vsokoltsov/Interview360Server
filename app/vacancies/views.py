@@ -5,10 +5,12 @@ from companies.models import Company
 from .serializers import VacancySerializer
 from common.serializers.base_vacancy_serializer import BaseVacancySerializer
 from .permissions import VacancyPermission
+from rest_framework.decorators import list_route
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from .search import VacancySearch
 import ipdb
 
 class VacancyViewSet(viewsets.ModelViewSet):
@@ -56,3 +58,12 @@ class VacancyViewSet(viewsets.ModelViewSet):
         else:
             return Response({'errors': serializer.errors},
                              status=status.HTTP_400_BAD_REQUEST)
+
+    @list_route(methods=['get'])
+    def search(self, request, company_pk=None):
+        """ Action for vacancy search """
+
+        query = request.query_params.get('q')
+        search = VacancySearch()
+        results = search.find(query, company_pk)
+        return  Response({ 'vacancies': results })
