@@ -4,10 +4,10 @@ class UserIndex(DocType):
     """ User class index """
 
     id = Integer()
-    first_name = Text(analyzer='snowball')
-    last_name = Text(analyzer='snowball')
-    email = Text(analyzer='snowball')
-    company_ids = Integer()
+    first_name = Text()
+    last_name = Text()
+    email = Text()
+    company_id = Integer()
     attachment = Object()
 
     class Meta:
@@ -27,7 +27,7 @@ class UserIndex(DocType):
             email=user.email,
             first_name=user.first_name,
             last_name=user.last_name,
-            company_ids=company_ids,
+            company_id=company_ids,
             attachment=attachment.full_urls() if attachment else None
         )
         obj.save()
