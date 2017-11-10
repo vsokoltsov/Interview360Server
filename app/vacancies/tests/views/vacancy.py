@@ -1,6 +1,8 @@
 from . import (
-    APITestCase, Vacancy, User, Company, CompanyMember, HR, Token, Skill, datetime
+    APITestCase, Vacancy, User, Company, CompanyMember, HR, Token, Skill,
+    datetime, mock
 )
+from vacancies.index import VacancyIndex
 
 class VacancyViewSetTests(APITestCase):
     """ Tests for VacancyViewSet class """
@@ -46,20 +48,23 @@ class VacancyViewSetTests(APITestCase):
         response = self.client.get(self.url + "{}/".format(self.vacancy.id))
         self.assertEqual(response.status_code, 200)
 
-    def test_success_vacancy_creation(self):
+    @mock.patch('vacancies.index.VacancyIndex.store_index')
+    def test_success_vacancy_creation(self, vacancy_index_mock):
         """ Test success vacancy creation """
 
         response = self.client.post(self.url, self.form_data)
         self.assertEqual(response.status_code, 201)
         self.assertEqual('vacancy' in response.data, True)
 
-    def test_failed_vacancy_creation(self):
+    @mock.patch('vacancies.index.VacancyIndex.store_index')
+    def test_failed_vacancy_creation(self, vacancy_index_mock):
         """ Test failed creation of the vacancy """
 
         response = self.client.post(self.url, {})
         self.assertEqual(response.status_code, 400)
 
-    def test_success_vacancy_update(self):
+    @mock.patch('vacancies.index.VacancyIndex.store_index')
+    def test_success_vacancy_update(self, vacancy_index_mock):
         """ Test success update of the vacancy """
 
         response = self.client.put(
@@ -69,7 +74,10 @@ class VacancyViewSetTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue('vacancy' in response.data)
 
-    def test_success_delete_vacancy(self):
+    @mock.patch.object(VacancyIndex, 'get')
+    @mock.patch.object(VacancyIndex, 'delete')
+    @mock.patch('vacancies.index.VacancyIndex.store_index')
+    def test_success_delete_vacancy(self, vacancy_index_mock, vacancy_delete, vacancy_save):
         """ Test success vacancy deletion """
 
         response = self.client.delete(self.url + "{}/".format(self.vacancy.id))

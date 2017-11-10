@@ -57,8 +57,9 @@ class VacancySerializerTest(TransactionTestCase):
         serializer = VacancySerializer(data=form_data)
         self.assertFalse(serializer.is_valid())
 
+    @mock.patch('vacancies.index.VacancyIndex.store_index')
     @mock.patch('vacancies.models.Vacancy.objects.create')
-    def test_vacancy_created(self, vacancy_mock):
+    def test_vacancy_created(self, vacancy_mock, vacancy_index_mock):
         """ Test success calling 'create' for Vacancy """
 
         vacancy_mock.objects = mock.MagicMock()
@@ -71,7 +72,8 @@ class VacancySerializerTest(TransactionTestCase):
 
         self.assertTrue(vacancy_mock.called)
 
-    def test_skills_was_setted(self):
+    @mock.patch('vacancies.index.VacancyIndex.store_index')
+    def test_skills_was_setted(self, vacancy_index_mock):
         """ Test success adding of skills to vacancy """
 
         serializer = VacancySerializer(data=self.form_data)
@@ -82,7 +84,8 @@ class VacancySerializerTest(TransactionTestCase):
         vacancy = Vacancy.objects.last()
         self.assertEqual(len(vacancy.skills.all()), 1)
 
-    def test_vacancy_was_updated(self):
+    @mock.patch('vacancies.index.VacancyIndex.store_index')
+    def test_vacancy_was_updated(self, vacancy_index_mock):
         """ Test success updating of the vacancy """
 
         form_data = {
@@ -102,7 +105,8 @@ class VacancySerializerTest(TransactionTestCase):
         v = serializer.save()
         self.assertTrue(v.title == form_data['title'])
 
-    def test_number_of_skills_was_changed(self):
+    @mock.patch('vacancies.index.VacancyIndex.store_index')
+    def test_number_of_skills_was_changed(self, vacancy_index_mock):
         """ Test that new skills were applly """
 
         new_skill = Skill.objects.create(name="Python")
