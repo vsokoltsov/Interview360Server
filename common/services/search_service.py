@@ -20,11 +20,15 @@ class SearchService:
         """ Common class for searching the objects """
 
         search = Search(using=ES_CLIENT, index=self.INDEX_NAME)
-        query =  MultiMatch(
-            query=query_string, fuzziness="6", operator="and",
-            fields=self.FIELDS
-        )
-        search = search.query(query)
+        if query_string:
+            query =  MultiMatch(
+                query=query_string, fuzziness="6", operator="and",
+                fields=self.FIELDS
+            )
+            search = search.query(query)
+        else:
+            search = search.query()
+
         if companies != None:
             search = search.filter('terms', company_id=companies)
         response = search.execute()
