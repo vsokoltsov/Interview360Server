@@ -64,5 +64,6 @@ class VacancySerializer(BaseVacancySerializer):
             instance.description = data.get('description', instance.description)
             instance.salary = data.get('salary', instance.salary)
             instance.skills.set(data.get('skills', []))
+            instance.save()
             VacancyIndex.store_index(instance)
             return instance

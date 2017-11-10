@@ -82,3 +82,20 @@ class VacancyViewSetTests(APITestCase):
 
         response = self.client.delete(self.url + "{}/".format(self.vacancy.id))
         self.assertEqual(response.status_code, 204)
+
+    @mock.patch('vacancies.search.VacancySearch.find')
+    def test_search_action(self, search_mock):
+        """ Test success search of vacancy inside particular company """
+
+        user_index = [
+            { 'id': 1 },
+            { 'id': 2 },
+            { 'id': 3 }
+        ]
+        search_mock.return_value = user_index
+        url = "/api/v1/companies/{}/vacancies/search/?q={}".format(
+            self.company.id, 'buzzword'
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['vacancies'], user_index)
