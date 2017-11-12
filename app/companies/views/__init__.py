@@ -9,6 +9,8 @@ from rest_framework.decorators import detail_route, list_route
 from profiles.search import UsersSearch
 from profiles.index import UserIndex
 from companies.index import CompanyIndex
+from rest_framework.decorators import list_route
+from companies.search import CompanySearch
 
 from companies.serializers import (
     CompanySerializer, EmployeeSerializer, CompaniesSerializer
