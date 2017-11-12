@@ -5,8 +5,8 @@ from elasticsearch_dsl import Index
 def rebuild_vacancy_index():
     """ Rebuild index for the vacancies """
 
-    VacancyIndex.init()
     Index('vacancies').delete()
+    VacancyIndex.init()
     vacancies = Vacancy.objects.all()
     for vacancy in vacancies:
         print(VacancyIndex.store_index(vacancy))
