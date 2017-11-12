@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import sys
 import yaml
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl.connections import connections
 from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -33,6 +35,8 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS = default_headers
+ES_CLIENT = Elasticsearch()
+connections.create_connection(hosts=['localhost'])
 
 if os.path.isfile('app/secrets.yaml'):
     with open('app/secrets.yaml') as stream:
@@ -56,6 +60,7 @@ INSTALLED_APPS = [
     'django_nose',
     'easy_thumbnails',
     'authorization',
+    'profiles',
     'companies',
     'skills',
     'vacancies',

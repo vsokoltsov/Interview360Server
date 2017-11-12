@@ -5,6 +5,7 @@ from skills.models import Skill
 from companies.models import Company
 from common.serializers.base_company_serializer import BaseCompanySerializer
 from common.serializers.base_interview_serializer import BaseInterviewSerializer
+from vacancies.index import VacancyIndex
 
 from vacancies.fields import SkillsField
 
@@ -50,6 +51,7 @@ class VacancySerializer(BaseVacancySerializer):
                 skills = data.pop('skills', None)
                 vacancy = Vacancy.objects.create(**data)
                 vacancy.skills.set(skills)
+                VacancyIndex.store_index(vacancy)
                 return vacancy
         except:
             return False
@@ -62,5 +64,6 @@ class VacancySerializer(BaseVacancySerializer):
             instance.description = data.get('description', instance.description)
             instance.salary = data.get('salary', instance.salary)
             instance.skills.set(data.get('skills', []))
-
+            instance.save()
+            VacancyIndex.store_index(instance)
             return instance

@@ -77,7 +77,8 @@ class EmployeeSerializerTest(TransactionTestCase):
     @override_settings(
         EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend'
     )
-    def test_success_mail_sending(self):
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_mail_sending(self, user_index):
         """ Test success mail sending after receivng users and the company """
 
         serializer = EmployeeSerializer(data=self.form_data,
@@ -86,10 +87,11 @@ class EmployeeSerializerTest(TransactionTestCase):
         serializer.save()
         self.assertEqual(len(mail.outbox), 3)
 
+    @mock.patch('profiles.index.UserIndex.store_index')
     @mock.patch('authorization.models.User.objects.create')
     @mock.patch('rest_framework.authtoken.models.Token.objects.get_or_create')
     @mock.patch('companies.models.CompanyMember.objects.create')
-    def test_success_user_creation(self, company_member_mock, token_mock, user_class_mock):
+    def test_success_user_creation(self, company_member_mock, token_mock, user_class_mock, user_index):
         """ Tests success creation of the user if it does not exists """
 
         user_class_mock.objects = mock.MagicMock()
@@ -110,8 +112,9 @@ class EmployeeSerializerTest(TransactionTestCase):
         serializer.save()
         self.assertEqual(user_class_mock.call_count, 3)
 
+    @mock.patch('profiles.index.UserIndex.store_index')
     @mock.patch('rest_framework.authtoken.models.Token.objects.get_or_create')
-    def test_success_token_creation(self, token_mock):
+    def test_success_token_creation(self, token_mock, user_index):
         """ Test creation of token for the new users """
 
         token_mock.user = User(id=1)
@@ -142,3 +145,15 @@ class EmployeeSerializerTest(TransactionTestCase):
                                         context={'user': self.user})
         serializer.is_valid()
         self.assertFalse(serializer.save())
+
+
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_user_indexing_after_create(self, user_index):
+        """ Test if index was created after the employee's creation """
+
+        serializer = EmployeeSerializer(data=self.form_data,
+                                        context={'user': self.user})
+        serializer.is_valid()
+        serializer.save()
+
+        self.assertTrue(user_index.called)

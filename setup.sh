@@ -1,5 +1,5 @@
 PYTHON_VERSION=3.5.2
-
+JAVA_VERSION=jdk-8u131-linux-x64.rpm
 sudo yum -y update
 
 # PYTHON 3.5.2
@@ -45,3 +45,28 @@ sudo systemctl enable rabbitmq-server.service
 sudo rabbitmqctl add_user admin admin
 sudo rabbitmqctl set_user_tags admin administrator
 sudo rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
+
+# JAVA
+wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" \
+"http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/$JAVA_VERSION"
+sudo yum -y localinstall $JAVA_VERSION
+rm $JAVA_VERSION
+
+#ELASTICSEARCH
+wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.3.rpm
+sha1sum elasticsearch-5.6.3.rpm
+sudo rpm --install elasticsearch-5.6.3.rpm
+sudo service elasticsearch start
+sudo service elasticsearch enabled
+
+#KIBANA
+wget https://artifacts.elastic.co/downloads/kibana/kibana-5.6.3-x86_64.rpm
+sha1sum kibana-5.6.3-x86_64.rpm
+sudo rpm --install kibana-5.6.3-x86_64.rpm
+sudo service kibana start
+
+#MAKE ELASTICSEARCH AND KIBANA VISIBLE FROM THE VM
+
+echo 'network.host: 0.0.0.0' >> /etc/elasticsearch/elasticsearch.yml
+echo 'server.host: 0.0.0.0' >> /etc/kibana/kibana.yml
+echo 'elasticsearch.url: "http://localhost:9200"' >> /etc/kibana/kibana.yml

@@ -1,9 +1,8 @@
 from . import (
     viewsets, status, Response, Company, CompanyMember, get_object_or_404,
     EmployeeSerializer, User, IsAuthenticated,  TokenAuthentication, User,
-    EmployeePermission
+    EmployeePermission, list_route, UsersSearch, UserIndex
 )
-from rest_framework.decorators import list_route
 
 class EmployeesViewSet(viewsets.ViewSet):
     """ View class for employee's actions """
@@ -45,8 +44,18 @@ class EmployeesViewSet(viewsets.ViewSet):
             user_id=employee.id, company_id=company.id
         )
         company_member.delete()
+        UserIndex.get(id=employee.id).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
     def get_company(self, id):
         return get_object_or_404(Company, pk=id)
+
+    @list_route(methods=['get'])
+    def search(self, request, company_pk=None):
+        """ Action for user search """
+
+        query = request.query_params.get('q')
+        search = UsersSearch()
+        results = search.find(query, company_pk)
+        return  Response({ 'users': results })

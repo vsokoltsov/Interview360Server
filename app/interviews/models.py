@@ -12,7 +12,7 @@ class Interview(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     passed = models.NullBooleanField()
-    assigned_at = models.DateTimeField(auto_now=True)
+    assigned_at = models.DateTimeField()
 
     interviewees = models.ManyToManyField(
         'authorization.User',

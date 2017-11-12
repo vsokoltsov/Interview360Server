@@ -1,6 +1,6 @@
 from . import forms, transaction, advisory_lock, User, Token
 from django.db.utils import IntegrityError
-
+from profiles.index import UserIndex
 import ipdb
 
 class RegistrationForm(forms.Form):
@@ -33,6 +33,7 @@ class RegistrationForm(forms.Form):
                 with advisory_lock('User'):
                     user.save()
                     self.token = Token.objects.create(user=user)
+                    UserIndex.store_index(user)
                     return True
         except IntegrityError as e:
             self.add_error('email', 'Already present')

@@ -15,3 +15,27 @@ class Attachment(models.Model):
     data = ThumbnailerField()
 
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def full_urls(self):
+        """ Receive a hash of all available urls """
+
+        url = self.data.url
+        thumb_url = self.__get_url_by_type('thumb')
+        small_thumb_url = self.__get_url_by_type('small_thumb')
+        medium_url = self.__get_url_by_type('medium')
+        medium_large_url = self.__get_url_by_type('medium_large')
+        large_url = self.__get_url_by_type('large')
+
+        return {
+            'thumb_url': thumb_url,
+            'small_thumb_url': small_thumb_url,
+            'medium_url': medium_url,
+            'medium_large_url': medium_large_url,
+            'large_url': large_url
+        }
+
+
+    def __get_url_by_type(self, url_type):
+        """ Return attachment url based on its type """
+
+        return self.data[url_type].url

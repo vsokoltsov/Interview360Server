@@ -9,6 +9,8 @@ from attachments.models import Attachment
 from interviews.models import Interview
 from django_pglocks import advisory_lock
 from roles.constants import COMPANY_OWNER
+from profiles.index import UserIndex
+from companies.index import CompanyIndex
 import ipdb
 
 class CompanySerializer(CompaniesSerializer):
@@ -87,6 +89,8 @@ class CompanySerializer(CompaniesSerializer):
                                                               company_id=company.id,
                                                               role=COMPANY_OWNER)
                 self._create_attachment(attachment_json, company)
+                UserIndex.store_index(User.objects.get(id=owner_id))
+                CompanyIndex.store_index(company)
                 return company
         except:
             return False
@@ -101,6 +105,7 @@ class CompanySerializer(CompaniesSerializer):
         instance.city = validated_data.get('city', instance.city)
         self._create_attachment(attachment_json, instance)
         instance.save()
+        CompanyIndex.store_index(instance)
         return instance
 
     def _create_attachment(self, attachment_json, instance):

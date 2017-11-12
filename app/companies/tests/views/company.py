@@ -1,5 +1,6 @@
 from . import (
-    APITestCase, Company, CompanyMember, User, Token, datetime, COMPANY_OWNER
+    APITestCase, Company, CompanyMember, User,
+    Token, datetime, COMPANY_OWNER, mock, CompanyIndex
 )
 
 class CompaniesViewSetTests(APITestCase):
@@ -40,7 +41,9 @@ class CompaniesViewSetTests(APITestCase):
         response = self.client.get('/api/v1/companies/{}/'.format(self.company.id))
         self.assertEqual(response.status_code, 200)
 
-    def test_success_create_action(self):
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_create_action(self, index_mock, company_index):
         """ Test success option of company's creation """
 
         response = self.client.post('/api/v1/companies/', self.company_params)
@@ -52,16 +55,37 @@ class CompaniesViewSetTests(APITestCase):
         response = self.client.post('/api/v1/companies/', {})
         self.assertTrue('errors' in response.data)
 
-    def test_success_update_action(self):
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    def test_success_update_action(self, company_index):
         """ Test success option of company's update """
 
         url = '/api/v1/companies/{}/'.format(self.company.id)
         response = self.client.put(url, self.company_params)
         self.assertTrue('company' in response.data)
 
-    def test_success_delete_action(self):
+    @mock.patch.object(CompanyIndex, 'get')
+    @mock.patch.object(CompanyIndex, 'delete')
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    def test_success_delete_action(self, company_index, compant_delete, company_get):
         """ Test success company deletion """
 
         url = '/api/v1/companies/{}/'.format(self.company.id)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
+
+    @mock.patch('companies.search.CompanySearch.find')
+    def test_search_action(self, search_mock):
+        """ Test success search of company """
+
+        user_index = [
+            { 'id': 1 },
+            { 'id': 2 },
+            { 'id': 3 }
+        ]
+        search_mock.return_value = user_index
+        url = "/api/v1/companies/search/?q={}".format(
+            'buzzword'
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['companies'], user_index)

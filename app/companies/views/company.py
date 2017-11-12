@@ -1,7 +1,8 @@
 from . import (
     render, viewsets, status, Response, get_object_or_404,
     IsAuthenticated,  TokenAuthentication, Count,
-    CompanySerializer, CompaniesSerializer, Company, CompanyPermissions
+    CompanySerializer, CompaniesSerializer, Company, CompanyPermissions,
+    CompanyIndex, list_route, CompanySearch
 )
 
 def get_company(user, pk):
@@ -61,5 +62,15 @@ class CompaniesViewSet(viewsets.ModelViewSet):
         """ Deletes selected company """
 
         company = self.get_object()
+        CompanyIndex.get(id=company.id).delete()
         company.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @list_route(methods=['get'])
+    def search(self, request):
+        """ Action for company search """
+
+        query = request.query_params.get('q')
+        search = CompanySearch()
+        results = search.find(query)
+        return  Response({ 'companies': results })

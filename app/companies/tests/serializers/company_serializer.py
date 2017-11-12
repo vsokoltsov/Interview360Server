@@ -28,6 +28,7 @@ class CompanySerializerTests(TransactionTestCase):
 
         self.serializer = CompanySerializer(instance=self.company)
 
+
     def test_contains_expected_field(self):
         """ Test presence of serializer expected field """
 
@@ -50,8 +51,11 @@ class CompanySerializerTests(TransactionTestCase):
         serializer = CompanySerializer(data={})
         self.assertFalse(serializer.is_valid())
 
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    @mock.patch('profiles.index.UserIndex.store_index')
     @mock.patch('companies.models.Company.objects.create')
-    def test_success_company_creation(self, company_class_mock):
+    def test_success_company_creation(
+        self, company_class_mock, index_mock, company_index_mock):
         """ Test success case of saving new Company """
 
         test_company = Company(id=1)
@@ -64,8 +68,11 @@ class CompanySerializerTests(TransactionTestCase):
         serializer.save()
         self.assertTrue(company_class_mock.called)
 
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    @mock.patch('profiles.index.UserIndex.store_index')
     @mock.patch('companies.models.CompanyMember.objects.create')
-    def test_success_company_member_creation(self, company_member_mock):
+    def test_success_company_member_creation(self, company_member_mock, user_index_mock,
+                                             company_index_mock):
         """ Test that CompanyMember objects was created just after the Company """
 
         test_company_member = CompanyMember(1)
@@ -79,7 +86,8 @@ class CompanySerializerTests(TransactionTestCase):
         serializer.save()
         self.assertTrue(company_member_mock.called)
 
-    def test_success_company_update(self):
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    def test_success_company_update(self, company_index):
         """ Test success company updated operation """
 
         serializer = CompanySerializer(self.company, data=self.company_params)
@@ -101,3 +109,31 @@ class CompanySerializerTests(TransactionTestCase):
         serializer = CompanySerializer(data=params)
         self.assertFalse(serializer.is_valid())
         self.assertTrue('owner_id' in serializer.errors)
+
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_user_indexing_after_company_creation(self, user_index, company_index):
+        """ Test success indexing of user after company creation """
+
+        serializer = CompanySerializer(data=self.company_params)
+        serializer.is_valid()
+        serializer.save()
+        self.assertTrue(user_index.called)
+
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    def test_company_index_after_company_creation(self, company_index):
+        """ Test success company indexing after creation """
+
+        serializer = CompanySerializer(data=self.company_params)
+        serializer.is_valid()
+        serializer.save()
+        self.assertTrue(company_index.called)
+
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    def test_company_index_after_company_update(self, company_index):
+        """ Test success company indexing after update """
+
+        serializer = CompanySerializer(self.company, data=self.company_params)
+        serializer.is_valid()
+        serializer.save()
+        self.assertTrue(company_index.called)

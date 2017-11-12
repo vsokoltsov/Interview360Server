@@ -29,10 +29,11 @@ class CompanyPermissions(permissions.BasePermission):
 class EmployeePermission(permissions.BasePermission):
     """ Permissions for EmployeeViewSet """
 
+
     def has_permission(self, request, view, obj=None):
         company = Company.objects.get(id=view.kwargs['company_pk'])
         role = request.user.get_role_for_company(company)
-        
+
         if request.method == 'PUT': return True
 
         if view.action == 'list':
@@ -41,5 +42,7 @@ class EmployeePermission(permissions.BasePermission):
             return role.has_permission(ADD_EMPLOYEE_TO_COMPANY)
         elif view.action == 'destroy':
             return role.has_permission(DELETE_EMPLOYEES)
+        elif view.action == 'search':
+            return role.has_permission(RECEIVE_EMPLOYEES)
         else:
             return False

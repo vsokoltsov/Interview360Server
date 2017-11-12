@@ -1,6 +1,7 @@
 from rest_framework.test import APITestCase
 from authorization.models import User
 from rest_framework.authtoken.models import Token
+import mock
 
 from .authorization import AuthorizationViewSetTests
 from .registration import RegistrationViewTests

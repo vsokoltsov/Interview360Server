@@ -1,7 +1,8 @@
 from . import (
     APITestCase, Company, CompanyMember, User, Token, datetime,
-    COMPANY_OWNER, HR, FileSystemStorage
+    COMPANY_OWNER, HR, FileSystemStorage, mock
 )
+from profiles.index import UserIndex
 
 class EmployeesViewSetTests(APITestCase):
     """ API View tests for EmployeeViewSet """
@@ -39,7 +40,8 @@ class EmployeesViewSetTests(APITestCase):
         response = self.client.get(url)
         self.assertEqual(len(response.data['employees']), 8)
 
-    def test_success_employee_creation(self):
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_employee_creation(self, user_index):
         """ Test success creation of the new employees """
 
         url = "/api/v1/companies/{}/employees/".format(self.company.id)
@@ -54,9 +56,28 @@ class EmployeesViewSetTests(APITestCase):
         self.assertTrue('errors' in response.data)
         self.assertEqual(response.status_code, 400)
 
-    def test_success_company_member_deletion(self):
+    @mock.patch.object(UserIndex, 'get')
+    @mock.patch.object(UserIndex, 'delete')
+    def test_success_company_member_deletion(self, user_index, get_mock):
         """ Test success response of deletion the CompanyMember instance """
 
         url = "/api/v1/companies/{}/employees/{}/".format(self.company.id, self.user.id)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
+
+    @mock.patch('profiles.search.UsersSearch.find')
+    def test_search_action(self, search_mock):
+        """ Test success search of user inside particular company """
+
+        user_index = [
+            { 'id': 1 },
+            { 'id': 2 },
+            { 'id': 3 }
+        ]
+        search_mock.return_value = user_index
+        url = "/api/v1/companies/{}/employees/search/?q={}".format(
+            self.company.id, 'buzzword'
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['users'], user_index)

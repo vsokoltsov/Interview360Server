@@ -3,6 +3,7 @@ from attachments.models import Attachment
 from drf_writable_nested import WritableNestedModelSerializer
 from common.serializers.user_serializer import UserSerializer
 from .fields import AttachmentField
+from .index import UserIndex
 import ipdb
 
 class ProfileAttachmentSerializer(serializers.Serializer):
@@ -34,5 +35,5 @@ class ProfileSerializer(serializers.ModelSerializer):
             attachment.save()
 
         instance.save()
-
+        UserIndex.store_index(instance)
         return instance

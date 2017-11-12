@@ -48,7 +48,8 @@ class ProfileViewSetTest(APITestCase):
         response = self.client.get('/api/v1/users/{}/'.format(self.user.id))
         assert response.status_code, 200
 
-    def test_success_update_profile(self):
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_update_profile(self, user_index):
         """ Test success update of the profile information """
 
         response = self.client.put(
@@ -75,8 +76,9 @@ class ProfileViewSetTest(APITestCase):
         )
         assert 400, response.status_code
 
+    @mock.patch('profiles.index.UserIndex.store_index')
     @mock.patch('storages.backends.s3boto3.S3Boto3Storage', FileSystemStorage)
-    def test_update_with_attachment_information(self):
+    def test_update_with_attachment_information(self, boto_mock):
         """ Test update user instance with attahcment field """
 
         content_type = ContentType.objects.get_for_model(User)

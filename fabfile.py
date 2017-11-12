@@ -12,6 +12,7 @@ GUNICORN_SERVICE_PATH = '/etc/systemd/system/'
 NGINX_CONFIG_PATH = '/etc/nginx/'
 PROJECT_PATH = "{}/{}".format(env.home_dir, PROJECT_NAME)
 GITHUB_PROJECT = 'https://github.com/vforvad/InterviewManager.git'
+PROJECT_NGINX_CONF_NAME = 'interview_360.conf'
 
 def set_up():
     """ Setting up all dependencies """
@@ -84,6 +85,9 @@ def configure_nginx_service():
         put('./deploy/nginx.conf', NGINX_CONFIG_PATH)
         sudo('usermod -a -G {} nginx'.format(env.user))
         sudo('chmod 710 {}'.format(env.home_dir))
+        sudo('ln -nfs {}/deploy/{} /etc/nginx/sites-enabled/interview_360.conf'.format(
+            PROJECT_PATH, PROJECT_NGINX_CONF_NAME
+        ))
         sudo('systemctl start nginx')
         sudo('systemctl enable nginx')
 
