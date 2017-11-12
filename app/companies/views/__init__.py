@@ -8,6 +8,7 @@ from django.db.models import Count
 from rest_framework.decorators import detail_route, list_route
 from profiles.search import UsersSearch
 from profiles.index import UserIndex
+from companies.index import CompanyIndex
 
 from companies.serializers import (
     CompanySerializer, EmployeeSerializer, CompaniesSerializer

@@ -6,6 +6,7 @@ from companies.models import Company, CompanyMember
 from authorization.models import User
 import datetime
 from roles.constants import COMPANY_OWNER, HR, EMPLOYEE
+from companies.index import CompanyIndex
 
 from .company import CompaniesViewSetTests
 from .employee import EmployeesViewSetTests

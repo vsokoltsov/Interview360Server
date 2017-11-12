@@ -1,7 +1,8 @@
 from . import (
     render, viewsets, status, Response, get_object_or_404,
     IsAuthenticated,  TokenAuthentication, Count,
-    CompanySerializer, CompaniesSerializer, Company, CompanyPermissions
+    CompanySerializer, CompaniesSerializer, Company, CompanyPermissions,
+    CompanyIndex
 )
 
 def get_company(user, pk):
@@ -61,5 +62,6 @@ class CompaniesViewSet(viewsets.ModelViewSet):
         """ Deletes selected company """
 
         company = self.get_object()
+        CompanyIndex.get(id=company.id).delete()
         company.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
