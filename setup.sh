@@ -57,6 +57,7 @@ wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.3.rp
 sha1sum elasticsearch-5.6.3.rpm
 sudo rpm --install elasticsearch-5.6.3.rpm
 sudo service elasticsearch start
+sudo service elasticsearch enabled
 
 #KIBANA
 wget https://artifacts.elastic.co/downloads/kibana/kibana-5.6.3-x86_64.rpm
