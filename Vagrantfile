@@ -8,6 +8,6 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", host_ip: "127.0.0.1", guest: 15672, host: 15672
   config.vm.network "forwarded_port", host_ip: "127.0.0.1", guest: 9200, host: 9200
   config.vm.network "forwarded_port", host_ip: "127.0.0.1", guest: 5601, host: 5601
-  config.vm.synced_folder "./", "/home/vagrant/im"
+  config.vm.synced_folder "./", "/home/vagrant/im", type: "rsync", rsync__exclude: ".git/"
   config.vm.provision "shell", privileged: false, path: "./setup.sh"
 end

@@ -3,7 +3,7 @@ JAVA_VERSION=jdk-8u131-linux-x64.rpm
 sudo yum -y update
 
 # PYTHON 3.5.2
-sudo yum install -y  gcc gcc-c++ make git patch openssl-devel zlib-devel readline-devel sqlite-devel bzip2-devel nginx
+sudo yum install -y  gcc gcc-c++ make git patch openssl-devel zlib-devel readline-devel sqlite-devel bzip2-devel nginx wget
 git clone git://github.com/yyuu/pyenv.git ~/.pyenv
 export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
@@ -25,7 +25,7 @@ sudo systemctl start postgresql
 sudo systemctl enable postgresql
 sudo su postgres -c 'psql -c "CREATE USER vagrant WITH PASSWORD '"'"'vagrant'"'"' SUPERUSER;"'
 sudo su postgres -c 'psql -c "CREATE DATABASE interview_manager;"'
-sudo su postgres -c 'psql -c "GRANT ALL PRIVELEGES ON DATABASE interview_manager TO vagrant;"'
+sudo su postgres -c 'psql -c "GRANT ALL PRIVILEGES ON DATABASE interview_manager TO vagrant;"'
 
 # ERLANG
 cd ~
@@ -53,6 +53,7 @@ sudo yum -y localinstall $JAVA_VERSION
 rm $JAVA_VERSION
 
 #ELASTICSEARCH
+cd ~
 wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.3.rpm
 sha1sum elasticsearch-5.6.3.rpm
 sudo rpm --install elasticsearch-5.6.3.rpm
@@ -67,6 +68,6 @@ sudo service kibana start
 
 #MAKE ELASTICSEARCH AND KIBANA VISIBLE FROM THE VM
 
-echo 'network.host: 0.0.0.0' >> /etc/elasticsearch/elasticsearch.yml
-echo 'server.host: 0.0.0.0' >> /etc/kibana/kibana.yml
-echo 'elasticsearch.url: "http://localhost:9200"' >> /etc/kibana/kibana.yml
+sudo bash -c "echo 'network.host: 0.0.0.0' >> /etc/elasticsearch/elasticsearch.yml"
+sudo bash -c "echo 'server.host: 0.0.0.0' >> /etc/kibana/kibana.yml"
+sudo bash -c "echo 'elasticsearch.url: http://localhost:9200' >> /etc/kibana/kibana.yml"
