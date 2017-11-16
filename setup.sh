@@ -11,13 +11,20 @@ echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> ~/.bashrc
 echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 echo 'alias pm="python manage.py"' >> ~/.bashrc
 echo 'alias activate_env="source venv/bin/activate"' >> ~/.bashrc
+
 pyenv install $PYTHON_VERSION
 pyenv global $PYTHON_VERSION
 pip install --upgrade pip
 pip install virtualenvwrapper
+git clone https://github.com/yyuu/pyenv-virtualenvwrapper.git ~/.pyenv/plugins/pyenv-virtualenvwrapper
+export WORKON_HOME=$HOME/.virtualenvs
+eval "$(pyenv init -)"
+pyenv virtualenvwrapper
+mkvirtualenv interview360
+echo 'pyenv virtualenvwrapper' >> ~/.bashrc
+echo 'workon interview360' >> ~/.bashrc
 
 cd ~
-git clone https://github.com/yyuu/pyenv-virtualenvwrapper.git ~/.pyenv/plugins/pyenv-virtualenvwrapper
 
 sudo yum -y install postgresql-server postgresql-contrib postgresql-devel curl
 sudo postgresql-setup initdb
@@ -67,7 +74,6 @@ sudo rpm --install kibana-5.6.3-x86_64.rpm
 sudo service kibana start
 
 #MAKE ELASTICSEARCH AND KIBANA VISIBLE FROM THE VM
-
 sudo bash -c "echo 'network.host: 0.0.0.0' >> /etc/elasticsearch/elasticsearch.yml"
 sudo bash -c "echo 'server.host: 0.0.0.0' >> /etc/kibana/kibana.yml"
 sudo bash -c "echo 'elasticsearch.url: http://localhost:9200' >> /etc/kibana/kibana.yml"
