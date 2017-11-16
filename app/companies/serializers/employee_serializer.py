@@ -16,7 +16,7 @@ class EmployeeSerializer(UserSerializer):
 
     company_id = serializers.IntegerField(write_only=True, required=True)
     emails = serializers.ListField(write_only=True, required=True,
-        max_length=10, child=serializers.CharField()
+        max_length=10, child=serializers.JSONField()
     )
     member_role = serializers.SerializerMethodField(read_only=True)
     role = serializers.IntegerField(
@@ -51,8 +51,10 @@ class EmployeeSerializer(UserSerializer):
         Creates a new employee if they are do not exist;
         Send invintation emails
         """
+
         try:
             with transaction.atomic():
+                # ipdb.set_trace()
                 for email in data['emails']:
                     user = self.find_or_create_user(email)
                     token, _ = Token.objects.get_or_create(user=user)

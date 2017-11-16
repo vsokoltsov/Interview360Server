@@ -1,6 +1,7 @@
 from . import (
     TransactionTestCase, serializers, Company, CompanyMember,
-    serializers, User, EmployeeSerializer, datetime, mock, User, HR, EMPLOYEE
+    serializers, User, EmployeeSerializer, datetime, mock, User,
+    HR, EMPLOYEE, CANDIDATE, Token
 )
 import django.core.mail as mail
 from django.test import override_settings
@@ -21,9 +22,9 @@ class EmployeeSerializerTest(TransactionTestCase):
         self.user = self.company.get_employees_with_role(HR)[0]
         self.form_data = {
             'emails': [
-                'example1@mail.com',
-                'example2@mail.com',
-                'example3@mail.com'
+                { 'email': 'example1@mail.com', 'role': CANDIDATE},
+                { 'email': 'example2@mail.com', 'role': EMPLOYEE},
+                { 'email': 'example3@mail.com', 'role': CANDIDATE }
             ],
             'company_id': self.company.id,
             'role': HR
@@ -46,16 +47,8 @@ class EmployeeSerializerTest(TransactionTestCase):
     def test_failed_validation_if_role_does_not_exists(self):
         """ Test failed validation if role does not exists """
 
-        form_data = {
-            'emails': [
-                'example1@mail.com',
-                'example2@mail.com',
-                'example3@mail.com'
-            ],
-            'company_id': self.company.id,
-            'role': 10000
-        }
-        serializer = EmployeeSerializer(data=form_data,
+        self.form_data['role'] = 1000
+        serializer = EmployeeSerializer(data=self.form_data,
                                         context={'user': self.user})
         self.assertFalse(serializer.is_valid())
 
@@ -88,44 +81,29 @@ class EmployeeSerializerTest(TransactionTestCase):
         self.assertEqual(len(mail.outbox), 3)
 
     @mock.patch('profiles.index.UserIndex.store_index')
-    @mock.patch('authorization.models.User.objects.create')
-    @mock.patch('rest_framework.authtoken.models.Token.objects.get_or_create')
-    @mock.patch('companies.models.CompanyMember.objects.create')
-    def test_success_user_creation(self, company_member_mock, token_mock, user_class_mock, user_index):
+    def test_success_user_creation(self, user_index_mock):
         """ Tests success creation of the user if it does not exists """
 
-        user_class_mock.objects = mock.MagicMock()
-        user_class_mock.objects.create = mock.MagicMock()
-        user_class_mock.objects.create.return_value = User(id=1)
-
-        token_mock.user = User(id=1)
-        token_mock.objects = mock.MagicMock()
-        token_mock.get_or_create = mock.MagicMock()
-        token_mock.return_value = ("12345", 12)
-
-        company_member_mock.objects = mock.MagicMock()
-        company_member_mock.objects.create = mock.MagicMock()
+        users_count = User.objects.count()
 
         serializer = EmployeeSerializer(data=self.form_data,
                                         context={'user': self.user})
         serializer.is_valid()
         serializer.save()
-        self.assertEqual(user_class_mock.call_count, 3)
+        self.assertEqual(User.objects.count(), users_count + 3)
 
     @mock.patch('profiles.index.UserIndex.store_index')
-    @mock.patch('rest_framework.authtoken.models.Token.objects.get_or_create')
-    def test_success_token_creation(self, token_mock, user_index):
+    def test_success_token_creation(self, user_index):
         """ Test creation of token for the new users """
 
-        token_mock.user = User(id=1)
-        token_mock.return_value = ("12345", 12)
+        tokens_count = Token.objects.count()
 
         serializer = EmployeeSerializer(data=self.form_data,
                                         context={'user': self.user})
         serializer.is_valid()
         serializer.save()
 
-        self.assertEqual(token_mock.call_count, 3)
+        self.assertEqual(Token.objects.count(), tokens_count + 3)
 
     def test_chosen_user_already_belongs_to_company(self):
         """ Test failed validation if user already belongs to a company """

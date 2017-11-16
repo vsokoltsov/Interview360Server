@@ -6,7 +6,7 @@ from companies.models import Company, CompanyMember
 from authorization.models import User
 from companies.serializers import CompanySerializer, EmployeeSerializer
 import datetime
-from roles.constants import HR, EMPLOYEE
+from roles.constants import HR, EMPLOYEE, CANDIDATE
 
 from .company_serializer import CompanySerializerTests
 from .employee import EmployeeSerializerTest
