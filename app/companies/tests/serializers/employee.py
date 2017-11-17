@@ -21,13 +21,12 @@ class EmployeeSerializerTest(TransactionTestCase):
         self.company = Company.objects.last()
         self.user = self.company.get_employees_with_role(HR)[0]
         self.form_data = {
-            'emails': [
-                { 'email': 'example1@mail.com', 'role': CANDIDATE},
-                { 'email': 'example2@mail.com', 'role': EMPLOYEE},
+            'employees': [
+                { 'email': 'example1@mail.com', 'role': CANDIDATE },
+                { 'email': 'example2@mail.com', 'role': EMPLOYEE },
                 { 'email': 'example3@mail.com', 'role': CANDIDATE }
             ],
-            'company_id': self.company.id,
-            'role': HR
+            'company_id': self.company.id
         }
 
     def test_success_validation(self):
@@ -47,7 +46,7 @@ class EmployeeSerializerTest(TransactionTestCase):
     def test_failed_validation_if_role_does_not_exists(self):
         """ Test failed validation if role does not exists """
 
-        self.form_data['role'] = 1000
+        self.form_data['employees'][0]['role'] = 1000
         serializer = EmployeeSerializer(data=self.form_data,
                                         context={'user': self.user})
         self.assertFalse(serializer.is_valid())
@@ -56,10 +55,10 @@ class EmployeeSerializerTest(TransactionTestCase):
     def test_success_email_validation(self):
         """ Validation failed if request.user email is in the emails list """
 
-        self.form_data['emails'] = [
-            self.user.email,
-            'example2@mail.com',
-            'example3@mail.com'
+        self.form_data['employees'] = [
+            { 'email': self.user.email, 'role': CANDIDATE },
+            { 'email': 'example2@mail.com', 'role': EMPLOYEE },
+            { 'email': 'example3@mail.com', 'role': CANDIDATE }
         ]
 
         serializer = EmployeeSerializer(data=self.form_data,
@@ -111,10 +110,10 @@ class EmployeeSerializerTest(TransactionTestCase):
         new_user = User.objects.create(email="example4@mail.com")
         CompanyMember.objects.create(user_id=new_user.id, company_id=self.company.id, role=EMPLOYEE)
         form_data = {
-            'emails': [
-                'example4@mail.com',
-                'example2@mail.com',
-                'example3@mail.com'
+            'employees': [
+                { 'email': 'example4@mail.com', 'role': CANDIDATE },
+                { 'email': 'example2@mail.com', 'role': EMPLOYEE },
+                { 'email': 'example3@mail.com', 'role': CANDIDATE }
             ],
             'company_id': self.company.id,
             'role': EMPLOYEE
