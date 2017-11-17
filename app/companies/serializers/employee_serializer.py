@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 from profiles.index import UserIndex
+from common.services.email_service import EmailService
 import os
 import ipdb
 
@@ -71,25 +72,13 @@ class EmployeeSerializer(UserSerializer):
                         role=employee['role']
                     )
                     UserIndex.store_index(user)
-                    self.send_invite(user, token, company)
+                    EmailService.sent_personal_employee_invite(
+                        user, token, company
+                    )
                 return True
         except IntegrityError as error:
             self.errors['employees'] = 'One of these users already belongs to a company'
             return False
-
-    def send_invite(self, user, token, company):
-        link_url = '{}/companies/{}/invite'.format(
-            os.environ['DEFAULT_CLIENT_HOST'],
-            company.id
-        )
-        msg = render_to_string('company_invite.html', {
-                          'company': company,
-                          'link_url': link_url,
-                          'token': token }
-                         )
-        send_mail("Company invite mail", msg,
-                  "Anymail Sender <from@example.com>", [user.email])
-
 
     def find_or_create_user(self, email):
         try:
