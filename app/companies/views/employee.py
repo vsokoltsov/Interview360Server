@@ -5,6 +5,7 @@ from . import (
 )
 from rest_framework.decorators import parser_classes
 from rest_framework.parsers import JSONParser
+import ipdb
 
 class EmployeesViewSet(viewsets.ViewSet):
     """ View class for employee's actions """
@@ -29,7 +30,7 @@ class EmployeesViewSet(viewsets.ViewSet):
 
         if serializer.is_valid() and serializer.save():
             return Response(
-                { 'message': 'Users were succesfully added as an employee' },
+                serializer.data,
                 status=status.HTTP_200_OK
             )
         else:
