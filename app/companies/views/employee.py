@@ -1,14 +1,17 @@
 from . import (
     viewsets, status, Response, Company, CompanyMember, get_object_or_404,
-    EmployeeSerializer, User, IsAuthenticated,  TokenAuthentication, User,
+    EmployeeSerializer, EmployeesSerializer, User, IsAuthenticated,  TokenAuthentication, User,
     EmployeePermission, list_route, UsersSearch, UserIndex
 )
+from rest_framework.decorators import parser_classes
+from rest_framework.parsers import JSONParser
 
 class EmployeesViewSet(viewsets.ViewSet):
     """ View class for employee's actions """
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, EmployeePermission, )
+    parser_classes = (JSONParser, )
 
     def list(self, request, company_pk=None):
         """ Return list of employees for the company """
@@ -22,7 +25,7 @@ class EmployeesViewSet(viewsets.ViewSet):
         """ Create new user and send it a letter """
 
         company = self.get_company(company_pk)
-        serializer = EmployeeSerializer(data=request.data, context={'user': request.user})
+        serializer = EmployeesSerializer(data=request.data, context={'user': request.user})
 
         if serializer.is_valid() and serializer.save():
             return Response(

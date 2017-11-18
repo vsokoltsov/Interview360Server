@@ -1,6 +1,6 @@
 from . import (
     APITestCase, Company, CompanyMember, User, Token, datetime,
-    COMPANY_OWNER, HR, FileSystemStorage, mock
+    COMPANY_OWNER, HR, FileSystemStorage, mock, EMPLOYEE, CANDIDATE
 )
 from profiles.index import UserIndex
 
@@ -23,21 +23,21 @@ class EmployeesViewSetTests(APITestCase):
             user_id=self.user.id, company_id=self.company.id
         )
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+        self.client.content_type = 'application/json'
         self.form_data = {
-            'emails': [
-                'example1@mail.com',
-                'example2@mail.com',
-                'example3@mail.com'
+            'employees': [
+                { 'email': 'example1@mail.com', 'role': CANDIDATE },
+                { 'email': 'example2@mail.com', 'role': EMPLOYEE },
+                { 'email': 'example3@mail.com', 'role': CANDIDATE }
             ],
-            'company_id': self.company.id,
-            'role': HR
+            'company_id': self.company.id
         }
 
     def test_employees_list(self):
         """ Test receiving list of employeers """
 
         url = "/api/v1/companies/{}/employees/".format(self.company.id)
-        response = self.client.get(url)
+        response = self.client.get(url, format='json')
         self.assertEqual(len(response.data['employees']), 8)
 
     @mock.patch('profiles.index.UserIndex.store_index')
@@ -45,14 +45,14 @@ class EmployeesViewSetTests(APITestCase):
         """ Test success creation of the new employees """
 
         url = "/api/v1/companies/{}/employees/".format(self.company.id)
-        response = self.client.post(url, self.form_data)
+        response = self.client.post(url, self.form_data, format='json')
         self.assertEqual('message' in response.data, True)
 
     def test_failed_employee_creation(self):
         """ Test failed creation of the new employees """
 
         url = "/api/v1/companies/{}/employees/".format(self.company.id)
-        response = self.client.post(url, {})
+        response = self.client.post(url, {}, format='json')
         self.assertTrue('errors' in response.data)
         self.assertEqual(response.status_code, 400)
 

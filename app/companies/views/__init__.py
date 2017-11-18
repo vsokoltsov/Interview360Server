@@ -13,7 +13,7 @@ from rest_framework.decorators import list_route
 from companies.search import CompanySearch
 
 from companies.serializers import (
-    CompanySerializer, EmployeeSerializer, CompaniesSerializer
+    CompanySerializer, EmployeeSerializer, CompaniesSerializer, EmployeesSerializer
 )
 from companies.models import Company, CompanyMember
 from authorization.models import User

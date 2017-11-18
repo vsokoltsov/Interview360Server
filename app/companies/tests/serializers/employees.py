@@ -115,7 +115,6 @@ class EmployeesSerializerTest(TransactionTestCase):
         """ Test creation of token for the new users """
 
         tokens_count = Token.objects.count()
-
         serializer = EmployeesSerializer(data=self.form_data,
                                         context={'user': self.user})
         serializer.is_valid()
@@ -153,3 +152,14 @@ class EmployeesSerializerTest(TransactionTestCase):
         serializer.save()
 
         self.assertTrue(user_index.called)
+
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_receiving_of_employees_information(self, user_index):
+        """ Test presence of 'employees' key after success creation """
+
+        serializer = EmployeesSerializer(data=self.form_data,
+                                        context={'user': self.user})
+        serializer.is_valid()
+        serializer.save()
+
+        self.assertTrue('employees' in serializer.data)

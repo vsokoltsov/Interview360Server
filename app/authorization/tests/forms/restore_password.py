@@ -56,22 +56,26 @@ class RestorePasswordFormTests(TestCase):
         form.submit()
         self.assertEqual(len(mail.outbox), 0)
 
-    def test_token_success_creation(self):
+    @mock.patch('rest_framework.authtoken.models.Token.objects.get_or_create')
+    def test_token_success_creation(self, token_mock):
         """ Test token creation after success restore password """
 
-        Token.objects.get_or_create = mock.MagicMock(user=self.user, return_value=("12345", 12))
+        token_mock.user = self.user
+        token_mock.return_value = ("12345", 12)
         form_data = { 'email': 'example@mail.com'}
         form = RestorePasswordForm(form_data)
         form.submit()
 
-        Token.objects.get_or_create.assert_called_once()
+        self.assertTrue(token_mock.called)
 
-    def test_token_failed_creation(self):
+    @mock.patch('rest_framework.authtoken.models.Token.objects.get_or_create')
+    def test_token_failed_creation(self, token_mock):
         """ Test token creation after failed restore password """
 
-        Token.objects.get_or_create = mock.MagicMock(user=self.user, return_value=("12345", 12))
+        token_mock.user = self.user
+        token_mock.return_value = ("12345", 12)
         form_data = { }
         form = RestorePasswordForm(form_data)
         form.submit()
 
-        self.assertFalse(Token.objects.get_or_create.called)
+        self.assertFalse(token_mock.called)

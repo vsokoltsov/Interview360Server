@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
-
+import ipdb
 
 class RestorePasswordForm(forms.Form):
     """ Send mail to user with instructions how to reset his password """
@@ -16,7 +16,8 @@ class RestorePasswordForm(forms.Form):
 
         try:
             user = User.objects.get(email=self['email'].value())
-            auth_token, _ = Token.objects.get_or_create(user=user)
+            result = Token.objects.get_or_create(user=user)
+            auth_token = result[0] if isinstance(result, tuple) else result
             msg = render_to_string('reset_password.html', {
                               'reset_link_url': '{}/auth/reset-password'.format(os.environ['DEFAULT_CLIENT_HOST']),
                               'token': auth_token }
