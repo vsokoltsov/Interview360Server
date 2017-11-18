@@ -1,4 +1,4 @@
-from . import serializers, transaction, User, Company, CompanyMember
+from . import serializers, transaction, User, Company, CompanyMember, EmployeeSerializer
 from rest_framework.authtoken.models import Token
 from roles.constants import ROLE_IDENTIFIERS
 from rest_framework.authtoken.models import Token
@@ -12,8 +12,8 @@ roles = ROLE_IDENTIFIERS.keys()
 class EmployeeParamsSerializer(serializers.Serializer):
     """ Serializer params class """
 
-    email = serializers.EmailField()
-    role = serializers.IntegerField()
+    email = serializers.EmailField(write_only=True)
+    role = serializers.IntegerField(write_only=True)
 
     def validate_email(self, value):
         """ Employee parameter validation """
@@ -36,8 +36,9 @@ class EmployeeParamsSerializer(serializers.Serializer):
 class EmployeesSerializer(serializers.Serializer):
     """ Employees serializer list """
 
-    employees = EmployeeParamsSerializer(many=True)
-    company_id = serializers.IntegerField()
+    employees = EmployeeParamsSerializer(many=True, write_only=True)
+    company_id = serializers.IntegerField(write_only=True)
+
 
     def create(self, data):
         """ Create employees """
@@ -59,10 +60,19 @@ class EmployeesSerializer(serializers.Serializer):
                         user, token, company
                     )
                     employees.append(user)
+                self.context['company_id'] = data['company_id']
                 return employees
         except IntegrityError as error:
             self.errors['employees'] = 'One of these users already belongs to a company'
             return False
+
+    def to_representation(self, instance):
+        context_value = {'company_id': self.context['company_id']}
+        response = super(EmployeesSerializer, self).to_representation(instance)
+        response['employees'] = EmployeeSerializer(
+            instance, many=True, context=context_value
+        ).data
+        return response
 
     def find_or_create_user(self, email):
         try:
