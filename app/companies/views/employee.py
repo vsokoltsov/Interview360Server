@@ -5,7 +5,6 @@ from . import (
 )
 from rest_framework.decorators import parser_classes
 from rest_framework.parsers import JSONParser
-import ipdb
 
 class EmployeesViewSet(viewsets.ViewSet):
     """ View class for employee's actions """
@@ -21,6 +20,14 @@ class EmployeesViewSet(viewsets.ViewSet):
         serializer = EmployeeSerializer(
             company.employees.all(), many=True, context={'company_id': company.id})
         return Response({'employees': serializer.data}, status=status.HTTP_200_OK);
+
+    def retrieve(self, request, company_pk=None, pk=None):
+        """ Return employee's information """
+
+        company = self.get_company(company_pk)
+        employee = get_object_or_404(User, pk=pk)
+        serializer = EmployeeSerializer(employee, context={'company_id': company.id})
+        return Response({'employee': serializer.data}, status=status.HTTP_200_OK);
 
     def create(self, request, company_pk=None):
         """ Create new user and send it a letter """

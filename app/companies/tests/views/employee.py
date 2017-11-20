@@ -18,6 +18,7 @@ class EmployeesViewSetTests(APITestCase):
 
         self.company = Company.objects.first()
         self.user = self.company.get_employees_with_role(COMPANY_OWNER)[0]
+        self.employee = self.company.get_employees_with_role(EMPLOYEE)[0]
         self.token = Token.objects.get(user=self.user)
         company_member = CompanyMember.objects.get(
             user_id=self.user.id, company_id=self.company.id
@@ -39,6 +40,15 @@ class EmployeesViewSetTests(APITestCase):
         url = "/api/v1/companies/{}/employees/".format(self.company.id)
         response = self.client.get(url, format='json')
         self.assertEqual(len(response.data['employees']), 8)
+
+    def test_employee_retrieving(self):
+        """ Test receiving detail information about employee """
+
+        url = "/api/v1/companies/{}/employees/{}/".format(
+            self.company.id, self.employee.id
+        )
+        response = self.client.get(url, format='json')
+        assert 'employee' in response.data, True
 
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_success_employee_creation(self, user_index):
