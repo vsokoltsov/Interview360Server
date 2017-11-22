@@ -1,8 +1,9 @@
-from . import serializers, CompanyMember
+from . import serializers, CompanyMember, transaction
 from profiles.fields import AttachmentField
 from profiles.index import UserIndex
 from .company_member_serializer import CompanyMemberSerializer
 from common.serializers.user_serializer import UserSerializer
+from attachments.models import Attachment
 
 class EmployeeSerializer(UserSerializer):
     """ Company employee serializer class """
@@ -10,7 +11,7 @@ class EmployeeSerializer(UserSerializer):
     email = serializers.EmailField(required=True)
     first_name = serializers.CharField(max_length=255, required=True)
     last_name = serializers.CharField(max_length=255, required=True)
-    attachment = AttachmentField(required=False)
+    attachment = AttachmentField(required=False, allow_null=True)
     member_role = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -29,17 +30,18 @@ class EmployeeSerializer(UserSerializer):
     def update(self, instance, data):
         """ Update employee's instance """
 
-        instance.email = data.get('email', instance.email)
-        instance.first_name = data.get('first_name', instance.first_name)
-        instance.last_name = data.get('last_name', instance.last_name)
-        attachment_json = data.get('attachment')
+        with transaction.atomic():
+            instance.email = data.get('email', instance.email)
+            instance.first_name = data.get('first_name', instance.first_name)
+            instance.last_name = data.get('last_name', instance.last_name)
+            attachment_json = data.get('attachment')
 
-        if attachment_json:
-            attachment_id = attachment_json.get('id')
-            attachment = Attachment.objects.get(id=attachment_id)
-            attachment.object_id=instance.id
-            attachment.save()
+            if attachment_json:
+                attachment_id = attachment_json.get('id')
+                attachment = Attachment.objects.get(id=attachment_id)
+                attachment.object_id=instance.id
+                attachment.save()
 
-        instance.save()
-        UserIndex.store_index(instance)
-        return instance
+            instance.save()
+            UserIndex.store_index(instance)
+            return instance
