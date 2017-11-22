@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import sys
 import yaml
+import logging
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl.connections import connections
 from corsheaders.defaults import default_headers
@@ -99,6 +100,9 @@ LOGGING = {
         },
     }
 }
+
+if 'test' in sys.argv:
+    logging.disable(logging.CRITICAL)
 
 TEMPLATES = [
     {

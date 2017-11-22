@@ -33,6 +33,11 @@ class EmployeesViewSetTests(APITestCase):
             ],
             'company_id': self.company.id
         }
+        self.update_form_data = {
+            'email': 'example@mail.com',
+            'first_name': 'Ololosh',
+            'last_name': 'Ololoevich'
+        }
 
     def test_employees_list(self):
         """ Test receiving list of employeers """
@@ -48,7 +53,7 @@ class EmployeesViewSetTests(APITestCase):
             self.company.id, self.employee.id
         )
         response = self.client.get(url, format='json')
-        assert 'employee' in response.data, True
+        assert response.status_code, 200
 
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_success_employee_creation(self, user_index):
@@ -65,6 +70,16 @@ class EmployeesViewSetTests(APITestCase):
         response = self.client.post(url, {}, format='json')
         self.assertTrue('errors' in response.data)
         self.assertEqual(response.status_code, 400)
+
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_employee_update(self, user_index):
+        """ Test success employee's instance update """
+
+        url = "/api/v1/companies/{}/employees/{}/".format(
+            self.company.id, self.employee.id
+        )
+        response = self.client.put(url, self.update_form_data, format='json')
+        self.assertEqual(response.status_code, 200)
 
     @mock.patch.object(UserIndex, 'get')
     @mock.patch.object(UserIndex, 'delete')

@@ -27,7 +27,7 @@ class EmployeesViewSet(viewsets.ViewSet):
         company = self.get_company(company_pk)
         employee = get_object_or_404(User, pk=pk)
         serializer = EmployeeSerializer(employee, context={'company_id': company.id})
-        return Response({'employee': serializer.data}, status=status.HTTP_200_OK);
+        return Response(serializer.data, status=status.HTTP_200_OK);
 
     def create(self, request, company_pk=None):
         """ Create new user and send it a letter """
@@ -45,6 +45,26 @@ class EmployeesViewSet(viewsets.ViewSet):
                 { 'errors': serializer.errors },
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+    def update(self, request, company_pk=None, pk=None):
+        """ Updates employee's instance """
+
+        company = self.get_company(company_pk)
+        employee = get_object_or_404(User, pk=pk)
+        serializer = EmployeeSerializer(
+            employee, data=request.data, context={'company_id': company.id}
+        )
+        if serializer.is_valid() and serializer.save():
+            return Response(
+                { 'employee': serializer.data },
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                { 'errors': serializer.errors },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
 
     def destroy(self, request, company_pk=None, pk=None):
         """ Destroys the CompanyMember object  """

@@ -1,10 +1,16 @@
 from . import serializers, CompanyMember
+from profiles.fields import AttachmentField
+from profiles.index import UserIndex
 from .company_member_serializer import CompanyMemberSerializer
 from common.serializers.user_serializer import UserSerializer
 
 class EmployeeSerializer(UserSerializer):
     """ Company employee serializer class """
 
+    email = serializers.EmailField(required=True)
+    first_name = serializers.CharField(max_length=255, required=True)
+    last_name = serializers.CharField(max_length=255, required=True)
+    attachment = AttachmentField(required=False)
     member_role = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
@@ -19,3 +25,21 @@ class EmployeeSerializer(UserSerializer):
         company_member = CompanyMember.objects.get(user_id=obj.id,
                                                 company_id=company_id)
         return CompanyMemberSerializer(company_member, read_only=True).data
+
+    def update(self, instance, data):
+        """ Update employee's instance """
+
+        instance.email = data.get('email', instance.email)
+        instance.first_name = data.get('first_name', instance.first_name)
+        instance.last_name = data.get('last_name', instance.last_name)
+        attachment_json = data.get('attachment')
+
+        if attachment_json:
+            attachment_id = attachment_json.get('id')
+            attachment = Attachment.objects.get(id=attachment_id)
+            attachment.object_id=instance.id
+            attachment.save()
+
+        instance.save()
+        UserIndex.store_index(instance)
+        return instance

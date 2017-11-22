@@ -14,7 +14,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     first_name = serializers.CharField(max_length=255, required=True)
     last_name = serializers.CharField(max_length=255, required=True)
-    attachment = AttachmentField()
+    attachment = AttachmentField(required=False)
 
     class Meta:
         model = UserSerializer.Meta.model
