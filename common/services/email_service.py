@@ -1,6 +1,7 @@
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
+import os
 import ipdb
 
 class EmailService:
@@ -31,6 +32,23 @@ class EmailService:
         msg = render_to_string('interview_invitation.html', params)
         topic = 'Interview invintation'
         cls._send_default_mail(topic, msg, users)
+
+    @classmethod
+    def sent_personal_employee_invite(cls, user, token, company):
+        """ Send email notificaiton about invintation into the company """
+
+        link_url = '{}/invites'.format(
+            os.environ['DEFAULT_CLIENT_HOST']
+        )
+        msg = render_to_string('company_invite.html', {
+                          'company': company,
+                          'link_url': link_url,
+                          'token': token }
+                         )
+        topic = "Company invite mail"
+        cls._send_default_mail(topic, msg, [user])
+
+
 
     @classmethod
     def _send_default_mail(cls, topic, message,mails):

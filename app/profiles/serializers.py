@@ -9,12 +9,11 @@ import ipdb
 class ProfileAttachmentSerializer(serializers.Serializer):
     id = serializers.IntegerField()
 
-
 class ProfileSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True)
     first_name = serializers.CharField(max_length=255, required=True)
     last_name = serializers.CharField(max_length=255, required=True)
-    attachment = AttachmentField()
+    attachment = AttachmentField(required=False, allow_null=True)
 
     class Meta:
         model = UserSerializer.Meta.model

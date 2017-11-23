@@ -5,7 +5,7 @@ from rest_framework.authtoken.models import Token
 from companies.models import Company, CompanyMember
 from authorization.models import User
 import datetime
-from roles.constants import COMPANY_OWNER, HR, EMPLOYEE
+from roles.constants import COMPANY_OWNER, HR, EMPLOYEE, CANDIDATE
 from companies.index import CompanyIndex
 
 from .company import CompaniesViewSetTests

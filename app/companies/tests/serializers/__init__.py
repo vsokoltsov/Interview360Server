@@ -4,9 +4,11 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from companies.models import Company, CompanyMember
 from authorization.models import User
-from companies.serializers import CompanySerializer, EmployeeSerializer
+from companies.serializers import (
+    CompanySerializer, EmployeeSerializer, EmployeesSerializer
+)
 import datetime
-from roles.constants import HR, EMPLOYEE
+from roles.constants import HR, EMPLOYEE, CANDIDATE
 
 from .company_serializer import CompanySerializerTests
-from .employee import EmployeeSerializerTest
+from .employees import EmployeesSerializerTest

@@ -38,6 +38,8 @@ class EmployeePermission(permissions.BasePermission):
 
         if view.action == 'list':
             return role.has_permission(RECEIVE_EMPLOYEES)
+        if view.action == 'retrieve':
+            return role.has_permission(RECEIVE_EMPLOYEES)
         elif view.action == 'create':
             return role.has_permission(ADD_EMPLOYEE_TO_COMPANY)
         elif view.action == 'destroy':
