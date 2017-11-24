@@ -3,7 +3,7 @@ from . import (mock, TransactionTestCase, Token, EmployeeForm,
 
 class EmployeeFormTest(TransactionTestCase):
     """ Tests for the EmployeeFormTest class """
-    
+
     fixtures = [
         'user.yaml',
         'auth_token.yaml',
@@ -15,10 +15,10 @@ class EmployeeFormTest(TransactionTestCase):
 
         self.company = Company.objects.first()
         self.hr = self.company.get_employees_with_role(HR)[0]
-        self.user = self.company.get_employees_with_role(CANDIDATE)[-1]
-        self.token = Token.objects.get(user=self.user)
-        self.company_member = CompanyMember.objects.get(
-            user_id=self.user.id, company_id=self.company.id
+        self.user = User.objects.create(email="test@mail.com")
+        self.token = Token.objects.create(user=self.user)
+        self.company_member = CompanyMember.objects.create(
+            user_id=self.user.id, company_id=self.company.id, role=CANDIDATE
         )
         self.form_data = {
             'company_pk': self.company.id,
@@ -106,3 +106,27 @@ class EmployeeFormTest(TransactionTestCase):
 
         form = EmployeeForm(self.form_data)
         self.assertFalse(form.submit())
+
+    def test_user_already_has_password(self):
+        """ Test submit form if user already has a password """
+
+        form_data = {
+            'company_pk': self.company.id,
+            'token': self.token.key
+        }
+        form = EmployeeForm(form_data)
+        self.assertTrue(form.submit())
+        self.company_member.refresh_from_db()
+        self.assertTrue(self.company_member.active)
+
+    def test_company_member_marked_as_active(self):
+        """ Test company member mark as active even if passwords are not present """
+
+        form_data = {
+            'company_pk': self.company.id,
+            'token': self.token.key
+        }
+        form = EmployeeForm(form_data)
+        form.submit()
+        self.company_member.refresh_from_db()
+        self.assertTrue(self.company_member.active)
