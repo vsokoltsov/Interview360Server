@@ -37,7 +37,7 @@ class EmailService:
     def sent_personal_employee_invite(cls, user, token, company):
         """ Send email notificaiton about invintation into the company """
 
-        link_url = '{}/invites'.format(
+        link_url = '{}/auth/invites'.format(
             os.environ['DEFAULT_CLIENT_HOST']
         )
         msg = render_to_string('company_invite.html', {
@@ -48,6 +48,17 @@ class EmailService:
         topic = "Company invite mail"
         cls._send_default_mail(topic, msg, [user])
 
+    @classmethod
+    def send_reset_password_mail(cls, user, token):
+        """ Send reset password email """
+
+        reset_link = '{}/auth/reset-password'.format(os.environ['DEFAULT_CLIENT_HOST'])
+        msg = render_to_string('reset_password.html', {
+                          'reset_link_url': reset_link,
+                          'token': token }
+                         )
+        topic = 'Reset password'
+        cls._send_default_mail(topic, msg, [user])
 
 
     @classmethod
