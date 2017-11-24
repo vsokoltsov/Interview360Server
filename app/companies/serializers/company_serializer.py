@@ -87,7 +87,8 @@ class CompanySerializer(CompaniesSerializer):
                 company = Company.objects.create(**validated_data)
                 company_member = CompanyMember.objects.create(user_id=owner_id,
                                                               company_id=company.id,
-                                                              role=COMPANY_OWNER)
+                                                              role=COMPANY_OWNER,
+                                                              active=True)
                 self._create_attachment(attachment_json, company)
                 UserIndex.store_index(User.objects.get(id=owner_id))
                 CompanyIndex.store_index(company)

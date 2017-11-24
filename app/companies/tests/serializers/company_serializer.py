@@ -87,6 +87,18 @@ class CompanySerializerTests(TransactionTestCase):
         self.assertTrue(company_member_mock.called)
 
     @mock.patch('companies.index.CompanyIndex.store_index')
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_company_member_already_activated(self, user_index_mock,
+                                             company_index_mock):
+        """ Test company member created already active """
+
+        serializer = CompanySerializer(data=self.company_params)
+        serializer.is_valid()
+        serializer.save()
+        company_member = CompanyMember.objects.last()
+        self.assertTrue(company_member.active)
+
+    @mock.patch('companies.index.CompanyIndex.store_index')
     def test_success_company_update(self, company_index):
         """ Test success company updated operation """
 
