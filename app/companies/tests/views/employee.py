@@ -20,7 +20,7 @@ class EmployeesViewSetTests(APITestCase):
         self.user = self.company.get_employees_with_role(COMPANY_OWNER)[0]
         self.employee = self.company.get_employees_with_role(EMPLOYEE)[0]
         self.token = Token.objects.get(user=self.user)
-        company_member = CompanyMember.objects.get(
+        self.company_member = CompanyMember.objects.get(
             user_id=self.user.id, company_id=self.company.id
         )
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
@@ -106,3 +106,13 @@ class EmployeesViewSetTests(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['users'], user_index)
+
+    def test_unactiveate_user_restricted_access(self):
+        """ Test check of user active in the company """
+
+        self.company_member.active = False
+        self.company_member.save()
+
+        url = "/api/v1/companies/{}/employees/".format(self.company.id)
+        response = self.client.post(url, self.form_data, format='json')
+        self.assertEqual(response.status_code, 403)

@@ -15,6 +15,7 @@ class CompanyPermissions(permissions.BasePermission):
 
 
     def has_object_permission(self, request, view, obj):
+
         role = request.user.get_role_for_company(obj)
         if view.action == 'retrieve':
             return role.has_permission(RECEIVE_COMPANY)
@@ -36,13 +37,14 @@ class EmployeePermission(permissions.BasePermission):
 
         if request.method == 'PUT': return True
 
+
         if view.action == 'list':
             return role.has_permission(RECEIVE_EMPLOYEES)
         if view.action == 'retrieve':
             return role.has_permission(RECEIVE_EMPLOYEES)
-        elif view.action == 'create':
+        elif request.user.is_activated_for_company(company) and view.action == 'create':
             return role.has_permission(ADD_EMPLOYEE_TO_COMPANY)
-        elif view.action == 'destroy':
+        elif request.user.is_activated_for_company(company) and view.action == 'destroy':
             return role.has_permission(DELETE_EMPLOYEES)
         elif view.action == 'search':
             return role.has_permission(RECEIVE_EMPLOYEES)
