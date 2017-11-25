@@ -37,10 +37,9 @@ class EmployeePermission(permissions.BasePermission):
 
         if request.method == 'PUT': return True
 
-
-        if view.action == 'list':
+        if request.user.is_activated_for_company(company) and view.action == 'list':
             return role.has_permission(RECEIVE_EMPLOYEES)
-        if view.action == 'retrieve':
+        if request.user.is_activated_for_company(company) and view.action == 'retrieve':
             return role.has_permission(RECEIVE_EMPLOYEES)
         elif request.user.is_activated_for_company(company) and view.action == 'create':
             return role.has_permission(ADD_EMPLOYEE_TO_COMPANY)
