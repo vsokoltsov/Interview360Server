@@ -9,11 +9,12 @@ class VacancyPermission(BasePermission):
     """ Permission class for VacancyViewSet """
 
     def has_permission(self, request, view):
+        user = request.user
         company = Company.objects.get(id=view.kwargs['company_pk'])
-        role = request.user.get_role_for_company(company)
+        role = user.get_role_for_company(company)
         if view.action == 'list':
             return role.has_permission(RECEIVE_VACANCY)
-        elif view.action == 'create':
+        elif view.action == 'create' and user.is_activated_for_company(company):
             return role.has_permission(CREATE_VACANCY)
         elif view.action == 'search':
             return role.has_permission(RECEIVE_VACANCY)
@@ -21,13 +22,14 @@ class VacancyPermission(BasePermission):
             return True
 
     def has_object_permission(self, request, view, obj):
+        user = request.user
         company = obj.company
-        role = request.user.get_role_for_company(company)
+        role = user.get_role_for_company(company)
         if view.action == 'retrieve':
             return role.has_permission(RECEIVE_VACANCY)
-        elif view.action == 'create':
+        elif view.action == 'create' and user.is_activated_for_company(company):
             return role.has_permission(CREATE_VACANCY)
-        elif view.action == 'destroy':
+        elif view.action == 'destroy' and user.is_activated_for_company(company):
             return role.has_permission(DELETE_VACANCY)
         else:
             return False
