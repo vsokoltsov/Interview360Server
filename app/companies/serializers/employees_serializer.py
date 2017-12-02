@@ -56,9 +56,7 @@ class EmployeesSerializer(serializers.Serializer):
                         role=employee['role']
                     )
                     UserIndex.store_index(user)
-                    EmailService.sent_personal_employee_invite(
-                        user, token, company
-                    )
+                    self.__send_email(user, company, token)
                     employees.append(user)
                 self.context['company_id'] = data['company_id']
                 return employees
@@ -80,3 +78,15 @@ class EmployeesSerializer(serializers.Serializer):
         except User.DoesNotExist:
             user = User.objects.create(email=email)
         return user
+
+    def __send_email(self, user, company, token):
+        """ Send email based on user's state """
+
+        if not user.password:
+            EmailService.sent_personal_employee_invite(
+                user, token, company
+            )
+        else:
+            EmailService.send_company_invite_confirmation(
+                user, company
+            )
