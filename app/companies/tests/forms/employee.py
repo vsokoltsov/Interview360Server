@@ -1,5 +1,7 @@
 from . import (mock, TransactionTestCase, Token, EmployeeForm,
-               Company, CompanyMember, User, datetime, HR, CANDIDATE)
+               Company, CompanyMember, User, datetime, HR, CANDIDATE,
+               override_settings)
+import django.core.mail as mail
 
 class EmployeeFormTest(TransactionTestCase):
     """ Tests for the EmployeeFormTest class """
@@ -130,3 +132,11 @@ class EmployeeFormTest(TransactionTestCase):
         form.submit()
         self.company_member.refresh_from_db()
         self.assertTrue(self.company_member.active)
+
+    @override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
+    def test_sending_final_confirmation_mail(self):
+        """ Test sending confirmation email """
+
+        form = EmployeeForm(self.form_data)
+        form.submit()
+        self.assertEqual(len(mail.outbox), 1)

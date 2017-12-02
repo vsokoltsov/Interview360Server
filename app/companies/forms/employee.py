@@ -1,4 +1,4 @@
-from . import forms, Company, User, CompanyMember
+from . import forms, Company, User, CompanyMember, EmailService
 from django.core.exceptions import ObjectDoesNotExist
 import ipdb
 
@@ -36,8 +36,10 @@ class EmployeeForm(forms.Form):
                 user_id=user.id, company_id=self['company_pk'].value()
             )
             if not company_member.active:
+                company = Company.objects.get(id=self['company_pk'].value())
                 company_member.active = True
                 company_member.save()
+                EmailService.send_company_invite_confirmation(user, company)
                 return True
             else:
                 raise forms.ValidationError('User member is already activated')

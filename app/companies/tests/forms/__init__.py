@@ -1,5 +1,6 @@
 from django.test import TestCase, TransactionTestCase
 from rest_framework.authtoken.models import Token
+from django.test import override_settings
 import mock
 import datetime
 

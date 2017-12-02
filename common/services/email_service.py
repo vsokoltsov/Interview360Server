@@ -60,6 +60,21 @@ class EmailService:
         topic = 'Reset password'
         cls._send_default_mail(topic, msg, [user])
 
+    @classmethod
+    def send_company_invite_confirmation(cls, user, company):
+        """ Send email with approvement of invite confirmation """
+
+        company_link = '{}/companies/{}/'.format(
+            os.environ['DEFAULT_CLIENT_HOST'], company.id
+        )
+        msg = render_to_string('company_invite_final.html', {
+                          'link_url': company_link,
+                          'user': user,
+                          'company': company
+                         })
+        topic = 'Invite confirmation'
+        cls._send_default_mail(topic, msg, [user])
+
 
     @classmethod
     def _send_default_mail(cls, topic, message,mails):
