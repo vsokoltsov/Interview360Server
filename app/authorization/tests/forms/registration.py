@@ -36,7 +36,8 @@ class RegistrationFormTests(TransactionTestCase):
         form = RegistrationForm(self.form_data)
         self.assertFalse(form.is_valid())
 
-    def test_success_submit(self):
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_submit(self, user_index_mock):
         """ Test success call of submit """
 
         form = RegistrationForm(self.form_data)
@@ -49,7 +50,8 @@ class RegistrationFormTests(TransactionTestCase):
         form = RegistrationForm(form_data)
         self.assertFalse(form.submit())
 
-    def test_success_user_creation(self):
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_user_creation(self, user_index_mock):
         """ Test success case of user creation """
 
         form = RegistrationForm(self.form_data)

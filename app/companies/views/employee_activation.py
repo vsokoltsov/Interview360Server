@@ -5,9 +5,6 @@ from rest_framework.views import APIView
 class EmployeeActivationView(APIView):
     """ View class responsible for activation of the new user """
 
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated, EmployeePermission, )
-
     def put(self, request, company_pk=None):
         form = EmployeeForm(request.data)
 

@@ -21,16 +21,21 @@ class InterviewPermission(BasePermission):
             return True
 
     def has_object_permission(self, request, view, obj=None):
+        user = request.user
         company = obj.vacancy.company
         role = request.user.get_role_for_company(company)
-        if view.action == 'destroy' or request.method == 'DELETE':
+        if ((view.action == 'destroy' or request.method == 'DELETE')
+            and user.is_activated_for_company(company)):
             return role.has_permission(DELETE_INTERVIEW)
-        elif view.action == 'update':
+        elif view.action == 'update' and user.is_activated_for_company(company):
             return role.has_permission(UPDATE_INTERVIEW)
         elif view.action == 'retrieve':
             if type(role) == Candidate:
                 return obj.candidate.id == request.user.id
             else:
-                return role.has_permission(RECEIVE_INTERVIEW)
+                return (
+                    role.has_permission(RECEIVE_INTERVIEW) and
+                    user.is_activated_for_company(company)
+                )
         else:
             return False

@@ -38,6 +38,17 @@ class User(AbstractBaseUser):
         ).role
         return int(role) == int(role_id)
 
+    def is_activated_for_company(self, company):
+        """ Returns whether or not user is active in company """
+
+        company_member_class = apps.get_model('companies', 'CompanyMember')
+        try:
+            return company_member_class.objects.get(
+                user_id=self.id, company_id=company.id
+            ).active
+        except company_member_class.DoesNotExist:
+            return False
+
     def get_roles_for_companies(self):
         """
         Return dictionary of company id's with role id's

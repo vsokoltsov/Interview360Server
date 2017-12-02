@@ -50,15 +50,9 @@ class EmployeesSerializer(serializers.Serializer):
                     user = self.find_or_create_user(employee['email'])
                     token, _ = Token.objects.get_or_create(user=user)
                     company = Company.objects.get(id=data['company_id'])
-
-                    CompanyMember.objects.create(
-                        user_id=user.id, company_id=company.id,
-                        role=employee['role']
-                    )
+                    self.__create_company_member(user, company, employee)
                     UserIndex.store_index(user)
-                    EmailService.sent_personal_employee_invite(
-                        user, token, company
-                    )
+                    self.__send_email(user, company, token)
                     employees.append(user)
                 self.context['company_id'] = data['company_id']
                 return employees
@@ -80,3 +74,28 @@ class EmployeesSerializer(serializers.Serializer):
         except User.DoesNotExist:
             user = User.objects.create(email=email)
         return user
+
+    def __send_email(self, user, company, token):
+        """ Send email based on user's state """
+
+        if not user.password:
+            EmailService.sent_personal_employee_invite(
+                user, token, company
+            )
+        else:
+            EmailService.send_company_invite_confirmation(
+                user, company
+            )
+
+    def __create_company_member(self, user, company, employee):
+        """ Create new company member based on some conditionas """
+
+        params = {
+            'user_id': user.id,
+            'company_id': company.id,
+            'role': employee['role']
+        }
+        if user.password:
+            params['active'] = True
+
+        CompanyMember.objects.create(**params)
