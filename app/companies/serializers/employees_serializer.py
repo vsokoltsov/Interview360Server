@@ -50,11 +50,7 @@ class EmployeesSerializer(serializers.Serializer):
                     user = self.find_or_create_user(employee['email'])
                     token, _ = Token.objects.get_or_create(user=user)
                     company = Company.objects.get(id=data['company_id'])
-
-                    CompanyMember.objects.create(
-                        user_id=user.id, company_id=company.id,
-                        role=employee['role']
-                    )
+                    self.__create_company_member(user, company, employee)
                     UserIndex.store_index(user)
                     self.__send_email(user, company, token)
                     employees.append(user)
@@ -90,3 +86,16 @@ class EmployeesSerializer(serializers.Serializer):
             EmailService.send_company_invite_confirmation(
                 user, company
             )
+
+    def __create_company_member(self, user, company, employee):
+        """ Create new company member based on some conditionas """
+
+        params = {
+            'user_id': user.id,
+            'company_id': company.id,
+            'role': employee['role']
+        }
+        if user.password:
+            params['active'] = True
+
+        CompanyMember.objects.create(**params)

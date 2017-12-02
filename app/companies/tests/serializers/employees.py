@@ -163,3 +163,30 @@ class EmployeesSerializerTest(TransactionTestCase):
         serializer.save()
 
         self.assertTrue('employees' in serializer.data)
+
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_creating_already_active_company_member(self, user_index):
+        """ Test creating already active company member if user
+        already set a password """
+
+        user = User.objects.create(email='test_new@gmail.com')
+        user.set_password('password')
+        user.save()
+        new_company = Company.objects.first()
+        CompanyMember.objects.create(
+            user_id=user.id, company_id=new_company.id, role=EMPLOYEE,
+            active=True
+        )
+        form_data = {
+            'employees': [
+                { 'email': user.email, 'role': CANDIDATE }
+            ],
+            'company_id': self.company.id
+        }
+
+        serializer = EmployeesSerializer(data=form_data,
+                                        context={'user': self.user})
+        serializer.is_valid()
+        serializer.save()
+        cm = CompanyMember.objects.last()
+        assert cm.active, True
