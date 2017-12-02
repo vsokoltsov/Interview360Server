@@ -37,8 +37,8 @@ class EmailService:
     def sent_personal_employee_invite(cls, user, token, company):
         """ Send email notificaiton about invintation into the company """
 
-        link_url = '{}/companies/{}/invites'.format(
-            os.environ['DEFAULT_CLIENT_HOST'], company.id
+        link_url = '{}/auth/invite'.format(
+            os.environ['DEFAULT_CLIENT_HOST']
         )
         msg = render_to_string('company_invite.html', {
                           'company': company,
