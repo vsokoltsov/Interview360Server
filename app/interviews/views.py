@@ -10,6 +10,7 @@ from common.serializers.base_interview_serializer import BaseInterviewSerializer
 from companies.models import Company
 from vacancies.models import Vacancy
 from authorization.models import User
+from django.db.models import Q
 from .models import Interview, InterviewEmployee
 from .permissions import InterviewPermission
 import ipdb
@@ -34,9 +35,14 @@ class InterviewViewSet(viewsets.ModelViewSet):
         Return scope of interviews where current user is participated
         """
 
+        current_user = self.request.user
         params = self.kwargs
         company = get_object_or_404(Company, pk=params['company_pk'])
-        queryset = Interview.objects.filter(vacancy__company__id=company.id)
+        queryset = Interview.objects.filter(
+            Q(candidate=current_user) |
+            Q(interviewees__in=[current_user.id]),
+            vacancy__company__id=company.id
+        )
 
         if self.action == 'list':
             queryset = queryset.prefetch_related(
