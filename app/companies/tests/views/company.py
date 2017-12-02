@@ -17,6 +17,7 @@ class CompaniesViewSetTests(APITestCase):
 
         self.company = Company.objects.first()
         self.user = self.company.get_employees_with_role(COMPANY_OWNER)[0]
+
         self.token = Token.objects.get(user=self.user)
         company_member = CompanyMember.objects.get(
             user_id=self.user.id, company_id=self.company.id
@@ -89,3 +90,16 @@ class CompaniesViewSetTests(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['companies'], user_index)
+
+    def test_absence_user_in_particular_company(self):
+        """ Test unauthorized access if user does not belong to the company """
+
+        user = User.objects.last()
+        company_params = {
+            'name': 'AAA',
+            'city': 'BBB',
+            'start_date': datetime.date.today()
+        }
+        company = Company.objects.create(**company_params)
+        response = self.client.get('/api/v1/companies/{}/'.format(company.id))
+        assert response.status_code, 404
