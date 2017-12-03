@@ -37,7 +37,7 @@ ALLOWED_HOSTS = ["*"]
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS = default_headers
 ES_CLIENT = Elasticsearch()
-connections.create_connection(hosts=['localhost'])
+connections.create_connection(hosts=['elasticsearch'])
 
 if os.path.isfile('app/secrets.yaml'):
     with open('app/secrets.yaml') as stream:

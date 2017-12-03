@@ -34,8 +34,13 @@ Then, connect to VM via `vagrant ssh` and then execute
 
 ### Docker
 
-* Django server with `ipdb` debug - `docker-compose run --service-ports web python app/manage.py runserver 0.0.0.0:80`
+* Django server with `ipdb` debug - `docker-compose run --service-ports --rm web python app/manage.py runserver 0.0.0.0:80`
 * Watching logs of other services - `docker-compose logs -f`
+
+*Notice*: The `vm.max_map_count` kernel of `elasticsearch` setting needs to be set to at least
+262144 for production use. Depending on your platform:
+* docker-machine ssh
+* sudo sysctl -w vm.max_map_count=262144
 
 ## Run tests
 
