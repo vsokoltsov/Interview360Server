@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /interview_manager
     docker:
-      - image: circleci/python:3.5.2
+      - image: circleci/python:3.5-jessie-node
     steps:
       - checkout
       - run:
