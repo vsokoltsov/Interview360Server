@@ -188,7 +188,14 @@ AUTH_USER_MODEL = 'authorization.User'
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = ['--with-spec', '--spec-color']
 FIXTURE_DIRS = (os.path.join(BASE_DIR, 'app', 'fixtures'),)
-CELERY_BROKER_URL = 'amqp://localhost'
+docker_env = os.environ.get('DOCKER_ENV')
+if docker_env:
+    username = os.environ.get('RABBITMQ_DEFAULT_USER')
+    password = os.environ.get('RABBITMQ_DEFAULT_PASS')
+    broker = 'amqp://{}:{}@rabbit'.format(username, password)
+else:
+    broker = 'amqp://localhost'
+CELERY_BROKER_URL = broker
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 MEDIA_URL = '/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')

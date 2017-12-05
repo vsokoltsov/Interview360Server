@@ -15,6 +15,8 @@ services:
       - "8000:8000"
     env_file:
       - ./.env
+    links:
+      - celery_worker
     depends_on:
       - db
       - elasticsearch
@@ -51,6 +53,32 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+
+  celery_worker:
+    container_name: 'celery_worker'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: "celery -A app.app worker -l INFO"
+    volumes:
+      - .:/interview360
+    env_file:
+      - ./.env
+    environment:
+      - DJANGO_SETTINGS_MODULE=app.app.settings
+    links:
+      - rabbit
+    depends_on:
+      - rabbit
+  #
+  # celery_beat:
+  #   container_name: 'celery_beat'
+  #   build: .
+  #   command: 'python -m celery -A app/app beat --pidfile= -l debug'
+  #   env_file:
+  #     - ./.env
+  #   depends_on:
+  #     - app
 
 volumes:
   database:
