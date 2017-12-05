@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/vforvad/Interview360Server.svg?style=svg)](https://circleci.com/gh/vforvad/Interview360Server)
+
 ## Interview Manager App
 
 Service for managing employees interview workflow
