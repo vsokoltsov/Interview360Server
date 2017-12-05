@@ -17,6 +17,7 @@ services:
       - ./.env
     links:
       - celery_worker
+      - celery_beat
     depends_on:
       - db
       - elasticsearch
@@ -70,15 +71,23 @@ services:
       - rabbit
     depends_on:
       - rabbit
-  #
-  # celery_beat:
-  #   container_name: 'celery_beat'
-  #   build: .
-  #   command: 'python -m celery -A app/app beat --pidfile= -l debug'
-  #   env_file:
-  #     - ./.env
-  #   depends_on:
-  #     - app
+
+  celery_beat:
+    container_name: 'celery_beat'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: 'celery -A app.app beat -l debug'
+    volumes:
+      - .:/interview360
+    env_file:
+      - ./.env
+    environment:
+      - DJANGO_SETTINGS_MODULE=app.app.settings
+    links:
+      - rabbit
+    depends_on:
+      - rabbit
 
 volumes:
   database:

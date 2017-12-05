@@ -1,39 +1,18 @@
-machine:
-  python:
-    version: 3.5.2
-
-  environment:
-    DEFAULT_CLIENT_HOST: 'http://localhost:4200'
-
-dependencies:
-  pre:
-    - pip install -r requirements.txt
-  post:
-    - wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.3.tar.gz
-    - sha1sum elasticsearch-5.6.3.tar.gz
-    - tar -xvf elasticsearch-5.6.3.tar.gz
-    - elasticsearch-5.6.3/bin/elasticsearch: {background: true}
-
-
-database:
-  override:
-    - createdb interview_manager
-    - echo "CREATE USER vagrant WITH PASSWORD 'vagrant' SUPERUSER;" | psql -U postgres
-
-test:
-  override:
-    - cd ./app && python manage.py test
-
-add_ssh_keys:
-    fingerprints:
-      - "cb:95:2d:0e:0a:7e:18:ae:a0:ff:50:0c:ea:83:03:23"
-
-deployment:
-  production:
-    branch: master
-    commands:
-      - deactivate
-      - pyenv global 2.7.12
-      - pip install -r requirements.txt
-      - pip install fabric3 fabtools
-      - fab deploy
+version: 2
+jobs:
+  build:
+    working_directory: /app
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache py-pip=9.0.0-r1
+            pip install docker-compose==1.15.0
+      - run:
+          name: Run tests
+          command: |
+            docker-compose run app bash -c "cd app && python manage.py test"
