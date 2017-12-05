@@ -13,8 +13,7 @@ services:
       - .:/interview360
     ports:
       - "8000:8000"
-    env_file:
-      - ./.env
+    env_file: ./.env
     links:
       - celery_worker
       - celery_beat
@@ -49,8 +48,7 @@ services:
   rabbit:
     container_name: rabbitmq
     image: rabbitmq:3-management
-    env_file:
-      - ./.env
+    env_file: ./.env
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -63,8 +61,7 @@ services:
     command: "celery -A app.app worker -l INFO"
     volumes:
       - .:/interview360
-    env_file:
-      - ./.env
+    env_file: ./.env
     environment:
       - DJANGO_SETTINGS_MODULE=app.app.settings
     links:
