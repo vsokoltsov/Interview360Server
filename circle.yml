@@ -3,17 +3,16 @@ jobs:
   build:
     working_directory: /interview_manager
     docker:
-      - image: docker:17.05.0-ce-git
+      - image: circleci/python:3.5.2
     steps:
       - checkout
-      - setup_remote_docker
       - run:
           name: Install dependencies
           command: |
             touch .env
             apk add --no-cache py-pip=9.0.0-r1
-            pip install docker-compose==1.15.0
+            pip install -r requirements.txt
       - run:
           name: Run tests
           command: |
-            docker-compose run app bash -c "cd app && python manage.py test"
+            cd app && python manage.py test
