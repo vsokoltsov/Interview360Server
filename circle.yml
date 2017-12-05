@@ -3,9 +3,10 @@ jobs:
   build:
     working_directory: /interview_manager
     docker:
-      - image: circleci/python:3.5-jessie-node
+      - image: docker:17.05.0-ce-git
     steps:
       - checkout
+      - setup_remote_docker
       - run:
           name: Install dependencies
           command: |
