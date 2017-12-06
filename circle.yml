@@ -8,7 +8,7 @@ jobs:
           name: Install dependencies
           command: |
             touch .env
-            apk add --no-cache py-pip=9.0.0-r1
+            sudo apt install python-minimal -y
             pip install docker-compose==1.15.0
       - run:
           name: Run tests
