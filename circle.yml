@@ -11,8 +11,9 @@ jobs:
           command: |
             touch .env
             apk add --no-cache py-pip=9.0.0-r1
-            pip install -r requirements.txt
+            pip install docker-compose==1.15.0
       - run:
           name: Run tests
           command: |
-            cd app && python manage.py test"
+            docker-compose up -d
+            docker-compose run app (cd app && python manage.py test)
