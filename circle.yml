@@ -8,6 +8,10 @@ jobs:
           name: Install dependencies
           command: |
             touch .env
+            echo "S3_KEY=$S3_KEY" >> .env
+            echo "S3_BUCKET=$S3_BUCKET" >> .env
+            echo "S3_SECRET=$S3_SECRET" >> .env
+            echo "DEFAULT_CLIENT_HOST=http://localhost:4200" >> .env
             sudo apt install python-minimal -y
             pip install docker-compose==1.15.0
       - run:
