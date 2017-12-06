@@ -1,9 +1,8 @@
 version: 2
 jobs:
   build:
-    working_directory: /interview_manager
-    docker:
-      - image: docker:17.05.0-ce-git
+    machine:
+      - image: circleci/classic:latest
     steps:
       - checkout
       - setup_remote_docker
