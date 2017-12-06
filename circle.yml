@@ -1,7 +1,6 @@
 version: 2
 jobs:
   build:
-    working_directory: /interview_manager
     machine: true
     steps:
       - checkout
