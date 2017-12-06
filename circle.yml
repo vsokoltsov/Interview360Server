@@ -2,8 +2,7 @@ version: 2
 jobs:
   build:
     working_directory: /interview_manager
-    docker:
-      machine: true
+    machine: true
     steps:
       - checkout
       - setup_remote_docker
