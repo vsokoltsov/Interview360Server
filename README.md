@@ -51,6 +51,6 @@ Then, connect to VM via `vagrant ssh` and then execute
 
 ### Docker
 
-* `docker-compose run app bash -c "cd app && python manage.py test"`
+* `docker-compose run --rm app bash -c "cd app && python manage.py test"`
 
 * Create file `secrets.yaml` in `/app/app` folder, where all your environment variables would be allocated
