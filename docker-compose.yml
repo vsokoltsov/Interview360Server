@@ -14,7 +14,7 @@ services:
   app:
     container_name: interview360
     build: .
-    command: bash -c "python3 app/manage.py migrate && python3 app/manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python3 app/manage.py migrate && cd app && gunicorn app.wsgi:application -b 0.0.0.0:8000"
     volumes:
       - .:/interview360
     expose:
