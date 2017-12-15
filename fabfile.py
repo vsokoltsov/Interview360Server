@@ -2,7 +2,7 @@ from fabric.api import cd, run, sudo, env, put, prefix
 from fabric.contrib.files import exists
 
 env.user = 'root'
-env.hosts = ['root@95.213.194.196']
+env.hosts = ['root@95.213.252.125']
 env.home_dir = '/root'
 
 PROJECT_NAME = 'interview_manager'
@@ -102,6 +102,17 @@ def provision():
     set_up_project_dependencies()
     configure_gunicorn_service()
     configure_nginx_service()
+
+
+def docker_provision():
+    """ Run provision on remote server for docker """
+
+    with cd(env.home_dir):
+        put('docker-compose.prod.yml', '{}/docker-compose.yml'.format(env.home_dir))
+        run('mkdir -p {}/deploy/nginx'.format(env.home_dir))
+        put('./deploy/nginx/dev.conf', '{}/deploy/nginx/developmet.conf'.format(env.home_dir))
+        put('.env', '{}/.env'.format(env.home_dir))
+
 
 def deploy(branch='master'):
     with cd(PROJECT_PATH):
