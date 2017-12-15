@@ -18,3 +18,10 @@ jobs:
           command: |
             docker-compose up -d
             docker-compose run app bash -c "cd app && python manage.py test"
+
+      - deploy:
+          name: 'Deploy the new image'
+          command: |
+            pip install fabric3 fabtools
+            docker login -e $DOCKER_HUB_EMAIL -u $DOCKER_HUB_USER_ID -p $DOCKER_HUB_PWD
+            fab docker_deploy
