@@ -104,14 +104,36 @@ def provision():
     configure_nginx_service()
 
 
+def docker_install():
+    """ Install docker """
+
+    run('wget -qO- https://get.docker.com/ | sh')
+    sudo('usermod -aG docker $(whoami)')
+    sudo('systemctl enable docker.service')
+    sudo('systemctl start docker.service')
+
+def docker_compose_install():
+    """ Install docker-compose """
+
+    sudo('yum install epel-release')
+    sudo('yum install -y python-pip')
+    sudo('pip install docker-compose')
+
+def docker_files_copy():
+    """ Copy necessary files on remote server """
+
+    put('docker-compose.prod.yml', '{}/docker-compose.yml'.format(env.home_dir))
+    run('mkdir -p {}/deploy/nginx'.format(env.home_dir))
+    put('./deploy/nginx/dev.conf', '{}/deploy/nginx/developmet.conf'.format(env.home_dir))
+    put('.env', '{}/.env'.format(env.home_dir))
+
 def docker_provision():
     """ Run provision on remote server for docker """
 
     with cd(env.home_dir):
-        put('docker-compose.prod.yml', '{}/docker-compose.yml'.format(env.home_dir))
-        run('mkdir -p {}/deploy/nginx'.format(env.home_dir))
-        put('./deploy/nginx/dev.conf', '{}/deploy/nginx/developmet.conf'.format(env.home_dir))
-        put('.env', '{}/.env'.format(env.home_dir))
+        docker_install()
+        docker_compose_install()
+        docker_files_copy()
 
 
 def deploy(branch='master'):
