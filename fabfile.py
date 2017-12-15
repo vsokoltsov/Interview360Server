@@ -2,7 +2,7 @@ from fabric.api import cd, run, sudo, env, put, prefix
 from fabric.contrib.files import exists
 
 env.user = 'root'
-env.hosts = ['root@95.213.194.196']
+env.hosts = ['root@95.213.252.125']
 env.home_dir = '/root'
 
 PROJECT_NAME = 'interview_manager'
@@ -102,6 +102,48 @@ def provision():
     set_up_project_dependencies()
     configure_gunicorn_service()
     configure_nginx_service()
+
+
+def docker_install():
+    """ Install docker """
+
+    run('wget -qO- https://get.docker.com/ | sh')
+    sudo('usermod -aG docker $(whoami)')
+    sudo('systemctl enable docker.service')
+    sudo('systemctl start docker.service')
+
+def docker_compose_install():
+    """ Install docker-compose """
+
+    sudo('yum install epel-release')
+    sudo('yum install -y python-pip')
+    sudo('pip install docker-compose')
+
+def docker_files_copy():
+    """ Copy necessary files on remote server """
+
+    put('docker-compose.prod.yml', '{}/docker-compose.yml'.format(env.home_dir))
+    run('mkdir -p {}/deploy/nginx'.format(env.home_dir))
+    put('./deploy/nginx/dev.conf', '{}/deploy/nginx/developmet.conf'.format(env.home_dir))
+    put('.env', '{}/.env'.format(env.home_dir))
+
+def docker_provision():
+    """ Run provision on remote server for docker """
+
+    with cd(env.home_dir):
+        docker_install()
+        docker_compose_install()
+        docker_files_copy()
+
+def docker_deploy(version='latest', container='app'):
+    """ Deploy docker application """
+
+    run('docker-compose build')
+    run('docker-compose push')
+
+    with cd(env.home_dir):
+        run('docker-compose stop {}'.format(container))
+        run('docker-compose up -d {}'.format(container))
 
 def deploy(branch='master'):
     with cd(PROJECT_PATH):

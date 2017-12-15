@@ -37,7 +37,7 @@ ALLOWED_HOSTS = ["*"]
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS = default_headers
 ES_CLIENT = Elasticsearch()
-connections.create_connection(hosts=['localhost'])
+connections.create_connection(hosts=['elasticsearch'])
 
 if os.path.isfile('app/secrets.yaml'):
     with open('app/secrets.yaml') as stream:
@@ -132,9 +132,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'interview_manager',
-        'HOST':'localhost',
-        'USER': 'vagrant',
-        'PASSWORD': 'vagrant'
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'db',
+        'PORT': 5432,
     }
 }
 
@@ -187,7 +188,14 @@ AUTH_USER_MODEL = 'authorization.User'
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = ['--with-spec', '--spec-color']
 FIXTURE_DIRS = (os.path.join(BASE_DIR, 'app', 'fixtures'),)
-CELERY_BROKER_URL = 'amqp://localhost'
+docker_env = os.environ.get('DOCKER_ENV')
+if docker_env:
+    username = os.environ.get('RABBITMQ_DEFAULT_USER')
+    password = os.environ.get('RABBITMQ_DEFAULT_PASS')
+    broker = 'amqp://{}:{}@rabbit'.format(username, password)
+else:
+    broker = 'amqp://localhost'
+CELERY_BROKER_URL = broker
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 MEDIA_URL = '/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
