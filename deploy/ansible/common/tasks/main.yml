@@ -25,3 +25,12 @@
     name: '*'
     state: latest
   become: true
+
+- name: Disable selinux
+  shell: setenforce 0
+  become: true
+
+- name: 'Add 80 port to firewall'
+  shell: |
+    firewall-cmd --zone=public --add-port=80/tcp --permanent
+    systemctl restart firewalld
