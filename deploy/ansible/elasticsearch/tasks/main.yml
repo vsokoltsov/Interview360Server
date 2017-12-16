@@ -1,0 +1,3 @@
+---
+# tasks file for elasticsearch
+- import_tasks: java.yml
