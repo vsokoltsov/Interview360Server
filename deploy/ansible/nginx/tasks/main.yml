@@ -32,3 +32,5 @@
     systemctl start nginx
     systemctl enable nginx
   become: true
+
+- import_tasks: gunicorn.yml

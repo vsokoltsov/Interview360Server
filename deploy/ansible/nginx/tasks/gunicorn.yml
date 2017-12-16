@@ -1,0 +1,11 @@
+- name: 'Copy gunicorn service config'
+  copy:
+    src: "{{ gunicorn_service_name }}"
+    dest: "{{ gunicorn_path }}/{{ gunicorn_service_name }}"
+    force: yes
+
+- name: 'Start and enable gunicorn service'
+  shell: |
+    systemctl start gunicorn
+    systemctl enable gunicorn
+  become: true
