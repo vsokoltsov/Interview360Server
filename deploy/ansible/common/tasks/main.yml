@@ -3,10 +3,6 @@
   raw: test -e /usr/bin/python || (yum -y update && yum install -y python-minimal)
   become: true
 
-# - name: 'update yum'
-#   yum: update_cache=yes
-#   become: true
-
 - name: 'install dependencies'
   yum: name="{{ item }}" state=present update_cache=yes
   with_items:
@@ -22,6 +18,7 @@
     - 'bzip2-devel'
     - 'nginx'
     - 'wget'
+    - 'curl'
 
 - name: Update all packages to the latest version
   yum:
