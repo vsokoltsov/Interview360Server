@@ -1,0 +1,13 @@
+---
+# defaults file for pyenv
+pyenv_owner: 'root'
+pyenv_path: "/{{ pyenv_owner }}/.pyenv"
+pyenv_update_git_install: no
+pyenv_enable_autocompletion: no
+pyenv_setting_path: ~/.bashrc
+base_python_version: 3.5.2
+base_virtualenv_name: interview360
+pyenv_python_versions:
+  - "{{ base_python_version }}"
+pyenv_virtualenvs:
+  - { venv_name: "{{ base_virtualenv_name }}", py_version: "{{ base_python_version }}" }

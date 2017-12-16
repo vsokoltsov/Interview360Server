@@ -1,0 +1,35 @@
+---
+- name: Install PyEnv
+  git:
+    repo: https://github.com/pyenv/pyenv.git
+    dest: "{{ pyenv_path }}"
+    update: "{{ pyenv_update_git_install }}"
+
+- name: Install PyEnv-virtualenvwrapper plugin
+  git:
+    repo: https://github.com/yyuu/pyenv-virtualenvwrapper.git
+    dest: "{{ pyenv_path }}/plugins/pyenv-virtualenvwrapper"
+    update: "{{ pyenv_update_git_install }}"
+
+
+- name: Update .bashrc
+  blockinfile:
+    dest: "/root/.bashrc"
+    block: |
+      export WORKON_HOME=$HOME/.virtualenvs
+      eval "$(pyenv init -)"
+      source /root/.pyenv/versions/{{ base_python_version }}/envs/{{ base_virtualenv_name }}/bin/virtualenvwrapper.sh
+      pyenv virtualenvwrapper
+      workon {{ base_virtualenv_name }}
+
+- name: Install Python interpreters "{{ pyenv_python_versions }}"
+  shell: pyenv install {{ item }}
+    creates="{{ pyenv_path }}/versions/{{ item }}/bin/python"
+  with_items: "{{ pyenv_python_versions }}"
+
+- name: Create virtual environments
+  shell: |
+    source /root/.pyenv/versions/{{ item.py_version }}/envs/{{ item.venv_name }}/bin/virtualenvwrapper.sh
+    pyenv virtualenvwrapper
+    mkvirtualenv {{ item.venv_name }}
+  with_items: "{{ pyenv_virtualenvs }}"
