@@ -1,0 +1,34 @@
+---
+- name: 'Copy base {{ base_conf_name }} config'
+  copy:
+    src: "{{ base_conf_name }}"
+    dest: "{{ nginx_config_path }}/{{ base_conf_name }}"
+    force: yes
+
+- name: 'Aadd user to the nginx group'
+  user:
+    name: root
+    groups: nginx
+    append: yes
+
+- name: Check for sites-enabled directory
+  stat: path={{ nginx_config_path }}/sites-enabled
+  register: sites_enabled_stat
+
+- name: 'Create sites-enabled directory'
+  file:
+    path: "{{ nginx_config_path }}/sites-enabled"
+    state: directory
+
+- name: 'Copy application nginx {{ app_conf_name }} config'
+  copy:
+    src: "{{ app_conf_name }}"
+    dest: "{{ nginx_config_path }}/sites-enabled/{{ app_conf_name }}"
+    force: yes
+  when: sites_enabled_stat.stat.isdir is not defined or not sites_enabled_stat.stat.isdir
+
+- name: 'Start nginx server'
+  shell: |
+    systemctl start nginx
+    systemctl enable nginx
+  become: true

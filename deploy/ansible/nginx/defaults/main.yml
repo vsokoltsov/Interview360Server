@@ -1,0 +1,5 @@
+---
+# defaults file for nginx
+base_conf_name: nginx.conf
+app_conf_name: interview360.conf
+nginx_config_path: /etc/nginx
