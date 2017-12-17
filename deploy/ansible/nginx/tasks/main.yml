@@ -27,10 +27,13 @@
     force: yes
   when: sites_enabled_stat.stat.isdir is not defined or not sites_enabled_stat.stat.isdir
 
+- name: Add permission to folder:
+  file:
+    path: /root
+    mode: 0710
+
 - name: 'Start nginx server'
   shell: |
     systemctl start nginx
     systemctl enable nginx
   become: true
-
-- import_tasks: gunicorn.yml
