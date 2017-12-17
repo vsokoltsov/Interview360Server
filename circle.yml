@@ -8,7 +8,6 @@ jobs:
           name: Install dependencies
           command: |
             touch .env
-            echo "DOCKER_ENV='true'" >> .env
             echo "S3_KEY=$S3_KEY" >> .env
             echo "S3_BUCKET=$S3_BUCKET" >> .env
             echo "S3_SECRET=$S3_SECRET" >> .env
@@ -23,6 +22,7 @@ jobs:
       - deploy:
           name: 'Deploy the new image'
           command: |
+            export DOCKER_ENV='true'
             pip install fabric3 fabtools
             docker login -u=$DOCKER_HUB_USER_ID -p=$DOCKER_HUB_PWD
             fab docker_deploy
