@@ -1,2 +1,4 @@
 ---
 interview360_repo: https://github.com/vforvad/InterviewManager.git
+gunicorn_service_name: gunicorn.service
+gunicorn_path: /etc/systemd/system
