@@ -38,6 +38,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS = default_headers
 ES_CLIENT = Elasticsearch()
 connections.create_connection(hosts=['elasticsearch'])
+docker_env = os.environ.get('DOCKER_ENV')
 
 if os.path.isfile('app/secrets.yaml'):
     with open('app/secrets.yaml') as stream:
@@ -128,14 +129,32 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+docker_db = {
+    'HOST': 'db',
+    'USER': 'postgres',
+    'PASSWORD': 'postgres',
+    'PORT': 5432
+}
+vagrant_db = {
+    'HOST': 'localhost',
+    'USER': 'vagrant',
+    'PASSWORD': 'vagrant',
+    'PORT': 5432
+}
+
+if docker_env:
+    db_config = docker_db
+else:
+    db_config = vagrant_db
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'interview_manager',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': 5432,
+        'USER': db_config['USER'],
+        'PASSWORD': db_config['PASSWORD'],
+        'HOST': db_config['HOST'],
+        'PORT': db_config['PORT'],
     }
 }
 
@@ -188,7 +207,6 @@ AUTH_USER_MODEL = 'authorization.User'
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = ['--with-spec', '--spec-color']
 FIXTURE_DIRS = (os.path.join(BASE_DIR, 'app', 'fixtures'),)
-docker_env = os.environ.get('DOCKER_ENV')
 if docker_env:
     username = os.environ.get('RABBITMQ_DEFAULT_USER')
     password = os.environ.get('RABBITMQ_DEFAULT_PASS')
