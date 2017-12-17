@@ -2,4 +2,6 @@
 # tasks file for elasticsearch
 # - import_tasks: java.yml
 
-- import_tasks: elasticsearch.yml
+# - import_tasks: elasticsearch.yml
+
+- import_tasks: kibana.yml
