@@ -219,7 +219,7 @@ MEDIA_URL = '/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'mysite/static'),
+    os.path.join(BASE_DIR, 'static'),
 ]
 
 AWS_ACCESS_KEY_ID = os.environ.get('S3_KEY')
