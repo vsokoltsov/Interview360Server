@@ -5,7 +5,7 @@ env.user = 'root'
 env.hosts = ['root@95.213.252.125']
 env.home_dir = '/root'
 
-PROJECT_NAME = 'interview_manager'
+PROJECT_NAME = 'interview360'
 PG_HBA_PATH = '/var/lib/pgsql/data/'
 SELINUX_PATH = '/etc/sysconfig'
 GUNICORN_SERVICE_PATH = '/etc/systemd/system/'
@@ -35,7 +35,7 @@ def set_virtualenvwrapper():
     with cd(env.home_dir):
         run('pyenv virtualenvwrapper')
         with prefix('source $(pyenv which virtualenvwrapper.sh)'):
-            run('mkvirtualenv interview_manager')
+            run('mkvirtualenv {}'.format(PROJECT_NAME))
 
 def disable_selinux():
     """ Disable selinux and firewalld """
@@ -56,7 +56,7 @@ def set_up_project_dependencies():
 
     run('pyenv virtualenvwrapper')
     with prefix('source $(pyenv which virtualenvwrapper.sh)'):
-        with prefix('workon interview_manager'):
+        with prefix('workon {}'.format(PROJECT_NAME)):
             with cd(PROJECT_PATH):
                 run('pip install -r requirements.txt')
 
@@ -142,15 +142,16 @@ def docker_deploy(version='latest', container='app'):
     run('docker-compose push')
 
     with cd(env.home_dir):
-        run('docker-compose stop {}'.format(container))
-        run('docker-compose up -d {}'.format(container))
+        run('docker-compose pull')
+        run('docker-compose stop')
+        run('docker-compose up -d')
 
 def deploy(branch='master'):
     with cd(PROJECT_PATH):
         run('git checkout {} && git pull origin {}'.format(branch, branch))
 
         with prefix('source $(pyenv which virtualenvwrapper.sh)'):
-            with prefix('workon interview_manager'):
+            with prefix('workon {}'.format(PROJECT_NAME)):
                 run('pip install -r requirements.txt')
 
                 with cd(PROJECT_PATH + '/app'):
