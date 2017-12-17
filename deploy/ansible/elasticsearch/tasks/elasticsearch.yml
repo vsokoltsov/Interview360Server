@@ -11,6 +11,12 @@
   yum:
     name: "{{ elasticsearch_package_name }}"
 
+- name: Repalce elasticsearch config
+  copy:
+    src: "{{ elasticsearch_config }}"
+    dest: "{{ elasticsearch_config_path }}"
+    force: yes
+
 - name: Start and enable elasticsearch service
   service:
     name: elasticsearch

@@ -7,3 +7,7 @@ elasticsearch_package_name: elasticsearch-5.6.3.rpm
 elasticsearch_url: "https://artifacts.elastic.co/downloads/elasticsearch/{{ elasticsearch_package_name }}"
 kibana_package_name: kibana-5.6.3-x86_64.rpm
 kibana_url: "https://artifacts.elastic.co/downloads/kibana/{{ kibana_package_name }}"
+elasticsearch_config: elasticsearch.yml
+kibana_config: kibana.yml
+elasticsearch_config_path: "/etc/elasticsearch/{{ elasticsearch_config }}"
+kibana_config_path: "/etc/kibana/{{ kibana_config }}"

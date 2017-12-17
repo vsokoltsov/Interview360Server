@@ -11,6 +11,12 @@
   yum:
     name: "{{ kibana_package_name }}"
 
+- name: Replace kibana config
+  copy:
+    src: "{{ kibana_config }}"
+    dest: "{{ kibana_config_path }}"
+    force: yes
+
 - name: Start and enable kibana service
   service:
     name: kibana
