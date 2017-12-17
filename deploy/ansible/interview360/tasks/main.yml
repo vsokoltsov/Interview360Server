@@ -1,0 +1,19 @@
+---
+- name: Clone project
+  git:
+    repo: "{{ interview360_repo }}"
+    dest: /root/interview360
+
+- name: Install requirements
+  pip:
+    requirements: /root/interview360/requirements.txt
+
+- name: Run migrations
+  django_manage:
+    command: migrate
+    app_path: /root/interview360/app
+
+- name: Collect static
+  django_manage:
+    command: collectstatic
+    app_path: /root/interview360/app
