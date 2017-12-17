@@ -142,8 +142,8 @@ def docker_deploy(version='latest', container='app'):
     run('docker-compose push')
 
     with cd(env.home_dir):
-        run('docker-compose stop {}'.format(container))
-        run('docker-compose up -d {}'.format(container))
+        run('docker-compose stop')
+        run('docker-compose up -d')
 
 def deploy(branch='master'):
     with cd(PROJECT_PATH):
