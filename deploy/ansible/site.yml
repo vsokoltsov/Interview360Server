@@ -1,0 +1,8 @@
+---
+- include: common.yml
+- include: pyenv.yml
+- include: database.yml
+- include: nginx.yml
+- include: rabbit_mq.yml
+- include: elasticsearch.yml
+- include: interview360.yml

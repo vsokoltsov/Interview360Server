@@ -39,6 +39,7 @@
     db: "{{ db_name }}"
     name: "{{ db_user }}"
     password: "{{ db_password }}"
+    role_attr_flags: SUPERUSER
     priv: ALL
 
 - name: 'Copy pg_hba.conf'
@@ -46,3 +47,8 @@
     src: pg_hba.conf
     dest: /var/lib/pgsql/data/pg_hba.conf
     force: yes
+
+- name: 'Restart postgresql service'
+  service:
+    name: postgresql
+    state: restarted
