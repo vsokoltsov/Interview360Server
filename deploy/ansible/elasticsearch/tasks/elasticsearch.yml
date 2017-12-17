@@ -1,0 +1,18 @@
+- name: Load elasticsearch package
+  become: yes
+  get_url:
+    url: "{{ elasticsearch_url }}"
+    dest: "/root/{{ elasticsearch_package_name }}"
+
+- name: Check sha1sum for elasticsearch package
+  shell: "sha1sum {{ elasticsearch_package_name }}"
+
+- name: Install elasticsearch
+  yum:
+    name: "{{ elasticsearch_package_name }}"
+
+- name: Start and enable elasticsearch service
+  service:
+    name: elasticsearch
+    state: restarted
+  become: true
