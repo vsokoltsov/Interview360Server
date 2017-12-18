@@ -1,0 +1,12 @@
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User={{ user }}
+Group=nginx
+WorkingDirectory="{{ home }}/{{ app_name }}/app"
+ExecStart={{ home }}/.virtualenvs/{{ app_name }}/bin/gunicorn --workers 3 --bind unix:{{ home }}/{{ app_name }}/{{ app_name }}.sock app.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
