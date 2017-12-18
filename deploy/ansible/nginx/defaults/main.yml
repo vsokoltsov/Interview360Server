@@ -1,7 +1,8 @@
 ---
 # defaults file for nginx
 base_conf_name: nginx.conf
-app_conf_name: interview360.conf
+app_conf_name: interview360
 nginx_config_path: /etc/nginx
 gunicorn_service_name: gunicorn.service
 gunicorn_path: /etc/systemd/system
+base_host: 95.213.252.125

@@ -7,7 +7,7 @@
 
 - name: 'Aadd user to the nginx group'
   user:
-    name: root
+    name: "{{ user }}"
     groups: nginx
     append: yes
 
@@ -21,21 +21,21 @@
     state: directory
 
 - name: 'Copy application nginx {{ app_conf_name }} config'
-  copy:
-    src: "{{ app_conf_name }}"
-    dest: "{{ nginx_config_path }}/sites-enabled/{{ app_conf_name }}"
+  template:
+    src: "templates/{{ app_conf_name }}.j2"
+    dest: "{{ nginx_config_path }}/sites-enabled/{{ app_conf_name }}.conf"
     force: yes
   when: sites_enabled_stat.stat.isdir is not defined or not sites_enabled_stat.stat.isdir
 
 - name: Add permission to folder
   file:
-    path: /root
+    path: "{{ home }}"
     mode: 0710
 
 - name: Add owner to folder
   file:
-    path: /root
-    owner: root
+    path: "{{ home }}"
+    owner: "{{ user }}"
     group: nginx
     recurse: yes
 
