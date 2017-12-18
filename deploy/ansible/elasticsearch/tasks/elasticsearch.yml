@@ -2,7 +2,7 @@
   become: yes
   get_url:
     url: "{{ elasticsearch_url }}"
-    dest: "/root/{{ elasticsearch_package_name }}"
+    dest: "{{ home }}/{{ elasticsearch_package_name }}"
 
 - name: Check sha1sum for elasticsearch package
   shell: "sha1sum {{ elasticsearch_package_name }}"
