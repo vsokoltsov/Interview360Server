@@ -8,3 +8,4 @@ celerybeat*
 .python-version
 *.pyc
 uploads
+*.retry

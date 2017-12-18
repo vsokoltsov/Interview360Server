@@ -1,0 +1,6 @@
+---
+# defaults file for database
+db_user: vagrant
+db_password: vagrant
+db_name: interview_manager
+pg_data_default: /var/lib/pgsql/data

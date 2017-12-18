@@ -1,0 +1,25 @@
+---
+- name: 'Install erlang package'
+  yum:
+    name: "{{ erlang_package }}"
+
+- name: Install rabbit mq server
+  yum:
+    name: "{{ rabbit_mq_package }}"
+
+- name: Start and enable rabbitmq services
+  shell: |
+    systemctl start rabbitmq-server.service
+    systemctl enable rabbitmq-server.service
+  become: true
+
+- name: Add rabbitmq user with priveleges
+  rabbitmq_user:
+    user: "{{ rabbit_mq_user }}"
+    password: "{{ rabbit_mq_password }}"
+    vhost: /
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    tags: administrator
+    state: present

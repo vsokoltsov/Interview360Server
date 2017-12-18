@@ -1,0 +1,6 @@
+---
+# defaults file for rabbit_mq
+erlang_package: http://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm
+rabbit_mq_package: https://www.rabbitmq.com/releases/rabbitmq-server/v3.6.1/rabbitmq-server-3.6.1-1.noarch.rpm
+rabbit_mq_user: admin
+rabbit_mq_password: admin

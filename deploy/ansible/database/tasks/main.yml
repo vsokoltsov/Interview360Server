@@ -1,0 +1,54 @@
+---
+- name: 'Install database dependencies'
+  yum: name="{{ item }}" state=present update_cache=yes
+  with_items:
+    - 'python-psycopg2'
+    - 'postgresql-server'
+    - 'postgresql-contrib'
+    - 'postgresql-devel'
+
+- name: 'Install psycopg2'
+  pip:
+    name: psycopg2
+
+- name: Check for pgdata directory
+  stat: path={{ pg_data_default }}/base
+  register: pgdata_stat
+
+- name: 'Run initdb for postgres'
+  shell: postgresql-setup initdb
+  become: true
+  when: pgdata_stat.stat.isdir is not defined or not pgdata_stat.stat.isdir
+
+- name: 'Run postgresql service'
+  shell: |
+    systemctl start postgresql
+    systemctl enable postgresql
+  become: true
+
+- name: 'Create {{ db_name }} database'
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: "{{ db_name }}"
+
+- name: 'Create postgresql user'
+  become: true
+  become_user: postgres
+  postgresql_user:
+    db: "{{ db_name }}"
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    role_attr_flags: SUPERUSER
+    priv: ALL
+
+- name: 'Copy pg_hba.conf'
+  copy:
+    src: pg_hba.conf
+    dest: /var/lib/pgsql/data/pg_hba.conf
+    force: yes
+
+- name: 'Restart postgresql service'
+  service:
+    name: postgresql
+    state: restarted
