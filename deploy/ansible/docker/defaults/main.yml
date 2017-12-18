@@ -1,4 +1,9 @@
 ---
 docker_url: https://get.docker.com
 docker_file: docker.sh
-nginx_dir_path: /root/deploy/nginx
+nginx_dir_path: "{{ home }}/deploy/nginx"
+default_docker_compose_path: ../../docker-compose.prod.yml
+default_nginx_app_conf_path: ../../deploy/nginx/dev.conf
+server_app_config_name: development.conf
+server_docker_compose_path: /root/docker-compose.yml
+default_env_file_path: ../../.env

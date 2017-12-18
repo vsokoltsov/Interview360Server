@@ -3,19 +3,19 @@
   become: yes
   get_url:
     url: "{{ docker_url }}"
-    dest: "/root/{{ docker_file }}"
+    dest: "{{ home }}/{{ docker_file }}"
 
 - name: set executable docker installer
   file:
-    path: "/root/{{ docker_file }}"
+    path: "{{ home }}/{{ docker_file }}"
     mode: 0755
 
 - name: Run docker installer
-  command: "/root/{{ docker_file }}"
+  command: "{{ home }}/{{ docker_file }}"
 
 - name: Add user to the docker group
   user:
-    name: root
+    name: "{{ user }}"
     groups: docker
 
 - name: 'Start and enable docker'
