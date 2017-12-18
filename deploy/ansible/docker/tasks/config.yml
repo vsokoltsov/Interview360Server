@@ -1,0 +1,19 @@
+- name: Copy docker-compose.yml file
+  copy:
+    src: ../../docker-compose.prod.yml
+    dest: /root/docker-compose.yml
+
+- name: Create folder for nginx config
+  file:
+    name: "{{ nginx_dir_path }}"
+    state: directory
+
+- name: Copy nginx config
+  copy:
+    src: ../../deploy/nginx/dev.conf
+    dest: "{{ nginx_dir_path }}/development.conf"
+
+- name: Copy .env file
+  copy:
+    src: ../../.env
+    dest: /root/.env

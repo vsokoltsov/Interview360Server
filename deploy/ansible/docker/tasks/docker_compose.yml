@@ -1,0 +1,11 @@
+---
+- name: Install necessary values
+  yum:
+    name: "{{ item }}"
+  with_items:
+    - epel-release
+    - python-pip
+
+- name: Install docker-compose via pip
+  pip:
+    name: docker-compose

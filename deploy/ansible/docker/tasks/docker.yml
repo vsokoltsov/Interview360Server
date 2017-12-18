@@ -1,0 +1,25 @@
+---
+- name: Load docker
+  become: yes
+  get_url:
+    url: "{{ docker_url }}"
+    dest: "/root/{{ docker_file }}"
+
+- name: set executable docker installer
+  file:
+    path: "/root/{{ docker_file }}"
+    mode: 0755
+
+- name: Run docker installer
+  command: "/root/{{ docker_file }}"
+
+- name: Add user to the docker group
+  user:
+    name: root
+    groups: docker
+
+- name: 'Start and enable docker'
+  shell: |
+    systemctl enable docker.service
+    systemctl start docker.service
+  become: true

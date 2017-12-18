@@ -1,0 +1,7 @@
+---
+# tasks file for docker
+- import_tasks: docker.yml
+
+- import_tasks: docker_compose.yml
+
+- import_tasks: config.yml
