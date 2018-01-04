@@ -8,9 +8,9 @@ class Company(models.Model):
     """ Base company model """
 
     name = models.CharField(max_length=255, null=False)
-    start_date = models.DateField(null=False)
+    start_date = models.DateField(null=True)
     description = models.TextField()
-    city = models.CharField(null=False, max_length=255)
+    city = models.CharField(null=True, max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
