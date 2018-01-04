@@ -2,7 +2,7 @@ import mock
 from django.test import TransactionTestCase
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
-from companies.models import Company, CompanyMember
+from companies.models import Company, CompanyMember, Specialty
 from authorization.models import User
 from companies.serializers import (
     CompanySerializer, EmployeeSerializer, EmployeesSerializer

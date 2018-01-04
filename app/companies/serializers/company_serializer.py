@@ -84,6 +84,7 @@ class CompanySerializer(CompaniesSerializer):
 
         try:
             with transaction.atomic():
+                specialties = validated_data.pop('specialties', None)
                 owner_id = validated_data.pop('owner_id', None)
                 attachment_json = validated_data.pop('attachment', None)
                 company = Company.objects.create(**validated_data)
@@ -92,6 +93,8 @@ class CompanySerializer(CompaniesSerializer):
                                                               role=COMPANY_OWNER,
                                                               active=True)
                 self._create_attachment(attachment_json, company)
+                if specialties:
+                    company.specialties.set(specialties)
                 UserIndex.store_index(User.objects.get(id=owner_id))
                 CompanyIndex.store_index(company)
                 return company
@@ -101,12 +104,15 @@ class CompanySerializer(CompaniesSerializer):
     def update(self, instance, validated_data):
         """ Update company method """
 
+        specialties = validated_data.pop('specialties', None)
         attachment_json = validated_data.pop('attachment', None)
         instance.name = validated_data.get('name', instance.name)
         instance.start_date = validated_data.get('start_date', instance.start_date)
         instance.description = validated_data.get('description', instance.description)
         instance.city = validated_data.get('city', instance.city)
         self._create_attachment(attachment_json, instance)
+        if specialties:
+            company.specialties.set(specialties)
         instance.save()
         CompanyIndex.store_index(instance)
         return instance
