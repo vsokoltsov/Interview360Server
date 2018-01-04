@@ -37,7 +37,7 @@ class CompanySerializerTests(TransactionTestCase):
                                                 'description', 'start_date',
                                                 'created_at', 'employees', 'attachment',
                                                 'vacancy_count', 'employees_count',
-                                                'vacancies', 'interviews']))
+                                                'vacancies', 'interviews', 'specialties']))
 
     def test_success_validation_of_new_company(self):
         """ Test success case of creation of the new company """

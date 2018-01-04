@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from companies.models import Company, CompanyMember
+from companies.models import Company, CompanyMember, Specialty
 from authorization.models import User
 from django.db import transaction
 from profiles.fields import AttachmentField

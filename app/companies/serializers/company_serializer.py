@@ -11,6 +11,7 @@ from django_pglocks import advisory_lock
 from roles.constants import COMPANY_OWNER
 from profiles.index import UserIndex
 from companies.index import CompanyIndex
+from companies.fields import SpecialtiesField
 import ipdb
 
 class CompanySerializer(CompaniesSerializer):
@@ -25,11 +26,12 @@ class CompanySerializer(CompaniesSerializer):
     employees = serializers.SerializerMethodField()
     vacancies = serializers.SerializerMethodField()
     interviews = serializers.SerializerMethodField()
+    specialties = SpecialtiesField(required=False)
 
     class Meta:
         model = CompaniesSerializer.Meta.model
         fields = CompaniesSerializer.Meta.fields + [
-            'owner_id', 'employees', 'vacancies', 'interviews'
+            'owner_id', 'employees', 'vacancies', 'interviews', 'specialties'
         ]
 
     def get_employees(self, obj):
