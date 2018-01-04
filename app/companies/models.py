@@ -62,3 +62,13 @@ class CompanyMember(models.Model):
         index_together = unique_together = [
             ['user', 'company']
         ]
+
+class Specialty(models.Model):
+    """ Specialty of the company model """
+
+    class Meta:
+        db_table = 'specialties'
+
+    name = name = models.CharField(max_length=255, null=False, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
