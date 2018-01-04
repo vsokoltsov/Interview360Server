@@ -16,7 +16,7 @@ class Company(models.Model):
 
     employees = models.ManyToManyField('authorization.User', through='CompanyMember')
     attachments = GenericRelation('attachments.Attachment')
-
+    specialties = models.ManyToManyField('companies.Specialty')
     objects = CompanyManager()
 
     class Meta:
