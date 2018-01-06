@@ -6,7 +6,19 @@ from common.serializers.user_serializer import UserSerializer
 from common.fields import CustomField
 import ipdb
 
-class ResumeSerializer(serializers.ModelSerializer):
+class ResumesSerializer(serializers.ModelSerializer):
+    """ Resumes serializer class """
+
+    class Meta:
+        model = Resume
+        fields = [
+            'id',
+            'title',
+            'user',
+            'updated_at'
+        ]
+
+class ResumeSerializer(ResumesSerializer):
     """ Resume serializer class """
 
     title = serializers.CharField(required=True)
@@ -14,16 +26,12 @@ class ResumeSerializer(serializers.ModelSerializer):
     description = serializers.CharField(required=True)
     skills = SkillsField(required=True)
 
-    class Meta:
-        model = Resume
-        fields = [
-            'id',
-            'title',
+    class Meta(ResumesSerializer.Meta):
+        model = ResumesSerializer.Meta.model
+        fields = ResumesSerializer.Meta.fields + [
             'description',
             'skills',
-            'user',
-            'created_at',
-            'updated_at'
+            'created_at'
         ]
 
     def create(self, data):
