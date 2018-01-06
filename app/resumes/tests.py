@@ -24,6 +24,7 @@ class ResumeSerializerTest(TransactionTestCase):
         self.user = self.company.get_employees_with_role(EMPLOYEE)[0]
         self.skills = [s.id for s in Skill.objects.filter(id__in=[1, 2])]
         self.params = {
+            'title': 'Python developer',
             'user': self.user.id,
             'skills': self.skills,
             'description': 'Resume'

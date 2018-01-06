@@ -9,6 +9,7 @@ import ipdb
 class ResumeSerializer(serializers.ModelSerializer):
     """ Resume serializer class """
 
+    title = serializers.CharField(required=True)
     user = CustomField(serializer=UserSerializer, obj='user', required=True)
     description = serializers.CharField(required=True)
     skills = SkillsField(required=True)
@@ -17,9 +18,12 @@ class ResumeSerializer(serializers.ModelSerializer):
         model = Resume
         fields = [
             'id',
+            'title',
             'description',
             'skills',
-            'user'
+            'user',
+            'created_at',
+            'updated_at'
         ]
 
     def create(self, data):
