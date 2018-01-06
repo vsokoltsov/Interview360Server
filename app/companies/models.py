@@ -8,15 +8,15 @@ class Company(models.Model):
     """ Base company model """
 
     name = models.CharField(max_length=255, null=False)
-    start_date = models.DateField(null=False)
+    start_date = models.DateField(null=True)
     description = models.TextField()
-    city = models.CharField(null=False, max_length=255)
+    city = models.CharField(null=True, max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     employees = models.ManyToManyField('authorization.User', through='CompanyMember')
     attachments = GenericRelation('attachments.Attachment')
-
+    specialties = models.ManyToManyField('companies.Specialty')
     objects = CompanyManager()
 
     class Meta:
@@ -62,3 +62,14 @@ class CompanyMember(models.Model):
         index_together = unique_together = [
             ['user', 'company']
         ]
+
+class Specialty(models.Model):
+    """ Specialty of the company model """
+
+    class Meta:
+        db_table = 'specialties'
+
+    name = name = models.CharField(max_length=255, null=False, blank=False)
+    parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

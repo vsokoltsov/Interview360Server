@@ -28,7 +28,7 @@
     created_at:  '2017-09-15T22:17:44+00:00', updated_at:  '2017-09-15T22:17:44+00:00'}
 - model: authorization.user
   pk: 7
-  fields: {password: Altair_69, last_login: null, email: sokol8@gmail.com, first_name: '',
+  fields: {password: test_pass, last_login: null, email: sokol8@gmail.com, first_name: '',
     last_name: '', created_at:  '2017-09-15T22:17:44+00:00', updated_at:  '2017-09-15T22:17:44+00:00'}
 - model: authorization.user
   pk: 8

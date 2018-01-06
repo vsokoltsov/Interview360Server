@@ -1,5 +1,5 @@
 from . import (
-    TransactionTestCase, serializers, Company, CompanyMember,
+    TransactionTestCase, serializers, Company, CompanyMember, Specialty,
     serializers, User, CompanySerializer, datetime, mock, HR
 )
 
@@ -8,7 +8,8 @@ class CompanySerializerTests(TransactionTestCase):
 
     fixtures = [
         'user.yaml',
-        'company.yaml'
+        'company.yaml',
+        'specialty.yaml'
     ]
 
     def setUp(self):
@@ -37,7 +38,7 @@ class CompanySerializerTests(TransactionTestCase):
                                                 'description', 'start_date',
                                                 'created_at', 'employees', 'attachment',
                                                 'vacancy_count', 'employees_count',
-                                                'vacancies', 'interviews']))
+                                                'vacancies', 'interviews', 'specialties']))
 
     def test_success_validation_of_new_company(self):
         """ Test success case of creation of the new company """
@@ -150,3 +151,20 @@ class CompanySerializerTests(TransactionTestCase):
         serializer.is_valid()
         serializer.save()
         self.assertTrue(company_index.called)
+
+    @mock.patch('profiles.index.UserIndex.store_index')
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    def test_adding_specialties_to_the_company(self, company_index, user_index):
+        """ Test success adding specialties information to the company """
+
+        specialties = [
+            Specialty.objects.get(id=1),
+            Specialty.objects.get(id=5)
+        ]
+        specialties_ids = list(map(lambda el: el.id, specialties))
+        self.company_params['specialties'] = specialties_ids
+        serializer = CompanySerializer(data=self.company_params)
+        serializer.is_valid()
+        serializer.save()
+        company = Company.objects.last()
+        assert [el.id for el in company.specialties.all()], [el.id for el in specialties]

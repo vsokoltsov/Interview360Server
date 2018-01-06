@@ -1,0 +1,135 @@
+- model: companies.specialty
+  pk: 1
+  fields:
+    name: IT
+    parent_id: !!null
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.specialty
+  pk: 2
+  fields:
+    name: Mining
+    parent_id: !!null
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.specialty
+  pk: 3
+  fields:
+    name: Factories
+    parent_id: !!null
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.specialty
+  pk: 4
+  fields:
+    name: Energetics
+    parent_id: !!null
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.specialty
+  pk: 5
+  fields:
+    name: Internet company
+    parent_id: 1
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.specialty
+  pk: 6
+  fields:
+    name: Startup
+    parent_id: 1
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.specialty
+  pk: 7
+  fields:
+    name: Bodyshop
+    parent_id: 1
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.specialty
+  pk: 8
+  fields:
+    name: Consulting
+    parent_id: 1
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.specialty
+  pk: 8
+  fields:
+    name: Mineral raw materials
+    parent_id: 2
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.specialty
+  pk: 9
+  fields:
+    name: Ore mining
+    parent_id: 2
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.specialty
+  pk: 10
+  fields:
+    name: Coal mining
+    parent_id: 2
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.specialty
+  pk: 11
+  fields:
+    name: Construction machinery
+    parent_id: 3
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.specialty
+  pk: 12
+  fields:
+    name: Agricultural machinery
+    parent_id: 3
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.specialty
+  pk: 13
+  fields:
+    name: Medical equipment
+    parent_id: 3
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.specialty
+  pk: 14
+  fields:
+    name: Alternative energetics
+    parent_id: 3
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.specialty
+  pk: 15
+  fields:
+    name: Nuclear energetics
+    parent_id: 3
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'
+
+- model: companies.specialty
+  pk: 16
+  fields:
+    name: Heat suply
+    parent_id: 3
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'

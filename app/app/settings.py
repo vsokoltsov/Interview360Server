@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'feedbacks',
     'notifications',
     'attachments',
+    'resumes',
     'storages'
 ]
 

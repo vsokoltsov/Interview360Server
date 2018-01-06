@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_DB: 'interview_manager'
     volumes:
-      - /var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql/data
     ports:
       - 5432:5432
 
@@ -106,4 +106,4 @@ services:
       - rabbit
 
 volumes:
-  database:
+  pg_data:
