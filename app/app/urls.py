@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^api/', include('skills.urls')),
     url(r'^api/', include('feedbacks.urls')),
     url(r'^api/', include('profiles.urls')),
-    url(r'^api/', include('attachments.urls'))
+    url(r'^api/', include('attachments.urls')),
+    url(r'^api/', include('resumes.urls'))
 ]
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)

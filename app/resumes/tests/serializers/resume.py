@@ -1,9 +1,7 @@
-from django.test import TransactionTestCase
-from .serializer import ResumeSerializer
-from roles.constants import HR, EMPLOYEE, CANDIDATE
-from skills.models import Skill
-from companies.models import Company
-from .models import Resume
+from . import (
+    TransactionTestCase, ResumeSerializer, HR, EMPLOYEE, CANDIDATE,
+    Skill, Company, Resume
+)
 import ipdb
 
 class ResumeSerializerTest(TransactionTestCase):

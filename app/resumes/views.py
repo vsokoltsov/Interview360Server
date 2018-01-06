@@ -5,12 +5,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from django.shortcuts import get_object_or_404
 from .serializers import ResumesSerializer, ResumeSerializer
+from .models import Resume
 
-class ResumeView(viewsets.ModelViewSet):
+class ResumeViewSet(viewsets.ModelViewSet):
     """ Resume views """
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, )
+    queryset = Resume.objects.prefetch_related('user', 'skills').all()
 
     def get_serializer_class(self):
         """ Return specific serializer for action """
