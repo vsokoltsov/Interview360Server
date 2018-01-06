@@ -29,3 +29,11 @@ class ResumeSerializer(serializers.ModelSerializer):
         resume = Resume.objects.create(**data)
         resume.skills.set(skills)
         return resume
+
+    def update(self, instance, data):
+        """ Update resume instance """
+
+        instance.description = data.get('description', instance.description)
+        instance.skills.set(data.get('skills', []))
+        instance.save()
+        return instance

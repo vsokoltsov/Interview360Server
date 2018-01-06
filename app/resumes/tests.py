@@ -12,12 +12,14 @@ class ResumeSerializerTest(TransactionTestCase):
     fixtures = [
         'user.yaml',
         'company.yaml',
-        'skill.yaml'
+        'skill.yaml',
+        'resume.yaml'
     ]
 
     def setUp(self):
         """ Setting up testing dependencies """
 
+        self.resume = Resume.objects.last()
         self.company = Company.objects.first()
         self.user = self.company.get_employees_with_role(EMPLOYEE)[0]
         self.skills = [s.id for s in Skill.objects.filter(id__in=[1, 2])]
@@ -68,3 +70,16 @@ class ResumeSerializerTest(TransactionTestCase):
         serializer.save()
 
         self.assertTrue(Resume.objects.last().user.id, self.user.id)
+
+    def test_success_update_resume(self):
+        """ Test success resume update """
+
+        serializer = ResumeSerializer(self.resume, data=self.params)
+        serializer.is_valid()
+        serializer.save()
+
+        self.resume.refresh_from_db()
+        assert(
+            [ s.id for s in self.resume.skills.all() ],
+            [ s for s in self.skills ]
+        )
