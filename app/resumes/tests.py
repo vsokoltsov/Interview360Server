@@ -27,8 +27,44 @@ class ResumeSerializerTest(TransactionTestCase):
             'description': 'Resume'
         }
 
-    def test_creation_of_resume(self):
+    def test_success_validation(self):
+        """ Testing success validation of the serializer """
+
+        serializer = ResumeSerializer(data=self.params)
+        assert serializer.is_valid(), True
+
+    def test_failed_validation(self):
+        """ Testing failed serializer validation """
+
+        serializer = ResumeSerializer(data=None)
+        self.assertFalse(serializer.is_valid())
+
+    def test_success_resume_creation(self):
+        """ Test success creation of the resume """
+
+        resume_count = Resume.objects.count()
         serializer = ResumeSerializer(data=self.params)
         serializer.is_valid()
         serializer.save()
-        serializer.data
+        assert Resume.objects.count(), resume_count + 1
+
+    def test_saving_skills_to_resume(self):
+        """ Save skills to resume """
+
+        serializer = ResumeSerializer(data=self.params)
+        serializer.is_valid()
+        serializer.save()
+
+        assert(
+            [ s.id for s in Resume.objects.last().skills.all() ],
+            [ s for s in self.skills ]
+        )
+
+    def test_saving_resume_with_user(self):
+        """ Test setting user to the new resume """
+
+        serializer = ResumeSerializer(data=self.params)
+        serializer.is_valid()
+        serializer.save()
+
+        self.assertTrue(Resume.objects.last().user.id, self.user.id)

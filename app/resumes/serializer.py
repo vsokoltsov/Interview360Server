@@ -9,7 +9,7 @@ import ipdb
 class ResumeSerializer(serializers.ModelSerializer):
     """ Resume serializer class """
 
-    user = CustomField(serializer=UserSerializer, obj='user')
+    user = CustomField(serializer=UserSerializer, obj='user', required=True)
     description = serializers.CharField(required=True)
     skills = SkillsField(required=True)
 
