@@ -9,7 +9,7 @@ class SkillIndex(DocType):
     name = Text(analyzer='standard')
 
     class Meta:
-        index = 'companies'
+        index = 'skills'
 
     @classmethod
     def store_index(cls, skill):
