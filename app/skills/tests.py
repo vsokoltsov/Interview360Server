@@ -80,3 +80,20 @@ class SkillViewSetTests(APITestCase):
 
         response = self.client.delete("/api/v1/skills/{}/".format(self.skill.id))
         self.assertEqual(response.status_code, 204)
+
+    @mock.patch('skills.search.SkillSearch.find')
+    def test_search_action(self, search_mock):
+        """ Test success search of skill """
+
+        skill_index = [
+            { 'id': 1 },
+            { 'id': 2 },
+            { 'id': 3 }
+        ]
+        search_mock.return_value = skill_index
+        url = "/api/v1/skills/search/?q={}".format(
+            'buzzword'
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['skills'], skill_index)

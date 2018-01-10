@@ -1,10 +1,12 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status
+from rest_framework.decorators import detail_route, list_route
 from .models import Skill
 from .serializers import SkillSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from .index import SkillIndex
+from .search import SkillSearch
 from rest_framework.response import Response
 
 # Create your views here.
@@ -23,3 +25,12 @@ class SkillsViewSet(viewsets.ModelViewSet):
         SkillIndex.get(id=skill.id).delete()
         skill.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @list_route(methods=['get'])
+    def search(self, request):
+        """ Action for skills search """
+
+        query = request.query_params.get('q')
+        search = SkillSearch()
+        results = search.find(query)
+        return  Response({ 'skills': results })
