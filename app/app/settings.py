@@ -36,7 +36,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS = default_headers
-ES_CLIENT = Elasticsearch()
+ES_CLIENT = Elasticsearch(['http://elasticsearch:9200'])
 connections.create_connection(hosts=['elasticsearch'])
 docker_env = os.environ.get('DOCKER_ENV')
 
