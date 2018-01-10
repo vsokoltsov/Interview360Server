@@ -15,11 +15,11 @@ services:
     image: vsokoltsov/interview360
     container_name: interview360
     build: .
-    command: bash -c "python3 app/manage.py migrate && cd app && gunicorn app.wsgi:application -b 0.0.0.0:8000"
+    command: bash -c "python3 app/manage.py migrate && cd app && gunicorn app.wsgi:application -b 0.0.0.0"
     volumes:
       - .:/interview360
-    expose:
-      - '8000'
+    ports:
+      - '8000:8000'
     env_file: ./.env
     links:
       - celery_worker
