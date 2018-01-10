@@ -17,8 +17,8 @@ class SkillIndex(DocType):
 
         obj = cls(
             meta={'id': skill.id},
-            'id': skill.id,
-            'name': skill.name
+            id=skill.id,
+            name=skill.name
         )
         obj.save()
         return obj.to_dict(include_meta=True)
