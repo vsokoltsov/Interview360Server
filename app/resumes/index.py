@@ -1,6 +1,7 @@
 from elasticsearch_dsl import (
     DocType, Date, Float, Integer, Boolean, Keyword, Text, Object
 )
+from skills.models import Skill
 
 class ResumesIndex(DocType):
     """ Resumes index class """
