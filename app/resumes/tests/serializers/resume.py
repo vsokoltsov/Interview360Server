@@ -1,6 +1,6 @@
 from . import (
     TransactionTestCase, ResumeSerializer, HR, EMPLOYEE, CANDIDATE,
-    Skill, Company, Resume
+    Skill, Company, Resume, mock
 )
 import ipdb
 
@@ -40,7 +40,8 @@ class ResumeSerializerTest(TransactionTestCase):
         serializer = ResumeSerializer(data=None)
         self.assertFalse(serializer.is_valid())
 
-    def test_success_resume_creation(self):
+    @mock.patch('resumes.index.ResumesIndex.store_index')
+    def test_success_resume_creation(self, resume_index):
         """ Test success creation of the resume """
 
         resume_count = Resume.objects.count()
@@ -49,7 +50,8 @@ class ResumeSerializerTest(TransactionTestCase):
         serializer.save()
         assert Resume.objects.count(), resume_count + 1
 
-    def test_saving_skills_to_resume(self):
+    @mock.patch('resumes.index.ResumesIndex.store_index')
+    def test_saving_skills_to_resume(self, resume_index):
         """ Save skills to resume """
 
         serializer = ResumeSerializer(data=self.params)
@@ -61,7 +63,8 @@ class ResumeSerializerTest(TransactionTestCase):
             [ s for s in self.skills ]
         )
 
-    def test_saving_resume_with_user(self):
+    @mock.patch('resumes.index.ResumesIndex.store_index')
+    def test_saving_resume_with_user(self, resume_index):
         """ Test setting user to the new resume """
 
         serializer = ResumeSerializer(data=self.params)
@@ -70,7 +73,8 @@ class ResumeSerializerTest(TransactionTestCase):
 
         self.assertTrue(Resume.objects.last().user.id, self.user.id)
 
-    def test_success_update_resume(self):
+    @mock.patch('resumes.index.ResumesIndex.store_index')
+    def test_success_update_resume(self, resume_index):
         """ Test success resume update """
 
         serializer = ResumeSerializer(self.resume, data=self.params)

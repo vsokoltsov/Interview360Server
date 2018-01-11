@@ -4,6 +4,7 @@ from authorization.models import User
 from vacancies.fields import SkillsField
 from common.serializers.user_serializer import UserSerializer
 from common.fields import CustomField
+from resumes.index import ResumesIndex
 import ipdb
 
 class ResumesSerializer(serializers.ModelSerializer):
@@ -40,6 +41,7 @@ class ResumeSerializer(ResumesSerializer):
         skills = data.pop('skills', None)
         resume = Resume.objects.create(**data)
         resume.skills.set(skills)
+        ResumesIndex.store_index(resume)
         return resume
 
     def update(self, instance, data):
@@ -48,4 +50,5 @@ class ResumeSerializer(ResumesSerializer):
         instance.description = data.get('description', instance.description)
         instance.skills.set(data.get('skills', []))
         instance.save()
+        ResumesIndex.store_index(instance)
         return instance

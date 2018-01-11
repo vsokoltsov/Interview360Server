@@ -2,6 +2,7 @@ from . import (
     APITestCase, mock, HR, EMPLOYEE, CANDIDATE,
     Skill, Company, Resume, Token
 )
+from resumes.index import ResumesIndex
 import ipdb
 
 class ResumeViewTest(APITestCase):
@@ -43,19 +44,22 @@ class ResumeViewTest(APITestCase):
         for key in ['id', 'title', 'description']:
             assert getattr(self.resume, key), response.data[key]
 
-    def test_success_creation_of_resume(self):
+    @mock.patch('resumes.index.ResumesIndex.store_index')
+    def test_success_creation_of_resume(self, resume_index):
         """ Test success creation of the resume """
 
         response = self.client.post('/api/v1/resumes/', self.params)
         self.assertTrue('resume' in response.data)
 
-    def test_failed_creation_of_resume(self):
+    @mock.patch('resumes.index.ResumesIndex.store_index')
+    def test_failed_creation_of_resume(self, resume_index):
         """ Test failed creation of the resume """
 
         response = self.client.post('/api/v1/resumes/', None)
         self.assertTrue('errors' in response.data)
 
-    def test_success_update_of_resume(self):
+    @mock.patch('resumes.index.ResumesIndex.store_index')
+    def test_success_update_of_resume(self, resume_index):
         """ Test success update of a resume """
 
         response = self.client.put(
@@ -63,10 +67,30 @@ class ResumeViewTest(APITestCase):
         )
         self.assertTrue('resume' in response.data)
 
-    def test_success_deletion_of_resume(self):
+    @mock.patch.object(ResumesIndex, 'get')
+    @mock.patch.object(ResumesIndex, 'delete')
+    @mock.patch('resumes.index.ResumesIndex.store_index')
+    def test_success_deletion_of_resume(self, resume_index, delete_resume, get_resume):
         """ Test success delete of the resume """
 
         response = self.client.delete(
             '/api/v1/resumes/{}/'.format(self.resume.id)
         )
         assert response.status_code, 204
+
+    @mock.patch('resumes.search.ResumesSearch.find')
+    def test_search_action(self, search_mock):
+        """ Test success search of resume """
+
+        resume_index = [
+            { 'id': 1 },
+            { 'id': 2 },
+            { 'id': 3 }
+        ]
+        search_mock.return_value = resume_index
+        url = "/api/v1/resumes/search/?q={}".format(
+            'buzzword'
+        )
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data['resumes'], resume_index)

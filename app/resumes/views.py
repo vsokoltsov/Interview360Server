@@ -4,8 +4,11 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from django.shortcuts import get_object_or_404
-from .serializers import ResumesSerializer, ResumeSerializer
-from .models import Resume
+from resumes.serializers import ResumesSerializer, ResumeSerializer
+from rest_framework.decorators import list_route
+from resumes.models import Resume
+from resumes.index import ResumesIndex
+from resumes.search import ResumesSearch
 
 class ResumeViewSet(viewsets.ModelViewSet):
     """ Resume views """
@@ -50,4 +53,14 @@ class ResumeViewSet(viewsets.ModelViewSet):
 
         resume = self.get_object()
         resume.delete()
+        ResumesIndex.get(id=resume.id).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @list_route(methods=['get'])
+    def search(self, request):
+        """ Action for resumes search """
+
+        query = request.query_params.get('q')
+        search = ResumesSearch()
+        results = search.find(query)
+        return  Response({ 'resumes': results })
