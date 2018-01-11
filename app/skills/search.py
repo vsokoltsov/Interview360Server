@@ -4,4 +4,4 @@ class SkillSearch(SearchService):
     """ Class for skill search methods """
 
     INDEX_NAME='skills'
-    FIELDS=['id', 'name']
+    FIELDS=['name']
