@@ -28,7 +28,8 @@ class ResumeViewTest(APITestCase):
             'title': 'Python developer',
             'user': self.user.id,
             'skills': self.skills,
-            'description': 'Resume'
+            'description': 'Resume',
+            'salary': 10000
         }
 
     def test_success_list_receiving(self):
