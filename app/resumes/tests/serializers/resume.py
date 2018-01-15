@@ -25,7 +25,8 @@ class ResumeSerializerTest(TransactionTestCase):
             'title': 'Python developer',
             'user': self.user.id,
             'skills': self.skills,
-            'description': 'Resume'
+            'description': 'Resume',
+            'salary': 120000
         }
 
     def test_success_validation(self):

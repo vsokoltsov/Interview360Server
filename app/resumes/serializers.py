@@ -16,6 +16,7 @@ class ResumesSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'user',
+            'salary',
             'updated_at'
         ]
 
@@ -25,6 +26,7 @@ class ResumeSerializer(ResumesSerializer):
     title = serializers.CharField(required=True)
     user = CustomField(serializer=UserSerializer, obj='user', required=True)
     description = serializers.CharField(required=True)
+    salary = serializers.DecimalField(max_digits=8, decimal_places=0, required=True)
     skills = SkillsField(required=True)
 
     class Meta(ResumesSerializer.Meta):
