@@ -4,6 +4,7 @@ from cerberus import Validator
 from contextlib import contextmanager
 from django.db import transaction
 from django_pglocks import advisory_lock
+import ipdb
 
 class BaseForm(abc.ABC):
     """ Base form-object class """
@@ -11,10 +12,6 @@ class BaseForm(abc.ABC):
     @property
     @abc.abstractmethod
     def schema(self):
-        pass
-
-    @property
-    def params(self):
         pass
 
     def __init__(self, **kwargs):
@@ -69,8 +66,29 @@ class WorkplaceForm(BaseForm):
                 'empty': False,
                 'type': 'dict',
                 'schema': {
-                    'title': {
+                    'id': {
+                        'type': 'integer',
+                        'required': False
+                    },
+                    'position': {
                         'type': 'string'
+                    },
+                    'resume_id': {
+                        'type': 'integer'
+                    },
+                    'company': {
+                        'type': 'string'
+                    },
+                    'description': {
+                        'type': 'string'
+                    },
+                    'start_date': {
+                        'type': 'string',
+                        'regex': '^\d{4}-\d{2}-\d{2}$'
+                    },
+                    'end_date': {
+                        'type': 'string',
+                        'regex': '^\d{4}-\d{2}-\d{2}$'
                     }
                 }
             }
