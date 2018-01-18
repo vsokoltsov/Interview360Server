@@ -2,6 +2,7 @@ from common.forms import BaseForm
 import cerberus
 from resumes.models import Resume, Workplace
 from companies.models import Company
+from django.db import transaction
 import ipdb
 
 def company_exist(field, value, error):
@@ -10,6 +11,13 @@ def company_exist(field, value, error):
     except Company.DoesNotExist:
         error(field, 'Does not exist')
 
+def resume_exist(field, value, error):
+    """ Check wheter or not resume exist """
+
+    try:
+        resume = Resume.objects.get(id=value)
+    except Resume.DoesNotExist:
+        error(field, 'Does not exist')
 
 class WorkplaceForm(BaseForm):
     """ Workplace form class """
@@ -36,7 +44,8 @@ class WorkplaceForm(BaseForm):
                     'resume_id': {
                         'type': 'integer',
                         'empty': False,
-                        'required': True
+                        'required': True,
+                        'validator': resume_exist
                     },
                     'company': {
                         'type': 'string',
@@ -69,9 +78,14 @@ class WorkplaceForm(BaseForm):
 
         if not self.is_valid(): return False
 
-        workplaces = self.params.get('workplaces')
+        with transaction.atomic():
+            response_list = []
+            workplaces = self.params.get('workplaces')
 
-        for wp in workplaces:
-            company_name = workplace.pop('company')
-            # company, created = Compan
-            workplace = Workplace.objects.create(**wp)
+            for wp in workplaces:
+                company_name = wp.pop('company')
+                company, created = Company.objects.get_or_create(name=company_name)
+                workplace = Workplace.objects.create(**wp, company=company)
+                response_list.append(workplace)
+            self.objects = response_list
+            return True
