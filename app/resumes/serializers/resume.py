@@ -1,24 +1,7 @@
-from rest_framework import serializers
-from .models import Resume
-from authorization.models import User
-from vacancies.fields import SkillsField
-from common.serializers.user_serializer import UserSerializer
-from common.fields import CustomField
-from resumes.index import ResumesIndex
-import ipdb
-
-class ResumesSerializer(serializers.ModelSerializer):
-    """ Resumes serializer class """
-
-    class Meta:
-        model = Resume
-        fields = [
-            'id',
-            'title',
-            'user',
-            'salary',
-            'updated_at'
-        ]
+from . import (
+    serializers, ResumesSerializer, Resume, User, SkillsField, UserSerializer,
+    CustomField, ResumesIndex
+)
 
 class ResumeSerializer(ResumesSerializer):
     """ Resume serializer class """
