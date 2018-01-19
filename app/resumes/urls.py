@@ -2,15 +2,13 @@ from django.conf.urls import url
 from django.conf.urls import include
 
 from rest_framework_nested import routers
-from .views import ResumeViewSet, WorkplaceViewSet
+from resumes.views import ResumeViewSet, WorkplacesApiView
 
 router = routers.SimpleRouter()
 router.register('v1/resumes', ResumeViewSet, base_name='resumes')
 
-workplace_router = routers.NestedSimpleRouter(router, r'v1/resumes', lookup='resumes')
-workplace_router.register('workplaces', WorkplaceViewSet, base_name="resume-workplaces")
-
 urlpatterns = [
         url(r'', include(router.urls) ),
-        url(r'', include(workplace_router.urls) )
+        url(r'^v1/resumes/(?P<resume_id>[A-Za-z0-9]*)/update',
+            WorkplacesApiView.as_view()),
 ]
