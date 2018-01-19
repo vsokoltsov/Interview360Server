@@ -11,3 +11,4 @@ from resumes.index import ResumesIndex
 from resumes.search import ResumesSearch
 
 from .resumes import ResumeViewSet
+from .workplaces import Workplace
