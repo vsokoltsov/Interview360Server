@@ -11,7 +11,8 @@ class WorkplaceFormTest(TransactionTestCase):
         'user.yaml',
         'company.yaml',
         'skill.yaml',
-        'resume.yaml'
+        'resume.yaml',
+        'workplaces.yaml'
     ]
 
     def setUp(self):
@@ -20,6 +21,7 @@ class WorkplaceFormTest(TransactionTestCase):
         self.resume = Resume.objects.last()
         self.company = Company.objects.first()
         self.user = self.company.get_employees_with_role(EMPLOYEE)[0]
+        self.workplace = Workplace.objects.last()
         self.params = {
             'workplaces': [
                 {
@@ -99,3 +101,14 @@ class WorkplaceFormTest(TransactionTestCase):
         form.submit()
 
         assert Company.objects.count(), companies_count + 1
+
+    def test_update_of_the_existing_workplace(self):
+        """ Test updating of the existing workplace """
+
+        self.params['workplaces'][0]['id'] = self.workplace.id
+        form = WorkplaceForm(params=self.params)
+        form.submit()
+
+        self.workplace.refresh_from_db()
+
+        assert self.workplace.position, 'Mechanic'

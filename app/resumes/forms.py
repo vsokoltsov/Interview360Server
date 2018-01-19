@@ -85,7 +85,12 @@ class WorkplaceForm(BaseForm):
             for wp in workplaces:
                 company_name = wp.pop('company')
                 company, created = Company.objects.get_or_create(name=company_name)
-                workplace = Workplace.objects.create(**wp, company=company)
+                if wp.get('id'):
+                    workplace = Workplace.objects.get(id=wp.get('id'))
+                    for key, value in wp.items():
+                        setattr(workplace, key, value)
+                else:
+                    workplace = Workplace.objects.create(**wp, company=company)
                 response_list.append(workplace)
             self.objects = response_list
             return True
