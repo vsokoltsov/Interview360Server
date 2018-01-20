@@ -44,12 +44,3 @@ class BaseForm(abc.ABC):
         """ Save object to the database """
 
         if not self.is_valid(): return False
-
-        for key, value in self.params.items():
-            setattr(self.obj, key, value)
-
-        with transaction.atomic():
-            with advisory_lock(message if message else 'aaa'):
-                self.obj.save()
-                yield
-                return True
