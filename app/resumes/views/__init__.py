@@ -12,3 +12,4 @@ from resumes.search import ResumesSearch
 
 from .resumes import ResumeViewSet
 from .workplaces import WorkplacesApiView
+from .workplaces_delete import WorkplacesDeleteApiView

@@ -2,6 +2,7 @@ from . import viewsets, list_route, Response, status
 from rest_framework.views import APIView
 from resumes.forms import WorkplaceForm
 from resumes.serializers import WorkplaceSerializer
+import ipdb
 
 class WorkplacesApiView(APIView):
     """ Views for workplace resource """

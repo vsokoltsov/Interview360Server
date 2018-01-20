@@ -40,7 +40,7 @@ class WorkplaceViewTest(APITestCase):
         """ Test success create of the workplace """
 
         response = self.client.put(
-            '/api/v1/resumes/{}/workplaces/'.format(self.resume.id),
+            '/api/v1/resumes/{}/workplaces/update/'.format(self.resume.id),
             self.params
         )
         self.assertTrue(response.status_code, 200)
@@ -49,7 +49,7 @@ class WorkplaceViewTest(APITestCase):
         """ Test failed create request for the workplace """
 
         response = self.client.put(
-            '/api/v1/resumes/{}/workplaces/'.format(self.resume.id),
+            '/api/v1/resumes/{}/workplaces/update/'.format(self.resume.id),
             { 'workplaces': [] }
         )
         self.assertTrue(response.status_code, 400)
@@ -60,7 +60,7 @@ class WorkplaceViewTest(APITestCase):
         self.params['workplaces'][0]['id'] = self.workplace.id
 
         response = self.client.put(
-            '/api/v1/resumes/{}/workplaces/'.format(self.resume.id),
+            '/api/v1/resumes/{}/workplaces/update/'.format(self.resume.id),
             self.params
         )
         self.assertTrue(response.status_code, 200)
@@ -71,7 +71,7 @@ class WorkplaceViewTest(APITestCase):
         self.params['workplaces'][0]['id'] = self.workplace.id
 
         response = self.client.put(
-            '/api/v1/resumes/{}/workplaces/'.format(self.resume.id),
+            '/api/v1/resumes/{}/workplaces/update/'.format(self.resume.id),
             { 'workplaces': [] }
         )
         self.assertTrue(response.status_code, 400)
