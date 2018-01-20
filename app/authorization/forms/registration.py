@@ -1,5 +1,7 @@
 from . import forms, transaction, advisory_lock, User, Token
 from django.db.utils import IntegrityError
+from django.db import connection
+from common.advisory_lock import advisory_lock
 from profiles.index import UserIndex
 import elasticsearch
 import ipdb
@@ -27,20 +29,17 @@ class RegistrationForm(forms.Form):
         if not self.is_valid(): return False
 
         try:
-            user = User(email=self['email'].value())
-            user.set_password(self['password'].value())
-
-            with transaction.atomic():
-                with advisory_lock('User'):
+            with advisory_lock('User') as acquired:
+                with transaction.atomic():
+                    user = User(email=self['email'].value())
+                    user.set_password(self['password'].value())
                     user.save()
                     self.token = Token.objects.create(user=user)
                     UserIndex.store_index(user)
                     return True
-        except IntegrityError as e:
-            transaction.rollback()
+        except IntegrityError:
             self.add_error('email', 'Already present')
             return False
         except elasticsearch.exceptions.ConnectionError:
-            transaction.rollback()
             self.add_error('email', 'There is an indexing error occured')
             return False
