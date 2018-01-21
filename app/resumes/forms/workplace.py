@@ -1,15 +1,4 @@
-from common.forms import BaseForm
-import cerberus
-from resumes.models import Resume, Workplace
-from companies.models import Company
-from django.db import transaction
-import ipdb
-
-def company_exist(field, value, error):
-    try:
-        company = Company.objects.get(name=value)
-    except Company.DoesNotExist:
-        error(field, 'Does not exist')
+from . import  BaseForm, cerberus, Resume, Workplace, Company, transaction
 
 def resume_exist(field, value, error):
     """ Check wheter or not resume exist """

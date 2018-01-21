@@ -10,7 +10,6 @@ def advisory_lock(lock):
 
     :param lock: The lock name. Can be anything convertible to a string.
       Should be scoped to the user/org and action being taken.
-    :param cur: A database cursor. Optional.
     :return True/False whether lock was acquired.
     """
     hasher = hashlib.sha1()
