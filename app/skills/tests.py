@@ -24,13 +24,15 @@ class SkillViewSetTests(APITestCase):
     def test_success_list_receiving(self):
         """ Test success receiving list of skills """
 
-        response = self.client.get('/api/v1/skills/')
+        response = self.client.get('/api/v1/skills/', format='json')
         self.assertEqual(len(response.data), 1)
 
     def test_success_detail_information_receiving(self):
         """ Test success receiving detail infromation """
 
-        response = self.client.get("/api/v1/skills/{}/".format(self.skill.id))
+        response = self.client.get(
+            "/api/v1/skills/{}/".format(self.skill.id), format='json'
+        )
         self.assertEqual(response.status_code, 200)
         self.assertTrue('name' in response.data)
 
@@ -38,7 +40,9 @@ class SkillViewSetTests(APITestCase):
     def test_success_skill_creation(self, skill_index):
         """ Test success creation of the skill """
 
-        response = self.client.post("/api/v1/skills/", self.form_data)
+        response = self.client.post(
+            "/api/v1/skills/", self.form_data, format='json'
+        )
         self.assertEqual(response.status_code, 201)
         self.assertTrue('name' in response.data)
 
@@ -46,7 +50,9 @@ class SkillViewSetTests(APITestCase):
     def test_failed_skill_creation(self, skill_index):
         """ Test failed creation of the skill """
 
-        response = self.client.post("/api/v1/skills/", {})
+        response = self.client.post(
+            "/api/v1/skills/", {}, format='json'
+        )
         self.assertEqual(response.status_code, 400)
         self.assertTrue('name' in response.data)
 
@@ -56,7 +62,7 @@ class SkillViewSetTests(APITestCase):
 
         response = self.client.put(
             "/api/v1/skills/{}/".format(self.skill.id),
-            self.form_data
+            self.form_data, format='json'
         )
         self.assertEqual(response.status_code, 200)
         self.assertTrue('name' in response.data)
@@ -67,7 +73,7 @@ class SkillViewSetTests(APITestCase):
 
         response = self.client.put(
             "/api/v1/skills/{}/".format(self.skill.id),
-            {}
+            {}, format='json'
         )
         self.assertEqual(response.status_code, 400)
         self.assertTrue('name' in response.data)
@@ -78,7 +84,9 @@ class SkillViewSetTests(APITestCase):
     def test_success_skill_deletion(self, skill_index, skill_delete, skill_get):
         """ Test success deletion of the skill """
 
-        response = self.client.delete("/api/v1/skills/{}/".format(self.skill.id))
+        response = self.client.delete(
+            "/api/v1/skills/{}/".format(self.skill.id), format='json'
+        )
         self.assertEqual(response.status_code, 204)
 
     @mock.patch('skills.search.SkillSearch.find')
@@ -94,6 +102,6 @@ class SkillViewSetTests(APITestCase):
         url = "/api/v1/skills/search/?q={}".format(
             'buzzword'
         )
-        response = self.client.get(url)
+        response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['skills'], skill_index)
