@@ -1,8 +1,9 @@
 from . import (
     render, viewsets, status, Response, IsAuthenticated, TokenAuthentication,
     get_object_or_404, ResumesSerializer, ResumeSerializer, list_route,
-    Resume, ResumesIndex, ResumesSearch
+    Resume, ResumesIndex, ResumesSearch, ResumeForm
 )
+import ipdb
 
 class ResumeViewSet(viewsets.ModelViewSet):
     """ Resume views """
@@ -22,24 +23,26 @@ class ResumeViewSet(viewsets.ModelViewSet):
     def create(self, request):
         """ Create a new resume """
 
-        serializer = ResumeSerializer(data=request.data)
-        if serializer.is_valid() and serializer.save():
+        form = ResumeForm(obj=Resume(), params=request.data)
+        if form.submit():
+            serializer = ResumeSerializer(form.obj)
             return Response({'resume': serializer.data},
                         status=status.HTTP_200_OK)
         else:
-            return Response({'errors': serializer.errors},
+            return Response({'errors': form.errors},
                             status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk=None):
         """ Update existing resume """
 
         resume = self.get_object()
-        serializer = ResumeSerializer(resume, data=request.data)
-        if serializer.is_valid() and serializer.save():
+        form = ResumeForm(obj=resume, params=request.data)
+        if form.submit():
+            serializer = ResumeSerializer(form.obj)
             return Response({'resume': serializer.data},
                         status=status.HTTP_200_OK)
         else:
-            return Response({'errors': serializer.errors},
+            return Response({'errors': form.errors},
                             status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):

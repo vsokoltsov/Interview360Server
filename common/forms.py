@@ -43,7 +43,6 @@ class BaseForm(abc.ABC):
         self.obj = kwargs.get('obj', None)
         self.params = kwargs.get('params', None)
 
-
     def is_valid(self):
         """ Return whether or not the receiving data are valid """
 

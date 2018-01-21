@@ -57,7 +57,7 @@ class ResumeForm(BaseForm):
         Set skills to resume object;
         Set workplaces to resume object;
         """
-
+        
         if not self.is_valid():
             return False
 
