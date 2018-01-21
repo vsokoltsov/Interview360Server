@@ -35,37 +35,42 @@ class FeedbackViewSetTest(APITestCase):
     def test_success_receiving_feedbacks_list(self):
         """ Test success receiving of the feedbacks list """
 
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, format='json')
         self.assertEqual(response.status_code, 200)
 
     def test_success_retrieving_action(self):
         """ Test success receiving ofthe detail information about feedback """
 
-        response = self.client.get(self.url + "{}/".format(self.feedback.id))
+        response = self.client.get(
+            self.url + "{}/".format(self.feedback.id), format='json'
+        )
         self.assertEqual(response.status_code, 200)
 
     def test_success_create_action(self):
         """ Test success creation of the feedback """
 
-        response = self.client.post(self.url, self.form_data)
+        response = self.client.post(self.url, self.form_data, format='json')
         self.assertEqual(response.status_code, 201)
 
     def test_failed_create_action(self):
         """ Test success creation of the feedback """
 
-        response = self.client.post(self.url, {})
+        response = self.client.post(self.url, {}, format='json')
         self.assertEqual(response.status_code, 400)
 
     def test_success_update_action(self):
         """ Test success update of the feedback """
 
         response = self.client.get(
-            self.url + "{}/".format(self.feedback.id), self.form_data
+            self.url + "{}/".format(self.feedback.id), self.form_data,
+            format='json'
         )
         self.assertEqual(response.status_code, 200)
 
     def test_success_destroy_action(self):
         """ Test success delete action """
 
-        response = self.client.delete(self.url + "{}/".format(self.feedback.id))
+        response = self.client.delete(
+            self.url + "{}/".format(self.feedback.id), format='json'
+        )
         self.assertEqual(response.status_code, 204)
