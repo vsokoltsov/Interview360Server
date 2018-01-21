@@ -33,13 +33,15 @@ class CompaniesViewSetTests(APITestCase):
     def test_list_action(self):
         """ Test receiving of companies list """
 
-        response = self.client.get('/api/v1/companies/')
+        response = self.client.get('/api/v1/companies/', format='json')
         self.assertEqual(len(response.data), 1)
 
     def test_success_retrieve_action(self):
         """ Test receiving of particular company """
 
-        response = self.client.get('/api/v1/companies/{}/'.format(self.company.id))
+        response = self.client.get(
+            '/api/v1/companies/{}/'.format(self.company.id), format='json'
+        )
         self.assertEqual(response.status_code, 200)
 
     @mock.patch('companies.index.CompanyIndex.store_index')
@@ -47,13 +49,15 @@ class CompaniesViewSetTests(APITestCase):
     def test_success_create_action(self, index_mock, company_index):
         """ Test success option of company's creation """
 
-        response = self.client.post('/api/v1/companies/', self.company_params)
+        response = self.client.post(
+            '/api/v1/companies/', self.company_params, format='json'
+        )
         self.assertTrue('company' in response.data)
 
     def test_failed_create_action(self):
         """ Test failed option of company's creation """
 
-        response = self.client.post('/api/v1/companies/', {})
+        response = self.client.post('/api/v1/companies/', {}, format='json')
         self.assertTrue('errors' in response.data)
 
     @mock.patch('companies.index.CompanyIndex.store_index')
@@ -61,7 +65,7 @@ class CompaniesViewSetTests(APITestCase):
         """ Test success option of company's update """
 
         url = '/api/v1/companies/{}/'.format(self.company.id)
-        response = self.client.put(url, self.company_params)
+        response = self.client.put(url, self.company_params, format='json')
         self.assertTrue('company' in response.data)
 
     @mock.patch.object(CompanyIndex, 'get')
@@ -71,7 +75,7 @@ class CompaniesViewSetTests(APITestCase):
         """ Test success company deletion """
 
         url = '/api/v1/companies/{}/'.format(self.company.id)
-        response = self.client.delete(url)
+        response = self.client.delete(url, format='json')
         self.assertEqual(response.status_code, 204)
 
     @mock.patch('companies.search.CompanySearch.find')
@@ -87,7 +91,7 @@ class CompaniesViewSetTests(APITestCase):
         url = "/api/v1/companies/search/?q={}".format(
             'buzzword'
         )
-        response = self.client.get(url)
+        response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['companies'], user_index)
 
@@ -101,5 +105,7 @@ class CompaniesViewSetTests(APITestCase):
             'start_date': datetime.date.today()
         }
         company = Company.objects.create(**company_params)
-        response = self.client.get('/api/v1/companies/{}/'.format(company.id))
+        response = self.client.get(
+            '/api/v1/companies/{}/'.format(company.id), format='json'
+        )
         assert response.status_code, 404
