@@ -5,6 +5,24 @@ from contextlib import contextmanager
 from django.db import transaction
 from django_pglocks import advisory_lock
 
+class FormException(Exception):
+    """ Form exception class """
+
+    def __init__(self, *args, **kwargs):
+        """ Initialization class; Setting form exception parameters """
+
+        self.field = kwargs.get('field', None)
+        self.errors = kwargs.get('errors', None)
+
+        if not self.field:
+            raise NotImplementedError('You must set field key')
+
+        if not self.errors:
+            raise NotImplementedError('You must set errors key')
+
+        super(Exception, self).__init__(self)
+
+
 class BaseForm(abc.ABC):
     """ Base form-object class """
 
