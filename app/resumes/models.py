@@ -18,7 +18,7 @@ class Workplace(models.Model):
     """ Workplace representation in the system """
 
     company = models.ForeignKey('companies.Company', null=False)
-    resume = models.ForeignKey('resumes.Resume', null=False)
+    resume = models.ForeignKey('resumes.Resume', null=False, related_name='workplaces')
     position = models.CharField(max_length=255, null=False, blank=False)
     description = models.TextField()
     start_date = models.DateField(null=True)
