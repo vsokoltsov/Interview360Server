@@ -67,7 +67,9 @@ class ResumeForm(BaseForm):
                 skills = self.params.pop('skills', [])
                 self._set_attributes()
                 self.obj.skills.set(skills)
-                workplace_form = WorkplaceForm(params={ 'workplaces': workplaces })
+                workplace_form = WorkplaceForm(
+                    params={ 'workplaces': self._configure_workplaces(workplaces) }
+                )
                 if not workplace_form.submit():
                     raise FormException(
                         field='workplaces', errors=workplace_form.errors
@@ -82,6 +84,15 @@ class ResumeForm(BaseForm):
 
 
     def _set_attributes(self):
+        """ Set attributes to the form object """
+
         for field, value in self.params.items():
             setattr(self.obj, field, value)
         self.obj.save()
+
+    def _configure_workplaces(self, workplaces):
+        """ Configure workplaces objects """
+
+        for wp in workplaces:
+            wp['resume_id'] = self.obj.id
+        return workplaces

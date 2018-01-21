@@ -30,7 +30,6 @@ class ResumeFormTest(TransactionTestCase):
             'workplaces': [
                 {
                     'position': 'QA',
-                    'resume_id': self.resume.id,
                     'company': self.company.name,
                     'description': 'Bla-bla',
                     'start_date': '2015-02-01',
@@ -44,6 +43,48 @@ class ResumeFormTest(TransactionTestCase):
 
         form = ResumeForm(obj=Resume(), params=self.params)
         self.assertTrue(form.is_valid())
+
+    def test_failed_validation(self):
+        """ Test failed validation of form """
+
+        form = ResumeForm(obj=Resume(), params={})
+        self.assertFalse(form.is_valid())
+
+    def test_success_creation_of_resume(self):
+        """ Test success creation of the resume """
+
+        resumes_count = Resume.objects.count()
+        form = ResumeForm(obj=Resume(), params=self.params)
+        form.submit()
+        assert Resume.objects.count(), resumes_count + 1
+
+    def test_success_setting_of_skils_to_resume(self):
+        """ Test setting skils to the resume after creation """
+
+        form = ResumeForm(obj=Resume(), params=self.params)
+        form.submit()
+        assert(
+            [s.id for s in form.obj.skills.all()],
+            self.skills
+        )
+
+    def test_success_creating_workplace_for_resume(self):
+        """ Test success creation of workplace for resume """
+
+        workplaces_count = Workplace.objects.count()
+        form = ResumeForm(obj=Resume(), params=self.params)
+        form.submit()
+        assert Workplace.objects.count(), workplaces_count + 1
+
+    def test_setting_workplace_for_resume(self):
+        """ Test setting workplace to the resume """
+
+        form = ResumeForm(obj=Resume(), params=self.params)
+        form.submit()
+        assert(
+            [w.id for w in form.obj.workplaces.all()],
+            [Workplace.objects.last().id]
+        )
 
     def test_failed_validation_workplaces_error(self):
         """ Test failed validation in case of failed validation of workplaces """
