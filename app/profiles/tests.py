@@ -45,7 +45,9 @@ class ProfileViewSetTest(APITestCase):
     def test_success_receiving_of_profile(self):
         """ Test success receiving current user information """
 
-        response = self.client.get('/api/v1/users/{}/'.format(self.user.id))
+        response = self.client.get(
+            '/api/v1/users/{}/'.format(self.user.id), format='json'
+        )
         assert response.status_code, 200
 
     @mock.patch('profiles.index.UserIndex.store_index')
@@ -54,7 +56,7 @@ class ProfileViewSetTest(APITestCase):
 
         response = self.client.put(
             '/api/v1/users/{}/'.format(self.user.id),
-            self.form_data
+            self.form_data, format='json'
         )
         user = User.objects.get(id=self.user.id)
         assert user.email, self.form_data['email']
@@ -64,7 +66,7 @@ class ProfileViewSetTest(APITestCase):
 
         response = self.client.put(
             '/api/v1/users/{}/change_password/'.format(self.user.id),
-            self.password_change_form
+            self.password_change_form, format='json'
         )
         assert 200, response.status_code
 
@@ -72,7 +74,8 @@ class ProfileViewSetTest(APITestCase):
         """ Test failed password change """
 
         response = self.client.put(
-            '/api/v1/users/{}/change_password/'.format(self.user.id), {}
+            '/api/v1/users/{}/change_password/'.format(self.user.id), {},
+            format='json'
         )
         assert 400, response.status_code
 
@@ -90,7 +93,8 @@ class ProfileViewSetTest(APITestCase):
             self.form_data['attachment'] = { 'id': attachment.id }
 
             response = self.client.put(
-                '/api/v1/users/{}/'.format(self.user.id), self.form_data, format='json'
+                '/api/v1/users/{}/'.format(self.user.id), self.form_data,
+                format='json'
             )
 
             attachment.refresh_from_db()
