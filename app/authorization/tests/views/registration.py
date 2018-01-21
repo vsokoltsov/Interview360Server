@@ -11,7 +11,7 @@ class RegistrationViewTests(APITestCase):
             'email': 'example@mail.com',
             'password': '12345678',
             'password_confirmation': '12345678'
-        })
+        }, format='json')
         self.assertEqual('token' in response.data, True)
 
     def test_failed_sign_up(self):
@@ -19,7 +19,7 @@ class RegistrationViewTests(APITestCase):
 
         response = self.client.post('/api/v1/sign_up/', {
                     'email': '', 'password': ''
-                })
+                }, format='json')
         self.assertEqual('errors' in response.data, True)
 
     def test_failed_sign_up_user_already_exists(self):
@@ -30,5 +30,5 @@ class RegistrationViewTests(APITestCase):
                 'email': 'example@mail.com',
                 'password': '12345678',
                 'password_confirmation': '12345678'
-        })
+        }, format='json')
         self.assertEqual('errors' in response.data, True)

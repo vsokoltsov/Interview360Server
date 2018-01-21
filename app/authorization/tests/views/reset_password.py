@@ -17,7 +17,9 @@ class ResetPasswordTest(APITestCase):
                       'password_confirmation': '123456789',
                       'token': self.token.key
                     }
-        response = self.client.post('/api/v1/reset_password/', form_data)
+        response = self.client.post(
+            '/api/v1/reset_password/', form_data, format='json'
+        )
         self.assertTrue('message' in response.data)
 
     def test_failed_reset(self):
@@ -27,5 +29,7 @@ class ResetPasswordTest(APITestCase):
                       'password_confirmation': '123456789',
                       'token': ''
                     }
-        response = self.client.post('/api/v1/reset_password/', form_data)
+        response = self.client.post(
+            '/api/v1/reset_password/', form_data, format='json'
+        )
         self.assertTrue('errors' in response.data)
