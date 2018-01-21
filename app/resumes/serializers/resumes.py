@@ -1,7 +1,9 @@
-from . import serializers, Resume
+from . import serializers, Resume, UserSerializer
 
 class ResumesSerializer(serializers.ModelSerializer):
     """ Resumes serializer class """
+
+    user = UserSerializer()
 
     class Meta:
         model = Resume

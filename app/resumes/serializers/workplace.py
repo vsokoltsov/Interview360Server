@@ -1,10 +1,10 @@
-from . import serializers, Workplace, BaseCompanySerializer, ResumeSerializer
+from . import serializers, Workplace, BaseCompanySerializer, ResumesSerializer
 
 class WorkplaceSerializer(serializers.ModelSerializer):
     """ Serializer for workplace resource """
 
     company = BaseCompanySerializer()
-    resume = ResumeSerializer()
+    resume = ResumesSerializer()
 
     class Meta:
         model = Workplace
