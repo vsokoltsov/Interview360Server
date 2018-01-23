@@ -21,8 +21,8 @@ class Workplace(models.Model):
     resume = models.ForeignKey('resumes.Resume', null=False, related_name='workplaces')
     position = models.CharField(max_length=255, null=False, blank=False)
     description = models.TextField()
-    start_date = models.DateField(null=True)
-    end_date = models.DateField(null=False)
+    start_date = models.DateField(null=False)
+    end_date = models.DateField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
