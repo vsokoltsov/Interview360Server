@@ -78,6 +78,8 @@ class WorkplaceForm(BaseForm):
                     workplace = Workplace.objects.get(id=wp.get('id'))
                     for key, value in wp.items():
                         setattr(workplace, key, value)
+                        
+                    workplace.company = company
                     workplace.save()
                 else:
                     workplace = Workplace.objects.create(**wp, company=company)
