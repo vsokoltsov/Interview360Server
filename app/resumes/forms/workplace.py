@@ -1,4 +1,5 @@
 from . import  BaseForm, cerberus, Resume, Workplace, Company, transaction
+import ipdb
 
 def resume_exist(field, value, error):
     """ Check wheter or not resume exist """
@@ -70,7 +71,6 @@ class WorkplaceForm(BaseForm):
         with transaction.atomic():
             response_list = []
             workplaces = self.params.get('workplaces')
-
             for wp in workplaces:
                 company_name = wp.pop('company')
                 company, created = Company.objects.get_or_create(name=company_name)
@@ -78,6 +78,7 @@ class WorkplaceForm(BaseForm):
                     workplace = Workplace.objects.get(id=wp.get('id'))
                     for key, value in wp.items():
                         setattr(workplace, key, value)
+                    workplace.save()
                 else:
                     workplace = Workplace.objects.create(**wp, company=company)
                 response_list.append(workplace)
