@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 
 class Resume(models.Model):
     """ Resume representation in the system """
@@ -28,3 +29,17 @@ class Workplace(models.Model):
 
     class Meta:
         db_table = 'workplaces'
+
+class Contact(models.Model):
+    """ Representation of the user's contact """
+
+    resume = models.ForeignKey('resumes.Resume', null=False, related_name='contacts')
+    email = models.EmailField(max_length=255, unique=True, null=False)
+    phone = models.CharField(max_length=255, unique=True, null=False)
+    phone_comment = models.TextField()
+    social_networks = JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'contacts'
