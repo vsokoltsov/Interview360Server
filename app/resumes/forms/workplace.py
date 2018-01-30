@@ -1,13 +1,8 @@
-from . import  BaseForm, cerberus, Resume, Workplace, Company, transaction
+from . import (
+    BaseForm, cerberus, Resume, Workplace, Company,
+    transaction, resume_exist
+)
 import ipdb
-
-def resume_exist(field, value, error):
-    """ Check wheter or not resume exist """
-
-    try:
-        resume = Resume.objects.get(id=value)
-    except Resume.DoesNotExist:
-        error(field, 'Does not exist')
 
 class WorkplaceForm(BaseForm):
     """ Workplace form class """
@@ -78,7 +73,7 @@ class WorkplaceForm(BaseForm):
                     workplace = Workplace.objects.get(id=wp.get('id'))
                     for key, value in wp.items():
                         setattr(workplace, key, value)
-                        
+
                     workplace.company = company
                     workplace.save()
                 else:
