@@ -8,3 +8,4 @@ from django.db import transaction
 
 from .workplace import WorkplaceForm
 from .resume import ResumeForm
+from .contact import ContactForm

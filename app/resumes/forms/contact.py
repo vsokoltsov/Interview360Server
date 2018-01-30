@@ -1,8 +1,13 @@
+import re
+
+from django.db.utils import IntegrityError
+
+import ipdb
+
 from . import  (
     BaseForm, FormException, cerberus, Resume, Workplace, Company, Contact,
     transaction, WorkplaceForm, resume_exist
 )
-from django.db.utils import IntegrityError
 from common.advisory_lock import advisory_lock
 
 class ContactForm(BaseForm):
@@ -33,7 +38,7 @@ class ContactForm(BaseForm):
             'type': 'string',
             'empty': False,
             'required': True,
-            'regex': '/[0-9]{7,12}\z/i'
+            'regex': '\A(\+)[0-9]{7,12}'
         },
         'phone_comment': {
             'type': 'string',
@@ -54,12 +59,19 @@ class ContactForm(BaseForm):
             return False
 
         try:
-            with transaction.atomic():
-                with advisory_lock() as acquired:
-                    for key, value in wp.items():
+            resume_id = self.params.get('resume_id')
+            with advisory_lock('resume_{}_contact'.format(resume_id)) as acquired:
+                with transaction.atomic():
+                    for key, value in self.params.items():
                         setattr(self.obj, key, value)
                     self.obj.save()
                     return True
         except IntegrityError as e:
-            ipdb.set_trace()
+            self._set_uniq_errors(str(e))
             return False
+
+    def _set_uniq_errors(self, e):
+        """ Set unique index errors into the form errors """
+        for item in ['email', 'phone']:
+            if re.search(item, e):
+                self.errors[item] = ['Is not unique']

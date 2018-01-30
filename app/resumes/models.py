@@ -37,7 +37,7 @@ class Contact(models.Model):
     email = models.EmailField(max_length=255, unique=True, null=False)
     phone = models.CharField(max_length=255, unique=True, null=False)
     phone_comment = models.TextField()
-    social_networks = JSONField()
+    social_networks = JSONField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
