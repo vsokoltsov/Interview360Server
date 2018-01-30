@@ -34,13 +34,33 @@ class ContactFormTest(TransactionTestCase):
         form = ContactForm(obj=Contact(), params=self.params)
         self.assertTrue(form.is_valid())
 
+    def test_failed_validation(self):
+        """ Test failed validation of form """
+
+        form = ContactForm(obj=Contact(), params={})
+        self.assertFalse(form.is_valid())
+
+    def test_success_creation_of_contact(self):
+        """ Test success creation of the contact """
+
+        contacts_count = Contact.objects.count()
+        form = ContactForm(obj=Contact(), params=self.params)
+        form.submit()
+        assert Contact.objects.count(), contacts_count + 1
+
+    def test_assertion_contact_to_resume(self):
+        """ Test assertion of the contact to the resume """
+
+        form = ContactForm(obj=Contact(), params=self.params)
+        form.submit()
+        assert form.obj.resume_id, self.resume.id
+
     def test_failed_validation_email_already_exists(self):
         """ Test failed validation of form if contact with this email
         already exist """
 
         self.params['email'] = self.contact.email
         form = ContactForm(obj=Contact(), params=self.params)
-        form.is_valid()
         form.submit()
         assert 'email' in form.errors, True
 
@@ -50,6 +70,5 @@ class ContactFormTest(TransactionTestCase):
 
         self.params['phone'] = self.contact.phone
         form = ContactForm(obj=Contact(), params=self.params)
-        form.is_valid()
         form.submit()
         assert 'phone' in form.errors, True

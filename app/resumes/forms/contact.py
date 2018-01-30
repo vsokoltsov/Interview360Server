@@ -72,6 +72,7 @@ class ContactForm(BaseForm):
 
     def _set_uniq_errors(self, e):
         """ Set unique index errors into the form errors """
+        
         for item in ['email', 'phone']:
             if re.search(item, e):
                 self.errors[item] = ['Is not unique']
