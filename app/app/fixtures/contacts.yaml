@@ -3,6 +3,6 @@
   fields:
     resume: !!int 1
     email: 'example@mail.com'
-    phone: '+79214438239'
+    phone: '+712312341234'
     created_at: '2017-09-15T22:17:44+00:00'
     updated_at: '2017-09-15T22:17:44+00:00'
