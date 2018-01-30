@@ -11,6 +11,6 @@ class WorkplacesDeleteApiView(APIView):
     def delete(self, request, id=None, resume_id=None):
         """ Delete existing workplace """
 
-        workplace = get_object_or_404(Resume, resume_id)
+        workplace = get_object_or_404(Workplace, resume_id)
         workplace.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
