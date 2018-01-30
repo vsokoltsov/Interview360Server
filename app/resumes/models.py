@@ -33,7 +33,7 @@ class Workplace(models.Model):
 class Contact(models.Model):
     """ Representation of the user's contact """
 
-    resume = models.ForeignKey('resumes.Resume', null=False, related_name='contacts')
+    resume = models.OneToOneField('resumes.Resume', null=False)
     email = models.EmailField(max_length=255, unique=True, null=False)
     phone = models.CharField(max_length=255, unique=True, null=False)
     phone_comment = models.TextField()
