@@ -1,7 +1,8 @@
-from . import viewsets, list_route, Response, status, get_object_or_404
+from . import viewsets, list_route, Response, status, get_object_or_404, Resume
 from rest_framework.views import APIView
 from resumes.forms import ContactForm
 from resumes.serializers import ContactSerializer
+import ipdb
 
 class ContactApiView(APIView):
     """ View for contact resource """
@@ -22,6 +23,6 @@ class ContactApiView(APIView):
     def delete(self, request, resume_id=None):
         """ Delete existing contact """
 
-        resume = get_object_or_404(Resume, resume_id)
+        resume = get_object_or_404(Resume, pk=resume_id)
         resume.contact.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
