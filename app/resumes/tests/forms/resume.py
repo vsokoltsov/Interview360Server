@@ -1,6 +1,6 @@
 from . import (
     TransactionTestCase, HR, EMPLOYEE, CANDIDATE,
-    Company, Resume, mock, ResumeForm, Workplace, Skill
+    Company, Resume, mock, ResumeForm, Workplace, Skill, Contact
 )
 import ipdb
 
@@ -80,6 +80,14 @@ class ResumeFormTest(TransactionTestCase):
         form = ResumeForm(obj=Resume(), params=self.params)
         form.submit()
         assert Workplace.objects.count(), workplaces_count + 1
+
+    def test_success_creating_contact_for_resume(self):
+        """ Test success creation of contact for resume """
+
+        contacts_count = Contact.objects.count()
+        form = ResumeForm(obj=Resume(), params=self.params)
+        form.submit()
+        assert Contact.objects.count(), contacts_count + 1
 
     def test_setting_workplace_for_resume(self):
         """ Test setting workplace to the resume """
