@@ -1,6 +1,6 @@
 from . import (
     TransactionTestCase, ResumeSerializer, HR, EMPLOYEE, CANDIDATE,
-    Skill, Company, Resume, mock
+    Skill, Company, Resume, mock, Workplace
 )
 import ipdb
 
@@ -11,78 +11,56 @@ class ResumeSerializerTest(TransactionTestCase):
         'user.yaml',
         'company.yaml',
         'skill.yaml',
-        'resume.yaml'
+        'resume.yaml',
+        'workplaces.yaml'
     ]
 
     def setUp(self):
         """ Setting up testing dependencies """
 
-        self.resume = Resume.objects.last()
+        self.resume = Resume.objects.first()
         self.company = Company.objects.first()
         self.user = self.company.get_employees_with_role(EMPLOYEE)[0]
         self.skills = [s.id for s in Skill.objects.filter(id__in=[1, 2])]
+        self.workplace = Workplace.objects.last()
+        self.serializer = ResumeSerializer(self.resume)
         self.params = {
             'title': 'Python developer',
             'user': self.user.id,
             'skills': self.skills,
-            'description': 'Resume'
+            'description': 'Resume',
+            'salary': 120000
         }
 
-    def test_success_validation(self):
-        """ Testing success validation of the serializer """
+    def test_contain_id(self):
+        """ Testing serializer containing id parameter """
 
-        serializer = ResumeSerializer(data=self.params)
-        assert serializer.is_valid(), True
+        assert self.serializer.data.get('id'), self.resume.id
 
-    def test_failed_validation(self):
-        """ Testing failed serializer validation """
+    def test_contain_title(self):
+        """ Testing serializer containing title parameter """
 
-        serializer = ResumeSerializer(data=None)
-        self.assertFalse(serializer.is_valid())
+        assert self.serializer.data.get('title'), self.resume.title
 
-    @mock.patch('resumes.index.ResumesIndex.store_index')
-    def test_success_resume_creation(self, resume_index):
-        """ Test success creation of the resume """
+    def test_contain_description(self):
+        """ Testing serializer containing description parameter """
 
-        resume_count = Resume.objects.count()
-        serializer = ResumeSerializer(data=self.params)
-        serializer.is_valid()
-        serializer.save()
-        assert Resume.objects.count(), resume_count + 1
+        assert self.serializer.data.get('description'), self.resume.description
 
-    @mock.patch('resumes.index.ResumesIndex.store_index')
-    def test_saving_skills_to_resume(self, resume_index):
-        """ Save skills to resume """
+    def test_contain_salary(self):
+        """ Testing serializer containing salary parameter """
 
-        serializer = ResumeSerializer(data=self.params)
-        serializer.is_valid()
-        serializer.save()
+        assert self.serializer.data.get('salary'), self.resume.salary
+
+    def test_contain_user(self):
+        """ Testing serializer containing user parameter """
+
+        assert self.serializer.data.get('user').get('id'), self.resume.user.id
+
+    def test_contain_workplaces(self):
+        """ Testing serializer container workplaces parameter """
 
         assert(
-            [ s.id for s in Resume.objects.last().skills.all() ],
-            [ s for s in self.skills ]
-        )
-
-    @mock.patch('resumes.index.ResumesIndex.store_index')
-    def test_saving_resume_with_user(self, resume_index):
-        """ Test setting user to the new resume """
-
-        serializer = ResumeSerializer(data=self.params)
-        serializer.is_valid()
-        serializer.save()
-
-        self.assertTrue(Resume.objects.last().user.id, self.user.id)
-
-    @mock.patch('resumes.index.ResumesIndex.store_index')
-    def test_success_update_resume(self, resume_index):
-        """ Test success resume update """
-
-        serializer = ResumeSerializer(self.resume, data=self.params)
-        serializer.is_valid()
-        serializer.save()
-
-        self.resume.refresh_from_db()
-        assert(
-            [ s.id for s in self.resume.skills.all() ],
-            [ s for s in self.skills ]
+            [ w.get('id') for w in self.serializer.data.get('workplaces') ],
+            [ w.id for w in Workplace.objects.all() ]
         )

@@ -30,12 +30,12 @@ class EmployeeActivationTests(APITestCase):
         """ Test success response for route """
 
         url = "/api/v1/companies/{}/activate_member/".format(self.company.id)
-        response = self.client.put(url, self.form_data)
+        response = self.client.put(url, self.form_data, format='json')
         self.assertTrue('message' in response.data)
 
     def test_failed_employee_activation(self):
         """ Test failed response for route """
 
         url = "/api/v1/companies/{}/activate_member/".format(self.company.id)
-        response = self.client.put(url, {})
+        response = self.client.put(url, {}, format='json')
         self.assertTrue('errors' in response.data)

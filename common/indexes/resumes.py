@@ -10,7 +10,7 @@ def rebuild_index():
     try:
         Index('resumes').delete()
     except TransportError:
-        logger.warning('There is no such index')
+        logging.logger.warning('There is no such index')
     finally:
         ResumesIndex.init()
         resumes = Resume.objects.all()

@@ -1,0 +1,11 @@
+- model: resumes.Workplace
+  pk: 1
+  fields:
+    company: !!int 33
+    resume: !!int 1
+    position: 'Mechanic'
+    description: 'Description'
+    start_date: '2017-09-15'
+    end_date: '2017-12-15'
+    created_at: '2017-09-15T22:17:44+00:00'
+    updated_at: '2017-09-15T22:17:44+00:00'

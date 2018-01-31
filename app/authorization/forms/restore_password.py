@@ -1,4 +1,4 @@
-from . import forms, User, Token
+from . import forms, User, Token, transaction
 
 import os
 from django.core.exceptions import ObjectDoesNotExist
@@ -12,11 +12,12 @@ class RestorePasswordForm(forms.Form):
         if not self.is_valid(): return False
 
         try:
-            user = User.objects.get(email=self['email'].value())
-            result = Token.objects.get_or_create(user=user)
-            auth_token = result[0] if isinstance(result, tuple) else result
-            EmailService.send_reset_password_mail(user, auth_token)
-            return True
+            with transaction.atomic():
+                user = User.objects.get(email=self['email'].value())
+                result = Token.objects.get_or_create(user=user)
+                auth_token = result[0] if isinstance(result, tuple) else result
+                EmailService.send_reset_password_mail(user, auth_token)
+                return True
         except ObjectDoesNotExist:
             self.add_error('email', 'There is no such user')
             return False

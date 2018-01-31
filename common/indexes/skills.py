@@ -10,7 +10,7 @@ def rebuild_index():
     try:
         Index('skills').delete()
     except TransportError:
-        logger.warning('There is no such index')
+        logging.logger.warning('There is no such index')
     finally:
         SkillIndex.init()
         skills = Skill.objects.all()

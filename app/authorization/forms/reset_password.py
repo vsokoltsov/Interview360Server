@@ -1,4 +1,4 @@
-from . import forms, User, Token
+from . import forms, User, Token, transaction
 
 from django.core.exceptions import ObjectDoesNotExist
 import ipdb
@@ -10,7 +10,7 @@ class ResetPasswordForm(forms.Form):
 
     def clean(self):
         """ Clean data and add custom validation """
-        
+
         cleaned_data = super(ResetPasswordForm, self).clean()
 
         password = cleaned_data.get('password')
@@ -28,10 +28,11 @@ class ResetPasswordForm(forms.Form):
         if not self.is_valid(): return False
 
         try:
-            user = User.objects.get(auth_token=self['token'].value())
-            user.set_password(self['password'].value())
-            user.save()
-            return True
+            with transaction.atomic():
+                user = User.objects.get(auth_token=self['token'].value())
+                user.set_password(self['password'].value())
+                user.save()
+                return True
         except ObjectDoesNotExist:
             self.add_error('password', 'There is no such user')
             return False

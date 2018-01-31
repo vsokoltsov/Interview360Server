@@ -18,7 +18,7 @@ class ResumeViewTest(APITestCase):
     def setUp(self):
         """ Setting up testing dependencies """
 
-        self.resume = Resume.objects.last()
+        self.resume = Resume.objects.first()
         self.company = Company.objects.first()
         self.user = self.company.get_employees_with_role(EMPLOYEE)[0]
         self.token = Token.objects.create(user=self.user)
@@ -26,21 +26,38 @@ class ResumeViewTest(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.params = {
             'title': 'Python developer',
-            'user': self.user.id,
+            'user_id': self.user.id,
             'skills': self.skills,
-            'description': 'Resume'
+            'description': 'Resume',
+            'salary': 120000,
+            'workplaces': [
+                {
+                    'position': 'QA',
+                    'company': self.company.name,
+                    'description': 'Bla-bla',
+                    'start_date': '2015-02-01',
+                    'end_date': '2017-02-01'
+                }
+            ],
+            'contact': {
+                'resume_id': self.resume.id,
+                'email': self.user.email,
+                'phone': '+79214438239'
+            }
         }
 
     def test_success_list_receiving(self):
         """ Test success receiving of the list of resumes """
 
-        response = self.client.get('/api/v1/resumes/')
+        response = self.client.get('/api/v1/resumes/', format='json')
         self.assertEqual(len(response.data), 2)
 
     def test_success_retrieve_resume(self):
         """ Test success resume retrieving """
 
-        response = self.client.get('/api/v1/resumes/{}/'.format(self.resume.id))
+        response = self.client.get(
+            '/api/v1/resumes/{}/'.format(self.resume.id), format='json'
+        )
         for key in ['id', 'title', 'description']:
             assert getattr(self.resume, key), response.data[key]
 
@@ -48,14 +65,14 @@ class ResumeViewTest(APITestCase):
     def test_success_creation_of_resume(self, resume_index):
         """ Test success creation of the resume """
 
-        response = self.client.post('/api/v1/resumes/', self.params)
+        response = self.client.post('/api/v1/resumes/', self.params, format='json')
         self.assertTrue('resume' in response.data)
 
     @mock.patch('resumes.index.ResumesIndex.store_index')
     def test_failed_creation_of_resume(self, resume_index):
         """ Test failed creation of the resume """
 
-        response = self.client.post('/api/v1/resumes/', None)
+        response = self.client.post('/api/v1/resumes/', None, format='json')
         self.assertTrue('errors' in response.data)
 
     @mock.patch('resumes.index.ResumesIndex.store_index')
@@ -63,7 +80,8 @@ class ResumeViewTest(APITestCase):
         """ Test success update of a resume """
 
         response = self.client.put(
-            '/api/v1/resumes/{}/'.format(self.resume.id), self.params
+            '/api/v1/resumes/{}/'.format(self.resume.id), self.params,
+            format='json'
         )
         self.assertTrue('resume' in response.data)
 
@@ -74,7 +92,7 @@ class ResumeViewTest(APITestCase):
         """ Test success delete of the resume """
 
         response = self.client.delete(
-            '/api/v1/resumes/{}/'.format(self.resume.id)
+            '/api/v1/resumes/{}/'.format(self.resume.id), format='json'
         )
         assert response.status_code, 204
 
@@ -89,7 +107,7 @@ class ResumeViewTest(APITestCase):
         ]
         search_mock.return_value = resume_index
         url = "/api/v1/resumes/search/?q={}".format(
-            'buzzword'
+            'buzzword', format='json'
         )
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)

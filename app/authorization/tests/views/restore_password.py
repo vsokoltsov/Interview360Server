@@ -15,7 +15,7 @@ class ResstorePasswordViewTest(APITestCase):
 
         response = self.client.post('/api/v1/restore_password/',  {
                 'email': 'example@mail.com'
-        })
+        }, format='json')
 
         self.assertEqual('message' in response.data, True)
 
@@ -24,7 +24,7 @@ class ResstorePasswordViewTest(APITestCase):
 
         response = self.client.post('/api/v1/restore_password/',  {
                 'email': ''
-        })
+        }, format='json')
 
         self.assertEqual('errors' in response.data, True)
 
@@ -34,6 +34,6 @@ class ResstorePasswordViewTest(APITestCase):
 
         response = self.client.post('/api/v1/restore_password/',  {
                 'email': 'example1@mail.com'
-        })
+        }, format='json')
 
         self.assertEqual('errors' in response.data, True)

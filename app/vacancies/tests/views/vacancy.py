@@ -38,21 +38,23 @@ class VacancyViewSetTests(APITestCase):
     def test_success_list_receiving(self):
         """ Test success receiving of the vacancies list """
 
-        response = self.client.get(self.url)
+        response = self.client.get(self.url, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 2)
 
     def test_success_retrieve_action(self):
         """ Success receivinf of the detail vacancy information """
 
-        response = self.client.get(self.url + "{}/".format(self.vacancy.id))
+        response = self.client.get(
+            self.url + "{}/".format(self.vacancy.id), format='json'
+        )
         self.assertEqual(response.status_code, 200)
 
     @mock.patch('vacancies.index.VacancyIndex.store_index')
     def test_success_vacancy_creation(self, vacancy_index_mock):
         """ Test success vacancy creation """
 
-        response = self.client.post(self.url, self.form_data)
+        response = self.client.post(self.url, self.form_data, format='json')
         self.assertEqual(response.status_code, 201)
         self.assertEqual('vacancy' in response.data, True)
 
@@ -60,7 +62,7 @@ class VacancyViewSetTests(APITestCase):
     def test_failed_vacancy_creation(self, vacancy_index_mock):
         """ Test failed creation of the vacancy """
 
-        response = self.client.post(self.url, {})
+        response = self.client.post(self.url, {}, format='json')
         self.assertEqual(response.status_code, 400)
 
     @mock.patch('vacancies.index.VacancyIndex.store_index')
@@ -69,7 +71,7 @@ class VacancyViewSetTests(APITestCase):
 
         response = self.client.put(
             self.url + "{}/".format(self.vacancy.id),
-            self.form_data
+            self.form_data, format='json'
         )
         self.assertEqual(response.status_code, 200)
         self.assertTrue('vacancy' in response.data)
@@ -80,7 +82,9 @@ class VacancyViewSetTests(APITestCase):
     def test_success_delete_vacancy(self, vacancy_index_mock, vacancy_delete, vacancy_save):
         """ Test success vacancy deletion """
 
-        response = self.client.delete(self.url + "{}/".format(self.vacancy.id))
+        response = self.client.delete(
+            self.url + "{}/".format(self.vacancy.id), format='json'
+        )
         self.assertEqual(response.status_code, 204)
 
     @mock.patch('vacancies.search.VacancySearch.find')
@@ -96,6 +100,6 @@ class VacancyViewSetTests(APITestCase):
         url = "/api/v1/companies/{}/vacancies/search/?q={}".format(
             self.company.id, 'buzzword'
         )
-        response = self.client.get(url)
+        response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['vacancies'], user_index)

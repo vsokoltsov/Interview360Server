@@ -24,7 +24,7 @@ class InterviewEmployeeViewTest(APITestCase):
         """ Test success deletion of the interview employee """
 
         url = "/api/v1/interviews/{}/employees/{}/".format(
-            self.interview.id, self.employee.id
+            self.interview.id, self.employee.id, format='json'
         )
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
