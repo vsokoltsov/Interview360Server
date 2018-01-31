@@ -7,5 +7,5 @@ from resumes.validators import resume_exist
 from django.db import transaction
 
 from .workplace import WorkplaceForm
-from .resume import ResumeForm
 from .contact import ContactForm
+from .resume import ResumeForm

@@ -38,7 +38,12 @@ class ResumeViewTest(APITestCase):
                     'start_date': '2015-02-01',
                     'end_date': '2017-02-01'
                 }
-            ]
+            ],
+            'contact': {
+                'resume_id': self.resume.id,
+                'email': self.user.email,
+                'phone': '+79214438239'
+            }
         }
 
     def test_success_list_receiving(self):

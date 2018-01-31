@@ -1,6 +1,6 @@
 from . import  (
     BaseForm, FormException, cerberus, Resume, Workplace, Company,
-    transaction, WorkplaceForm
+    transaction, WorkplaceForm, ContactForm
 )
 import ipdb
 
@@ -12,6 +12,8 @@ class ResumeForm(BaseForm):
     :param skills: List of skills for resume
     :param salary: Salary value for resume
     :param user_id: Id of the user, to whom this resume belongs to
+    :param workplace: List of workplaces
+    :param contact: Contact information
     :return True/False whether form was submitted
     """
 
@@ -48,6 +50,11 @@ class ResumeForm(BaseForm):
             'type': 'list',
             'required': True,
             'empty': False
+        },
+        'contact': {
+            'type': 'dict',
+            'required': True,
+            'empty': False
         }
     }
 
@@ -57,22 +64,28 @@ class ResumeForm(BaseForm):
         Set skills to resume object;
         Set workplaces to resume object;
         """
-        
+
         if not self.is_valid():
             return False
 
         try:
             with transaction.atomic():
                 workplaces = self.params.pop('workplaces', [])
+                contact = self.params.pop('contact', None)
                 skills = self.params.pop('skills', [])
                 self._set_attributes()
                 self.obj.skills.set(skills)
                 workplace_form = WorkplaceForm(
                     params={ 'workplaces': self._configure_workplaces(workplaces) }
                 )
+                contact_form = ContactForm(params=contact)
                 if not workplace_form.submit():
                     raise FormException(
                         field='workplaces', errors=workplace_form.errors
+                    )
+                if not contact_form.submit():
+                    raise FormException(
+                        field='contact', errors=contact_form.errors
                     )
                 return True
         except FormException as e:
