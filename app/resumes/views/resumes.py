@@ -10,7 +10,20 @@ class ResumeViewSet(viewsets.ModelViewSet):
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, )
-    queryset = Resume.objects.prefetch_related('user', 'skills').all()
+
+    def get_queryset(self):
+        """ Return queryset class """
+
+        if self.action == 'list':
+            return Resume.objects.prefetch_related(
+                'user', 'user__attachments'
+            ).all()
+        else:
+            return Resume.objects.prefetch_related(
+                'user', 'user__attachments', 'skills',
+                'workplaces', 'workplaces__company', 'contact'
+            ).all()
+
 
     def get_serializer_class(self):
         """ Return specific serializer for action """
