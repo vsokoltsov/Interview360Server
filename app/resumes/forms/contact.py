@@ -47,7 +47,8 @@ class ContactForm(BaseForm):
         'phone_comment': {
             'type': 'string',
             'required': False,
-            'empty': True
+            'empty': True,
+            'nullable': True
         },
         'social_networks': {
             'type': 'dict',
