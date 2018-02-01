@@ -36,7 +36,7 @@ class Contact(models.Model):
     resume = models.OneToOneField('resumes.Resume', null=False)
     email = models.EmailField(max_length=255, unique=True, null=False)
     phone = models.CharField(max_length=255, unique=True, null=False)
-    phone_comment = models.TextField()
+    phone_comment = models.TextField(null=True)
     social_networks = JSONField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

@@ -78,7 +78,7 @@ class ResumeForm(BaseForm):
                 workplace_form = WorkplaceForm(
                     params={ 'workplaces': self._configure_workplaces(workplaces) }
                 )
-                contact_form = ContactForm(params=contact)
+                contact_form = ContactForm(params=self._configure_contact(contact))
                 if not workplace_form.submit():
                     raise FormException(
                         field='workplaces', errors=workplace_form.errors
@@ -102,6 +102,12 @@ class ResumeForm(BaseForm):
         for field, value in self.params.items():
             setattr(self.obj, field, value)
         self.obj.save()
+
+    def _configure_contact(self, contact):
+        """ Configure contact parameter """
+
+        contact['resume_id'] = self.obj.id
+        return contact
 
     def _configure_workplaces(self, workplaces):
         """ Configure workplaces objects """
