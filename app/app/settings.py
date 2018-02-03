@@ -19,7 +19,7 @@ from elasticsearch_dsl.connections import connections
 from corsheaders.defaults import default_headers
 from django.core.exceptions import ImproperlyConfigured
 
-def os.environ.get(var_name):
+def get_environment_variable(var_name):
     """ Get environment variable or raise the exception """
 
     try:
