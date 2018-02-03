@@ -10,5 +10,5 @@ from common.serializers.base_company_serializer import BaseCompanySerializer
 
 from .resumes import ResumesSerializer
 from .workplace import WorkplaceSerializer
-from .resume import ResumeSerializer
 from .contact import ContactSerializer
+from .resume import ResumeSerializer

@@ -1,12 +1,13 @@
 from . import (
     serializers, ResumesSerializer, Resume, User, SkillSerializer, UserSerializer,
-    CustomField, ResumesIndex, WorkplaceSerializer
+    CustomField, ResumesIndex, WorkplaceSerializer, ContactSerializer
 )
 
 class ResumeSerializer(ResumesSerializer):
     """ Resume serializer class """
 
     skills = SkillSerializer(many=True)
+    contact = ContactSerializer()
     workplaces = WorkplaceSerializer(many=True)
 
     class Meta(ResumesSerializer.Meta):
@@ -15,5 +16,6 @@ class ResumeSerializer(ResumesSerializer):
             'description',
             'skills',
             'workplaces',
+            'contact',
             'created_at'
         ]

@@ -17,6 +17,16 @@ import logging
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl.connections import connections
 from corsheaders.defaults import default_headers
+from django.core.exceptions import ImproperlyConfigured
+
+def get_environment_variable(var_name):
+    """ Get environment variable or raise the exception """
+
+    try:
+        return os.environ[var_name]
+    except KeyError:
+        error_msg = 'Set the {} environment variable'.format(var_name)
+        raise ImproperlyConfigured(error_msg)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
