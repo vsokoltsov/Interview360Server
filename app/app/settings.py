@@ -19,7 +19,7 @@ from elasticsearch_dsl.connections import connections
 from corsheaders.defaults import default_headers
 from django.core.exceptions import ImproperlyConfigured
 
-def get_env_variable(var_name):
+def os.environ.get(var_name):
     """ Get environment variable or raise the exception """
 
     try:
@@ -48,7 +48,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS = default_headers
 ES_CLIENT = Elasticsearch(['http://elasticsearch:9200'])
 connections.create_connection(hosts=['elasticsearch'])
-docker_env = get_env_variable('DOCKER_ENV')
+docker_env = os.environ.get('DOCKER_ENV')
 
 if os.path.isfile('app/secrets.yaml'):
     with open('app/secrets.yaml') as stream:
@@ -195,10 +195,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 ANYMAIL = {
-    "MAILGUN_API_KEY": get_env_variable('MAILGUN_API_KEY'),
-    "MAILGUN_SENDER_DOMAIN": get_env_variable('MAILGUN_SERVER_NAME')
+    "MAILGUN_API_KEY": os.environ.get('MAILGUN_API_KEY'),
+    "MAILGUN_SENDER_DOMAIN": os.environ.get('MAILGUN_SERVER_NAME')
 }
-EMAIL_BACKEND = get_env_variable('EMAIL_BACKEND')  # or sendgrid.EmailBackend, or...
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')  # or sendgrid.EmailBackend, or...
 DEFAULT_FROM_EMAIL = "you@example.com"  # if you don't already have this in settings
 
 # Internationalization
@@ -225,8 +225,8 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = ['--with-spec', '--spec-color']
 FIXTURE_DIRS = (os.path.join(BASE_DIR, 'app', 'fixtures'),)
 if docker_env:
-    username = get_env_variable('RABBITMQ_DEFAULT_USER')
-    password = get_env_variable('RABBITMQ_DEFAULT_PASS')
+    username = os.environ.get('RABBITMQ_DEFAULT_USER')
+    password = os.environ.get('RABBITMQ_DEFAULT_PASS')
     broker = 'amqp://{}:{}@rabbit'.format(username, password)
 else:
     broker = 'amqp://localhost'
@@ -239,9 +239,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-AWS_ACCESS_KEY_ID = get_env_variable('S3_KEY')
-AWS_SECRET_ACCESS_KEY = get_env_variable('S3_SECRET')
-AWS_STORAGE_BUCKET_NAME = get_env_variable('S3_BUCKET')
+AWS_ACCESS_KEY_ID = os.environ.get('S3_KEY')
+AWS_SECRET_ACCESS_KEY = os.environ.get('S3_SECRET')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('S3_BUCKET')
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
 
