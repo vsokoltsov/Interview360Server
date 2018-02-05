@@ -12,6 +12,10 @@ jobs:
             echo "S3_KEY=$S3_KEY" >> .env
             echo "S3_BUCKET=$S3_BUCKET" >> .env
             echo "S3_SECRET=$S3_SECRET" >> .env
+            echo "ELASTICSEARCH_URL=$ELASTICSEARCH_URL" >> .env
+            echo "USER=$USER" >> .env
+            echo "HOST=$HOST" >> .env
+            echo "PASSWORD=$PASSWORD" >> .env
             echo "DEFAULT_CLIENT_HOST=http://localhost:4200" >> .env
             pip install docker-compose==1.15.0
       - run:
