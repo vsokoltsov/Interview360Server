@@ -1,4 +1,4 @@
-from fabric.api import cd, run, sudo, env, put, prefix
+from fabric.api import local, cd, run, sudo, env, put, prefix
 from fabric.contrib.files import exists
 
 env.use_ssh_config = True
@@ -155,8 +155,8 @@ def docker_provision_aws():
 def docker_deploy(version='latest', container='app'):
     """ Deploy docker application """
 
-    run('docker-compose build')
-    run('docker-compose push')
+    local('docker-compose build --force-rm --no-cache app')
+    local('docker-compose push app')
 
     with cd(env.home_dir):
         run('docker-compose pull')
