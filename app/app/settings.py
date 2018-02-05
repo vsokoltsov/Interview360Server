@@ -20,7 +20,10 @@ from corsheaders.defaults import default_headers
 from django.core.exceptions import ImproperlyConfigured
 from boto3.session import Session
 from app.logging import LOGGING
-from app.credentials import AWS_STORAGE_BUCKET_NAME
+from app.credentials import (
+    AWS_STORAGE_BUCKET_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,
+    AWS_REGION_NAME
+)
 import ipdb
 
 def get_environment_variable(var_name):
@@ -209,13 +212,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-
+BUCKET_NAME = AWS_STORAGE_BUCKET_NAME
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-
+REGION_HOST = 's3.{}.amazonaws.com'.format(AWS_REGION_NAME)
 
 # AWS_LOCATION = 'static'
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-THUMBNAIL_DEFAULT_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+THUMBNAIL_DEFAULT_STORAGE = 'app.storage_backends.MediaStorage'
 THUMBNAIL_BASEDIR = 'thumbs'
 # STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 

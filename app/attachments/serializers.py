@@ -1,9 +1,12 @@
 import re
+import boto
 from rest_framework import serializers
+from django.db import transaction
 from .models import Attachment
 from feedbacks.fields import ContentTypeField
 from easy_thumbnails.files import get_thumbnailer
 from app.settings import THUMBNAIL_ALIASES
+import ipdb
 
 from common.serializers.base_attachment_serializer import BaseAttachmentSerializer
 
@@ -34,8 +37,13 @@ class AttachmentSerializer(BaseAttachmentSerializer):
     def create(self, data):
         """ Create new attachment and creating thumb images """
 
-        attachment = Attachment.objects.create(**data)
+        try:
+            with transaction.atomic():
+                attachment = Attachment.objects.create(**data)
 
-        for key, value in THUMBNAIL_ALIASES[''].items():
-            get_thumbnailer(attachment.data).get_thumbnail(value)
-        return attachment
+                for key, value in THUMBNAIL_ALIASES[''].items():
+                    get_thumbnailer(attachment.data).get_thumbnail(value)
+                return attachment
+        except boto.exception.S3ResponseError:
+            self.errors['attachment'] = ['An error has occured']
+            return False
