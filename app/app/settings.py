@@ -18,6 +18,7 @@ from elasticsearch import Elasticsearch
 from elasticsearch_dsl.connections import connections
 from corsheaders.defaults import default_headers
 from django.core.exceptions import ImproperlyConfigured
+import ipdb
 
 def get_environment_variable(var_name):
     """ Get environment variable or raise the exception """
@@ -46,8 +47,9 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS = default_headers
-ES_CLIENT = Elasticsearch(['http://elasticsearch:9200'])
-connections.create_connection(hosts=['elasticsearch'])
+es_host = get_environment_variable('ELASTICSEARCH_URL')
+ES_CLIENT = Elasticsearch(['{}'.format(es_host)])
+connections.create_connection(hosts=['{}'.format(es_host)])
 docker_env = os.environ.get('DOCKER_ENV')
 
 if os.path.isfile('app/secrets.yaml'):
@@ -146,32 +148,14 @@ WSGI_APPLICATION = 'app.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-docker_db = {
-    'HOST': 'db',
-    'USER': 'postgres',
-    'PASSWORD': 'postgres',
-    'PORT': 5432
-}
-vagrant_db = {
-    'HOST': 'localhost',
-    'USER': 'vagrant',
-    'PASSWORD': 'vagrant',
-    'PORT': 5432
-}
-
-if docker_env:
-    db_config = docker_db
-else:
-    db_config = vagrant_db
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'interview_manager',
-        'USER': db_config['USER'],
-        'PASSWORD': db_config['PASSWORD'],
-        'HOST': db_config['HOST'],
-        'PORT': db_config['PORT'],
+        'USER': get_environment_variable('USER'),
+        'PASSWORD': get_environment_variable('PASSWORD'),
+        'HOST': get_environment_variable('HOST'),
+        'PORT': os.environ.get('PORT') or 5432,
     }
 }
 
