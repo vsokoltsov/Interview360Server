@@ -1,9 +1,10 @@
 from fabric.api import cd, run, sudo, env, put, prefix
 from fabric.contrib.files import exists
 
-env.user = 'root'
-env.hosts = ['root@95.213.252.125']
-env.home_dir = '/root'
+env.use_ssh_config = True
+env.user = 'ec2-user'
+env.hosts = ['ec2-user@18.219.94.82']
+env.home_dir = '/home/ec2-user'
 
 PROJECT_NAME = 'interview360'
 PG_HBA_PATH = '/var/lib/pgsql/data/'
@@ -112,6 +113,14 @@ def docker_install():
     sudo('systemctl enable docker.service')
     sudo('systemctl start docker.service')
 
+def docker_redhat_install():
+    """ Install docker for the RedHat 7 """
+
+    sudo('yum update -y')
+    sudo('yum install -y docker')
+    sudo('usermod -aG docker $(whoami)')
+    sudo('service docker start')
+
 def docker_compose_install():
     """ Install docker-compose """
 
@@ -125,13 +134,21 @@ def docker_files_copy():
     put('docker-compose.prod.yml', '{}/docker-compose.yml'.format(env.home_dir))
     run('mkdir -p {}/deploy/nginx'.format(env.home_dir))
     put('./deploy/nginx/dev.conf', '{}/deploy/nginx/developmet.conf'.format(env.home_dir))
-    put('.env', '{}/.env'.format(env.home_dir))
+    put('.env.prod', '{}/.env'.format(env.home_dir))
 
 def docker_provision():
     """ Run provision on remote server for docker """
 
     with cd(env.home_dir):
         docker_install()
+        docker_compose_install()
+        docker_files_copy()
+
+def docker_provision_aws():
+    """ Run provision on remote AWS server for the docker """
+
+    with cd(env.home_dir):
+        docker_redhat_install()
         docker_compose_install()
         docker_files_copy()
 
