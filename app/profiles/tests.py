@@ -2,6 +2,7 @@ import app
 import os
 from os.path import abspath, join, dirname
 from tempfile import mkdtemp
+from shutil import rmtree
 from django.core.files import File
 from rest_framework.test import APITestCase
 from authorization.models import User
@@ -18,6 +19,7 @@ class ProfileViewSetTest(APITestCase):
 
     def setUp(self):
         """ Setting up testing dependencies """
+
         password = 'aaaaaaaa'
         self.user = User.objects.create(email="example1@mail.com", password=password)
         self.token = Token.objects.create(user=self.user)
@@ -40,7 +42,10 @@ class ProfileViewSetTest(APITestCase):
         dir_path = app.settings.MEDIA_ROOT
         for f in os.listdir(dir_path):
             file_path = "{}/{}".format(dir_path, f)
-            os.remove(file_path)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+            elif os.path.isdir(file_path):
+                rmtree(file_path)
 
     def test_success_receiving_of_profile(self):
         """ Test success receiving current user information """

@@ -208,6 +208,7 @@ CELERY_BROKER_URL = broker
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 MEDIA_URL = '/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+THUMBS_ROOT = os.path.join(MEDIA_ROOT, 'thumbs')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
