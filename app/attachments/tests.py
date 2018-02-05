@@ -22,13 +22,19 @@ class AttachmentViewSet(APITestCase):
         if not os.path.exists(app.settings.MEDIA_ROOT):
             os.makedirs(app.settings.MEDIA_ROOT)
 
+        if not os.path.exists(app.settings.THUMBS_ROOT):
+            os.makedirs(app.settings.THUMBS_ROOT)
+
     def tearDown(self):
         """ Removing all dependencies after test """
 
         dir_path = app.settings.MEDIA_ROOT
         for f in os.listdir(dir_path):
             file_path = "{}/{}".format(dir_path, f)
-            os.remove(file_path)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+            elif os.path.isdir(file_path):
+                rmtree(file_path)
 
     @mock.patch('storages.backends.s3boto3.S3Boto3Storage', FileSystemStorage)
     def test_success_photo_upload(self):
