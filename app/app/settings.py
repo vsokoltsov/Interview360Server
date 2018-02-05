@@ -18,6 +18,9 @@ from elasticsearch import Elasticsearch
 from elasticsearch_dsl.connections import connections
 from corsheaders.defaults import default_headers
 from django.core.exceptions import ImproperlyConfigured
+from boto3.session import Session
+from app.logging import LOGGING
+from app.credentials import AWS_STORAGE_BUCKET_NAME
 import ipdb
 
 def get_environment_variable(var_name):
@@ -104,22 +107,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'app.urls'
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-        }
-    },
-    'loggers': {
-        'django.db.backends': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-        },
-    }
-}
 
 if 'test' in sys.argv:
     logging.disable(logging.CRITICAL)
@@ -223,9 +210,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-AWS_ACCESS_KEY_ID = os.environ.get('S3_KEY')
-AWS_SECRET_ACCESS_KEY = os.environ.get('S3_SECRET')
-AWS_STORAGE_BUCKET_NAME = os.environ.get('S3_BUCKET')
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
 
