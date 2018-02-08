@@ -55,7 +55,8 @@ class ResumeFormTest(TransactionTestCase):
         form = ResumeForm(obj=Resume(), params={})
         self.assertFalse(form.is_valid())
 
-    def test_success_creation_of_resume(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_success_creation_of_resume(self, twilio_mock):
         """ Test success creation of the resume """
 
         resumes_count = Resume.objects.count()
@@ -63,7 +64,8 @@ class ResumeFormTest(TransactionTestCase):
         form.submit()
         assert Resume.objects.count(), resumes_count + 1
 
-    def test_success_setting_of_skils_to_resume(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_success_setting_of_skils_to_resume(self, twilio_mock):
         """ Test setting skils to the resume after creation """
 
         form = ResumeForm(obj=Resume(), params=self.params)
@@ -73,7 +75,8 @@ class ResumeFormTest(TransactionTestCase):
             self.skills
         )
 
-    def test_success_creating_workplace_for_resume(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_success_creating_workplace_for_resume(self, twilio_mock):
         """ Test success creation of workplace for resume """
 
         workplaces_count = Workplace.objects.count()
@@ -81,7 +84,8 @@ class ResumeFormTest(TransactionTestCase):
         form.submit()
         assert Workplace.objects.count(), workplaces_count + 1
 
-    def test_success_creating_contact_for_resume(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_success_creating_contact_for_resume(self, twilio_mock):
         """ Test success creation of contact for resume """
 
         contacts_count = Contact.objects.count()
@@ -89,7 +93,8 @@ class ResumeFormTest(TransactionTestCase):
         form.submit()
         assert Contact.objects.count(), contacts_count + 1
 
-    def test_setting_workplace_for_resume(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_setting_workplace_for_resume(self, twilio_mock):
         """ Test setting workplace to the resume """
 
         form = ResumeForm(obj=Resume(), params=self.params)
@@ -99,14 +104,16 @@ class ResumeFormTest(TransactionTestCase):
             [Workplace.objects.last().id]
         )
 
-    def test_failed_validation_workplaces_error(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_failed_validation_workplaces_error(self, twilio_mock):
         """ Test failed validation in case of failed validation of workplaces """
 
         self.params['workplaces'][0]['position'] = None
         form = ResumeForm(obj=Resume(), params=self.params)
         self.assertFalse(form.submit())
 
-    def test_failed_validation_does_not_create_resume(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_failed_validation_does_not_create_resume(self, twilio_mock):
         """ Test failed validation does not create resume """
 
         resumes_count = Resume.objects.count()

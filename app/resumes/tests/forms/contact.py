@@ -28,19 +28,22 @@ class ContactFormTest(TransactionTestCase):
             'phone': '+79214438239'
         }
 
-    def test_success_validation(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_success_validation(self, twilio_mock):
         """ Test success validation of form """
 
         form = ContactForm(params=self.params)
         self.assertTrue(form.is_valid())
 
-    def test_failed_validation(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_failed_validation(self, twilio_mock):
         """ Test failed validation of form """
 
         form = ContactForm(params={})
         self.assertFalse(form.is_valid())
 
-    def test_success_creation_of_contact(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_success_creation_of_contact(self, twilio_mock):
         """ Test success creation of the contact """
 
         contacts_count = Contact.objects.count()
@@ -48,14 +51,16 @@ class ContactFormTest(TransactionTestCase):
         form.submit()
         assert Contact.objects.count(), contacts_count + 1
 
-    def test_assertion_contact_to_resume(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_assertion_contact_to_resume(self, twilio_mock):
         """ Test assertion of the contact to the resume """
 
         form = ContactForm(params=self.params)
         form.submit()
         assert form.obj.resume_id, self.resume.id
 
-    def test_failed_validation_email_already_exists(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_failed_validation_email_already_exists(self, twilio_mock):
         """ Test failed validation of form if contact with this email
         already exist """
 
@@ -64,7 +69,8 @@ class ContactFormTest(TransactionTestCase):
         form.submit()
         assert 'email' in form.errors, True
 
-    def test_failed_validation_phone_already_exists(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_failed_validation_phone_already_exists(self, twilio_mock):
         """ Test failed validation of form if contact with this phone
         already exist """
 
