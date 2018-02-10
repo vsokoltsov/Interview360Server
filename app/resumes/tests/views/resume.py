@@ -61,22 +61,25 @@ class ResumeViewTest(APITestCase):
         for key in ['id', 'title', 'description']:
             assert getattr(self.resume, key), response.data[key]
 
+    @mock.patch('common.services.twilio_service.TwilioService')
     @mock.patch('resumes.index.ResumesIndex.store_index')
-    def test_success_creation_of_resume(self, resume_index):
+    def test_success_creation_of_resume(self, resume_index, twilio_mock):
         """ Test success creation of the resume """
 
         response = self.client.post('/api/v1/resumes/', self.params, format='json')
         self.assertTrue('resume' in response.data)
 
+    @mock.patch('common.services.twilio_service.TwilioService')
     @mock.patch('resumes.index.ResumesIndex.store_index')
-    def test_failed_creation_of_resume(self, resume_index):
+    def test_failed_creation_of_resume(self, resume_index, twilio_mock):
         """ Test failed creation of the resume """
 
         response = self.client.post('/api/v1/resumes/', None, format='json')
         self.assertTrue('errors' in response.data)
 
+    @mock.patch('common.services.twilio_service.TwilioService')
     @mock.patch('resumes.index.ResumesIndex.store_index')
-    def test_success_update_of_resume(self, resume_index):
+    def test_success_update_of_resume(self, resume_index, twilio_mock):
         """ Test success update of a resume """
 
         response = self.client.put(
@@ -88,7 +91,8 @@ class ResumeViewTest(APITestCase):
     @mock.patch.object(ResumesIndex, 'get')
     @mock.patch.object(ResumesIndex, 'delete')
     @mock.patch('resumes.index.ResumesIndex.store_index')
-    def test_success_deletion_of_resume(self, resume_index, delete_resume, get_resume):
+    def test_success_deletion_of_resume(self, resume_index,
+                                        delete_resume, get_resume):
         """ Test success delete of the resume """
 
         response = self.client.delete(

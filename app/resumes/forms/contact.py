@@ -6,7 +6,7 @@ import ipdb
 
 from . import  (
     BaseForm, FormException, cerberus, Resume, Workplace, Company, Contact,
-    transaction, WorkplaceForm, resume_exist
+    transaction, WorkplaceForm, resume_exist, phone_validation
 )
 from common.advisory_lock import advisory_lock
 
@@ -42,7 +42,8 @@ class ContactForm(BaseForm):
             'type': 'string',
             'empty': False,
             'required': True,
-            'regex': '\A(\+)[0-9]{7,12}'
+            'regex': '\A(\+)[0-9]{7,12}',
+            'validator': phone_validation
         },
         'phone_comment': {
             'type': 'string',

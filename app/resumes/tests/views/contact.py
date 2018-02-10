@@ -31,7 +31,8 @@ class ContactApiViewTest(APITestCase):
             'phone': '+79214438239'
         }
 
-    def test_success_create_request(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_success_create_request(self, twilio_mock):
         """ Test success create of the contact """
 
         response = self.client.put(
@@ -40,7 +41,8 @@ class ContactApiViewTest(APITestCase):
         )
         self.assertTrue(response.status_code, 200)
 
-    def test_failed_create_request(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_failed_create_request(self, twilio_mock):
         """ Test failed create of the contact """
 
         response = self.client.put(
@@ -49,7 +51,8 @@ class ContactApiViewTest(APITestCase):
         )
         self.assertTrue(response.status_code, 400)
 
-    def test_success_update_request(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_success_update_request(self, twilio_mock):
         """ Test success update of the contact """
 
         self.params['id'] = self.contact.id
@@ -59,7 +62,8 @@ class ContactApiViewTest(APITestCase):
         )
         self.assertTrue(response.status_code, 200)
 
-    def test_failed_update_request(self):
+    @mock.patch('common.services.twilio_service.TwilioService')
+    def test_failed_update_request(self, twilio_mock):
         """ Test failed update of the contact """
 
         self.params['id'] = self.contact.id
