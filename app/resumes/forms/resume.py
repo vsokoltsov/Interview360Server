@@ -91,8 +91,8 @@ class ResumeForm(BaseForm):
         except FormException as e:
             self.errors = {
                 **self.errors,
-                **e.errors
             }
+            self.errors[e.field] = e.errors
             return False
 
 
