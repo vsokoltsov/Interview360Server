@@ -16,6 +16,8 @@ jobs:
             echo "USER=$USER" >> .env
             echo "HOST=$HOST" >> .env
             echo "PASSWORD=$PASSWORD" >> .env
+            echo "TWILIO_ACCOUNT_SID=$TWILIO_ACCOUNT_SID" >> .env
+            echo "TWILIO_AUTH_TOKEN=$TWILIO_AUTH_TOKEN" >> .env
             echo "DEFAULT_CLIENT_HOST=http://localhost:4200" >> .env
             pip install docker-compose==1.15.0
       - run:
