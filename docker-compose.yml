@@ -25,6 +25,8 @@ services:
     ports:
       - '8000:8000'
     env_file: ./.env
+    environment:
+      - DJANGO_DEFAULT_ENV=development
     links:
       - celery_worker
       - celery_beat
@@ -88,6 +90,7 @@ services:
     env_file: ./.env
     environment:
       - DJANGO_SETTINGS_MODULE=app.app.settings
+      - DJANGO_DEFAULT_ENV=development
     links:
       - rabbit
     depends_on:
@@ -107,6 +110,7 @@ services:
       - ./.env
     environment:
       - DJANGO_SETTINGS_MODULE=app.app.settings
+      - DJANGO_DEFAULT_ENV=development
     links:
       - rabbit
     depends_on:

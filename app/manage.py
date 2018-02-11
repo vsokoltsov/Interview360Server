@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 import os
 import sys
+import app.environments as environment
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "app.settings")
+    if environment.TEST in sys.argv:
+        os.environ["DJANGO_DEFAULT_ENV"] = environment.TEST
     try:
         from django.core.management import execute_from_command_line
     except ImportError:
