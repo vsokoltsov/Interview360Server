@@ -7,8 +7,6 @@ services:
     expose:
       - '8000'
     env_file: ./.env
-    enviroment:
-      - DJANGO_DEFAULT_ENV=production
     depends_on:
       - rabbit
 
