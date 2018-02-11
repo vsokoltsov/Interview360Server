@@ -7,6 +7,8 @@ ENV REQUIREMENTS $DEFAULT_REQUIREMENTS
 RUN mkdir /interview360
 WORKDIR /interview360
 
+RUN echo ${REQUIREMENTS}, kkk
+
 ADD ./requirements /interview360/requirements
 RUN pip install -r ./requirements/$REQUIREMENTS
 ADD . /interview360/

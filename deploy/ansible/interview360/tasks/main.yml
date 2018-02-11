@@ -6,7 +6,7 @@
 
 - name: Install requirements
   pip:
-    requirements: /root/interview360/requirements.txt
+    requirements: /root/interview360/requirements/production.txt
 
 - name: Run migrations
   django_manage:
