@@ -19,7 +19,6 @@ from elasticsearch_dsl.connections import connections
 from corsheaders.defaults import default_headers
 from django.core.exceptions import ImproperlyConfigured
 from boto3.session import Session
-from app.logging import LOGGING
 from app.credentials import (
     AWS_STORAGE_BUCKET_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,
     AWS_REGION_NAME
@@ -38,9 +37,8 @@ def get_environment_variable(var_name):
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 BASE_DIR = os.path.join(PROJECT_ROOT, 'app')
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(1, PROJECT_ROOT)
-
+COMMON_DIR = os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(__name__)), '../'))
+sys.path.insert(1, COMMON_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -48,7 +46,6 @@ if PROJECT_ROOT not in sys.path:
 SECRET_KEY = 'nje62b1kyvvc1!g_d@5a5qq!2bs6jl)isr^91cm=gv1&_h6m^5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 CORS_ORIGIN_ALLOW_ALL = True
@@ -111,8 +108,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'app.urls'
 
-if 'test' in sys.argv:
-    logging.disable(logging.CRITICAL)
 
 TEMPLATES = [
     {
@@ -197,7 +192,8 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'authorization.User'
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = ['--with-spec', '--spec-color']
-FIXTURE_DIRS = (os.path.join(BASE_DIR, 'app', 'fixtures'),)
+
+FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures'),)
 if docker_env:
     username = os.environ.get('RABBITMQ_DEFAULT_USER')
     password = os.environ.get('RABBITMQ_DEFAULT_PASS')
