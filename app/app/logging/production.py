@@ -9,7 +9,7 @@ boto3_session = Session(aws_access_key_id=AWS_ACCESS_KEY_ID,
                         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
                         region_name=AWS_REGION_NAME)
 
-PRODUCTION = {
+LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'root': {
@@ -22,7 +22,6 @@ PRODUCTION = {
             'datefmt': "%Y-%m-%d %H:%M:%S"
         },
         'aws': {
-            # you can add specific format for aws here
             'format': u"%(asctime)s [%(levelname)-8s] %(message)s",
             'datefmt': "%Y-%m-%d %H:%M:%S"
         },
@@ -50,6 +49,5 @@ PRODUCTION = {
             'handlers': ['watchtower'],
             'propagate': False,
         },
-        # add your other loggers here...
     },
 }

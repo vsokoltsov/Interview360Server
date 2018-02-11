@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
+from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from .settings import MEDIA_URL, MEDIA_ROOT
@@ -29,5 +30,13 @@ urlpatterns = [
     url(r'^api/', include('attachments.urls')),
     url(r'^api/', include('resumes.urls'))
 ]
+import ipdb
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^debug/', include(debug_toolbar.urls))
+    ]
+
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
 init_indexes()

@@ -7,7 +7,7 @@ machine:
 
 dependencies:
   pre:
-    - pip install -r requirements.txt
+    - pip install -r requirements/development.txt
   post:
     - wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.3.tar.gz
     - sha1sum elasticsearch-5.6.3.tar.gz
@@ -34,6 +34,6 @@ deployment:
     commands:
       - deactivate
       - pyenv global 2.7.12
-      - pip install -r requirements.txt
+      - pip install -r requirements/development.txt
       - pip install fabric3 fabtools
       - fab deploy

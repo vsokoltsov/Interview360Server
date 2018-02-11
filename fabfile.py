@@ -59,7 +59,7 @@ def set_up_project_dependencies():
     with prefix('source $(pyenv which virtualenvwrapper.sh)'):
         with prefix('workon {}'.format(PROJECT_NAME)):
             with cd(PROJECT_PATH):
-                run('pip install -r requirements.txt')
+                run('pip install -r requirements/production.txt')
 
                 with cd(PROJECT_PATH + '/app'):
                     run('./manage.py migrate')
@@ -155,7 +155,7 @@ def docker_provision_aws():
 def docker_deploy(version='latest', container='app'):
     """ Deploy docker application """
 
-    local('docker-compose build --force-rm --no-cache app')
+    local('docker-compose build --force-rm --no-cache --build-arg DEFAULT_REQUIREMENTS=production.txt app')
     local('docker-compose push app')
 
     with cd(env.home_dir):
@@ -169,7 +169,7 @@ def deploy(branch='master'):
 
         with prefix('source $(pyenv which virtualenvwrapper.sh)'):
             with prefix('workon {}'.format(PROJECT_NAME)):
-                run('pip install -r requirements.txt')
+                run('pip install -r requirements/production.txt')
 
                 with cd(PROJECT_PATH + '/app'):
                     run('./manage.py migrate')
