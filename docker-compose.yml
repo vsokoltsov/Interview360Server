@@ -14,7 +14,11 @@ services:
   app:
     image: vsokoltsov/interview360
     container_name: interview360
-    build: .
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      args:
+        - DEFAULT_REQUIREMENTS=development.txt
     command: bash -c "python3 app/manage.py migrate && cd app && gunicorn app.wsgi:application -b 0.0.0.0:8000"
     volumes:
       - .:/interview360
@@ -75,7 +79,9 @@ services:
     container_name: 'celery_worker'
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./Dockerfile
+      args:
+        - DEFAULT_REQUIREMENTS=development.txt
     command: "celery -A app.app worker -l INFO"
     volumes:
       - .:/interview360
@@ -91,7 +97,9 @@ services:
     container_name: 'celery_beat'
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./Dockerfile
+      args:
+        - DEFAULT_REQUIREMENTS=development.txt
     command: 'celery -A app.app beat -l debug'
     volumes:
       - .:/interview360
