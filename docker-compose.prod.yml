@@ -15,10 +15,12 @@ services:
   nginx:
     image: nginx:latest
     container_name: nginx
-    ports:
-      - "80:8000"
     volumes:
       - ./deploy/nginx:/etc/nginx/conf.d
+      - /etc/letsencrypt:/etc/letsencrypt
+    ports:
+      - "80:2081"
+      - "443:20443"
     depends_on:
       - app
 
@@ -28,4 +30,3 @@ services:
     env_file: ./.env
     ports:
       - "5672:5672"
-      - "15672:15672"
