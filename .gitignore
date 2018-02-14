@@ -10,3 +10,4 @@ celerybeat*
 uploads
 *.retry
 .env.prod
+/deploy/nginx/*.conf
