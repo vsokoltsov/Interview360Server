@@ -9,8 +9,6 @@ services:
     env_file: ./.env
     environment:
       - DJANGO_DEFAULT_ENV=production
-    depends_on:
-      - rabbit
 
   nginx:
     image: nginx:latest
