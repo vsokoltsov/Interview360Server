@@ -15,7 +15,7 @@ server {
   }
 
   location / {
-        proxy_pass http://app/;
+      proxy_pass http://app/;
   }
 }
 
