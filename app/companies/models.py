@@ -15,7 +15,7 @@ class Company(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     employees = models.ManyToManyField('authorization.User', through='CompanyMember')
-    attachments = GenericRelation('attachments.Attachment')
+    # attachments = GenericRelation('attachments.Attachment')
     specialties = models.ManyToManyField('companies.Specialty')
     objects = CompanyManager()
 

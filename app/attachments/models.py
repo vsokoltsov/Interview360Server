@@ -7,7 +7,7 @@ class Attachment(models.Model):
     """ Uploaded file model representation """
 
     class Meta:
-        db_table = 'attachments'
+        abstract = True
 
     content_type = models.ForeignKey(ContentType, null=False)
     object_id = models.PositiveIntegerField(null=True)
@@ -39,3 +39,11 @@ class Attachment(models.Model):
         """ Return attachment url based on its type """
 
         return self.data[url_type].url
+
+
+class Image(Attachment):
+    """ Image implementation of attachment class """
+
+    class Meta:
+        db_table = 'attachment_images'
+    pass
