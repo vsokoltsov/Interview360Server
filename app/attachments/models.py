@@ -16,31 +16,6 @@ class Attachment(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def full_urls(self):
-        """ Receive a hash of all available urls """
-
-        url = self.data.url
-        thumb_url = self.__get_url_by_type('thumb')
-        small_thumb_url = self.__get_url_by_type('small_thumb')
-        medium_url = self.__get_url_by_type('medium')
-        medium_large_url = self.__get_url_by_type('medium_large')
-        large_url = self.__get_url_by_type('large')
-
-        return {
-            'thumb_url': thumb_url,
-            'small_thumb_url': small_thumb_url,
-            'medium_url': medium_url,
-            'medium_large_url': medium_large_url,
-            'large_url': large_url
-        }
-
-
-    def __get_url_by_type(self, url_type):
-        """ Return attachment url based on its type """
-
-        return self.data[url_type].url
-
-
 class Image(Attachment):
     """ Image implementation of attachment class """
 
@@ -66,3 +41,15 @@ class Image(Attachment):
 
     class Meta:
         db_table = 'attachment_images'
+
+    def full_urls(self):
+        """ Receive a hash of all available urls """
+
+        return {
+            'url': self.data.url,
+            'thumb_url': self.image_thumb.url,
+            'small_thumb_url': self.image_small_thumb.url,
+            'medium_url': self.image_medium.url,
+            'medium_large_url': self.image_medium_large.url,
+            'large_url': self.image_large.url
+        }

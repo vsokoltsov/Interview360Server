@@ -14,7 +14,7 @@ class User(AbstractBaseUser):
     companies = models.ManyToManyField('companies.Company', through='companies.CompanyMember')
     interviews = models.ManyToManyField('interviews.Interview', through='interviews.InterviewEmployee')
     feedbacks = GenericRelation('feedbacks.Feedback')
-    # attachments = GenericRelation('attachments.Attachment')
+    avatars = GenericRelation('attachments.Image')
 
     objects = BaseUserManager()
 
