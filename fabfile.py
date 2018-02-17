@@ -3,7 +3,7 @@ from fabric.contrib.files import exists
 
 env.use_ssh_config = True
 env.user = 'ec2-user'
-env.hosts = ['ec2-user@18.219.94.82']
+env.hosts = ['ec2-user@18.218.218.124']
 env.home_dir = '/home/ec2-user'
 
 PROJECT_NAME = 'interview360'
