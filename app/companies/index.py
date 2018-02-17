@@ -21,7 +21,7 @@ class CompanyIndex(DocType):
     def store_index(cls, company):
         """ Create or update company's index """
 
-        attachment = company.attachments.last()
+        attachment = company.images.last()
         obj = cls(
             meta={'id': company.id},
             id=company.id,

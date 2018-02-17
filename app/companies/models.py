@@ -15,7 +15,7 @@ class Company(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     employees = models.ManyToManyField('authorization.User', through='CompanyMember')
-    # attachments = GenericRelation('attachments.Attachment')
+    images = GenericRelation('attachments.Image')
     specialties = models.ManyToManyField('companies.Specialty')
     objects = CompanyManager()
 
@@ -36,7 +36,7 @@ class Company(models.Model):
     @classmethod
     def prefetch_for_list(cls):
         objects = cls.objects.prefetch_related(
-            'vacancy_set', 'attachments', 'employees'
+            'vacancy_set', 'images', 'employees'
         )
         objects = (
             objects

@@ -1,11 +1,11 @@
 from . import (
-    serializers, User, Company, CompanyMember, transaction, AttachmentField
+    serializers, User, Company, CompanyMember, transaction
 )
 from .companies_serializer import CompaniesSerializer
 from .employee_serializer import EmployeeSerializer
 from common.serializers.base_vacancy_serializer import BaseVacancySerializer
 from common.serializers.base_interview_serializer import BaseInterviewSerializer
-from attachments.models import Attachment
+from attachments.models import Image
 from interviews.models import Interview
 from django_pglocks import advisory_lock
 from roles.constants import COMPANY_OWNER
@@ -37,7 +37,7 @@ class CompanySerializer(CompaniesSerializer):
     def get_employees(self, obj):
         """ Receives the list of employees """
 
-        employees_list = obj.employees.prefetch_related('attachments')[:5]
+        employees_list = obj.employees.prefetch_related('avatars')[:5]
         return EmployeeSerializer(employees_list,
                                          many=True, read_only=True,
                                          context={'company_id': obj.id}).data
@@ -121,7 +121,7 @@ class CompanySerializer(CompaniesSerializer):
 
         if attachment_json:
             attachment_id = attachment_json.get('id')
-            attachment = Attachment.objects.get(id=attachment_id)
+            attachment = Image.objects.get(id=attachment_id)
             attachment.object_id=instance.id
             attachment.save()
             return attachment
