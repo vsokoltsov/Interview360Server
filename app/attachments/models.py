@@ -12,7 +12,6 @@ class Attachment(models.Model):
     content_type = models.ForeignKey(ContentType, null=False)
     object_id = models.PositiveIntegerField(null=True)
     content_object = GenericForeignKey('content_type', 'object_id')
-    data = ThumbnailerField()
 
     created_at = models.DateTimeField(auto_now_add=True)
 
