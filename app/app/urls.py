@@ -30,12 +30,10 @@ urlpatterns = [
     url(r'^api/', include('attachments.urls')),
     url(r'^api/', include('resumes.urls'))
 ]
-import ipdb
 
 if settings.DEBUG:
-    import debug_toolbar
     urlpatterns += [
-        url(r'^debug/', include(debug_toolbar.urls))
+        url(r'^silk/', include('silk.urls', namespace='silk'))
     ]
 
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)

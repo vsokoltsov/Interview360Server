@@ -4,6 +4,13 @@
 
 Service for managing employees interview workflow.
 
+## Setup
+
+* Generate `.env` file according to the .env.sample file
+* For deployment
+  * Generate `.env.prod` file for necessary environment variables
+  * Generate `dev.conf` file in `deploy/nginx` folder according to the `development.conf.example`
+
 There are two main options of running and working with application:
 
 * [Vagrant](https://github.com/vforvad/Interview360Server/wiki/Vagrant-configuration)

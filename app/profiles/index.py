@@ -20,7 +20,7 @@ class UserIndex(DocType):
         company_ids = list(
             map(lambda c: c.id, user.companies.all())
         )
-        attachment = user.attachments.last()
+        attachment = user.avatars.last()
         obj = cls(
             meta={'id': user.id},
             id=user.id,

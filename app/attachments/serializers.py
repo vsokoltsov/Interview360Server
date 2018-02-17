@@ -2,7 +2,7 @@ import re
 import boto
 from rest_framework import serializers
 from django.db import transaction
-from .models import Attachment
+from .models import Image
 from feedbacks.fields import ContentTypeField
 from easy_thumbnails.files import get_thumbnailer
 from app.settings import THUMBNAIL_ALIASES
@@ -10,15 +10,15 @@ import ipdb
 
 from common.serializers.base_attachment_serializer import BaseAttachmentSerializer
 
-class AttachmentSerializer(BaseAttachmentSerializer):
-    """ Serializer for Attachment """
+class ImageSerializer(BaseAttachmentSerializer):
+    """ Serializer for Image """
 
     content_type = ContentTypeField(required=True)
     data = serializers.FileField(write_only=True)
     object_id = serializers.IntegerField(required=False, min_value=1)
 
     class Meta:
-        model = BaseAttachmentSerializer.Meta.model
+        model = Image
         fields = BaseAttachmentSerializer.Meta.fields + [
             'object_id',
             'content_type',
@@ -39,11 +39,18 @@ class AttachmentSerializer(BaseAttachmentSerializer):
 
         try:
             with transaction.atomic():
-                attachment = Attachment.objects.create(**data)
-
-                for key, value in THUMBNAIL_ALIASES[''].items():
-                    get_thumbnailer(attachment.data).get_thumbnail(value)
+                attachment = Image.objects.create(**data)
+                self._generate_thumbs(attachment)
                 return attachment
         except boto.exception.S3ResponseError:
             self.errors['attachment'] = ['An error has occured']
             return False
+
+    def _generate_thumbs(self, attachment):
+        """ Generate thumbs for the attachment """
+
+        for item in ['small_thumb', 'thumb', 'medium', 'medium_large', 'large']:
+            try:
+                getattr(attachment, 'image_{}'.format(item)).generate()
+            except ValueError:
+                pass

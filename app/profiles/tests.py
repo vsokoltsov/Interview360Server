@@ -7,7 +7,7 @@ from django.core.files import File
 from rest_framework.test import APITestCase
 from authorization.models import User
 from rest_framework.authtoken.models import Token
-from attachments.models import Attachment
+from attachments.models import Image
 from django.contrib.contenttypes.models import ContentType
 from django.test.utils import override_settings
 from django.core.files.storage import FileSystemStorage
@@ -93,7 +93,7 @@ class ProfileViewSetTest(APITestCase):
         file_path = join(dirname(app.__file__), 'fixtures/test.jpg')
 
         with open(file_path, 'rb') as photo:
-            attachment = Attachment(content_type=content_type)
+            attachment = Image(content_type=content_type)
             attachment.data.save('test.jpg', File(photo), 'rb')
             self.form_data['attachment'] = { 'id': attachment.id }
 

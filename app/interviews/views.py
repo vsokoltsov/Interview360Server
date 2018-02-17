@@ -46,7 +46,7 @@ class InterviewViewSet(viewsets.ModelViewSet):
 
         if self.action == 'list':
             queryset = queryset.prefetch_related(
-                'candidate', 'candidate__attachments'
+                'candidate', 'candidate__avatars'
             )
 
         return queryset

@@ -24,7 +24,7 @@ class VacancyViewSet(viewsets.ModelViewSet):
         """ Return queryset for vacancies """
 
         vacancies = Vacancy.objects.prefetch_related(
-            'skills', 'company', 'company__attachments'
+            'skills', 'company', 'company__images'
         ).filter(company_id=self.kwargs['company_pk'])
         return vacancies
 

@@ -8,7 +8,7 @@ class CompanyManager(models.Manager):
         """ Prefetch all necessary objects """
 
         objects = self.prefetch_related(
-            'vacancy_set', 'attachments'
+            'vacancy_set', 'images'
         )
         objects = (
             objects
@@ -21,7 +21,7 @@ class CompanyManager(models.Manager):
         """ Prefetch objects for detail representaiton of company """
 
         objects = self.prefetch_related(
-            'vacancy_set', 'attachments', 'employees', 'vacancy_set__interviews'
+            'vacancy_set', 'images', 'employees', 'employees__avatars', 'vacancy_set__interviews'
         )
         objects = (
             objects

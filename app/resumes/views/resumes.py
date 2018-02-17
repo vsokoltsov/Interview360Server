@@ -16,12 +16,12 @@ class ResumeViewSet(viewsets.ModelViewSet):
 
         if self.action == 'list':
             return Resume.objects.prefetch_related(
-                'user', 'user__attachments'
+                'user', 'user__avatars'
             ).all()
         else:
-            return Resume.objects.prefetch_related(
-                'user', 'user__attachments', 'skills',
-                'workplaces', 'workplaces__company', 'contact'
+            return Resume.objects.select_related('user', 'contact').prefetch_related(
+                'user__avatars', 'skills',
+                'workplaces', 'workplaces__company'
             ).all()
 
 

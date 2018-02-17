@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from attachments.models import Attachment
+from attachments.models import Image
 from drf_writable_nested import WritableNestedModelSerializer
 from common.serializers.user_serializer import UserSerializer
 from .fields import AttachmentField
@@ -29,7 +29,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
         if attachment_json:
             attachment_id = attachment_json.get('id')
-            attachment = Attachment.objects.get(id=attachment_id)
+            attachment = Image.objects.get(id=attachment_id)
             attachment.object_id=instance.id
             attachment.save()
 
