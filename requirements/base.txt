@@ -20,6 +20,7 @@ django-anymail==0.10
 django-appconf==1.0.1
 django-cors-headers==2.1.0
 django-image-cropping==1.1.0
+django-imagekit==4.0.2
 django-nose==1.4.4
 django-pglocks==1.0.2
 django-storages==1.6.5
@@ -48,6 +49,7 @@ paramiko==2.2.1
 pbr==3.1.1
 pexpect==4.2.1
 pickleshare==0.7.4
+pilkit==2.0
 Pillow==4.3.0
 pinocchio==0.4.2
 prompt-toolkit==1.0.14
