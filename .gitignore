@@ -11,3 +11,4 @@ uploads
 *.retry
 .env.prod
 /deploy/nginx/*.conf
+static

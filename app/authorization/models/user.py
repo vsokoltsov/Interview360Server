@@ -5,6 +5,7 @@ from . import (
 
 class User(AbstractBaseUser):
     """ Represents a user object in our system """
+
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
