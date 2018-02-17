@@ -21,7 +21,8 @@ class ResumeViewSet(viewsets.ModelViewSet):
         else:
             return Resume.objects.prefetch_related(
                 'user', 'user__avatars', 'skills',
-                'workplaces', 'workplaces__company', 'contact'
+                'workplaces', 'workplaces__company', 'workplaces__company__images',
+                'contact'
             ).all()
 
 
