@@ -28,16 +28,16 @@ class BaseAttachmentSerializer(serializers.ModelSerializer):
         return obj.data.url
 
     def get_thumb_url(self, obj):
-        return obj.data['thumb'].url
+        return obj.image_thumb.url
 
     def get_small_thumb_url(self, obj):
-        return obj.data['small_thumb'].url
+        return obj.image_small_thumb.url
 
     def get_medium_url(self, obj):
-        return obj.data['medium'].url
+        return obj.image_medium.url
 
     def get_medium_large_url(self, obj):
-        return obj.data['medium_large'].url
+        return obj.image_medium_large.url
 
     def get_large_url(self, obj):
-        return obj.data['large'].url
+        return obj.image_large.url
