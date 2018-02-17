@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from attachments.models import Attachment
 
-class BaseAttachmentSerializer(serializers.ModelSerializer):
+class BaseAttachmentSerializer(serializers.Serializer):
     """ Base attachment serializer """
 
     id = serializers.IntegerField(read_only=True)
@@ -13,7 +13,6 @@ class BaseAttachmentSerializer(serializers.ModelSerializer):
     large_url = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
-        model = Attachment
         fields = [
             'id',
             'url',
