@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from easy_thumbnails.fields import ThumbnailerField
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 
 class Attachment(models.Model):
     """ Uploaded file model representation """
@@ -43,6 +44,25 @@ class Attachment(models.Model):
 class Image(Attachment):
     """ Image implementation of attachment class """
 
+    DEFAULT_SOURCE = 'data'
+    DEFAULT_FORMAT = 'PNG'
+
+    data = models.ImageField(upload_to='image')
+    image_small_thumb = ImageSpecField(source=DEFAULT_SOURCE,
+                                 processors=[ResizeToFill(50, 50)],
+                                 format=DEFAULT_FORMAT)
+    image_thumb = ImageSpecField(source=DEFAULT_SOURCE,
+                                 processors=[ResizeToFill(100, 100)],
+                                 format=DEFAULT_FORMAT)
+    image_medium = ImageSpecField(source=DEFAULT_SOURCE,
+                                 processors=[ResizeToFill(200, 200)],
+                                 format=DEFAULT_FORMAT)
+    image_medium_large = ImageSpecField(source=DEFAULT_SOURCE,
+                                 processors=[ResizeToFill(250, 250)],
+                                 format=DEFAULT_FORMAT)
+    image_large = ImageSpecField(source=DEFAULT_SOURCE,
+                                 processors=[ResizeToFill(350, 350)],
+                                 format=DEFAULT_FORMAT)
+
     class Meta:
         db_table = 'attachment_images'
-    pass
