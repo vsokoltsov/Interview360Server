@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+import os
 from django.conf.urls import url, include
 from django.conf import settings
 from django.conf.urls.static import static
@@ -31,7 +32,9 @@ urlpatterns = [
     url(r'^api/', include('resumes.urls'))
 ]
 
-if settings.DEBUG:
+SILK_ENABLED = os.environ.get("SILK_ENABLED")
+
+if settings.DEBUG and SILK_ENABLED:
     urlpatterns += [
         url(r'^silk/', include('silk.urls', namespace='silk'))
     ]
