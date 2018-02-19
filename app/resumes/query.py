@@ -41,6 +41,7 @@ class ResumesQuery:
 
         if self.order:
             queryset = queryset.order_by(self.order)
+            
         return queryset
 
     @property
