@@ -1,4 +1,5 @@
 import re
+from decimal import Decimal
 
 from django.db.models import Count
 from resumes.models import Resume
@@ -65,8 +66,8 @@ class ResumesQuery:
         """ Return whether or not the salary is valid """
 
         try:
-            salary.get('min')
-            salary.get('max')
+            Decimal(salary.get('min'))
+            Decimal(salary.get('max'))
             return True
-        except (AttributeError, TypeError):
+        except (AttributeError, TypeError, ValueError):
             return None
