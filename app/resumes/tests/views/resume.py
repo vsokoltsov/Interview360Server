@@ -110,9 +110,7 @@ class ResumeViewTest(APITestCase):
             { 'id': 3 }
         ]
         search_mock.return_value = resume_index
-        url = "/api/v1/resumes/search/?q={}".format(
-            'buzzword', format='json'
-        )
-        response = self.client.get(url)
+        url = "/api/v1/resumes/search/"
+        response = self.client.get(url, { 'q': 'buzzword' }, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['resumes'], resume_index)
