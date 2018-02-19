@@ -29,6 +29,16 @@ class ResumesQuery:
             'user__avatars'
         ).annotate(workplaces_count=Count('workplaces'))
 
+        if self.salary:
+            queryset = queryset.filter(salary__range=[
+                self.salary.get('min'), self.salary.get('max')
+            ])
+
+        if self.skills:
+            queryset = queryset.prefetch_related(
+                'skills'
+            ).filter(skills__id__in=self.skills)
+
         if self.order:
             queryset = queryset.order_by(self.order)
         return queryset
