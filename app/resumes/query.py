@@ -36,12 +36,15 @@ class ResumesQuery:
     def salary(self):
         """ Return salary value """
 
-        return self.params.get('salary')
+        salary = self.params.get('salary')
+        return salary if self.is_valid_salary(salary) else None
+
 
     @property
     def order(self):
         """ Retur order value """
 
+        order = self.params.get('order')
         return order if self.is_valid_order(order) else None
 
     @property
@@ -57,3 +60,13 @@ class ResumesQuery:
         if order_template.match(str(order)):
             order = order[1:]
         return order in self.VALID_ORDER_FIELDS
+
+    def is_valid_salary(self, salary):
+        """ Return whether or not the salary is valid """
+
+        try:
+            salary.get('min')
+            salary.get('max')
+            return True
+        except (AttributeError, TypeError):
+            return None
