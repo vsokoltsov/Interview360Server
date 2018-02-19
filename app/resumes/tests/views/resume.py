@@ -50,7 +50,7 @@ class ResumeViewTest(APITestCase):
         """ Test success receiving of the list of resumes """
 
         response = self.client.get('/api/v1/resumes/', format='json')
-        self.assertEqual(len(response.data), 2)
+        self.assertEqual(len(response.data), 4)
 
     def test_success_retrieve_resume(self):
         """ Test success resume retrieving """
