@@ -52,7 +52,8 @@ class ResumesQuery:
     def skills(self):
         """ Return skills value """
 
-        return self.params.get('skills')
+        skills = self.params.get('skills')
+        return skills if self.is_valid_skills(skills) else None
 
     def is_valid_order(self, order):
         """ Return whether or not the order value is valid """
@@ -70,4 +71,14 @@ class ResumesQuery:
             Decimal(salary.get('max'))
             return True
         except (AttributeError, TypeError, ValueError):
+            return None
+
+    def is_valid_skills(self, skills):
+        """ Return whether or not skills are valid """
+
+        try:
+            list(skills)
+            [int(item) for item in skills]
+            return True
+        except (TypeError, ValueError):
             return None
