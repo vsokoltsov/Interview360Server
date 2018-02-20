@@ -1,7 +1,7 @@
 from . import (
     render, viewsets, status, Response, IsAuthenticated, TokenAuthentication,
     get_object_or_404, ResumesSerializer, ResumeSerializer, list_route,
-    Resume, ResumesIndex, ResumesSearch, ResumeForm
+    Resume, ResumesIndex, ResumesSearch, ResumeForm, ResumesQuery
 )
 import ipdb
 
@@ -15,9 +15,8 @@ class ResumeViewSet(viewsets.ModelViewSet):
         """ Return queryset class """
 
         if self.action == 'list':
-            return Resume.objects.prefetch_related(
-                'user', 'user__avatars'
-            ).all()
+            query = ResumesQuery(self.request.query_params)
+            return query.list()
         else:
             return Resume.objects.select_related('user', 'contact').prefetch_related(
                 'user__avatars', 'skills',
