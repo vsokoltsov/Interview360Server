@@ -123,7 +123,7 @@ class ResumesQueryTest(TestCase):
         """ Return list of resumes with the wrong order value """
 
         query = ResumesQuery({
-            'order': 'user'
+            'order': 'company'
         })
         response = query.list()
         self.assertEqual(
