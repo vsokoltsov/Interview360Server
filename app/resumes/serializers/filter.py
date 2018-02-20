@@ -1,4 +1,6 @@
 from . import serializers, Resume
+
+from django.db.models import Max, Min
 from skills.models import Skill
 from skills.serializers import SkillSerializer
 from resumes.query import ResumesQuery
@@ -10,19 +12,26 @@ class ResumesFilter(serializers.Serializer):
     order = serializers.SerializerMethodField()
     salary = serializers.SerializerMethodField()
 
-    def get_skills(self, object):
+    class Meta:
+        fields = [
+            'skills',
+            'order',
+            'salary'
+        ]
+
+    def get_skills(self, obj):
         """ Receive the list of the most frequent skills for all resumes """
 
         skills_list = Resume.objects.values_list('skills', flat=True)
         skills = Skill.objects.filter(id__in=[item for item in skills_list])
         return SkillSerializer(skills, many=True).data
 
-    def get_order(self, object):
+    def get_order(self, obj):
         """ Get list of available items for ordering """
 
         return ResumesQuery.VALID_ORDER_FIELDS
 
-    def get_salary(self, object):
+    def get_salary(self, obj):
         """ Get object for the minimum and maximum salary """
 
         return Resume.objects.aggregate(min=Min('salary'), max=Max('salary'))

@@ -78,5 +78,5 @@ class ResumeViewSet(viewsets.ModelViewSet):
     def filters(self, request):
         """ Receive the filter value of the resumes """
 
-        serializer = ResumesFilter()
+        serializer = ResumesFilter({})
         return Response({ 'filters': serializer.data })
