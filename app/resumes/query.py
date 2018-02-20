@@ -41,7 +41,7 @@ class ResumesQuery:
 
         if self.order:
             queryset = queryset.order_by(self.order)
-            
+
         return queryset
 
     @property
@@ -57,7 +57,7 @@ class ResumesQuery:
         """ Retur order value """
 
         order = self.params.get('order')
-        return order if self.is_valid_order(order) else None
+        return order if self.is_valid_order(order) else 'created_at'
 
     @property
     def skills(self):
