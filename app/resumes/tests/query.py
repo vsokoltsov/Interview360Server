@@ -6,6 +6,7 @@ from skills.models import Skill
 from companies.models import Company
 from resumes.models import Resume, Workplace, Contact
 import mock
+import ipdb
 
 
 class ResumesQueryTest(TestCase):
@@ -104,7 +105,7 @@ class ResumesQueryTest(TestCase):
         response = query.list()
         self.assertEqual(
             [ item.id for item in response ],
-            [self.resume_1.id, self.resume_3.id, self.resume_2.id, self.resume_4.id]
+            [self.resume_1.id, self.resume_3.id, self.resume_4.id, self.resume_2.id]
         )
 
     def test_opposite_list_order(self):

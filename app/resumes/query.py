@@ -40,7 +40,7 @@ class ResumesQuery:
             ).filter(skills__id__in=self.skills)
 
         if self.order:
-            queryset = queryset.order_by(self.order, 'updated_at')
+            queryset = queryset.order_by(self.order)
 
         return queryset
 
