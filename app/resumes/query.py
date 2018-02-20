@@ -57,7 +57,7 @@ class ResumesQuery:
         """ Retur order value """
 
         order = self.params.get('order')
-        return order if self.is_valid_order(order) else 'created_at'
+        return order if self.is_valid_order(order) else 'title'
 
     @property
     def skills(self):

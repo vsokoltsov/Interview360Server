@@ -36,7 +36,7 @@ class ResumesQueryTest(TestCase):
         response = query.list()
         self.assertEqual(
             [ item.id for item in response ],
-            [self.resume_1.id, self.resume_2.id, self.resume_4.id, self.resume_3.id]
+            [self.resume_1.id, self.resume_2.id, self.resume_3.id, self.resume_4.id]
         )
 
     def test_matching_of_salary_value(self):
@@ -67,7 +67,7 @@ class ResumesQueryTest(TestCase):
         response = query.list()
         self.assertEqual(
             [ item.id for item in response ],
-            [self.resume_1.id, self.resume_2.id, self.resume_4.id, self.resume_3.id]
+            [self.resume_1.id, self.resume_2.id, self.resume_3.id, self.resume_4.id]
         )
 
     def test_matching_of_skills(self):
@@ -92,7 +92,7 @@ class ResumesQueryTest(TestCase):
         response = query.list()
         self.assertEqual(
             [ item.id for item in response ],
-            [self.resume_1.id, self.resume_2.id, self.resume_4.id, self.resume_3.id]
+            [self.resume_1.id, self.resume_2.id, self.resume_3.id, self.resume_4.id]
         )
 
     def test_matching_the_order_of_list(self):
@@ -128,5 +128,5 @@ class ResumesQueryTest(TestCase):
         response = query.list()
         self.assertEqual(
             [ item.id for item in response ],
-            [self.resume_1.id, self.resume_2.id, self.resume_4.id, self.resume_3.id]
+            [self.resume_1.id, self.resume_2.id, self.resume_3.id, self.resume_4.id]
         )
