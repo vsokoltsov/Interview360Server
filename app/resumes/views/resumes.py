@@ -1,7 +1,7 @@
 from . import (
     render, viewsets, status, Response, IsAuthenticated, TokenAuthentication,
     get_object_or_404, ResumesSerializer, ResumeSerializer, list_route,
-    Resume, ResumesIndex, ResumesSearch, ResumeForm, ResumesQuery
+    Resume, ResumesIndex, ResumesSearch, ResumeForm, ResumesQuery, ResumesFilter
 )
 import ipdb
 
@@ -73,3 +73,10 @@ class ResumeViewSet(viewsets.ModelViewSet):
         search = ResumesSearch()
         results = search.find(query)
         return  Response({ 'resumes': results })
+
+    @list_route(methods=['get'])
+    def filters(self, request):
+        """ Receive the filter value of the resumes """
+
+        serializer = ResumesFilter()
+        return Response({ 'filters': serializer.data })

@@ -12,3 +12,4 @@ from .resumes import ResumesSerializer
 from .workplace import WorkplaceSerializer
 from .contact import ContactSerializer
 from .resume import ResumeSerializer
+from .filter import ResumesFilter
