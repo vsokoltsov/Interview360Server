@@ -13,12 +13,13 @@ class QueryParser:
         """ Parse given parameters in order to match the schema """
 
         denormalized = {}
-        for key, value in params.items():
-            key_type = self.schema.get(key)
-            if key_type is dict:
-                denormalized[key] = self._parse_dict(value)
+        for key, value in self.schema.items():
+            if value is dict:
+                denormalized[key] = self._parse_dict(params.get(key))
+            elif value is list:
+                denormalized[key] = params.getlist(key)
             else:
-                denormalized[key] = value
+                denormalized[key] = params.get(key)
 
         return denormalized
 
@@ -27,10 +28,6 @@ class QueryParser:
         """ Parse given parameters to dict """
 
         try:
-            return literal_eval(value)
+            return literal_eval(val)
         except ValueError:
-            return value
-
-    def _parse_arr(self, val):
-        """ Parse given parameters to arr """
-        pass
+            return val

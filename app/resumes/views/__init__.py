@@ -11,6 +11,7 @@ from resumes.forms import ResumeForm
 from resumes.index import ResumesIndex
 from resumes.search import ResumesSearch
 from resumes.query import ResumesQuery
+from common.query_parser import QueryParser
 
 from .resumes import ResumeViewSet
 from .workplaces import WorkplacesApiView
