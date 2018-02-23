@@ -114,3 +114,21 @@ class ResumeViewTest(APITestCase):
         response = self.client.get(url, { 'q': 'buzzword' }, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['resumes'], resume_index)
+
+    def test_list_action_with_attributes(self):
+        """ Test receiving of the resumes list with parameters """
+
+        url = "/api/v1/resumes/"
+        response = self.client.get(url, {
+            'salary': {
+                'min': 10000,
+                'max': 15000
+            }
+        }, format='json')
+
+    def test_success_receiving_of_filters(self):
+        """ Test success response on filters receiving """
+
+        url = "/api/v1/resumes/filters/"
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, 200)

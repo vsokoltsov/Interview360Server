@@ -1,7 +1,8 @@
 from . import (
     render, viewsets, status, Response, IsAuthenticated, TokenAuthentication,
     get_object_or_404, ResumesSerializer, ResumeSerializer, list_route,
-    Resume, ResumesIndex, ResumesSearch, ResumeForm, ResumesQuery
+    Resume, ResumesIndex, ResumesSearch, ResumeForm, ResumesQuery, ResumesFilter,
+    QueryParser
 )
 import ipdb
 
@@ -10,12 +11,18 @@ class ResumeViewSet(viewsets.ModelViewSet):
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, )
+    queryset_parser = QueryParser({
+        'salary': dict,
+        'skills': list,
+        'order': str
+    })
 
     def get_queryset(self):
         """ Return queryset class """
 
         if self.action == 'list':
-            query = ResumesQuery(self.request.query_params)
+            params = self.queryset_parser.parse(self.request.query_params)
+            query = ResumesQuery(params)
             return query.list()
         else:
             return Resume.objects.select_related('user', 'contact').prefetch_related(
@@ -73,3 +80,10 @@ class ResumeViewSet(viewsets.ModelViewSet):
         search = ResumesSearch()
         results = search.find(query)
         return  Response({ 'resumes': results })
+
+    @list_route(methods=['get'])
+    def filters(self, request):
+        """ Receive the filter value of the resumes """
+
+        serializer = ResumesFilter({})
+        return Response({ 'filters': serializer.data })
