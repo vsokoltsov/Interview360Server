@@ -12,7 +12,7 @@ from resumes.index import ResumesIndex
 from resumes.search import ResumesSearch
 from resumes.query import ResumesQuery
 from common.query_parser import QueryParser
-from resumes.permissions import ResumePermissions
+from resumes.permissions import ResumePermissions, ContactPermissions
 
 from .resumes import ResumeViewSet
 from .workplaces import WorkplacesApiView

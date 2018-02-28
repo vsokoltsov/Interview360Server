@@ -1,6 +1,6 @@
 from . import (
     APITestCase, mock, HR, EMPLOYEE, CANDIDATE,
-    Skill, Company, Resume, Token, Workplace, Contact
+    Skill, Company, Resume, Token, Workplace, Contact, User
 )
 import ipdb
 
@@ -21,7 +21,7 @@ class ContactApiViewTest(APITestCase):
         self.resume = Resume.objects.first()
         self.company = Company.objects.first()
         self.contact = Contact.objects.last()
-        self.user = self.company.get_employees_with_role(EMPLOYEE)[0]
+        self.user = User.objects.first()
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.workplace = Workplace.objects.last()
