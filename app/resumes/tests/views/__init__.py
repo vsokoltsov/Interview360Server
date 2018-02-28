@@ -3,6 +3,7 @@ import mock
 from rest_framework.authtoken.models import Token
 from roles.constants import HR, EMPLOYEE, CANDIDATE
 from skills.models import Skill
+from authorization.models import User
 from companies.models import Company
 from resumes.models import Resume, Workplace, Contact
 

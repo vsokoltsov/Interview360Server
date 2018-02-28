@@ -1,6 +1,6 @@
 from . import (
     APITestCase, mock, HR, EMPLOYEE, CANDIDATE,
-    Skill, Company, Resume, Token
+    Skill, Company, Resume, Token, User
 )
 from resumes.index import ResumesIndex
 import ipdb
@@ -20,7 +20,7 @@ class ResumeViewTest(APITestCase):
 
         self.resume = Resume.objects.first()
         self.company = Company.objects.first()
-        self.user = self.company.get_employees_with_role(EMPLOYEE)[0]
+        self.user = User.objects.first()
         self.token = Token.objects.create(user=self.user)
         self.skills = [s.id for s in Skill.objects.filter(id__in=[1, 2])]
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
