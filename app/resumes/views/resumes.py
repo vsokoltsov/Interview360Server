@@ -2,7 +2,7 @@ from . import (
     render, viewsets, status, Response, IsAuthenticated, TokenAuthentication,
     get_object_or_404, ResumesSerializer, ResumeSerializer, list_route,
     Resume, ResumesIndex, ResumesSearch, ResumeForm, ResumesQuery, ResumesFilter,
-    QueryParser
+    QueryParser, ResumePermissions
 )
 import ipdb
 
@@ -10,7 +10,7 @@ class ResumeViewSet(viewsets.ModelViewSet):
     """ Resume views """
 
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, ResumePermissions, )
     queryset_parser = QueryParser({
         'salary': dict,
         'skills': list,

@@ -1,8 +1,9 @@
 from rest_framework import permissions
 from .models import Company, CompanyMember
 from roles.constants import (
-    COMPANY_OWNER, RECEIVE_COMPANY, DELETE_COMPANY, UPDATE_COMPANY,
-    RECEIVE_EMPLOYEES, ADD_EMPLOYEE_TO_COMPANY, DELETE_EMPLOYEES
+    COMPANY_OWNER, HR, RECEIVE_COMPANY, DELETE_COMPANY, UPDATE_COMPANY,
+    RECEIVE_RESUME, CREATE_RESUME, RECEIVE_EMPLOYEES, ADD_EMPLOYEE_TO_COMPANY,
+    DELETE_EMPLOYEES
 )
 from roles.models import get_role
 import ipdb

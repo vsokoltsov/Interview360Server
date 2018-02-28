@@ -22,7 +22,11 @@ class Candidate(RoleManager):
     permissions = [
         RECEIVE_VACANCY,
         RECEIVE_INTERVIEW,
-        RECEIVE_COMPANY
+        RECEIVE_COMPANY,
+        RECEIVE_RESUME,
+        CREATE_RESUME,
+        UPDATE_RESUME,
+        DELETE_RESUME
     ]
 
 class Employee(Candidate):

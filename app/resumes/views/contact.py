@@ -1,4 +1,7 @@
-from . import viewsets, list_route, Response, status, get_object_or_404, Resume
+from . import (
+    viewsets, list_route, Response, status, IsAuthenticated, TokenAuthentication,
+    get_object_or_404, Resume, ContactPermissions
+)
 from rest_framework.views import APIView
 from resumes.forms import ContactForm
 from resumes.serializers import ContactSerializer
@@ -6,6 +9,9 @@ import ipdb
 
 class ContactApiView(APIView):
     """ View for contact resource """
+
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated, ContactPermissions, )
 
     def put(self, request, resume_id=None):
         """ Create or update new contact instance for resume """
