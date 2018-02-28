@@ -1,6 +1,6 @@
 from . import (
     APITestCase, mock, HR, EMPLOYEE, CANDIDATE,
-    Skill, Company, Resume, Token, Workplace
+    Skill, Company, Resume, Token, Workplace, User
 )
 
 class WorkplaceDeleteViewTest(APITestCase):
@@ -19,7 +19,7 @@ class WorkplaceDeleteViewTest(APITestCase):
 
         self.resume = Resume.objects.last()
         self.company = Company.objects.first()
-        self.user = self.company.get_employees_with_role(EMPLOYEE)[0]
+        self.user = User.objects.first()
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.workplace = Workplace.objects.last()

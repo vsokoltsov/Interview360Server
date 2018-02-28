@@ -1,4 +1,7 @@
-from . import viewsets, list_route, Response, status
+from . import (
+    viewsets, list_route, Response, status, IsAuthenticated,
+    TokenAuthentication, WorkplacePermissions
+)
 from rest_framework.views import APIView
 from resumes.forms import WorkplaceForm
 from resumes.serializers import WorkplaceSerializer
@@ -6,6 +9,9 @@ import ipdb
 
 class WorkplacesApiView(APIView):
     """ Views for workplace resource """
+
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated, WorkplacePermissions, )
 
     def put(self, request, resume_id=None):
         """ Create new workplaces for resume; Update existing ones """

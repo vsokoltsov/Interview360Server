@@ -27,7 +27,7 @@ class ResumePermissions(permissions.BasePermission):
 class ContactPermissions(permissions.BasePermission):
     """ Permissions class for resume's contact """
 
-    def has_permission(self, request, view, resume_id=None):
+    def has_permission(self, request, view):
         """ Base permissions handler """
 
         try:
@@ -36,10 +36,14 @@ class ContactPermissions(permissions.BasePermission):
         except Resume.DoesNotExist:
             return True
 
-    def has_object_permission(self, request, view, obj):
-        """ Object permission handler """
+class WorkplacePermissions(permissions.BasePermission):
+    """ Permissions class for resume's workplaces """
 
-        if view.action == 'update' or view.action == 'destroy':
-            return request.user.id == obj.user_id
-        else:
+    def has_permission(self, request, view, resume_id=None):
+        """ Base permissions handler """
+
+        try:
+            resume = Resume.objects.get(id=view.kwargs.get('resume_id'))
+            return request.user.id == resume.user_id
+        except Resume.DoesNotExist:
             return True
