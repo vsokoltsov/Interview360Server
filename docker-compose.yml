@@ -49,6 +49,19 @@ services:
     depends_on:
       - rabbit
 
+  celery_flower:
+    <<: *default_app
+    container_name: 'celery_flower'
+    command: bash -c "cd app && celery flower -A app.celery"
+    environment:
+      - DJANGO_SETTINGS_MODULE=app.settings
+    ports:
+      - '5555:5555'
+    links:
+      - rabbit
+    depends_on:
+      - rabbit
+
   celery_beat:
     <<: *default_app
     container_name: 'celery_beat'
