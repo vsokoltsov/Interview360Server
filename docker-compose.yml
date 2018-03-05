@@ -11,28 +11,64 @@ services:
     ports:
       - 5432:5432
 
-  app:
-    image: vsokoltsov/interview360
-    container_name: interview360
+  default_app: &default_app
     build:
       context: .
       dockerfile: ./Dockerfile
       args:
         - DEFAULT_REQUIREMENTS=development.txt
-    command: bash -c "python3 app/manage.py migrate && cd app && gunicorn app.wsgi:application -b 0.0.0.0:8000"
     volumes:
       - .:/interview360
-    ports:
-      - '8000:8000'
     env_file: ./.env
     environment:
       - DJANGO_DEFAULT_ENV=development
+
+  app:
+    <<: *default_app
+    image: vsokoltsov/interview360
+    container_name: interview360
+    command: bash -c "python3 app/manage.py migrate && cd app && gunicorn app.wsgi:application -b 0.0.0.0:8000"
+    ports:
+      - '8000:8000'
     links:
       - celery_worker
       - celery_beat
     depends_on:
       - db
       - elasticsearch
+      - rabbit
+
+  celery_worker:
+    <<: *default_app
+    container_name: 'celery_worker'
+    command: bash -c "cd app && celery -A app.celery worker -l INFO"
+    environment:
+      - DJANGO_SETTINGS_MODULE=app.settings
+    links:
+      - rabbit
+    depends_on:
+      - rabbit
+
+  celery_flower:
+    <<: *default_app
+    container_name: 'celery_flower'
+    command: bash -c "cd app && celery flower -A app.celery"
+    environment:
+      - DJANGO_SETTINGS_MODULE=app.settings
+    ports:
+      - '5555:5555'
+    links:
+      - rabbit
+    depends_on:
+      - rabbit
+
+  celery_beat:
+    <<: *default_app
+    container_name: 'celery_beat'
+    command: bash -c "cd app && celery -A app beat -l debug"
+    links:
+      - rabbit
+    depends_on:
       - rabbit
 
   nginx:
@@ -76,45 +112,6 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
-
-  celery_worker:
-    container_name: 'celery_worker'
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-      args:
-        - DEFAULT_REQUIREMENTS=development.txt
-    command: "celery -A app.app worker -l INFO"
-    volumes:
-      - .:/interview360
-    env_file: ./.env
-    environment:
-      - DJANGO_SETTINGS_MODULE=app.app.settings
-      - DJANGO_DEFAULT_ENV=development
-    links:
-      - rabbit
-    depends_on:
-      - rabbit
-
-  celery_beat:
-    container_name: 'celery_beat'
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-      args:
-        - DEFAULT_REQUIREMENTS=development.txt
-    command: 'celery -A app.app beat -l debug'
-    volumes:
-      - .:/interview360
-    env_file:
-      - ./.env
-    environment:
-      - DJANGO_SETTINGS_MODULE=app.app.settings
-      - DJANGO_DEFAULT_ENV=development
-    links:
-      - rabbit
-    depends_on:
-      - rabbit
 
 volumes:
   pg_data:
