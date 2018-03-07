@@ -10,17 +10,11 @@ class Feedback(models.Model):
     IN_PROGRESS = 1
     DONE = 2
 
-    STATUSES = [
-        ASSIGNED,
-        IN_PROGRESS,
-        DONE
-    ]
-
-    STATUSES_NAMES = [
-        'assigned',
-        'in progress',
-        'done'
-    ]
+    STATUSES = (
+        (ASSIGNED, 'Assigned'),
+        (IN_PROGRESS, 'In progress'),
+        (DONE, 'Done')
+    )
 
     user = models.ForeignKey(User, null=False)
     description = models.TextField()
@@ -28,12 +22,9 @@ class Feedback(models.Model):
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
+    status = models.IntegerField(
+        null=False, default=ASSIGNED, choices=STATUSES, db_index=True
+    )
 
     class Meta:
         db_table = 'feedbacks'
-
-    @classmethod
-    def status_value(cls, val):
-        """ Get name of the status by status value """
-
-        return cls.STATUSES_NAMES.index(val) if val in cls.STATUSES else None
