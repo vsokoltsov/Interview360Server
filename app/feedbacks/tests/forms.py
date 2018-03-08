@@ -4,6 +4,7 @@ import mock
 
 import ipdb
 
+from authorization.models import User
 from authorization.factory import UserFactory
 from feedbacks.factory import FeedbackFactory
 from companies.factory import CompanyFactory, CompanyMemberFactory
@@ -27,10 +28,6 @@ class FeedbackFormTests(TransactionTestCase):
         self.company_member_2 = CompanyMemberFactory(
             user_id=self.user_2.id, company_id=self.company.id
         )
-        # self.feedback = FeedbackFactory(
-        #     user_id=self.user_1.id, object_id=self.user_2.id,
-        #     content_type=ContentType.objects.get_for_model('authorization.User')
-        # )
         self.params = {
             'user_id': self.user_1.id,
             'object_id': self.user_2.id,
@@ -58,3 +55,19 @@ class FeedbackFormTests(TransactionTestCase):
         form = FeedbackForm(params=self.params)
         form.submit()
         self.assertEqual(Feedback.objects.count(), feedbacks_count + 1)
+
+    def test_success_update_of_feedback(self):
+        """ Test success updating of the feedback """
+
+        params = {
+            **self.params,
+            'description': 'TEXT_TEXT'
+        }
+        feedback = FeedbackFactory(
+            user_id=self.user_1.id, object_id=self.user_2.id, company_id=self.company.id,
+            content_type=ContentType.objects.get_for_model(User)
+        )
+        form = FeedbackForm(obj=feedback, params=params)
+        form.submit()
+        feedback.refresh_from_db()
+        self.assertEqual(feedback.description, params.get('description'))

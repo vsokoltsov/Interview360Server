@@ -60,9 +60,7 @@ class FeedbackForm(BaseForm):
             with transaction.atomic():
                 self.params['content_type'] = self._get_content_type_provider()
                 if not self.obj:
-                    self.obj = Feedback.objects.create(
-                        **self.params, content_type=content_type
-                    )
+                    self.obj = Feedback.objects.create(**self.params)
                 else:
                     self._set_attributes()
                     self.obj.save()
