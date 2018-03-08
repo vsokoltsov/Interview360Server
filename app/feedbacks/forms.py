@@ -1,6 +1,12 @@
+from django.db import transaction
+from django.contrib.contenttypes.models import ContentType
+
+from feedbacks.models import Feedback
 from common.forms import BaseForm, FormException
 
-class FeedbackForm:
+import ipdb
+
+class FeedbackForm(BaseForm):
     """
     Feedback form object
     :param id: Identifier of feedback
@@ -22,6 +28,11 @@ class FeedbackForm:
             'empty': False
             # 'not_equal_generic_type': ['object_id', 'content_type']
         },
+        'company_id': {
+            'type': 'integer',
+            'required': True,
+            'empty': False
+        },
         'object_id': {
             'type': 'integer',
             'required': True,
@@ -31,7 +42,7 @@ class FeedbackForm:
             'type': 'string',
             'required': True,
             'empty': False,
-            'oneof': [ 'interviews.interview', 'authorization.user' ]
+            'allowed': [ 'interviews.interview', 'authorization.user' ]
         },
         'description': {
             'type': 'string',
@@ -42,4 +53,34 @@ class FeedbackForm:
 
     def submit(self):
         """ Save feedback information into database """
-        pass
+
+        if not self.is_valid(): return False
+
+        try:
+            with transaction.atomic():
+                self.params['content_type'] = self._get_content_type_provider()
+                if not self.obj:
+                    self.obj = Feedback.objects.create(
+                        **self.params, content_type=content_type
+                    )
+                else:
+                    self._set_attributes()
+                    self.obj.save()
+                return True
+        except:
+            return False
+
+    def _get_content_type_provider(self):
+        """ Receive a correct content type value """
+
+        app_name, model = self.params.get('content_type').split('.')
+        content_type = ContentType.objects.get(
+            app_label=app_name, model=model
+        )
+        return content_type
+
+    def _set_attributes(self):
+        """ Set attributes to new feedback instance """
+
+        for field, value in self.params.items():
+            setattr(self.obj, field, value)
