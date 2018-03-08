@@ -1,2 +1,2 @@
-from .serializers import *
+from .forms import *
 from .views import *
