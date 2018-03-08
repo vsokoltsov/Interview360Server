@@ -24,10 +24,11 @@ class FeedbackViewSetTest(APITestCase):
         self.feedback = Feedback.objects.last()
         self.interview = Interview.objects.first()
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
-        self.url = '/api/v1/feedbacks/mine/'
+        self.url = '/api/v1/feedbacks/'
         self.form_data = {
-            'user': self.hr.id,
+            'user_id': self.hr.id,
             'description': 'AAA',
+            'company_id': self.company.id,
             'object_id': self.interview.id,
             'content_type': 'interviews.interview'
         }
