@@ -5,6 +5,23 @@ from contextlib import contextmanager
 from django.db import transaction
 from django_pglocks import advisory_lock
 
+
+class BaseValidator(cerberus.Validator):
+    """ Custom base validator """
+
+    def _validate_equal(self, equal, field, value):
+        """ Validates equation of one field to another """
+
+        match_field, match_value = self._lookup_field(equal)
+        if value != match_value:
+            self._error(field, 'Does not match the {}'.format(match_field))
+
+    # def _validate_not_equal_generic_type(self, not_equal, field, value):
+    #     """ Validates disequation of field to generic field values """
+    #
+    #     match_object_id, match_content_type = self._lookup_field(not_equal[0]), self._lookup_field(not_equal[1]),
+
+
 class FormException(Exception):
     """ Form exception class """
 

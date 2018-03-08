@@ -20,6 +20,7 @@ class FeedbackForm:
             'type': 'integer',
             'required': True,
             'empty': False
+            # 'not_equal_generic_type': ['object_id', 'content_type']
         },
         'object_id': {
             'type': 'integer',
