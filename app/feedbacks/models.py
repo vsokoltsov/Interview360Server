@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from authorization.models import User
 
 class Feedback(models.Model):
     """ Feedback model representations """
@@ -16,7 +15,8 @@ class Feedback(models.Model):
         (DONE, 'Done')
     )
 
-    user = models.ForeignKey(User, null=False)
+    user = models.ForeignKey('authorization.User', null=False)
+    company = models.ForeignKey('companies.Company', null=False)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     content_type = models.ForeignKey(ContentType)
