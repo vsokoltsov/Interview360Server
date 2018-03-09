@@ -48,10 +48,22 @@ class Company(models.Model):
 class CompanyMember(models.Model):
     """ CompanyMember model, which is used for `through` association """
 
+    COMPANY_OWNER = 1
+    HR = 2
+    CANDIDATE = 3
+    EMPLOYEE = 4
+
+    ROLES = (
+        (COMPANY_OWNER, 'Company Owner'),
+        (HR, 'HR'),
+        (CANDIDATE, 'Candidate'),
+        (EMPLOYEE, 'Employee')
+    )
+
     user = models.ForeignKey(User)
     company = models.ForeignKey(Company)
     role = models.IntegerField(
-        validators=[MaxValueValidator(4), MinValueValidator(1)]
+        default=EMPLOYEE, choices=ROLES, db_index=True, null=False
     )
     active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

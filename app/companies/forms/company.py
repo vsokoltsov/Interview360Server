@@ -47,7 +47,7 @@ class CompanyForm(BaseForm):
         },
         'current_user': {
             'empty': False,
-            'required': True,
+            'required': True
         }
     }
 
