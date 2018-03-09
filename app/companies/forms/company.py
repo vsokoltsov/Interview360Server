@@ -31,8 +31,8 @@ class CompanyForm(BaseForm):
         },
         'description': {
             'type': 'string',
-            'empty': False,
-            'required': True
+            'empty': True,
+            'required': False
         },
         'city': {
             'type': 'string',
@@ -45,6 +45,10 @@ class CompanyForm(BaseForm):
             'required': True,
             'validator': owner_exist
         },
+        'current_user': {
+            'empty': False,
+            'required': True,
+        }
     }
 
     def submit(self):

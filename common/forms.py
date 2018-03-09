@@ -4,7 +4,7 @@ from cerberus import Validator
 from contextlib import contextmanager
 from django.db import transaction
 from django_pglocks import advisory_lock
-
+import ipdb
 
 class BaseValidator(cerberus.Validator):
     """ Custom base validator """
@@ -59,6 +59,9 @@ class BaseForm(abc.ABC):
         self.validator = Validator(self.schema)
         self.obj = kwargs.get('obj', None)
         self.params = kwargs.get('params', None)
+        self.current_user = kwargs.get('current_user', None)
+        if self.current_user:
+            self.params['current_user'] = self.current_user
 
     def is_valid(self):
         """ Return whether or not the receiving data are valid """
