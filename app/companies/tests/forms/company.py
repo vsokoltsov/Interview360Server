@@ -42,3 +42,24 @@ class CompanyFormTest(TransactionTestCase):
         )
         self.assertFalse(form.is_valid())
         self.assertTrue('current_user' in form.errors)
+
+    def test_success_company_creation(self):
+        """ Test success creation of the companys """
+
+        companies_count = Company.objects.count()
+        form = CompanyForm(
+            obj=Company(), params=self.params, current_user=self.user
+        )
+        form.submit()
+        self.assertEqual(Company.objects.count(), companies_count + 1)
+
+    def test_success_company_update(self):
+        """ Test success company update """
+
+        company = CompanyFactory()
+        form = CompanyForm(
+            obj=company, params=self.params, current_user=self.user
+        )
+        form.submit()
+        company.refresh_from_db()
+        self.assertEqual(company.name, self.params['name'])
