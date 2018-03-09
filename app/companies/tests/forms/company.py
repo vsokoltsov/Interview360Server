@@ -44,7 +44,7 @@ class CompanyFormTest(TransactionTestCase):
         self.assertTrue('current_user' in form.errors)
 
     def test_success_company_creation(self):
-        """ Test success creation of the companys """
+        """ Test success creation of the companies """
 
         companies_count = Company.objects.count()
         form = CompanyForm(
@@ -57,9 +57,19 @@ class CompanyFormTest(TransactionTestCase):
         """ Test success company update """
 
         company = CompanyFactory()
+        company_member = CompanyMemberFactory(user_id=self.user.id, company_id=company.id)
         form = CompanyForm(
             obj=company, params=self.params, current_user=self.user
         )
         form.submit()
         company.refresh_from_db()
         self.assertEqual(company.name, self.params['name'])
+
+    def test_failed_company_update_user_does_not_belong_to_company(self):
+        """ Test failed validation if user does not belongs to company """
+
+        company = CompanyFactory()
+        form = CompanyForm(
+            obj=company, params=self.params, current_user=self.user
+        )
+        self.assertFalse(form.submit())

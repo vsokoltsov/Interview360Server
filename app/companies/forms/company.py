@@ -1,6 +1,8 @@
 from common.forms import BaseForm
 from django.db import transaction
 from authorization.models import User
+from companies.models import CompanyMember
+import ipdb
 
 def owner_exist(field, value, error):
     """ Check whether or not owner exist """
@@ -14,10 +16,6 @@ class CompanyForm(BaseForm):
     """ Form object for company model """
 
     schema = {
-        'id': {
-            'type': 'integer',
-            'required': False
-        },
         'name': {
             'type': 'string',
             'empty': False,
@@ -63,7 +61,26 @@ class CompanyForm(BaseForm):
         except:
             return False
 
+    def is_valid(self):
+        """ Override the parent class method """
+
+        result = super(CompanyForm, self).is_valid()
+
+        if (self.obj.id and not self.__is_company_member(self.obj, self.current_user)):
+            self.set_error_message('company_member', 'Does not belong to company')
+            result = False
+            
+        return result
 
     def __set_attributes(self):
         for field, value in self.params.items():
             setattr(self.obj, field, value)
+
+    def __is_company_member(self, company_id, user_id):
+        """ Check whether or not the current user is the member of the company """
+
+        try:
+            CompanyMember.objects.get(company_id=company_id, user_id=user_id)
+            return True
+        except CompanyMember.DoesNotExist:
+            return False
