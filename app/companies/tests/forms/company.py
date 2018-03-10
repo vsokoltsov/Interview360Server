@@ -1,5 +1,5 @@
 from . import (
-    TransactionTestCase, mock, datetime, Company,
+    TransactionTestCase, mock, datetime, Company, ImageFactory, ContentType,
     UserFactory, CompanyFactory, CompanyMemberFactory, CompanyForm, CompanyMember
 )
 import ipdb
@@ -38,12 +38,14 @@ class CompanyFormTest(TransactionTestCase):
         """ Test failed form validation if current user is abscent """
 
         form = CompanyForm(
-            obj=Company(), params={}
+            obj=Company(), params=self.params
         )
         self.assertFalse(form.is_valid())
         self.assertTrue('current_user' in form.errors)
 
-    def test_success_company_creation(self):
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_company_creation(self, user_index, company_index):
         """ Test success creation of the companies """
 
         companies_count = Company.objects.count()
@@ -53,7 +55,9 @@ class CompanyFormTest(TransactionTestCase):
         form.submit()
         self.assertEqual(Company.objects.count(), companies_count + 1)
 
-    def test_success_company_member_creation(self):
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_company_member_creation(self, user_index, company_index):
         """ Test success company member creation along with new company """
 
         company_members_count = CompanyMember.objects.count()
@@ -63,7 +67,9 @@ class CompanyFormTest(TransactionTestCase):
         form.submit()
         self.assertEqual(CompanyMember.objects.count(), company_members_count + 1)
 
-    def test_success_company_update(self):
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_company_update(self, user_index, company_index):
         """ Test success company update """
 
         company = CompanyFactory()
@@ -96,3 +102,19 @@ class CompanyFormTest(TransactionTestCase):
             obj=company, params=self.params, current_user=self.user
         )
         self.assertFalse(form.submit())
+
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_image_setting(self, user_index, company_index):
+        """ Test whether or not image setting came succesfullty """
+
+        attachment = ImageFactory(
+            content_type=ContentType.objects.get_for_model(Company)
+        )
+        self.params['attachment'] = { 'id': attachment.id }
+        form = CompanyForm(
+            obj=Company(), params=self.params, current_user=self.user
+        )
+        form.submit()
+        attachment.refresh_from_db()
+        self.assertEqual(attachment.object_id, Company.objects.last().id)

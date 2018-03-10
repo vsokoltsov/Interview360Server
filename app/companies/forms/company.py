@@ -2,7 +2,9 @@ from common.forms import BaseForm
 from django.db import transaction
 from authorization.models import User
 from companies.models import CompanyMember
-# from companies.models import DoesNotE
+from attachments.models import Image
+from profiles.index import UserIndex
+from companies.index import CompanyIndex
 import ipdb
 
 def owner_exist(field, value, error):
@@ -47,6 +49,17 @@ class CompanyForm(BaseForm):
         'current_user': {
             'empty': False,
             'required': True
+        },
+        'attachment': {
+            'required': False,
+            'type': 'dict',
+            'schema': {
+                'id': {
+                    'type': 'integer',
+                    'required': True,
+                    'empty': False
+                }
+            }
         }
     }
 
@@ -57,55 +70,75 @@ class CompanyForm(BaseForm):
 
         try:
             with transaction.atomic():
+                attachment_json = self.params.pop('attachment', None)
                 new_company = not self.obj.id
-                self.__set_attributes()
+                self._set_attributes()
                 self.obj.save()
                 if new_company:
                     company_member = CompanyMember.objects.create(
                         company_id=self.obj.id, user_id=self.current_user.id,
                         role=CompanyMember.COMPANY_OWNER, active=True
                     )
-        except:
+                        # ipdb.set_trace()
+                self._set_attachment(attachment_json)
+                UserIndex.store_index(User.objects.get(
+                    id=self.params.get('owner_id'))
+                )
+                CompanyIndex.store_index(self.obj)
+        except Exception as e:
             return False
 
     def is_valid(self):
         """ Override the parent class method """
 
         result = super(CompanyForm, self).is_valid()
-        not_belongs_to_company = self.obj.id and not self.is_company_member
-        not_allowed_to_edit = not_belongs_to_company and not self.is_allowed_to_update
+        if not result:
+            return result
 
-        if not_belongs_to_company:
-            self.set_error_message(
-                'company_member', 'Does not belong to company'
-            )
-            result = False
+        if self.obj.id:
+            not_belongs_to_company = not self.is_company_member
+            not_allowed_to_edit = not_belongs_to_company and not self.is_allowed_to_update
 
-        if not_allowed_to_edit:
-            self.set_error_message(
-                'company_member', 'is not allowed to edit company'
-            )
-            result = False
+            if not_belongs_to_company:
+                self.set_error_message(
+                    'company_member', 'Does not belong to company'
+                )
+                result = False
 
+            if not_allowed_to_edit:
+                self.set_error_message(
+                    'company_member', 'is not allowed to edit company'
+                )
+                result = False
         return result
 
-    def __set_attributes(self):
+    def _set_attributes(self):
         for field, value in self.params.items():
             setattr(self.obj, field, value)
+
+    def _set_attachment(self, attachment_json):
+        """ Set attachment to the company's instance """
+
+        if attachment_json:
+            attachment_id = attachment_json.get('id')
+            attachment = Image.objects.get(id=attachment_id)
+            attachment.object_id=self.obj.id
+            attachment.save()
+            return attachment
 
     @property
     def is_company_member(self):
         """ Wrapper for validation function """
 
-        return self.__is_company_member(self.obj.id, self.current_user.id)
+        return self._is_company_member(self.obj.id, self.current_user.id)
 
     @property
     def is_allowed_to_update(self):
         """ Wrapper for validation function """
 
-        return self.__is_allowed_to_update(self.obj.id, self.current_user.id)
+        return self._is_allowed_to_update(self.obj.id, self.current_user.id)
 
-    def __is_company_member(self, company_id, user_id):
+    def _is_company_member(self, company_id, user_id):
         """ Check whether or not the current user is the member of the company """
 
         try:
@@ -114,7 +147,7 @@ class CompanyForm(BaseForm):
         except CompanyMember.DoesNotExist:
             return False
 
-    def __is_allowed_to_update(self, company_id, user_id):
+    def _is_allowed_to_update(self, company_id, user_id):
         """ Check whether or not the current user is allowed to edit company """
 
         try:
