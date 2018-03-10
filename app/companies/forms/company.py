@@ -79,12 +79,12 @@ class CompanyForm(BaseForm):
                         company_id=self.obj.id, user_id=self.current_user.id,
                         role=CompanyMember.COMPANY_OWNER, active=True
                     )
-                        # ipdb.set_trace()
                 self._set_attachment(attachment_json)
                 UserIndex.store_index(User.objects.get(
                     id=self.params.get('owner_id'))
                 )
                 CompanyIndex.store_index(self.obj)
+                return True
         except Exception as e:
             return False
 

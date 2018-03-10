@@ -26,7 +26,7 @@ class CompaniesViewSetTests(APITestCase):
         self.company_params = {
             'name': 'NAME',
             'city': 'City',
-            'start_date': datetime.date.today(),
+            'start_date': '2015-02-01',
             'owner_id': self.user.id
         }
 

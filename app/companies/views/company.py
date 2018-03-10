@@ -2,9 +2,10 @@ from . import (
     render, viewsets, status, Response, get_object_or_404,
     IsAuthenticated,  TokenAuthentication, Count,
     CompanySerializer, CompaniesSerializer, Company, CompanyPermissions,
-    CompanyIndex, list_route, CompanySearch
+    CompanyIndex, list_route, CompanySearch, CompanyForm
 )
 
+import ipdb
 def get_company(user, pk):
     """ Helper method; Receives particular company from the queryset """
 
@@ -38,24 +39,30 @@ class CompaniesViewSet(viewsets.ModelViewSet):
     def create(self, request):
         """ Creates a new company """
 
-        serializer = CompanySerializer(data=request.data)
-        if serializer.is_valid() and serializer.save():
+        form = CompanyForm(
+            obj=Company(), params=request.data, current_user=request.user
+        )
+        if form.submit():
+            serializer = CompanySerializer(form.obj)
             return Response({'company': serializer.data},
                             status=status.HTTP_201_CREATED)
         else:
-            return Response({'errors': serializer.errors},
+            return Response({'errors': form.errors},
                             status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk=None):
         """ Update an existent company """
 
         company = self.get_object()
-        serializer = CompanySerializer(company, data=request.data, partial=True)
-        if serializer.is_valid() and serializer.save():
+        form = CompanyForm(
+            obj=company, params=request.data, current_user=request.user
+        )
+        if form.submit():
+            serializer = CompanySerializer(form.obj)
             return Response({'company': serializer.data},
                         status=status.HTTP_200_OK)
         else:
-            return Response({'errors': serializer.errors},
+            return Response({'errors': form.errors},
                             status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):

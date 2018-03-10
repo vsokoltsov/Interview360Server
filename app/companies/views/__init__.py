@@ -11,6 +11,7 @@ from profiles.index import UserIndex
 from companies.index import CompanyIndex
 from rest_framework.decorators import list_route
 from companies.search import CompanySearch
+from companies.forms import CompanyForm
 
 from companies.serializers import (
     CompanySerializer, EmployeeSerializer, CompaniesSerializer, EmployeesSerializer
