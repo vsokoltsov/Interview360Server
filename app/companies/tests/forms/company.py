@@ -118,3 +118,25 @@ class CompanyFormTest(TransactionTestCase):
         form.submit()
         attachment.refresh_from_db()
         self.assertEqual(attachment.object_id, Company.objects.last().id)
+
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_user_index_call(self, user_index, company_index):
+        """ Test of the storing of the user's index data """
+
+        form = CompanyForm(
+            obj=Company(), params=self.params, current_user=self.user
+        )
+        form.submit()
+        self.assertTrue(user_index.called)
+
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_company_index_call(self, user_index, company_index):
+        """ Test of the storing of the company's index data """
+
+        form = CompanyForm(
+            obj=Company(), params=self.params, current_user=self.user
+        )
+        form.submit()
+        self.assertTrue(company_index.called)
