@@ -66,8 +66,8 @@ class CompanyForm(BaseForm):
         """ Override the parent class method """
 
         result = super(CompanyForm, self).is_valid()
-        not_belongs_to_company = self.obj.id and not self.__is_company_member(self.obj.id, self.current_user.id)
-        not_allowed_to_edit = not_belongs_to_company and not self.__is_allowed_to_update(self.obj.id, self.current_user.id)
+        not_belongs_to_company = self.obj.id and not self.is_company_member
+        not_allowed_to_edit = not_belongs_to_company and not self.is_allowed_to_update
 
         if not_belongs_to_company:
             self.set_error_message(
@@ -82,6 +82,18 @@ class CompanyForm(BaseForm):
             result = False
 
         return result
+
+    @property
+    def is_company_member(self):
+        """ Wrapper for validation function """
+
+        return self.__is_company_member(self.obj.id, self.current_user.id)
+
+    @property
+    def is_allowed_to_update(self):
+        """ Wrapper for validation function """
+
+        return self.__is_allowed_to_update(self.obj.id, self.current_user.id)
 
     def __set_attributes(self):
         for field, value in self.params.items():
