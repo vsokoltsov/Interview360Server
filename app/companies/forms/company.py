@@ -57,8 +57,14 @@ class CompanyForm(BaseForm):
 
         try:
             with transaction.atomic():
+                new_company = not self.obj.id
                 self.__set_attributes()
                 self.obj.save()
+                if new_company:
+                    company_member = CompanyMember.objects.create(
+                        company_id=self.obj.id, user_id=self.current_user.id,
+                        role=CompanyMember.COMPANY_OWNER, active=True
+                    )
         except:
             return False
 
@@ -83,6 +89,10 @@ class CompanyForm(BaseForm):
 
         return result
 
+    def __set_attributes(self):
+        for field, value in self.params.items():
+            setattr(self.obj, field, value)
+
     @property
     def is_company_member(self):
         """ Wrapper for validation function """
@@ -94,10 +104,6 @@ class CompanyForm(BaseForm):
         """ Wrapper for validation function """
 
         return self.__is_allowed_to_update(self.obj.id, self.current_user.id)
-
-    def __set_attributes(self):
-        for field, value in self.params.items():
-            setattr(self.obj, field, value)
 
     def __is_company_member(self, company_id, user_id):
         """ Check whether or not the current user is the member of the company """

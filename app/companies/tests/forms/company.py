@@ -53,6 +53,16 @@ class CompanyFormTest(TransactionTestCase):
         form.submit()
         self.assertEqual(Company.objects.count(), companies_count + 1)
 
+    def test_success_company_member_creation(self):
+        """ Test success company member creation along with new company """
+
+        company_members_count = CompanyMember.objects.count()
+        form = CompanyForm(
+            obj=Company(), params=self.params, current_user=self.user
+        )
+        form.submit()
+        self.assertEqual(CompanyMember.objects.count(), company_members_count + 1)
+
     def test_success_company_update(self):
         """ Test success company update """
 
