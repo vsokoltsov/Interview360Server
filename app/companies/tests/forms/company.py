@@ -1,6 +1,6 @@
 from . import (
     TransactionTestCase, mock, datetime, Company,
-    UserFactory, CompanyFactory, CompanyMemberFactory, CompanyForm
+    UserFactory, CompanyFactory, CompanyMemberFactory, CompanyForm, CompanyMember
 )
 import ipdb
 
@@ -69,6 +69,19 @@ class CompanyFormTest(TransactionTestCase):
         """ Test failed validation if user does not belongs to company """
 
         company = CompanyFactory()
+        form = CompanyForm(
+            obj=company, params=self.params, current_user=self.user
+        )
+        self.assertFalse(form.submit())
+
+    def test_failed_company_update_user_does_not_have_appropriate_role(self):
+        """ Test failed validation if user does not"""\
+        """ have appropriate role in company """
+
+        company = CompanyFactory()
+        company_member = CompanyMemberFactory(
+            user_id=self.user.id, company_id=company.id, role=CompanyMember.EMPLOYEE
+        )
         form = CompanyForm(
             obj=company, params=self.params, current_user=self.user
         )
