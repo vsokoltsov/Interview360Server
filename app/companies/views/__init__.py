@@ -14,7 +14,8 @@ from companies.search import CompanySearch
 from companies.forms import CompanyForm
 
 from companies.serializers import (
-    CompanySerializer, EmployeeSerializer, CompaniesSerializer, EmployeesSerializer
+    CompanySerializer, EmployeeSerializer,
+    CompaniesSerializer, EmployeesSerializer, CompaniesFilter
 )
 from companies.models import Company, CompanyMember
 from authorization.models import User

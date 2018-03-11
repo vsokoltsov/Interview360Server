@@ -80,9 +80,7 @@ class CompanyForm(BaseForm):
                         role=CompanyMember.COMPANY_OWNER, active=True
                     )
                 self._set_attachment(attachment_json)
-                UserIndex.store_index(User.objects.get(
-                    id=self.params.get('owner_id'))
-                )
+                UserIndex.store_index(User.objects.get(id=self.params.get('owner_id')))
                 CompanyIndex.store_index(self.obj)
                 return True
         except Exception as e:

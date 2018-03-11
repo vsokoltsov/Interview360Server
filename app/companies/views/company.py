@@ -2,7 +2,7 @@ from . import (
     render, viewsets, status, Response, get_object_or_404,
     IsAuthenticated,  TokenAuthentication, Count,
     CompanySerializer, CompaniesSerializer, Company, CompanyPermissions,
-    CompanyIndex, list_route, CompanySearch, CompanyForm
+    CompanyIndex, list_route, CompanySearch, CompanyForm, CompaniesFilter
 )
 
 import ipdb
@@ -81,3 +81,10 @@ class CompaniesViewSet(viewsets.ModelViewSet):
         search = CompanySearch()
         results = search.find(query)
         return  Response({ 'companies': results })
+
+    @list_route(methods=['get'])
+    def filters(self, request):
+        """ Get filters for the companies """
+
+        filters = CompaniesFilter({})
+        return  Response({ 'filters': filters.data })

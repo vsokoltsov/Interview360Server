@@ -2,6 +2,7 @@ from . import (
     APITestCase, Company, CompanyMember, User,
     Token, datetime, COMPANY_OWNER, mock, CompanyIndex
 )
+import ipdb
 
 class CompaniesViewSetTests(APITestCase):
     """ API View tests for CompaniesViewSet """
@@ -60,8 +61,9 @@ class CompaniesViewSetTests(APITestCase):
         response = self.client.post('/api/v1/companies/', {}, format='json')
         self.assertTrue('errors' in response.data)
 
+    @mock.patch('profiles.index.UserIndex.store_index')
     @mock.patch('companies.index.CompanyIndex.store_index')
-    def test_success_update_action(self, company_index):
+    def test_success_update_action(self, company_index, user_index):
         """ Test success option of company's update """
 
         url = '/api/v1/companies/{}/'.format(self.company.id)
@@ -109,3 +111,12 @@ class CompaniesViewSetTests(APITestCase):
             '/api/v1/companies/{}/'.format(company.id), format='json'
         )
         assert response.status_code, 404
+
+    def test_receiving_companies_filters(self):
+        """ Test receiving of the companies filters """
+
+        response = self.client.get('/api/v1/companies/filters/', format='json')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('order' in response.data['filters'])
+        self.assertTrue('roles' in response.data['filters'])
