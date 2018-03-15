@@ -73,7 +73,10 @@ class CompanyFormTest(TransactionTestCase):
         """ Test success company update """
 
         company = CompanyFactory()
-        company_member = CompanyMemberFactory(user_id=self.user.id, company_id=company.id)
+        company_member = CompanyMemberFactory(
+            user_id=self.user.id, company_id=company.id,
+            role=CompanyMember.COMPANY_OWNER
+        )
         form = CompanyForm(
             obj=company, params=self.params, current_user=self.user
         )

@@ -94,10 +94,10 @@ class CompanyForm(BaseForm):
             return result
 
         if self.obj.id:
-            not_belongs_to_company = not self.is_company_member
-            not_allowed_to_edit = not_belongs_to_company and not self.is_allowed_to_update
+            belongs_to_company = self.is_company_member
+            not_allowed_to_edit = belongs_to_company and not self.is_allowed_to_update
 
-            if not_belongs_to_company:
+            if not belongs_to_company:
                 self.set_error_message(
                     'company_member', 'Does not belong to company'
                 )
