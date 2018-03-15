@@ -7,6 +7,12 @@ from .managers import CompanyManager
 class Company(models.Model):
     """ Base company model """
 
+    ORDER_FIELDS = (
+        ('employees_count', 'Employees count'),
+        ('interviews_count', 'Interviews count'),
+        ('vacancies_count', 'Vacancies count')
+    )
+
     name = models.CharField(max_length=255, null=False)
     start_date = models.DateField(null=True)
     description = models.TextField()

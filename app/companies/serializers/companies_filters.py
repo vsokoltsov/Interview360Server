@@ -6,12 +6,6 @@ class CompaniesFilter(serializers.Serializer):
     roles = serializers.SerializerMethodField()
     order = serializers.SerializerMethodField()
 
-    ORDERS = (
-        ('employees_count', 'Employees count'),
-        ('interviews_count', 'Interviews count'),
-        ('vacancies_count', 'Vacancies count')
-    )
-
     def get_roles(self, obj):
         """ Receive dict of the roles """
 
@@ -22,7 +16,6 @@ class CompaniesFilter(serializers.Serializer):
     def get_order(self, obj):
         """ Receive of the possible orders """
 
-
         return [
-            {'title': val, 'key': key } for key, val in self.ORDERS
+            {'title': val, 'key': key } for key, val in Company.ORDER_FIELDS
         ]
