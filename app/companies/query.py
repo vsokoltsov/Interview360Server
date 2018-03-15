@@ -5,6 +5,8 @@ from common.queries import BaseQuery, QueryOrderMixin
 from django.db.models import Count
 from companies.models import Company, CompanyMember
 
+import ipdb
+
 class CompaniesQuery(BaseQuery, QueryOrderMixin):
     """ Query class for Company """
 
@@ -19,14 +21,22 @@ class CompaniesQuery(BaseQuery, QueryOrderMixin):
     def list(self):
         """ Perform query for extracting list of the Company instances """
 
-        queryset = self.current_user.companies.prefetched_list()
+        queryset = (
+            Company.objects
+            .prefetch_related('images')
+            .annotate(Count('vacancy', distinct=True))
+            .annotate(Count('employees'))
+        )
 
         if self.role:
             queryset = queryset.filter(
-                companymember__role=self.role
+                companymember__role=self.role,
+                companymember__user_id=self.current_user.id
             )
 
         if self.order:
+            if self.order == 'vacancy__interviews__count':
+                queryset = queryset.annotate(Count('interviews', distinct=True))
             queryset = queryset.order_by(self.order)
 
         return queryset

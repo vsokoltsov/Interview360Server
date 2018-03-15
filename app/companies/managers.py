@@ -8,12 +8,12 @@ class CompanyManager(models.Manager):
         """ Prefetch all necessary objects """
 
         objects = self.prefetch_related(
-            'vacancy_set', 'images'
+            'images'
         )
         objects = (
             objects
-                .annotate(Count('employees', distinct=True))
                 .annotate(Count('vacancy', distinct=True))
+                .annotate(Count('employees'))
         )
         return objects
 

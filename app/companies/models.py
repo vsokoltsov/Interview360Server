@@ -8,9 +8,10 @@ class Company(models.Model):
     """ Base company model """
 
     ORDER_FIELDS = (
-        ('employees_count', 'Employees count'),
-        ('interviews_count', 'Interviews count'),
-        ('vacancies_count', 'Vacancies count')
+        ('employees__count', 'Employees count'),
+        ('vacancy__count', 'Vacancies count'),
+        ('vacancy__interviews__count', 'Interviews count'),
+        ('created_at', 'Created at')
     )
 
     name = models.CharField(max_length=255, null=False)

@@ -21,7 +21,7 @@ class QueryOrderMixin(abc.ABC):
         """ Return order value """
 
         order = self.params.get('order')
-        return order if self.is_valid_order(order) else 'title'
+        return order if self.is_valid_order(order) else 'id'
 
     def is_valid_order(self, order):
         """ Return whether or not the order value is valid """
