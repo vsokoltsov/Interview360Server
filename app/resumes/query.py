@@ -1,10 +1,9 @@
 import re
 from decimal import Decimal
 
-from common.queries.base import BaseQuery
 from django.db.models import Count
 from resumes.models import Resume
-from common.queries.order_mixin import QueryOrderMixin
+from common.queries import BaseQuery, QueryOrderMixin
 import ipdb
 
 class ResumesQuery(BaseQuery, QueryOrderMixin):
