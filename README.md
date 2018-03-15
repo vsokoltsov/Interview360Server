@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/vforvad/Interview360Server.svg?style=svg)](https://circleci.com/gh/vforvad/Interview360Server)
+[![CircleCI](https://circleci.com/gh/vsokoltsov/Interview360Server.svg?style=svg)](https://circleci.com/gh/vsokoltsov/Interview360Server)
 
 ## Interview Manager App
 

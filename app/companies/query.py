@@ -23,7 +23,6 @@ class CompaniesQuery(BaseQuery, QueryOrderMixin):
 
         if self.role:
             queryset = queryset.filter(
-                companymember__user_id=self.current_user.id,
                 companymember__role=self.role
             )
 
