@@ -26,7 +26,7 @@ static files via `python manage.py collectstatic` and pass `--silk-enabled` argu
 
 * Dump database
   * For local development (I am using OS X and docker machine) you should applye these steps:
-    * Create dump `pg_dump -U postgres -h db interview_manager > <dump name>.sql`
+    * Create dump `docker-compose exec pg_dump -U postgres -h db interview_manager > <dump name>.sql`
     * Copy dump to docker machine environment `docker-machine scp ./<dump name> default:/var/lib`
     * Move dump on docker machine to folder which is volume to the `db` container
       (`/var/lib/postgresql/data` in my case)
