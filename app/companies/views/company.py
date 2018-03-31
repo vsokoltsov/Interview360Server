@@ -3,7 +3,7 @@ from . import (
     IsAuthenticated,  TokenAuthentication, Count,
     CompanySerializer, CompaniesSerializer, Company, CompanyPermissions,
     CompanyIndex, list_route, CompanySearch, CompanyForm, CompaniesFilter,
-    CompaniesQuery, QueryParser
+    CompaniesQuery, QueryParser, CitiesService
 )
 import ipdb
 
@@ -36,7 +36,7 @@ class CompaniesViewSet(viewsets.ModelViewSet):
         """
         Return scope of companies which current user belongs to
         """
-        
+
         if self.action == 'list':
             params = self.queryset_parser.parse(self.request.query_params)
             query = CompaniesQuery(params, self.request.user)
@@ -96,3 +96,11 @@ class CompaniesViewSet(viewsets.ModelViewSet):
 
         filters = CompaniesFilter({})
         return  Response({ 'filters': filters.data })
+
+    @list_route(methods=['get'])
+    def cities(self, request):
+        """ Find city with country by name """
+
+        cities_service = CitiesService()
+        response = cities_service.find_by_name(request.query_params.get('name'))
+        return  Response({ 'cities': response.objects })

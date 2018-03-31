@@ -14,6 +14,7 @@ from companies.search import CompanySearch
 from companies.forms import CompanyForm
 from companies.query import CompaniesQuery
 from common.query_parser import QueryParser
+from common.services.cities_service import CitiesService
 
 from companies.serializers import (
     CompanySerializer, EmployeeSerializer,
