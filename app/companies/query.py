@@ -27,7 +27,6 @@ class CompaniesQuery(BaseQuery, QueryOrderMixin):
             .annotate(Count('vacancy', distinct=True))
             .annotate(Count('employees'))
         )
-
         if self.role:
             queryset = queryset.filter(
                 companymember__role=self.role,

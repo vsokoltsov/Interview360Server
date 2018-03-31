@@ -2,10 +2,11 @@ from . import (
     render, viewsets, status, Response, get_object_or_404,
     IsAuthenticated,  TokenAuthentication, Count,
     CompanySerializer, CompaniesSerializer, Company, CompanyPermissions,
-    CompanyIndex, list_route, CompanySearch, CompanyForm, CompaniesFilter
+    CompanyIndex, list_route, CompanySearch, CompanyForm, CompaniesFilter,
+    CompaniesQuery, QueryParser
 )
-
 import ipdb
+
 def get_company(user, pk):
     """ Helper method; Receives particular company from the queryset """
 
@@ -18,6 +19,10 @@ class CompaniesViewSet(viewsets.ModelViewSet):
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, CompanyPermissions, )
+    queryset_parser = QueryParser({
+        'role': int,
+        'order': str
+    })
 
     def get_serializer_class(self):
         """ Return specific serializer for action """
@@ -31,8 +36,11 @@ class CompaniesViewSet(viewsets.ModelViewSet):
         """
         Return scope of companies which current user belongs to
         """
+        
         if self.action == 'list':
-            return self.request.user.companies.prefetched_list()
+            params = self.queryset_parser.parse(self.request.query_params)
+            query = CompaniesQuery(params, self.request.user)
+            return query.list()
         else:
             return self.request.user.companies.prefetched_detail()
 

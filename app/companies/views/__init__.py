@@ -12,6 +12,8 @@ from companies.index import CompanyIndex
 from rest_framework.decorators import list_route
 from companies.search import CompanySearch
 from companies.forms import CompanyForm
+from companies.query import CompaniesQuery
+from common.query_parser import QueryParser
 
 from companies.serializers import (
     CompanySerializer, EmployeeSerializer,
