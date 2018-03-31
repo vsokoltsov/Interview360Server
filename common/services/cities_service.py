@@ -1,12 +1,12 @@
 import requests
 import os
 import json
+import ipdb
 
 class CitiesService:
     """ Service for getting the cities list from geonames.com """
 
-    DEFAULT_ENCODING = 'utf-8'
-    URL = 'http://api.geonames.org/search'
+    URL = 'https://maps.googleapis.com/maps/api/place/autocomplete/{}'
     FORMAT_TYPE = 'json'
 
     def __init__(self):
@@ -14,21 +14,23 @@ class CitiesService:
 
         self.objects = []
         self.errors = None
+        self.api_key = os.environ.get('GOOGLE_PLACES_API')
 
-    def find_exact_name(self, name):
+    def find_by_name(self, name):
         """ Receive a list of matched cities by the name """
 
-        username = os.environ('GEONAMES_USER')
         params = {
-            'name_equals': name,
-            'type': self.FORMAT_TYPE,
-            'username': username
+            'input': name,
+            'types': '(cities)',
+            'key': self.api_key
         }
-        request = requests.get(self.URL, params=params)
-        json_result = json.loads(result.decode(self.DEFAULT_ENCODING))
-        if json_result.get('status'):
-            self.errors = json_result.get('status')
-            return False
-        else:
-            self.objects = json_result
-            return True
+        request = requests.get(
+            self.URL.format(self.FORMAT_TYPE), params=params
+        )
+        json_result = request.json().get('predictions')
+        self.objects = [
+            {
+              'city': item.get('structured_formatting').get('main_text'),
+              'country': item.get('structured_formatting').get('secondary_text')
+             } for item in json_result
+        ]
