@@ -8,6 +8,7 @@ class CitiesService:
 
     URL = 'https://maps.googleapis.com/maps/api/place/autocomplete/{}'
     FORMAT_TYPE = 'json'
+    REQUEST_DENIED = 'REQUEST_DENIED'
 
     def __init__(self):
         """ Initialize method for cities service """
@@ -27,7 +28,10 @@ class CitiesService:
         request = requests.get(
             self.URL.format(self.FORMAT_TYPE), params=params
         )
-        json_result = request.json().get('predictions')
+        result = request.json()
+        if result.get('status') == self.REQUEST_DENIED:
+            return []
+        json_result = result.get('predictions')
         return [
             {
               'city': item.get('structured_formatting').get('main_text'),
