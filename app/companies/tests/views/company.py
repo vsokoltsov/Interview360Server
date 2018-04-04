@@ -120,3 +120,14 @@ class CompaniesViewSetTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue('order' in response.data['filters'])
         self.assertTrue('roles' in response.data['filters'])
+
+    def test_receiving_cities(self):
+        """ Test receiving of the cities """
+
+        response = self.client.get(
+            '/api/v1/companies/cities/?name={}'.format('Moscow'),
+            format='json'
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('cities' in response.data)
+        self.assertTrue(len(response.data['cities']) > 0)

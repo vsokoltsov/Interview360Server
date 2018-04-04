@@ -103,4 +103,4 @@ class CompaniesViewSet(viewsets.ModelViewSet):
 
         cities_service = CitiesService()
         response = cities_service.find_by_name(request.query_params.get('name'))
-        return  Response({ 'cities': response.objects })
+        return  Response({ 'cities': response })

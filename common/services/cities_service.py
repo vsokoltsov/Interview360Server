@@ -28,7 +28,7 @@ class CitiesService:
             self.URL.format(self.FORMAT_TYPE), params=params
         )
         json_result = request.json().get('predictions')
-        self.objects = [
+        return [
             {
               'city': item.get('structured_formatting').get('main_text'),
               'country': item.get('structured_formatting').get('secondary_text')
