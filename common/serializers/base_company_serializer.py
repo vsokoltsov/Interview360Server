@@ -14,6 +14,7 @@ class BaseCompanySerializer(serializers.ModelSerializer):
             'id',
             'name',
             'city',
+            'country',
             'description',
             'start_date',
             'created_at',

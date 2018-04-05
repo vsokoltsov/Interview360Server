@@ -22,6 +22,7 @@ class CompanySerializer(CompaniesSerializer):
     start_date = serializers.DateField(required=True)
     description = serializers.CharField(required=False)
     city = serializers.CharField(required=True, max_length=255)
+    country = serializers.CharField(required=True, max_length=255)
     owner_id = serializers.IntegerField(required=True, write_only=True)
     employees = serializers.SerializerMethodField()
     vacancies = serializers.SerializerMethodField()
