@@ -5,6 +5,7 @@
     start_date: '2017-08-21'
     description: Test
     city: Spb
+    country: Russia
     created_at: '2017-09-15T22:17:44+00:00'
     updated_at: '2017-09-15T22:17:44+00:00'
 
@@ -15,6 +16,7 @@
     start_date: '2012-04-13'
     description: Another description
     city: New York
+    country: USA
     created_at: '2017-09-15T22:17:44+00:00'
     updated_at: '2017-09-15T22:17:44+00:00'
 

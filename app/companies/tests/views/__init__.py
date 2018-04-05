@@ -8,6 +8,10 @@ import datetime
 from roles.constants import COMPANY_OWNER, HR, EMPLOYEE, CANDIDATE
 from companies.index import CompanyIndex
 
+from attachments.factory import ImageFactory
+from authorization.factory import UserFactory
+from companies.factory import CompanyFactory, CompanyMemberFactory
+
 from .company import CompaniesViewSetTests
 from .employee import EmployeesViewSetTests
 from .employee_activation import EmployeeActivationTests

@@ -10,7 +10,8 @@ class CompanyFactory(factory.django.DjangoModelFactory):
 
     name = factory.Faker('sentence', nb_words=2)
     description = factory.Faker('text')
-    city = factory.Faker('address')
+    city = factory.Faker('city')
+    country = factory.Faker('country')
     start_date = factory.LazyFunction(datetime.now)
 
 

@@ -14,6 +14,7 @@ class CompanyFormTest(TransactionTestCase):
         self.params = {
             'name': 'NAME',
             'city': 'City',
+            'country': 'Country',
             'start_date': '2015-02-01',
             'owner_id': self.user.id
         }

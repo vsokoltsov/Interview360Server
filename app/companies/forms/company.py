@@ -40,6 +40,11 @@ class CompanyForm(BaseForm):
             'empty': False,
             'required': True
         },
+        'country': {
+            'type': 'string',
+            'empty': False,
+            'required': True
+        },
         'owner_id': {
             'type': 'integer',
             'empty': False,

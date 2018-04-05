@@ -1,32 +1,30 @@
 from . import (
     APITestCase, Company, CompanyMember, User,
-    Token, datetime, COMPANY_OWNER, mock, CompanyIndex
+    Token, datetime, COMPANY_OWNER, mock, CompanyIndex,
+    CompanyFactory, CompanyMemberFactory, UserFactory
 )
 import ipdb
 
 class CompaniesViewSetTests(APITestCase):
     """ API View tests for CompaniesViewSet """
 
-    fixtures = [
-        'user.yaml',
-        'auth_token.yaml',
-        'company.yaml'
-    ]
-
     def setUp(self):
         """ Set up test dependencies """
 
-        self.company = Company.objects.first()
-        self.user = self.company.get_employees_with_role(COMPANY_OWNER)[0]
-
-        self.token = Token.objects.get(user=self.user)
-        company_member = CompanyMember.objects.get(
-            user_id=self.user.id, company_id=self.company.id
+        self.company = CompanyFactory()
+        self.user = UserFactory()
+        self.company_member = CompanyMemberFactory(
+            user_id=self.user.id,
+            company_id=self.company.id,
+            role=COMPANY_OWNER
         )
+
+        self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.company_params = {
             'name': 'NAME',
             'city': 'City',
+            'country': 'Country',
             'start_date': '2015-02-01',
             'owner_id': self.user.id
         }
@@ -104,6 +102,7 @@ class CompaniesViewSetTests(APITestCase):
         company_params = {
             'name': 'AAA',
             'city': 'BBB',
+            'country': 'CCC',
             'start_date': datetime.date.today()
         }
         company = Company.objects.create(**company_params)
