@@ -18,6 +18,7 @@ class Company(models.Model):
     start_date = models.DateField(null=True)
     description = models.TextField()
     city = models.CharField(null=True, max_length=255)
+    country = models.CharField(null=True, max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
