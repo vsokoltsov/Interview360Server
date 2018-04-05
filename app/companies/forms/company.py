@@ -57,6 +57,8 @@ class CompanyForm(BaseForm):
         },
         'attachment': {
             'required': False,
+            'empty': True,
+            'nullable': True,
             'type': 'dict',
             'schema': {
                 'id': {
