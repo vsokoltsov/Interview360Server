@@ -10,3 +10,4 @@ from .companies_serializer import CompaniesSerializer
 from .employee_serializer import EmployeeSerializer
 from .employees_serializer import EmployeesSerializer
 from .companies_filters import CompaniesFilter
+from .specialties_serializer import SpecialtiesSerializer

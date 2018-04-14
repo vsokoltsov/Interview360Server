@@ -18,9 +18,10 @@ from common.services.cities_service import CitiesService
 
 from companies.serializers import (
     CompanySerializer, EmployeeSerializer,
-    CompaniesSerializer, EmployeesSerializer, CompaniesFilter
+    CompaniesSerializer, EmployeesSerializer, CompaniesFilter,
+    SpecialtiesSerializer
 )
-from companies.models import Company, CompanyMember
+from companies.models import Company, CompanyMember, Specialty
 from authorization.models import User
 from companies.permissions import CompanyPermissions, EmployeePermission
 from companies.forms import EmployeeForm

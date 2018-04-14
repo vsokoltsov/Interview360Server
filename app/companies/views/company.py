@@ -3,7 +3,7 @@ from . import (
     IsAuthenticated,  TokenAuthentication, Count,
     CompanySerializer, CompaniesSerializer, Company, CompanyPermissions,
     CompanyIndex, list_route, CompanySearch, CompanyForm, CompaniesFilter,
-    CompaniesQuery, QueryParser, CitiesService
+    CompaniesQuery, QueryParser, CitiesService, Specialty
 )
 import ipdb
 
