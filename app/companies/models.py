@@ -90,6 +90,5 @@ class Specialty(models.Model):
         db_table = 'specialties'
 
     name = name = models.CharField(max_length=255, null=False, blank=False)
-    parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
