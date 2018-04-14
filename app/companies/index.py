@@ -39,6 +39,9 @@ class CompanyIndex(DocType):
 class SpecialtyIndex(DocType):
     """ Specialty's index class """
 
+    class Meta:
+        index = 'specialties'
+
     id = Integer()
     name = Text(analyzer='standard')
 
@@ -47,9 +50,9 @@ class SpecialtyIndex(DocType):
         """ Create or update specialty's index """
 
         obj = cls(
-            meta={'id': company.id},
-            id=company.id,
-            name=company.name
+            meta={'id': specialty.id},
+            id=specialty.id,
+            name=specialty.name
         )
         obj.save()
         return obj.to_dict(include_meta=True)
