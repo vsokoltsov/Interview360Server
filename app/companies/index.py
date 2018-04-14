@@ -35,3 +35,21 @@ class CompanyIndex(DocType):
         )
         obj.save()
         return obj.to_dict(include_meta=True)
+
+class SpecialtyIndex(DocType):
+    """ Specialty's index class """
+
+    id = Integer()
+    name = Text(analyzer='standard')
+
+    @classmethod
+    def store_index(cls, specialty):
+        """ Create or update specialty's index """
+
+        obj = cls(
+            meta={'id': company.id},
+            id=company.id,
+            name=company.name
+        )
+        obj.save()
+        return obj.to_dict(include_meta=True)
