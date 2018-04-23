@@ -29,8 +29,7 @@ urlpatterns = [
         url(r'', include(interviews_router.urls) ),
         url(r'^v1/companies/(?P<company_pk>[A-Za-z0-9]*)/activate_member',
             EmployeeActivationView.as_view()),
-        url(r'^v1/companies/(?P<company_pk>[A-Za-z0-9]*)/specialties/search',
-            SpecialtiesSearchView.as_view()),
+        url(r'^v1/companies/specialties/search', SpecialtiesSearchView.as_view()),
         url(r'^v1/interviews/(?P<interview_id>[A-Za-z0-9]*)/employees/(?P<employee_id>[A-Za-z0-9]*)',
             InterviewEmployeeView.as_view()),
 ]
