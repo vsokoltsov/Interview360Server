@@ -11,7 +11,7 @@ class Command(BaseCommand):
         """ Execute command """
 
         if Specialty.objects.count() == 0:
-            call_command('loaddata', 'specialties.yaml')
+            call_command('loaddata', 'specialty.yaml')
         try:
             SpecialtyIndex.init()
         finally:
