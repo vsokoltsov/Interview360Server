@@ -10,7 +10,7 @@ from profiles.search import UsersSearch
 from profiles.index import UserIndex
 from companies.index import CompanyIndex
 from rest_framework.decorators import list_route
-from companies.search import CompanySearch
+from companies.search import CompanySearch, SpecialtySearch
 from companies.forms import CompanyForm
 from companies.query import CompaniesQuery
 from common.query_parser import QueryParser
@@ -29,3 +29,4 @@ from companies.forms import EmployeeForm
 from .company import CompaniesViewSet
 from .employee import EmployeesViewSet
 from .employee_activation import EmployeeActivationView
+from .specialties import SpecialtiesSearchView
