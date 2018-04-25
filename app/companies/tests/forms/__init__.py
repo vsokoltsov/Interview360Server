@@ -12,7 +12,7 @@ from roles.constants import HR, CANDIDATE
 
 from attachments.factory import ImageFactory
 from authorization.factory import UserFactory
-from companies.factory import CompanyFactory, CompanyMemberFactory
+from companies.factory import CompanyFactory, CompanyMemberFactory, SpecialtyFactory
 
 from .employee import EmployeeFormTest
 from .company import CompanyFormTest

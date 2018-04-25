@@ -67,6 +67,15 @@ class CompanyForm(BaseForm):
                     'empty': False
                 }
             }
+        },
+        'specialties': {
+            'required': False,
+            'empty': True,
+            'nullable': True,
+            'type': 'list',
+            'schema': {
+                'type': 'integer'
+            }
         }
     }
 
@@ -78,6 +87,7 @@ class CompanyForm(BaseForm):
         try:
             with transaction.atomic():
                 attachment_json = self.params.pop('attachment', None)
+                specialties = self.params.pop('specialties', None)
                 new_company = not self.obj.id
                 self._set_attributes()
                 self.obj.save()
@@ -87,6 +97,8 @@ class CompanyForm(BaseForm):
                         role=CompanyMember.COMPANY_OWNER, active=True
                     )
                 self._set_attachment(attachment_json)
+                if specialties:
+                    self.obj.specialties.set(specialties)
                 UserIndex.store_index(User.objects.get(id=self.params.get('owner_id')))
                 CompanyIndex.store_index(self.obj)
                 return True

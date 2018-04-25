@@ -23,3 +23,11 @@ class CompanyMemberFactory(factory.django.DjangoModelFactory):
 
     active = True
     role = EMPLOYEE
+
+class SpecialtyFactory(factory.django.DjangoModelFactory):
+    """ Factory for the specialty model """
+
+    class Meta:
+        model = 'companies.Specialty'
+
+    name = factory.Faker('sentence', nb_words=2)

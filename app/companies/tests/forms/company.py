@@ -1,6 +1,7 @@
 from . import (
     TransactionTestCase, mock, datetime, Company, ImageFactory, ContentType,
-    UserFactory, CompanyFactory, CompanyMemberFactory, CompanyForm, CompanyMember
+    UserFactory, CompanyFactory, CompanyMemberFactory, CompanyForm, CompanyMember,
+    SpecialtyFactory
 )
 import ipdb
 
@@ -11,6 +12,7 @@ class CompanyFormTest(TransactionTestCase):
         """ Setting up testing dependencies """
 
         self.user = UserFactory()
+        self.specialties = [SpecialtyFactory(), SpecialtyFactory()]
         self.params = {
             'name': 'NAME',
             'city': 'City',
@@ -144,3 +146,19 @@ class CompanyFormTest(TransactionTestCase):
         )
         form.submit()
         self.assertTrue(company_index.called)
+
+    @mock.patch('companies.index.CompanyIndex.store_index')
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_setting_specialties_values(self, user_index, company_index):
+        """ Test setting of the specialties to the company """
+
+        self.params['specialties'] = [item.id for item in self.specialties]
+        form = CompanyForm(
+            obj=Company(), params=self.params, current_user=self.user
+        )
+        form.submit()
+        company = Company.objects.last()
+        self.assertEqual(
+            [item.id for item in company.specialties.all()],
+            [item.id for item in self.specialties]
+        )
