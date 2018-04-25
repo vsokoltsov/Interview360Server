@@ -10,5 +10,4 @@ from companies.serializers import (
 import datetime
 from roles.constants import HR, EMPLOYEE, CANDIDATE
 
-from .company_serializer import CompanySerializerTests
 from .employees import EmployeesSerializerTest
