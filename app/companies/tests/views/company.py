@@ -120,7 +120,7 @@ class CompaniesViewSetTests(APITestCase):
         self.assertTrue('order' in response.data['filters'])
         self.assertTrue('roles' in response.data['filters'])
 
-    @mock.patch('common.services.cities_service.CitiesService')
+    @mock.patch('common.services.cities_service.CitiesService.find_by_name')
     def test_receiving_cities(self, cities_mock):
         """ Test receiving of the cities """
 
