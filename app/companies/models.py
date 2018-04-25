@@ -7,10 +7,18 @@ from .managers import CompanyManager
 class Company(models.Model):
     """ Base company model """
 
+    ORDER_FIELDS = (
+        ('employees__count', 'Employees count'),
+        ('vacancy__count', 'Vacancies count'),
+        ('vacancy__interviews__count', 'Interviews count'),
+        ('created_at', 'Created at')
+    )
+
     name = models.CharField(max_length=255, null=False)
     start_date = models.DateField(null=True)
     description = models.TextField()
     city = models.CharField(null=True, max_length=255)
+    country = models.CharField(null=True, max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -48,10 +56,22 @@ class Company(models.Model):
 class CompanyMember(models.Model):
     """ CompanyMember model, which is used for `through` association """
 
+    COMPANY_OWNER = 1
+    HR = 2
+    CANDIDATE = 3
+    EMPLOYEE = 4
+
+    ROLES = (
+        (COMPANY_OWNER, 'Company Owner'),
+        (HR, 'HR'),
+        (CANDIDATE, 'Candidate'),
+        (EMPLOYEE, 'Employee')
+    )
+
     user = models.ForeignKey(User)
     company = models.ForeignKey(Company)
     role = models.IntegerField(
-        validators=[MaxValueValidator(4), MinValueValidator(1)]
+        default=EMPLOYEE, choices=ROLES, db_index=True, null=False
     )
     active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -70,6 +90,5 @@ class Specialty(models.Model):
         db_table = 'specialties'
 
     name = name = models.CharField(max_length=255, null=False, blank=False)
-    parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

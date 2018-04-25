@@ -18,6 +18,8 @@ class QueryParser:
                 denormalized[key] = self._parse_dict(params.get(key))
             elif value is list:
                 denormalized[key] = params.getlist(key)
+            elif value is int:
+                denormalized[key] = int(params.get(key)) if params.get(key) else None
             else:
                 denormalized[key] = params.get(key)
 

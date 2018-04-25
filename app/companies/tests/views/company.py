@@ -1,32 +1,31 @@
 from . import (
     APITestCase, Company, CompanyMember, User,
-    Token, datetime, COMPANY_OWNER, mock, CompanyIndex
+    Token, datetime, COMPANY_OWNER, mock, CompanyIndex,
+    CompanyFactory, CompanyMemberFactory, UserFactory
 )
+import ipdb
 
 class CompaniesViewSetTests(APITestCase):
     """ API View tests for CompaniesViewSet """
 
-    fixtures = [
-        'user.yaml',
-        'auth_token.yaml',
-        'company.yaml'
-    ]
-
     def setUp(self):
         """ Set up test dependencies """
 
-        self.company = Company.objects.first()
-        self.user = self.company.get_employees_with_role(COMPANY_OWNER)[0]
-
-        self.token = Token.objects.get(user=self.user)
-        company_member = CompanyMember.objects.get(
-            user_id=self.user.id, company_id=self.company.id
+        self.company = CompanyFactory()
+        self.user = UserFactory()
+        self.company_member = CompanyMemberFactory(
+            user_id=self.user.id,
+            company_id=self.company.id,
+            role=COMPANY_OWNER
         )
+
+        self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.company_params = {
             'name': 'NAME',
             'city': 'City',
-            'start_date': datetime.date.today(),
+            'country': 'Country',
+            'start_date': '2015-02-01',
             'owner_id': self.user.id
         }
 
@@ -60,8 +59,9 @@ class CompaniesViewSetTests(APITestCase):
         response = self.client.post('/api/v1/companies/', {}, format='json')
         self.assertTrue('errors' in response.data)
 
+    @mock.patch('profiles.index.UserIndex.store_index')
     @mock.patch('companies.index.CompanyIndex.store_index')
-    def test_success_update_action(self, company_index):
+    def test_success_update_action(self, company_index, user_index):
         """ Test success option of company's update """
 
         url = '/api/v1/companies/{}/'.format(self.company.id)
@@ -102,6 +102,7 @@ class CompaniesViewSetTests(APITestCase):
         company_params = {
             'name': 'AAA',
             'city': 'BBB',
+            'country': 'CCC',
             'start_date': datetime.date.today()
         }
         company = Company.objects.create(**company_params)
@@ -109,3 +110,29 @@ class CompaniesViewSetTests(APITestCase):
             '/api/v1/companies/{}/'.format(company.id), format='json'
         )
         assert response.status_code, 404
+
+    def test_receiving_companies_filters(self):
+        """ Test receiving of the companies filters """
+
+        response = self.client.get('/api/v1/companies/filters/', format='json')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('order' in response.data['filters'])
+        self.assertTrue('roles' in response.data['filters'])
+
+    @mock.patch('common.services.cities_service.CitiesService.find_by_name')
+    def test_receiving_cities(self, cities_mock):
+        """ Test receiving of the cities """
+
+        cities = [
+            { 'id': 1, 'name': 'Moscow' }
+        ]
+        cities_mock.return_value = cities
+
+        response = self.client.get(
+            '/api/v1/companies/cities/?name={}'.format('Moscow'),
+            format='json'
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('cities' in response.data)
+        self.assertTrue(len(response.data['cities']) > 0)

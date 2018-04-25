@@ -5,3 +5,10 @@ class CompanySearch(SearchService):
 
     INDEX_NAME='companies'
     FIELDS=['name', 'description', 'city']
+
+
+class SpecialtySearch(SearchService):
+    """ Class for specialty search methods """
+
+    INDEX_NAME = 'specialties'
+    FIELDS=['name']

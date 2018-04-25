@@ -10,7 +10,8 @@ class CompanyFactory(factory.django.DjangoModelFactory):
 
     name = factory.Faker('sentence', nb_words=2)
     description = factory.Faker('text')
-    city = factory.Faker('address')
+    city = factory.Faker('city')
+    country = factory.Faker('country')
     start_date = factory.LazyFunction(datetime.now)
 
 
@@ -22,3 +23,11 @@ class CompanyMemberFactory(factory.django.DjangoModelFactory):
 
     active = True
     role = EMPLOYEE
+
+class SpecialtyFactory(factory.django.DjangoModelFactory):
+    """ Factory for the specialty model """
+
+    class Meta:
+        model = 'companies.Specialty'
+
+    name = factory.Faker('sentence', nb_words=2)

@@ -29,7 +29,7 @@ class ResumesFilter(serializers.Serializer):
     def get_order(self, obj):
         """ Get list of available items for ordering """
 
-        return ResumesQuery.VALID_ORDER_FIELDS
+        return ResumesQuery.order_fields
 
     def get_salary(self, obj):
         """ Get object for the minimum and maximum salary """

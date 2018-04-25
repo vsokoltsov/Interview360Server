@@ -6,3 +6,4 @@ from companies.models import Company, CompanyMember
 from common.services.email_service import EmailService
 
 from .employee import EmployeeForm
+from .company import CompanyForm

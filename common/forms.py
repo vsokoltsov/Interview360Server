@@ -5,6 +5,8 @@ from contextlib import contextmanager
 from django.db import transaction
 from django_pglocks import advisory_lock
 
+from companies.models import CompanyMember
+import ipdb
 
 class BaseValidator(cerberus.Validator):
     """ Custom base validator """
@@ -15,11 +17,6 @@ class BaseValidator(cerberus.Validator):
         match_field, match_value = self._lookup_field(equal)
         if value != match_value:
             self._error(field, 'Does not match the {}'.format(match_field))
-
-    # def _validate_not_equal_generic_type(self, not_equal, field, value):
-    #     """ Validates disequation of field to generic field values """
-    #
-    #     match_object_id, match_content_type = self._lookup_field(not_equal[0]), self._lookup_field(not_equal[1]),
 
 
 class FormException(Exception):
@@ -56,9 +53,12 @@ class BaseForm(abc.ABC):
         if not self.schema:
             raise NotImplementedError('Subclasses must define schema property')
 
-        self.validator = Validator(self.schema)
+        self.validator = BaseValidator(self.schema)
         self.obj = kwargs.get('obj', None)
         self.params = kwargs.get('params', None)
+        self.current_user = kwargs.get('current_user', None)
+        if self.current_user:
+            self.params['current_user'] = self.current_user
 
     def is_valid(self):
         """ Return whether or not the receiving data are valid """
@@ -72,6 +72,11 @@ class BaseForm(abc.ABC):
         except cerberus.validator.DocumentError:
             self.errors['base'] =  ['Invalid structure']
             return False
+
+    def set_error_message(self, key, message):
+        """ Set custom error message for particular key """
+
+        self.errors[key] = self.errors.get(key, []) + [message]
 
     @contextmanager
     def submit(self, message=None):

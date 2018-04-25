@@ -22,7 +22,7 @@ class CompanySerializer(CompaniesSerializer):
     start_date = serializers.DateField(required=True)
     description = serializers.CharField(required=False)
     city = serializers.CharField(required=True, max_length=255)
-    owner_id = serializers.IntegerField(required=True, write_only=True)
+    country = serializers.CharField(required=True, max_length=255)
     employees = serializers.SerializerMethodField()
     vacancies = serializers.SerializerMethodField()
     interviews = serializers.SerializerMethodField()
@@ -31,7 +31,7 @@ class CompanySerializer(CompaniesSerializer):
     class Meta:
         model = CompaniesSerializer.Meta.model
         fields = CompaniesSerializer.Meta.fields + [
-            'owner_id', 'employees', 'vacancies', 'interviews', 'specialties'
+            'employees', 'vacancies', 'interviews', 'specialties'
         ]
 
     def get_employees(self, obj):
@@ -68,60 +68,3 @@ class CompanySerializer(CompaniesSerializer):
             return obj.vacancy__count
         except AttributeError:
             return obj.vacancy_set.count()
-
-    def validate_owner_id(self, value):
-        """ Custom validation for owner_id field """
-
-        try:
-            self.owner = User.objects.get(id=value)
-            return value
-        except User.DoesNotExist:
-            raise serializers.ValidationError("There is no such user")
-
-
-    def create(self, validated_data):
-        """ Create company method """
-
-        try:
-            with transaction.atomic():
-                specialties = validated_data.pop('specialties', None)
-                owner_id = validated_data.pop('owner_id', None)
-                attachment_json = validated_data.pop('attachment', None)
-                company = Company.objects.create(**validated_data)
-                company_member = CompanyMember.objects.create(user_id=owner_id,
-                                                              company_id=company.id,
-                                                              role=COMPANY_OWNER,
-                                                              active=True)
-                self._create_attachment(attachment_json, company)
-                if specialties:
-                    company.specialties.set(specialties)
-                UserIndex.store_index(User.objects.get(id=owner_id))
-                CompanyIndex.store_index(company)
-                return company
-        except:
-            return False
-
-    def update(self, instance, validated_data):
-        """ Update company method """
-
-        specialties = validated_data.pop('specialties', None)
-        attachment_json = validated_data.pop('attachment', None)
-        instance.name = validated_data.get('name', instance.name)
-        instance.start_date = validated_data.get('start_date', instance.start_date)
-        instance.description = validated_data.get('description', instance.description)
-        instance.city = validated_data.get('city', instance.city)
-        self._create_attachment(attachment_json, instance)
-        if specialties:
-            company.specialties.set(specialties)
-        instance.save()
-        CompanyIndex.store_index(instance)
-        return instance
-
-    def _create_attachment(self, attachment_json, instance):
-
-        if attachment_json:
-            attachment_id = attachment_json.get('id')
-            attachment = Image.objects.get(id=attachment_id)
-            attachment.object_id=instance.id
-            attachment.save()
-            return attachment

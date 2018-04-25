@@ -3,11 +3,11 @@ version: '3'
 services:
   db:
     container_name: database
-    image: postgres
+    image: postgres:9.6.7
     environment:
       POSTGRES_DB: 'interview_manager'
     volumes:
-      - pg_data:/var/lib/postgresql/data
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
     ports:
       - 5432:5432
 
@@ -113,5 +113,10 @@ services:
       - "5672:5672"
       - "15672:15672"
 
+  chromedriver:
+    image: selenium/standalone-chrome
+    ports:
+      - "4444:4444"
+
 volumes:
-  pg_data:
+  pg_data: {}

@@ -3,7 +3,10 @@ from django.conf.urls import include
 
 from rest_framework_nested import routers
 
-from .views import CompaniesViewSet, EmployeesViewSet, EmployeeActivationView
+from .views import (
+    CompaniesViewSet, EmployeesViewSet,
+    EmployeeActivationView, SpecialtiesSearchView
+)
 from vacancies.views import VacancyViewSet
 from interviews.views import InterviewViewSet, InterviewEmployeeView
 
@@ -26,6 +29,7 @@ urlpatterns = [
         url(r'', include(interviews_router.urls) ),
         url(r'^v1/companies/(?P<company_pk>[A-Za-z0-9]*)/activate_member',
             EmployeeActivationView.as_view()),
+        url(r'^v1/companies/specialties/search', SpecialtiesSearchView.as_view()),
         url(r'^v1/interviews/(?P<interview_id>[A-Za-z0-9]*)/employees/(?P<employee_id>[A-Za-z0-9]*)',
             InterviewEmployeeView.as_view()),
 ]
