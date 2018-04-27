@@ -3,6 +3,7 @@ from . import (
 )
 from .companies_serializer import CompaniesSerializer
 from .employee_serializer import EmployeeSerializer
+from .specialties_serializer import SpecialtiesSerializer
 from common.serializers.base_vacancy_serializer import BaseVacancySerializer
 from common.serializers.base_interview_serializer import BaseInterviewSerializer
 from attachments.models import Image
@@ -26,7 +27,7 @@ class CompanySerializer(CompaniesSerializer):
     employees = serializers.SerializerMethodField()
     vacancies = serializers.SerializerMethodField()
     interviews = serializers.SerializerMethodField()
-    specialties = SpecialtiesField(required=False)
+    specialties = SpecialtiesSerializer(many=True)
 
     class Meta:
         model = CompaniesSerializer.Meta.model
