@@ -17,7 +17,18 @@ def owner_exist(field, value, error):
 
 
 class CompanyForm(BaseForm):
-    """Form object for company model."""
+    """Form object for company model.
+
+    :param name: Name of the company
+    :param start_date: Date of establishment
+    :param description: Company's description
+    :param city: City of origin
+    :param country: Country of origin
+    :param owner_id: Identifier of creator
+    :param attachment: Company's avatar
+    :param current_user: Current system's user
+    :return: True/False whether or not form was submitted
+    """
 
     schema = {
         'name': {
