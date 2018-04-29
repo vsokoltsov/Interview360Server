@@ -1,5 +1,9 @@
-from common.serializers.base_company_member_serializer import BaseCompanyMemberSerializer
+from common.serializers.base_company_member_serializer import (
+    BaseCompanyMemberSerializer
+)
+
 
 class CompanyMemberSerializer(BaseCompanyMemberSerializer):
-    """ CompanyMember serializer class """
+    """CompanyMember serializer class."""
+
     pass
