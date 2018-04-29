@@ -26,6 +26,7 @@ class CompanyForm(BaseForm):
     :param country: Country of origin
     :param owner_id: Identifier of creator
     :param attachment: Company's avatar
+    :param specialties: List of company's specialties
     :param current_user: Current system's user
     :return: True/False whether or not form was submitted
     """

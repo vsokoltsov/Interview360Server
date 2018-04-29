@@ -1,28 +1,32 @@
 from . import forms, Company, User, CompanyMember, EmailService
-from django.core.exceptions import ObjectDoesNotExist
-import ipdb
+
 
 class EmployeeForm(forms.Form):
     """
-    Employee form class;
+    Employee form classself.
+
     Updates user information and creates CompanyMember object
     """
 
     token = forms.CharField(required=True)
     password = forms.CharField(max_length=255, min_length=6, required=False)
-    password_confirmation = forms.CharField(max_length=255, min_length=6, required=False)
+    password_confirmation = forms.CharField(
+        max_length=255, min_length=6, required=False
+    )
     company_pk = forms.IntegerField(required=True)
 
     def clean_password_confirmation(self):
-        """ Check matching of password and password confirmation """
+        """Check matching of password and password confirmation."""
 
         cleaned_data = self.clean()
         if cleaned_data['password'] != cleaned_data['password_confirmation']:
-            raise forms.ValidationError('Password confirmation does not match password')
+            raise forms.ValidationError(
+                'Password confirmation does not match password'
+            )
         return cleaned_data['password']
 
     def submit(self):
-        """ Activate company member """
+        """Activate company member."""
 
         if not self.is_valid():
             return False
