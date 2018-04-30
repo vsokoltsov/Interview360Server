@@ -5,7 +5,7 @@ from . import (
     CompanyIndex, list_route, CompanySearch, CompanyForm, CompaniesFilter,
     CompaniesQuery, QueryParser, CitiesService, Specialty
 )
-import ipdb
+
 
 def get_company(user, pk):
     """ Helper method; Receives particular company from the queryset """

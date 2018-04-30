@@ -20,6 +20,78 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from .settings import MEDIA_URL, MEDIA_ROOT
 from common.indexes.base import init_indexes
+from rest_framework.renderers import CoreJSONRenderer
+from rest_framework_swagger.views import get_swagger_view
+import coreapi
+import coreschema
+
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.schemas import SchemaGenerator
+from rest_framework.views import APIView
+from rest_framework_swagger import renderers
+
+import ipdb
+
+
+class SwaggerSchemaView(APIView):
+    permission_classes = [AllowAny]
+    renderer_classes = [
+        CoreJSONRenderer,
+        renderers.OpenAPIRenderer,
+        renderers.SwaggerUIRenderer
+    ]
+
+    def get(self, request):
+        generator = SchemaGenerator()
+        schema = generator.get_schema(request=request)
+        doc = coreapi.Document(
+            title='Companies API',
+            content = {
+                'companies': {
+                    'list': coreapi.Link(
+                        url='/companies',
+                        action='get',
+                        description='Return list of companies for current user'
+                    ),
+                    'create': coreapi.Link(
+                        url='/companies',
+                        action='post',
+                        description='Create new company',
+                        fields=[
+                            coreapi.Field(
+                                'name',
+                                required=True,
+                                location="form",
+                                description='Company\'s name',
+                                schema=coreschema.String()
+                            ),
+                            coreapi.Field(
+                                'description',
+                                required=True,
+                                location="form",
+                                description='Company\'s description',
+                                schema=coreschema.String()
+                            ),
+                            coreapi.Field(
+                                'start_date',
+                                required=True,
+                                location="form",
+                                description='Company\'s start_date',
+                                schema=coreschema.String()
+                            ),
+                        ]
+                    )
+                }
+            }
+        )
+
+        return Response(doc)
+
+# schema_view = get_swagger_view(title='Interview360 API')
+
+
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -29,7 +101,8 @@ urlpatterns = [
     url(r'^api/', include('feedbacks.urls')),
     url(r'^api/', include('profiles.urls')),
     url(r'^api/', include('attachments.urls')),
-    url(r'^api/', include('resumes.urls'))
+    url(r'^api/', include('resumes.urls')),
+    url(r'^docs/v1/', SwaggerSchemaView.as_view())
 ]
 
 SILK_ENABLED = os.environ.get("SILK_ENABLED")
