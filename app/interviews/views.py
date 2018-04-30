@@ -15,6 +15,7 @@ from .models import Interview, InterviewEmployee
 from .permissions import InterviewPermission
 import ipdb
 
+
 class InterviewViewSet(viewsets.ModelViewSet):
     """ View class for Interviews """
 
@@ -59,12 +60,11 @@ class InterviewViewSet(viewsets.ModelViewSet):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid() and serializer.save():
             return Response(
-                { 'interview': serializer.data }, status=status.HTTP_201_CREATED
+                {'interview': serializer.data}, status=status.HTTP_201_CREATED
             )
         else:
-            return Response(
-                { 'errors': serializer.errors }, status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({'errors': serializer.errors},
+                            status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk=None, company_pk=None):
         """ PUT action for update the interview instance """
@@ -77,12 +77,12 @@ class InterviewViewSet(viewsets.ModelViewSet):
         )
         if serializer.is_valid() and serializer.save():
             return Response(
-                { 'interview': serializer.data }, status=status.HTTP_200_OK
+                {'interview': serializer.data}, status=status.HTTP_200_OK
             )
         else:
-            return Response(
-                { 'errors': serializer.errors }, status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({'errors': serializer.errors},
+                            status=status.HTTP_400_BAD_REQUEST)
+
 
 class InterviewEmployeeView(APIView):
     """ View class for InterviewEmployee """
@@ -101,11 +101,11 @@ class InterviewEmployeeView(APIView):
             )
             interview_employee.delete()
             return Response(
-                { 'message': 'Succesfully deleted' },
+                {'message': 'Succesfully deleted'},
                 status=status.HTTP_204_NO_CONTENT
             )
         except InterviewEmployee.DoesNotExist:
             return Response(
-                { 'detail': 'There is no such user' },
+                {'detail': 'There is no such user'},
                 status=status.HTTP_404_NOT_FOUND
             )

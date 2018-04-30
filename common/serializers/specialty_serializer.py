@@ -1,9 +1,11 @@
 from . import serializers, Specialty
 
+
 class BaseSpecialtySerializer(serializers.ModelSerializer):
     class Meta:
         model = Specialty
-        fields = [ 'id', 'name' ]
+        fields = ['id', 'name']
+
 
 class SpecialtySerializer(BaseSpecialtySerializer):
     """ Serializer for the specialty model """

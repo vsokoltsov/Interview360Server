@@ -16,6 +16,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='companymember',
             name='role',
-            field=models.IntegerField(validators=[django.core.validators.MaxValueValidator(4), django.core.validators.MinValueValidator(1)]),
+            field=models.IntegerField(
+                validators=[
+                    django.core.validators.MaxValueValidator(4),
+                    django.core.validators.MinValueValidator(1)]),
         ),
     ]

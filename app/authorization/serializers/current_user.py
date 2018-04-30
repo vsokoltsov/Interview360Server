@@ -1,6 +1,7 @@
 from . import serializers
 from common.serializers.user_serializer import UserSerializer
 
+
 class CurrentUserSerializer(UserSerializer):
     roles = serializers.SerializerMethodField()
 

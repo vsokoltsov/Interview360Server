@@ -1,6 +1,7 @@
 from django import forms
 from django.db import transaction
 
+
 class ChangePasswordForm(forms.Form):
     """ Change password form for user profile """
 
@@ -37,11 +38,12 @@ class ChangePasswordForm(forms.Form):
     def submit(self):
         """ Change users password  """
 
-        if not self.is_valid(): return False
+        if not self.is_valid():
+            return False
 
         try:
             self.user.set_password(self['password'].value())
             self.user.save()
             return True
-        except:
+        except BaseException:
             return False

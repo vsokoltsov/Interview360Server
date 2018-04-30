@@ -7,6 +7,7 @@ from rest_framework.authtoken.models import Token
 from .index import SkillIndex
 import ipdb
 
+
 class SkillViewSetTests(APITestCase):
     """ View tests for SkillViewTest class """
 
@@ -81,7 +82,11 @@ class SkillViewSetTests(APITestCase):
     @mock.patch.object(SkillIndex, 'get')
     @mock.patch.object(SkillIndex, 'delete')
     @mock.patch('skills.index.SkillIndex.store_index')
-    def test_success_skill_deletion(self, skill_index, skill_delete, skill_get):
+    def test_success_skill_deletion(
+            self,
+            skill_index,
+            skill_delete,
+            skill_get):
         """ Test success deletion of the skill """
 
         response = self.client.delete(
@@ -94,9 +99,9 @@ class SkillViewSetTests(APITestCase):
         """ Test success search of skill """
 
         skill_index = [
-            { 'id': 1 },
-            { 'id': 2 },
-            { 'id': 3 }
+            {'id': 1},
+            {'id': 2},
+            {'id': 3}
         ]
         search_mock.return_value = skill_index
         url = "/api/v1/skills/search/?q={}".format(

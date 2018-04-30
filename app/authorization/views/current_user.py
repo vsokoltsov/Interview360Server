@@ -1,6 +1,7 @@
 from . import (TokenAuthentication, IsAuthenticated,
                CurrentUserSerializer, Response, APIView)
 
+
 class CurrentUserView(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)

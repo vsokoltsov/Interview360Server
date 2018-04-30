@@ -15,6 +15,17 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='companymember',
             name='role',
-            field=models.IntegerField(choices=[(1, 'Company Owner'), (2, 'HR'), (3, 'Candidate'), (4, 'Employee')], db_index=True, default=4),
+            field=models.IntegerField(
+                choices=[
+                    (1,
+                     'Company Owner'),
+                    (2,
+                     'HR'),
+                    (3,
+                     'Candidate'),
+                    (4,
+                     'Employee')],
+                db_index=True,
+                default=4),
         ),
     ]

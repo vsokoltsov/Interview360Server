@@ -4,6 +4,7 @@ from . import (
 )
 import ipdb
 
+
 class ResumeFormTest(TransactionTestCase):
     """ Tests for ResumeForm class """
 

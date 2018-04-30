@@ -1,12 +1,13 @@
 from . import User, TestCase, AuthorizationForm
 
+
 class AuthorizationFormTests(TestCase):
     """ Tests for AuthorizationForm class """
 
     def test_success_form_validation(self):
         """ Test form validation if all necessary parameters are passed. """
 
-        form_data = { 'email': 'example@mail.com', 'password': '12345678' }
+        form_data = {'email': 'example@mail.com', 'password': '12345678'}
         form = AuthorizationForm(form_data)
         self.assertEqual(form.is_valid(), True)
 
@@ -23,7 +24,7 @@ class AuthorizationFormTests(TestCase):
         user.set_password('12345678')
         user.save()
 
-        form_data = { 'email': 'example@mail.com', 'password': '12345678' }
+        form_data = {'email': 'example@mail.com', 'password': '12345678'}
         form = AuthorizationForm(form_data)
         self.assertEqual(form.submit(), True)
 
@@ -34,7 +35,7 @@ class AuthorizationFormTests(TestCase):
         user.set_password('12345678')
         user.save()
 
-        form_data = { 'email': 'example@mail.com', 'password': '' }
+        form_data = {'email': 'example@mail.com', 'password': ''}
         form = AuthorizationForm(form_data)
         self.assertEqual(form.submit(), False)
 
@@ -45,7 +46,7 @@ class AuthorizationFormTests(TestCase):
         user.set_password('12345678')
         user.save()
 
-        form_data = { 'email': 'example@mail.com', 'password': '12345678' }
+        form_data = {'email': 'example@mail.com', 'password': '12345678'}
         form = AuthorizationForm(form_data)
         form.submit()
         self.assertIsNotNone(form.token)
@@ -57,7 +58,7 @@ class AuthorizationFormTests(TestCase):
         user.set_password('12345678')
         user.save()
 
-        form_data = { 'email': 'example@mail.com', 'password': '' }
+        form_data = {'email': 'example@mail.com', 'password': ''}
         form = AuthorizationForm(form_data)
         form.submit()
         self.assertEqual(hasattr(form, 'token'), False)

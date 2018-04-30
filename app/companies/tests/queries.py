@@ -8,6 +8,7 @@ from companies.factory import CompanyFactory, CompanyMemberFactory
 
 import ipdb
 
+
 class CompaniesQueryTest(TestCase):
     """ Tests for the CompaniesQuery class """
 
@@ -68,84 +69,84 @@ class CompaniesQueryTest(TestCase):
         response = query.list()
         self.assertEqual(
             [item.id for item in response],
-            [ self.company_1.id, self.company_2.id,
-             self.company_3.id, self.company_4.id ]
+            [self.company_1.id, self.company_2.id,
+             self.company_3.id, self.company_4.id]
         )
 
     def test_setting_of_order(self):
         """ Test receiving of the companies according to the particular order """
 
-        query = CompaniesQuery({ 'order': 'employees__count' }, self.user_1)
+        query = CompaniesQuery({'order': 'employees__count'}, self.user_1)
         response = query.list()
         self.assertEqual(
             [item.id for item in response],
-            [ self.company_4.id, self.company_1.id,
-             self.company_3.id, self.company_2.id ]
+            [self.company_4.id, self.company_1.id,
+             self.company_3.id, self.company_2.id]
         )
 
     def test_reverse_order_value(self):
         """ Test receiving of companies with reversed order value  """
 
-        query = CompaniesQuery({ 'order': '-employees__count' }, self.user_1)
+        query = CompaniesQuery({'order': '-employees__count'}, self.user_1)
         response = query.list()
         self.assertEqual(
             [item.id for item in response],
-            [ self.company_2.id, self.company_1.id,
-             self.company_3.id, self.company_4.id ]
+            [self.company_2.id, self.company_1.id,
+             self.company_3.id, self.company_4.id]
         )
 
     def test_receiving_of_wrong_order(self):
         """ Test receiving companies in case of the wrong order value """
 
-        query = CompaniesQuery({ 'order': 'title' }, self.user_1)
+        query = CompaniesQuery({'order': 'title'}, self.user_1)
         response = query.list()
         self.assertEqual(
             [item.id for item in response],
-            [ self.company_1.id, self.company_2.id,
-             self.company_3.id, self.company_4.id ]
+            [self.company_1.id, self.company_2.id,
+             self.company_3.id, self.company_4.id]
         )
 
     def test_empty_order_value(self):
         """ Test of receiving empty order value """
 
-        query = CompaniesQuery({ 'order': None }, self.user_1)
+        query = CompaniesQuery({'order': None}, self.user_1)
         response = query.list()
         self.assertEqual(
             [item.id for item in response],
-            [ self.company_1.id, self.company_2.id,
-             self.company_3.id, self.company_4.id ]
+            [self.company_1.id, self.company_2.id,
+             self.company_3.id, self.company_4.id]
         )
-
 
     def test_setting_of_role(self):
         """ Test receiving of companies according to the role of current user """
 
-        query = CompaniesQuery({ 'role': CompanyMember.COMPANY_OWNER }, self.user_1)
+        query = CompaniesQuery(
+            {'role': CompanyMember.COMPANY_OWNER}, self.user_1)
         response = query.list()
         self.assertEqual(
             [item.id for item in response],
-            [ self.company_1.id, self.company_2.id,
-             self.company_4.id ]
+            [self.company_1.id, self.company_2.id,
+             self.company_4.id]
         )
 
     def test_receiving_of_wrong_role(self):
         """ Test receiving of companies list if role is wrong """
 
-        query = CompaniesQuery({ 'role': 10 }, self.user_1)
+        query = CompaniesQuery({'role': 10}, self.user_1)
         response = query.list()
         self.assertEqual(
             [item.id for item in response],
-            [ self.company_1.id, self.company_2.id,
-             self.company_3.id, self.company_4.id ]
+            [self.company_1.id, self.company_2.id,
+             self.company_3.id, self.company_4.id]
         )
 
     def test_receiving_of_empty_role(self):
         """ Test receiving of companies list if role is None """
 
-        query = CompaniesQuery({ 'role': None }, self.user_1)
+        query = CompaniesQuery({'role': None}, self.user_1)
         response = query.list()
         self.assertEqual(
             [item.id for item in response],
-            [ self.company_1.id, self.company_2.id,
-             self.company_3.id, self.company_4.id ]
+            [self.company_1.id, self.company_2.id,
+             self.company_3.id, self.company_4.id]
         )

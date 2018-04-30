@@ -3,6 +3,7 @@ from . import (
     Skill, Company, Resume, Token, Workplace, User
 )
 
+
 class WorkplaceDeleteViewTest(APITestCase):
     """ Test for WorklaceDeleteApiView class """
 

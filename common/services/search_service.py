@@ -2,6 +2,7 @@ from app.settings import ES_CLIENT
 from elasticsearch_dsl.query import MultiMatch
 from elasticsearch_dsl import Search
 
+
 class SearchService:
     INDEX_NAME = None
     FIELDS = None
@@ -21,7 +22,7 @@ class SearchService:
 
         search = Search(using=ES_CLIENT, index=self.INDEX_NAME)
         if query_string:
-            query =  MultiMatch(
+            query = MultiMatch(
                 query=query_string, fuzziness="6", operator="and",
                 fields=self.FIELDS
             )

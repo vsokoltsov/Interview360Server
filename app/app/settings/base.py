@@ -25,6 +25,7 @@ from app.credentials import (
 )
 import ipdb
 
+
 def get_environment_variable(var_name):
     """ Get environment variable or raise the exception """
 
@@ -34,10 +35,18 @@ def get_environment_variable(var_name):
         error_msg = 'Set the {} environment variable'.format(var_name)
         raise ImproperlyConfigured(error_msg)
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+PROJECT_ROOT = os.path.dirname(
+    os.path.dirname(
+        os.path.dirname(
+            os.path.abspath(__file__))))
 BASE_DIR = os.path.join(PROJECT_ROOT, 'app')
-COMMON_DIR = os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(__name__)), '../'))
+COMMON_DIR = os.path.abspath(
+    os.path.join(
+        os.path.abspath(
+            os.path.dirname(__name__)),
+        '../'))
 sys.path.insert(1, COMMON_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -168,8 +177,10 @@ ANYMAIL = {
     "MAILGUN_API_KEY": os.environ.get('MAILGUN_API_KEY'),
     "MAILGUN_SENDER_DOMAIN": os.environ.get('MAILGUN_SERVER_NAME')
 }
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')  # or sendgrid.EmailBackend, or...
-DEFAULT_FROM_EMAIL = "you@example.com"  # if you don't already have this in settings
+# or sendgrid.EmailBackend, or...
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
+# if you don't already have this in settings
+DEFAULT_FROM_EMAIL = "you@example.com"
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -221,11 +232,11 @@ DEFAULT_FILE_STORAGE = 'app.storage_backends.MediaStorage'
 
 THUMBNAIL_ALIASES = {
     '': {
-        'small_thumb': {'size': (50, 50) },
-        'thumb': {'size': (100, 100) },
-        'medium': {'size': (200, 200) },
-        'medium_large': {'size': (250, 250) },
-        'large': {'size': (350, 350) }
+        'small_thumb': {'size': (50, 50)},
+        'thumb': {'size': (100, 100)},
+        'medium': {'size': (200, 200)},
+        'medium_large': {'size': (250, 250)},
+        'large': {'size': (350, 350)}
     },
 }
 THUMBNAIL_FORCE_OVERWRITE = True

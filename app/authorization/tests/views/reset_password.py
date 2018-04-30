@@ -1,5 +1,6 @@
 from . import APITestCase, User, Token
 
+
 class ResetPasswordTest(APITestCase):
     """ Test ResetPasswordViewSet routes """
 
@@ -13,10 +14,10 @@ class ResetPasswordTest(APITestCase):
     def test_success_reset(self):
         """ Succesfully reset user password """
 
-        form_data = { 'password': '123456789',
-                      'password_confirmation': '123456789',
-                      'token': self.token.key
-                    }
+        form_data = {'password': '123456789',
+                     'password_confirmation': '123456789',
+                     'token': self.token.key
+                     }
         response = self.client.post(
             '/api/v1/reset_password/', form_data, format='json'
         )
@@ -25,10 +26,10 @@ class ResetPasswordTest(APITestCase):
     def test_failed_reset(self):
         """ Test failed attempt to reset user's password """
 
-        form_data = { 'password': '123456789',
-                      'password_confirmation': '123456789',
-                      'token': ''
-                    }
+        form_data = {'password': '123456789',
+                     'password_confirmation': '123456789',
+                     'token': ''
+                     }
         response = self.client.post(
             '/api/v1/reset_password/', form_data, format='json'
         )

@@ -2,6 +2,7 @@ from elasticsearch_dsl import (
     DocType, Integer, Text
 )
 
+
 class SkillIndex(DocType):
     """ Skill's index class """
 

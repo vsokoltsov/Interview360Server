@@ -1,5 +1,6 @@
 from . import serializers, Vacancy
 
+
 class BaseVacancySerializer(serializers.ModelSerializer):
     """ Base vacancy objects serializer """
 

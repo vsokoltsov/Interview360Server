@@ -3,6 +3,7 @@ from elasticsearch_dsl import (
 )
 from skills.models import Skill
 
+
 class ResumesIndex(DocType):
     """ Resumes index class """
 
@@ -22,7 +23,9 @@ class ResumesIndex(DocType):
         """ Create or update resume's index """
 
         if resume.user.first_name and resume.user.last_name:
-            user = '{} {}'.format(resume.user.first_name, resume.user.last_name)
+            user = '{} {}'.format(
+                resume.user.first_name,
+                resume.user.last_name)
         else:
             user = resume.user.email
         skills = list(map(lambda s: s.name, Skill.objects.all()))

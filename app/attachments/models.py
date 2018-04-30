@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 
+
 class Attachment(models.Model):
     """ Uploaded file model representation """
 
@@ -16,6 +17,7 @@ class Attachment(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
+
 class Image(Attachment):
     """ Image implementation of attachment class """
 
@@ -24,17 +26,17 @@ class Image(Attachment):
 
     data = models.ImageField(upload_to='image')
     image_small_thumb = ImageSpecField(source=DEFAULT_SOURCE,
-                                 processors=[ResizeToFill(50, 50)],
-                                 format=DEFAULT_FORMAT)
+                                       processors=[ResizeToFill(50, 50)],
+                                       format=DEFAULT_FORMAT)
     image_thumb = ImageSpecField(source=DEFAULT_SOURCE,
                                  processors=[ResizeToFill(100, 100)],
                                  format=DEFAULT_FORMAT)
     image_medium = ImageSpecField(source=DEFAULT_SOURCE,
-                                 processors=[ResizeToFill(200, 200)],
-                                 format=DEFAULT_FORMAT)
+                                  processors=[ResizeToFill(200, 200)],
+                                  format=DEFAULT_FORMAT)
     image_medium_large = ImageSpecField(source=DEFAULT_SOURCE,
-                                 processors=[ResizeToFill(250, 250)],
-                                 format=DEFAULT_FORMAT)
+                                        processors=[ResizeToFill(250, 250)],
+                                        format=DEFAULT_FORMAT)
     image_large = ImageSpecField(source=DEFAULT_SOURCE,
                                  processors=[ResizeToFill(350, 350)],
                                  format=DEFAULT_FORMAT)

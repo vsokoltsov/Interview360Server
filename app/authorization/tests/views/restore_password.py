@@ -1,5 +1,6 @@
 from . import APITestCase, User
 
+
 class ResstorePasswordViewTest(APITestCase):
     """ Test of RestorePassword view class """
 
@@ -13,8 +14,8 @@ class ResstorePasswordViewTest(APITestCase):
     def test_success_restore_password(self):
         """ Test success workflow of restoring user password """
 
-        response = self.client.post('/api/v1/restore_password/',  {
-                'email': 'example@mail.com'
+        response = self.client.post('/api/v1/restore_password/', {
+            'email': 'example@mail.com'
         }, format='json')
 
         self.assertEqual('message' in response.data, True)
@@ -22,8 +23,8 @@ class ResstorePasswordViewTest(APITestCase):
     def test_failed_restore_password(self):
         """ Tests failed workflow for restoring user's password """
 
-        response = self.client.post('/api/v1/restore_password/',  {
-                'email': ''
+        response = self.client.post('/api/v1/restore_password/', {
+            'email': ''
         }, format='json')
 
         self.assertEqual('errors' in response.data, True)
@@ -32,8 +33,8 @@ class ResstorePasswordViewTest(APITestCase):
         """ Tests failed workflow for restoring user's password if there is
             no such user """
 
-        response = self.client.post('/api/v1/restore_password/',  {
-                'email': 'example1@mail.com'
+        response = self.client.post('/api/v1/restore_password/', {
+            'email': 'example1@mail.com'
         }, format='json')
 
         self.assertEqual('errors' in response.data, True)

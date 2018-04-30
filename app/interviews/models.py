@@ -4,6 +4,7 @@ from authorization.models import User
 from django.contrib.contenttypes.fields import GenericRelation
 from datetime import datetime, timedelta
 
+
 class Interview(models.Model):
     """ Interview object representation """
 
@@ -40,6 +41,7 @@ class Interview(models.Model):
 
     class Meta:
         db_table = 'interviews'
+
 
 class InterviewEmployee(models.Model):
     """ Intermediate table among the Interview, User and Role """

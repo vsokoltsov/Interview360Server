@@ -1,6 +1,6 @@
 from . import (
     render, viewsets, status, Response, get_object_or_404,
-    IsAuthenticated,  TokenAuthentication, Count,
+    IsAuthenticated, TokenAuthentication, Count,
     CompanySerializer, CompaniesSerializer, Company, CompanyPermissions,
     CompanyIndex, list_route, CompanySearch, CompanyForm, CompaniesFilter,
     CompaniesQuery, QueryParser, CitiesService, Specialty
@@ -13,6 +13,7 @@ def get_company(user, pk):
     queryset = user.companies.all()
     company = get_object_or_404(queryset, pk=pk)
     return company
+
 
 class CompaniesViewSet(viewsets.ModelViewSet):
     """ Viewset for company actions """
@@ -68,7 +69,7 @@ class CompaniesViewSet(viewsets.ModelViewSet):
         if form.submit():
             serializer = CompanySerializer(form.obj)
             return Response({'company': serializer.data},
-                        status=status.HTTP_200_OK)
+                            status=status.HTTP_200_OK)
         else:
             return Response({'errors': form.errors},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -88,19 +89,20 @@ class CompaniesViewSet(viewsets.ModelViewSet):
         query = request.query_params.get('q')
         search = CompanySearch()
         results = search.find(query)
-        return  Response({ 'companies': results })
+        return Response({'companies': results})
 
     @list_route(methods=['get'])
     def filters(self, request):
         """ Get filters for the companies """
 
         filters = CompaniesFilter({})
-        return  Response({ 'filters': filters.data })
+        return Response({'filters': filters.data})
 
     @list_route(methods=['get'])
     def cities(self, request):
         """ Find city with country by name """
 
         cities_service = CitiesService()
-        response = cities_service.find_by_name(request.query_params.get('name'))
-        return  Response({ 'cities': response })
+        response = cities_service.find_by_name(
+            request.query_params.get('name'))
+        return Response({'cities': response})

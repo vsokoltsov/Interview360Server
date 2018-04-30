@@ -3,6 +3,7 @@ import os
 import json
 import ipdb
 
+
 class CitiesService:
     """ Service for getting the cities list from geonames.com """
 
@@ -34,7 +35,7 @@ class CitiesService:
         json_result = result.get('predictions')
         return [
             {
-              'city': item.get('structured_formatting').get('main_text'),
-              'country': item.get('structured_formatting').get('secondary_text')
-             } for item in json_result
+                'city': item.get('structured_formatting').get('main_text'),
+                'country': item.get('structured_formatting').get('secondary_text')
+            } for item in json_result
         ]

@@ -16,6 +16,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='interviews',
-            field=models.ManyToManyField(through='interviews.InterviewEmployee', to='interviews.Interview'),
+            field=models.ManyToManyField(
+                through='interviews.InterviewEmployee',
+                to='interviews.Interview'),
         ),
     ]

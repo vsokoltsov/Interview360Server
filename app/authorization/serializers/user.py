@@ -1,6 +1,7 @@
 from . import serializers, User, BaseAttachmentSerializer
 import ipdb
 
+
 class UserSerializer(serializers.ModelSerializer):
     attachment = serializers.SerializerMethodField()
 

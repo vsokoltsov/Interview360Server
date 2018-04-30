@@ -1,6 +1,7 @@
 from . import serializers, Interview
 from .base_employee_serializer import BaseEmployeeSerializer
 
+
 class BaseInterviewSerializer(serializers.ModelSerializer):
 
     candidate = serializers.SerializerMethodField()
@@ -20,6 +21,6 @@ class BaseInterviewSerializer(serializers.ModelSerializer):
 
         serializer = BaseEmployeeSerializer(
             interview.candidate, read_only=True,
-            context={'company_id': interview.vacancy.company.id }
+            context={'company_id': interview.vacancy.company.id}
         )
         return serializer.data

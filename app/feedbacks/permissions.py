@@ -6,6 +6,7 @@ from roles.constants import (
 )
 from roles.models import Hr, Employee,
 
+
 class FeedbackPermission(BasePermission):
     """ Permission class for the FeedbackViewSet """
 
@@ -19,7 +20,6 @@ class FeedbackPermission(BasePermission):
             return role.has_permission(CREATE_FEEDBACK)
         else:
             return True
-
 
     def has_object_permission(self, request, view, obj):
         company = Company.objects.get(id=view.kwargs['company_pk'])

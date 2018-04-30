@@ -2,12 +2,14 @@ from . import forms, User, Token, transaction
 
 import ipdb
 
+
 class AuthorizationForm(forms.Form):
     email = forms.CharField(max_length=255, strip=True)
     password = forms.CharField(max_length=255)
 
     def submit(self):
-        if not self.is_valid(): return False
+        if not self.is_valid():
+            return False
 
         with transaction.atomic():
             try:

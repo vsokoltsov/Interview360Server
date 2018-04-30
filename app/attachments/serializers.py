@@ -10,6 +10,7 @@ import ipdb
 
 from common.serializers.base_attachment_serializer import BaseAttachmentSerializer
 
+
 class ImageSerializer(BaseAttachmentSerializer):
     """ Serializer for Image """
 
@@ -49,7 +50,12 @@ class ImageSerializer(BaseAttachmentSerializer):
     def _generate_thumbs(self, attachment):
         """ Generate thumbs for the attachment """
 
-        for item in ['small_thumb', 'thumb', 'medium', 'medium_large', 'large']:
+        for item in [
+            'small_thumb',
+            'thumb',
+            'medium',
+            'medium_large',
+                'large']:
             try:
                 getattr(attachment, 'image_{}'.format(item)).generate()
             except ValueError:

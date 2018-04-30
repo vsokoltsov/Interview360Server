@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+
 class CustomField(serializers.Field):
 
     def __init__(self, **kwargs):
@@ -35,4 +36,5 @@ class CustomField(serializers.Field):
         except AttributeError as e:
             raise serializers.ValidationError('There are no such attribute')
         except self.serializer.Meta.model.DoesNotExist as e:
-            raise serializers.ValidationError('Object with id {} does not exists'.format(data))
+            raise serializers.ValidationError(
+                'Object with id {} does not exists'.format(data))

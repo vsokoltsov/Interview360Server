@@ -4,11 +4,12 @@ from django.db.utils import IntegrityError
 
 import ipdb
 
-from . import  (
+from . import (
     BaseForm, FormException, cerberus, Resume, Workplace, Company, Contact,
     transaction, WorkplaceForm, resume_exist, phone_validation
 )
 from common.advisory_lock import advisory_lock
+
 
 class ContactForm(BaseForm):
     """

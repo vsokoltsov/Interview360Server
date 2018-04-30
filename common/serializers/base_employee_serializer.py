@@ -18,5 +18,5 @@ class BaseEmployeeSerializer(UserSerializer):
 
         company_id = self.context.get('company_id')
         company_member = CompanyMember.objects.get(user_id=employee.id,
-                                                company_id=company_id)
+                                                   company_id=company_id)
         return BaseCompanyMemberSerializer(company_member, read_only=True).data

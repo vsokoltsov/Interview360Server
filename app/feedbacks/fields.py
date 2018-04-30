@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from rest_framework import serializers
 
+
 class ContentTypeField(serializers.Field):
     """ Custom field for 'content_type' attribute in request """
 

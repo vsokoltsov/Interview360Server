@@ -2,6 +2,8 @@ from . import (User, TransactionTestCase,
                ResetPasswordForm, mock, Token)
 
 import ipdb
+
+
 class ResetPasswordFormTest(TransactionTestCase):
     """ Tests for ResetPasswordForm """
 
@@ -16,17 +18,17 @@ class ResetPasswordFormTest(TransactionTestCase):
         """ Test form validation if all necessary parameters are passed. """
 
         form_data = {
-                     'token': self.token.key,
-                     'password': '12345678',
-                     'password_confirmation': '12345678'
-                     }
+            'token': self.token.key,
+            'password': '12345678',
+            'password_confirmation': '12345678'
+        }
         form = ResetPasswordForm(form_data)
         self.assertTrue(form.is_valid())
 
     def test_failed_form_validation(self):
         """ Test failed form validation if params are missing """
 
-        form_data = { }
+        form_data = {}
         form = ResetPasswordForm(form_data)
         self.assertFalse(form.is_valid())
 
@@ -34,10 +36,10 @@ class ResetPasswordFormTest(TransactionTestCase):
         """ Test success form submit """
 
         form_data = {
-                     'token': self.token.key,
-                     'password': 'aaaaaa',
-                     'password_confirmation': 'aaaaaa'
-                     }
+            'token': self.token.key,
+            'password': 'aaaaaa',
+            'password_confirmation': 'aaaaaa'
+        }
         form = ResetPasswordForm(form_data)
         self.assertTrue(form.submit())
 
@@ -52,10 +54,10 @@ class ResetPasswordFormTest(TransactionTestCase):
         """ Test success password changing """
 
         form_data = {
-                     'token': self.token.key,
-                     'password': 'aaaaaa',
-                     'password_confirmation': 'aaaaaa'
-                     }
+            'token': self.token.key,
+            'password': 'aaaaaa',
+            'password_confirmation': 'aaaaaa'
+        }
         form = ResetPasswordForm(form_data)
         form.submit()
         self.user.refresh_from_db()
@@ -65,22 +67,21 @@ class ResetPasswordFormTest(TransactionTestCase):
         """ Test failed submit if passwords does not match """
 
         form_data = {
-                     'token': self.token.key,
-                     'password': 'aaaaaa',
-                     'password_confirmation': 'bbbbbb'
-                     }
+            'token': self.token.key,
+            'password': 'aaaaaa',
+            'password_confirmation': 'bbbbbb'
+        }
         form = ResetPasswordForm(form_data)
         self.assertFalse(form.submit())
-
 
     def test_password_matching_error_key(self):
         """ Test correct error key after password matching error """
 
         form_data = {
-                     'token': self.token.key,
-                     'password': 'aaaaaa',
-                     'password_confirmation': 'bbbbbb'
-                     }
+            'token': self.token.key,
+            'password': 'aaaaaa',
+            'password_confirmation': 'bbbbbb'
+        }
         form = ResetPasswordForm(form_data)
         form.submit()
         self.assertTrue('password_confirmation' in form.errors)

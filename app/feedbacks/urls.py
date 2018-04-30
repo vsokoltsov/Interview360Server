@@ -8,5 +8,5 @@ router = DefaultRouter()
 router.register('v1/feedbacks', FeedbackViewSet, base_name='feedbacks')
 
 urlpatterns = [
-    url(r'', include(router.urls) )
+    url(r'', include(router.urls))
 ]

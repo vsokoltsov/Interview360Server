@@ -4,6 +4,7 @@ from . import (
 )
 import django.core.mail as mail
 
+
 class InterviewTaskTest(TestCase):
     """ Tests for interview tasks """
 
@@ -36,7 +37,8 @@ class InterviewTaskTest(TestCase):
         self.assertTrue(notification.called)
         self.assertEqual(notification.call_count, 2)
 
-    @override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
+    @override_settings(
+        EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
     def test_send_mail_tested(self):
         """ Test of sending the email after calling the function """
 

@@ -12,6 +12,7 @@ from companies.factory import CompanyFactory, CompanyMemberFactory
 from feedbacks.models import Feedback
 from feedbacks.forms import FeedbackForm
 
+
 class FeedbackFormTests(TransactionTestCase):
     """ Test case for Feedback form test """
 
@@ -64,9 +65,10 @@ class FeedbackFormTests(TransactionTestCase):
             'description': 'TEXT_TEXT'
         }
         feedback = FeedbackFactory(
-            user_id=self.user_1.id, object_id=self.user_2.id, company_id=self.company.id,
-            content_type=ContentType.objects.get_for_model(User)
-        )
+            user_id=self.user_1.id,
+            object_id=self.user_2.id,
+            company_id=self.company.id,
+            content_type=ContentType.objects.get_for_model(User))
         form = FeedbackForm(obj=feedback, params=params)
         form.submit()
         feedback.refresh_from_db()

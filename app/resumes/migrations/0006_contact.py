@@ -17,14 +17,35 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Contact',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('email', models.EmailField(max_length=255, unique=True)),
-                ('phone', models.CharField(max_length=255, unique=True)),
-                ('phone_comment', models.TextField()),
-                ('social_networks', django.contrib.postgres.fields.jsonb.JSONField()),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('resume', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='contacts', to='resumes.Resume')),
+                ('id',
+                 models.AutoField(
+                     auto_created=True,
+                     primary_key=True,
+                     serialize=False,
+                     verbose_name='ID')),
+                ('email',
+                 models.EmailField(
+                     max_length=255,
+                     unique=True)),
+                ('phone',
+                 models.CharField(
+                     max_length=255,
+                     unique=True)),
+                ('phone_comment',
+                 models.TextField()),
+                ('social_networks',
+                 django.contrib.postgres.fields.jsonb.JSONField()),
+                ('created_at',
+                 models.DateTimeField(
+                     auto_now_add=True)),
+                ('updated_at',
+                 models.DateTimeField(
+                     auto_now=True)),
+                ('resume',
+                 models.ForeignKey(
+                     on_delete=django.db.models.deletion.CASCADE,
+                     related_name='contacts',
+                     to='resumes.Resume')),
             ],
             options={
                 'db_table': 'contacts',

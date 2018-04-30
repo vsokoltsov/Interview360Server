@@ -1,5 +1,6 @@
 import factory
 
+
 class UserFactory(factory.django.DjangoModelFactory):
     """ Factory object for the user model """
 

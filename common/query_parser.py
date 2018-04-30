@@ -1,6 +1,7 @@
 from ast import literal_eval
 import ipdb
 
+
 class QueryParser:
     """ Base class for parsing the query """
 
@@ -19,12 +20,12 @@ class QueryParser:
             elif value is list:
                 denormalized[key] = params.getlist(key)
             elif value is int:
-                denormalized[key] = int(params.get(key)) if params.get(key) else None
+                denormalized[key] = int(
+                    params.get(key)) if params.get(key) else None
             else:
                 denormalized[key] = params.get(key)
 
         return denormalized
-
 
     def _parse_dict(self, val):
         """ Parse given parameters to dict """

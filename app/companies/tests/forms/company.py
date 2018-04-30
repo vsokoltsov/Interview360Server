@@ -1,9 +1,18 @@
 from . import (
-    TransactionTestCase, mock, datetime, Company, ImageFactory, ContentType,
-    UserFactory, CompanyFactory, CompanyMemberFactory, CompanyForm, CompanyMember,
-    SpecialtyFactory
-)
+    TransactionTestCase,
+    mock,
+    datetime,
+    Company,
+    ImageFactory,
+    ContentType,
+    UserFactory,
+    CompanyFactory,
+    CompanyMemberFactory,
+    CompanyForm,
+    CompanyMember,
+    SpecialtyFactory)
 import ipdb
+
 
 class CompanyFormTest(TransactionTestCase):
     """ Test cases for the company form object """
@@ -68,7 +77,9 @@ class CompanyFormTest(TransactionTestCase):
             obj=Company(), params=self.params, current_user=self.user
         )
         form.submit()
-        self.assertEqual(CompanyMember.objects.count(), company_members_count + 1)
+        self.assertEqual(
+            CompanyMember.objects.count(),
+            company_members_count + 1)
 
     @mock.patch('companies.index.CompanyIndex.store_index')
     @mock.patch('profiles.index.UserIndex.store_index')
@@ -98,12 +109,13 @@ class CompanyFormTest(TransactionTestCase):
 
     def test_failed_company_update_user_does_not_have_appropriate_role(self):
         """ Test failed validation if user does not"""\
-        """ have appropriate role in company """
+            """ have appropriate role in company """
 
         company = CompanyFactory()
         company_member = CompanyMemberFactory(
-            user_id=self.user.id, company_id=company.id, role=CompanyMember.EMPLOYEE
-        )
+            user_id=self.user.id,
+            company_id=company.id,
+            role=CompanyMember.EMPLOYEE)
         form = CompanyForm(
             obj=company, params=self.params, current_user=self.user
         )
@@ -117,7 +129,7 @@ class CompanyFormTest(TransactionTestCase):
         attachment = ImageFactory(
             content_type=ContentType.objects.get_for_model(Company)
         )
-        self.params['attachment'] = { 'id': attachment.id }
+        self.params['attachment'] = {'id': attachment.id}
         form = CompanyForm(
             obj=Company(), params=self.params, current_user=self.user
         )

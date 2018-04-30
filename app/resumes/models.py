@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 
+
 class Resume(models.Model):
     """ Resume representation in the system """
 
@@ -15,11 +16,15 @@ class Resume(models.Model):
     class Meta:
         db_table = 'resumes'
 
+
 class Workplace(models.Model):
     """ Workplace representation in the system """
 
     company = models.ForeignKey('companies.Company', null=False)
-    resume = models.ForeignKey('resumes.Resume', null=False, related_name='workplaces')
+    resume = models.ForeignKey(
+        'resumes.Resume',
+        null=False,
+        related_name='workplaces')
     position = models.CharField(max_length=255, null=False, blank=False)
     description = models.TextField()
     start_date = models.DateField(null=False)
@@ -29,6 +34,7 @@ class Workplace(models.Model):
 
     class Meta:
         db_table = 'workplaces'
+
 
 class Contact(models.Model):
     """ Representation of the user's contact """

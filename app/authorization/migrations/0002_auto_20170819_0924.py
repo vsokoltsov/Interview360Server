@@ -16,7 +16,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='user',
             name='companies',
-            field=models.ManyToManyField(through='companies.CompanyMember', to='companies.Company'),
+            field=models.ManyToManyField(
+                through='companies.CompanyMember',
+                to='companies.Company'),
         ),
         migrations.AlterModelTable(
             name='user',

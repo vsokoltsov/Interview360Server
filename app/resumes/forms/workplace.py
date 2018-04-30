@@ -4,6 +4,7 @@ from . import (
 )
 import ipdb
 
+
 class WorkplaceForm(BaseForm):
     """ Workplace form class """
 
@@ -61,14 +62,16 @@ class WorkplaceForm(BaseForm):
     def submit(self):
         """ Check the from validation and create workplaces """
 
-        if not self.is_valid(): return False
+        if not self.is_valid():
+            return False
 
         with transaction.atomic():
             response_list = []
             workplaces = self.params.get('workplaces')
             for wp in workplaces:
                 company_name = wp.pop('company')
-                company, created = Company.objects.get_or_create(name=company_name)
+                company, created = Company.objects.get_or_create(
+                    name=company_name)
                 if wp.get('id'):
                     workplace = Workplace.objects.get(id=wp.get('id'))
                     for key, value in wp.items():

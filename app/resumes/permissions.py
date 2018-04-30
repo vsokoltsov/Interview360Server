@@ -8,6 +8,7 @@ from roles.constants import (
 from roles.models import get_role
 import ipdb
 
+
 class ResumePermissions(permissions.BasePermission):
     """ Permission class for the resumes """
 
@@ -24,6 +25,7 @@ class ResumePermissions(permissions.BasePermission):
         else:
             return True
 
+
 class ContactPermissions(permissions.BasePermission):
     """ Permissions class for resume's contact """
 
@@ -35,6 +37,7 @@ class ContactPermissions(permissions.BasePermission):
             return request.user.id == resume.user_id
         except Resume.DoesNotExist:
             return True
+
 
 class WorkplacePermissions(permissions.BasePermission):
     """ Permissions class for resume's workplaces """

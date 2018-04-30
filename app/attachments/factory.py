@@ -1,6 +1,7 @@
 import factory
 from datetime import datetime
 
+
 class ImageFactory(factory.django.DjangoModelFactory):
     """ Factory for the attachment model """
 

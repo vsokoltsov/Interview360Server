@@ -5,6 +5,7 @@ from skills.models import Skill
 from skills.serializers import SkillSerializer
 from resumes.query import ResumesQuery
 
+
 class ResumesFilter(serializers.Serializer):
     """ Serializer for the resumes filter """
 

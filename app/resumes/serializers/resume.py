@@ -1,7 +1,15 @@
 from . import (
-    serializers, ResumesSerializer, Resume, User, SkillSerializer, UserSerializer,
-    CustomField, ResumesIndex, WorkplaceSerializer, ContactSerializer
-)
+    serializers,
+    ResumesSerializer,
+    Resume,
+    User,
+    SkillSerializer,
+    UserSerializer,
+    CustomField,
+    ResumesIndex,
+    WorkplaceSerializer,
+    ContactSerializer)
+
 
 class ResumeSerializer(ResumesSerializer):
     """ Resume serializer class """

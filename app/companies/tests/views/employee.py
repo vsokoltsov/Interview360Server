@@ -4,6 +4,7 @@ from . import (
 )
 from profiles.index import UserIndex
 
+
 class EmployeesViewSetTests(APITestCase):
     """ API View tests for EmployeeViewSet """
 
@@ -27,9 +28,9 @@ class EmployeesViewSetTests(APITestCase):
         self.client.content_type = 'application/json'
         self.form_data = {
             'employees': [
-                { 'email': 'example1@mail.com', 'role': CANDIDATE },
-                { 'email': 'example2@mail.com', 'role': EMPLOYEE },
-                { 'email': 'example3@mail.com', 'role': CANDIDATE }
+                {'email': 'example1@mail.com', 'role': CANDIDATE},
+                {'email': 'example2@mail.com', 'role': EMPLOYEE},
+                {'email': 'example3@mail.com', 'role': CANDIDATE}
             ],
             'company_id': self.company.id
         }
@@ -86,7 +87,8 @@ class EmployeesViewSetTests(APITestCase):
     def test_success_company_member_deletion(self, user_index, get_mock):
         """ Test success response of deletion the CompanyMember instance """
 
-        url = "/api/v1/companies/{}/employees/{}/".format(self.company.id, self.user.id)
+        url = "/api/v1/companies/{}/employees/{}/".format(
+            self.company.id, self.user.id)
         response = self.client.delete(url)
         self.assertEqual(response.status_code, 204)
 
@@ -95,9 +97,9 @@ class EmployeesViewSetTests(APITestCase):
         """ Test success search of user inside particular company """
 
         user_index = [
-            { 'id': 1 },
-            { 'id': 2 },
-            { 'id': 3 }
+            {'id': 1},
+            {'id': 2},
+            {'id': 3}
         ]
         search_mock.return_value = user_index
         url = "/api/v1/companies/{}/employees/search/?q={}".format(

@@ -3,6 +3,7 @@ from . import (
     BaseUserManager, apps, get_role
 )
 
+
 class User(AbstractBaseUser):
     """ Represents a user object in our system """
 
@@ -12,8 +13,12 @@ class User(AbstractBaseUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    companies = models.ManyToManyField('companies.Company', through='companies.CompanyMember')
-    interviews = models.ManyToManyField('interviews.Interview', through='interviews.InterviewEmployee')
+    companies = models.ManyToManyField(
+        'companies.Company',
+        through='companies.CompanyMember')
+    interviews = models.ManyToManyField(
+        'interviews.Interview',
+        through='interviews.InterviewEmployee')
     feedbacks = GenericRelation('feedbacks.Feedback')
     avatars = GenericRelation('attachments.Image')
 
@@ -56,7 +61,7 @@ class User(AbstractBaseUser):
         """
 
         return {
-            item.company_id: item.role for item in  self.companymember_set.all()
+            item.company_id: item.role for item in self.companymember_set.all()
         }
 
     def __str__(self):

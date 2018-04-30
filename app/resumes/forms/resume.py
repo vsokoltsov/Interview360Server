@@ -1,8 +1,9 @@
-from . import  (
+from . import (
     BaseForm, FormException, cerberus, Resume, Workplace, Company,
     transaction, WorkplaceForm, ContactForm
 )
 import ipdb
+
 
 class ResumeForm(BaseForm):
     """
@@ -76,9 +77,10 @@ class ResumeForm(BaseForm):
                 self._set_attributes()
                 self.obj.skills.set(skills)
                 workplace_form = WorkplaceForm(
-                    params={ 'workplaces': self._configure_workplaces(workplaces) }
+                    params={'workplaces': self._configure_workplaces(workplaces)}
                 )
-                contact_form = ContactForm(params=self._configure_contact(contact))
+                contact_form = ContactForm(
+                    params=self._configure_contact(contact))
                 if not workplace_form.submit():
                     raise FormException(
                         field='workplaces', errors=workplace_form.errors
@@ -94,7 +96,6 @@ class ResumeForm(BaseForm):
             }
             self.errors[e.field] = e.errors
             return False
-
 
     def _set_attributes(self):
         """ Set attributes to the form object """

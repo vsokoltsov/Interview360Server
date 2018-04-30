@@ -35,6 +35,7 @@ import yaml
 import ipdb
 from docs.view import SwaggerSchemaView
 
+
 def _custom_get_responses(link):
     detail = False
     if '{id}' in link.url:

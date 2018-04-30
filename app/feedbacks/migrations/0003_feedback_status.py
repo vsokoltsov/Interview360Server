@@ -13,8 +13,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AddField(
-            model_name='feedback',
-            name='status',
-            field=models.IntegerField(choices=[(0, 'Assigned'), (1, 'In progress'), (2, 'Done')], db_index=True, default=0),
-        ),
-    ]
+            model_name='feedback', name='status', field=models.IntegerField(
+                choices=[
+                    (0, 'Assigned'), (1, 'In progress'), (2, 'Done')], db_index=True, default=0), ), ]

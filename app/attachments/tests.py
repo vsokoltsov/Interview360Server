@@ -12,6 +12,8 @@ import mock
 import ipdb
 
 # Create your tests here.
+
+
 class AttachmentViewSet(APITestCase):
     """ Tests class for AttachmentViewSet """
 
@@ -58,6 +60,6 @@ class AttachmentViewSet(APITestCase):
 
         with open(photo_path, 'rb') as photo:
             with override_settings(MEDIA_ROOT=self.media_folder):
-                resp = self.client.post('/api/v1/attachments/', { })
+                resp = self.client.post('/api/v1/attachments/', {})
                 self.assertEqual(resp.status_code, 400)
                 self.assertTrue('errors' in resp.data)

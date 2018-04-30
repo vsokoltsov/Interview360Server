@@ -1,5 +1,6 @@
 from elasticsearch_dsl import DocType, Date, Integer, Keyword, Text, Object
 
+
 class UserIndex(DocType):
     """ User class index """
 

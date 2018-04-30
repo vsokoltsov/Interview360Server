@@ -5,6 +5,7 @@ from . import (
 from resumes.index import ResumesIndex
 import ipdb
 
+
 class ResumeViewTest(APITestCase):
     """ Tests for ResumeViewTest """
 
@@ -66,7 +67,8 @@ class ResumeViewTest(APITestCase):
     def test_success_creation_of_resume(self, resume_index, twilio_mock):
         """ Test success creation of the resume """
 
-        response = self.client.post('/api/v1/resumes/', self.params, format='json')
+        response = self.client.post(
+            '/api/v1/resumes/', self.params, format='json')
         self.assertTrue('resume' in response.data)
 
     @mock.patch('common.services.twilio_service.TwilioService')
@@ -105,13 +107,13 @@ class ResumeViewTest(APITestCase):
         """ Test success search of resume """
 
         resume_index = [
-            { 'id': 1 },
-            { 'id': 2 },
-            { 'id': 3 }
+            {'id': 1},
+            {'id': 2},
+            {'id': 3}
         ]
         search_mock.return_value = resume_index
         url = "/api/v1/resumes/search/"
-        response = self.client.get(url, { 'q': 'buzzword' }, format='json')
+        response = self.client.get(url, {'q': 'buzzword'}, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['resumes'], resume_index)
 

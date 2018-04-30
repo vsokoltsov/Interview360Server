@@ -1,10 +1,23 @@
 from . import (
-    viewsets, status, Response, Company, CompanyMember, get_object_or_404,
-    EmployeeSerializer, EmployeesSerializer, User, IsAuthenticated,  TokenAuthentication, User,
-    EmployeePermission, list_route, UsersSearch, UserIndex
-)
+    viewsets,
+    status,
+    Response,
+    Company,
+    CompanyMember,
+    get_object_or_404,
+    EmployeeSerializer,
+    EmployeesSerializer,
+    User,
+    IsAuthenticated,
+    TokenAuthentication,
+    User,
+    EmployeePermission,
+    list_route,
+    UsersSearch,
+    UserIndex)
 from rest_framework.decorators import parser_classes
 from rest_framework.parsers import JSONParser
+
 
 class EmployeesViewSet(viewsets.ViewSet):
     """ View class for employee's actions """
@@ -18,22 +31,28 @@ class EmployeesViewSet(viewsets.ViewSet):
 
         company = self.get_company(company_pk)
         serializer = EmployeeSerializer(
-            company.employees.all(), many=True, context={'company_id': company.id})
-        return Response({'employees': serializer.data}, status=status.HTTP_200_OK);
+            company.employees.all(), many=True, context={
+                'company_id': company.id})
+        return Response({'employees': serializer.data},
+                        status=status.HTTP_200_OK)
 
     def retrieve(self, request, company_pk=None, pk=None):
         """ Return employee's information """
 
         company = self.get_company(company_pk)
         employee = get_object_or_404(User, pk=pk)
-        serializer = EmployeeSerializer(employee, context={'company_id': company.id})
-        return Response(serializer.data, status=status.HTTP_200_OK);
+        serializer = EmployeeSerializer(
+            employee, context={
+                'company_id': company.id})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request, company_pk=None):
         """ Create new user and send it a letter """
 
         company = self.get_company(company_pk)
-        serializer = EmployeesSerializer(data=request.data, context={'user': request.user})
+        serializer = EmployeesSerializer(
+            data=request.data, context={
+                'user': request.user})
 
         if serializer.is_valid() and serializer.save():
             return Response(
@@ -42,7 +61,7 @@ class EmployeesViewSet(viewsets.ViewSet):
             )
         else:
             return Response(
-                { 'errors': serializer.errors },
+                {'errors': serializer.errors},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
@@ -56,15 +75,14 @@ class EmployeesViewSet(viewsets.ViewSet):
         )
         if serializer.is_valid() and serializer.save():
             return Response(
-                { 'employee': serializer.data },
+                {'employee': serializer.data},
                 status=status.HTTP_200_OK
             )
         else:
             return Response(
-                { 'errors': serializer.errors },
+                {'errors': serializer.errors},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
 
     def destroy(self, request, company_pk=None, pk=None):
         """ Destroys the CompanyMember object  """
@@ -78,7 +96,6 @@ class EmployeesViewSet(viewsets.ViewSet):
         UserIndex.get(id=employee.id).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
     def get_company(self, id):
         return get_object_or_404(Company, pk=id)
 
@@ -89,4 +106,4 @@ class EmployeesViewSet(viewsets.ViewSet):
         query = request.query_params.get('q')
         search = UsersSearch()
         results = search.find(query, company_pk)
-        return  Response({ 'users': results })
+        return Response({'users': results})

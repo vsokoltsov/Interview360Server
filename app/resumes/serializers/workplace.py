@@ -1,5 +1,6 @@
 from . import serializers, Workplace, BaseCompanySerializer, ResumesSerializer
 
+
 class WorkplaceSerializer(serializers.ModelSerializer):
     """ Serializer for workplace resource """
 

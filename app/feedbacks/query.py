@@ -2,6 +2,7 @@ from django.contrib.contenttypes.models import ContentType
 from .models import Feedback
 from authorization.models import User
 
+
 class FeedbacksQuery:
     """
     Feedbacks quering class;

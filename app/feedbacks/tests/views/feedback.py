@@ -3,6 +3,7 @@ from . import (
     HR, EMPLOYEE, CANDIDATE, Company, Token
 )
 
+
 class FeedbackViewSetTest(APITestCase):
     """ Tests for the FeedbackViewSet """
 

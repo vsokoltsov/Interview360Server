@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Feedback
 from .fields import ContentTypeField
 
+
 class FeedbackSerializer(serializers.ModelSerializer):
     """ Serializer class for Feedback mode """
 
@@ -20,6 +21,6 @@ class FeedbackSerializer(serializers.ModelSerializer):
 
     def create(self, data):
         """ creates new instance of the Feedback """
-        
+
         feedback = Feedback.objects.create(**data)
         return feedback

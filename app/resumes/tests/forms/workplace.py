@@ -4,6 +4,7 @@ from . import (
 )
 import ipdb
 
+
 class WorkplaceFormTest(TransactionTestCase):
     """ Tests for the WorkplaceForm class """
 
@@ -57,7 +58,7 @@ class WorkplaceFormTest(TransactionTestCase):
     def test_failed_validation_with_empty_workplaces_list(self):
         """ Test failed validation in case of empty workplaces list """
 
-        form = WorkplaceForm(params={ 'workplaces': [] })
+        form = WorkplaceForm(params={'workplaces': []})
         form.submit()
         self.assertTrue('workplaces' in form.errors)
 
@@ -83,7 +84,6 @@ class WorkplaceFormTest(TransactionTestCase):
         form.submit()
         self.assertTrue(Workplace.objects.last().company_id == self.company.id)
 
-
     def test_receiving_of_workplaces_list(self):
         """ Test receiving list of the created workplace """
 
@@ -96,7 +96,7 @@ class WorkplaceFormTest(TransactionTestCase):
         """ Test creating of the new company if it does not exist """
 
         companies_count = Company.objects.count()
-        self.params['workplaces'][0]['company'] = 'OOO AAA';
+        self.params['workplaces'][0]['company'] = 'OOO AAA'
         form = WorkplaceForm(params=self.params)
         form.submit()
 

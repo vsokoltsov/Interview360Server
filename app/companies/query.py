@@ -7,6 +7,7 @@ from companies.models import Company, CompanyMember
 
 import ipdb
 
+
 class CompaniesQuery(BaseQuery, QueryOrderMixin):
     """ Query class for Company """
 
@@ -35,7 +36,8 @@ class CompaniesQuery(BaseQuery, QueryOrderMixin):
 
         if self.order:
             if self.order == 'vacancy__interviews__count':
-                queryset = queryset.annotate(Count('interviews', distinct=True))
+                queryset = queryset.annotate(
+                    Count('interviews', distinct=True))
             queryset = queryset.order_by(self.order)
 
         return queryset

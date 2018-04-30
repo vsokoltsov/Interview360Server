@@ -2,6 +2,7 @@ import factory
 from datetime import datetime
 from roles.constants import EMPLOYEE
 
+
 class CompanyFactory(factory.django.DjangoModelFactory):
     """ Factory for the company model """
 
@@ -23,6 +24,7 @@ class CompanyMemberFactory(factory.django.DjangoModelFactory):
 
     active = True
     role = EMPLOYEE
+
 
 class SpecialtyFactory(factory.django.DjangoModelFactory):
     """ Factory for the specialty model """

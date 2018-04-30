@@ -17,9 +17,20 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='VacancySkill',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('skill', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='skills.Skill')),
-                ('vacancy', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='vacancies.Vacancy')),
+                ('id',
+                 models.AutoField(
+                     auto_created=True,
+                     primary_key=True,
+                     serialize=False,
+                     verbose_name='ID')),
+                ('skill',
+                 models.ForeignKey(
+                     on_delete=django.db.models.deletion.CASCADE,
+                     to='skills.Skill')),
+                ('vacancy',
+                 models.ForeignKey(
+                     on_delete=django.db.models.deletion.CASCADE,
+                     to='vacancies.Vacancy')),
             ],
             options={
                 'db_table': 'vacancy_skills',
@@ -28,6 +39,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='vacancy',
             name='skills',
-            field=models.ManyToManyField(through='vacancies.VacancySkill', to='skills.Skill'),
+            field=models.ManyToManyField(
+                through='vacancies.VacancySkill',
+                to='skills.Skill'),
         ),
     ]

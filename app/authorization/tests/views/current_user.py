@@ -2,13 +2,16 @@ from . import APITestCase, User
 from rest_framework.authtoken.models import Token
 import ipdb
 
+
 class CurrentUserViewTests(APITestCase):
     """ Tests for current user receiving methods """
 
     def setUp(self):
         """ Set up test dependencies """
 
-        user = User.objects.create(email="example@mail.com", password="12345678")
+        user = User.objects.create(
+            email="example@mail.com",
+            password="12345678")
         self.token = Token.objects.create(user=user)
 
     def test_success_user_receiving(self):

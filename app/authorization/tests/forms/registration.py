@@ -6,11 +6,12 @@ from rest_framework.authtoken.models import Token
 from profiles.index import UserIndex
 import ipdb
 
+
 class RegistrationFormTests(TransactionTestCase):
     """ Tests for RegistrationForm object """
 
     def setUp(self):
-        self.test_user =  User(id=1)
+        self.test_user = User(id=1)
         self.form_data = {
             'email': 'example@mail.com',
             'password': '12345678',
@@ -64,10 +65,10 @@ class RegistrationFormTests(TransactionTestCase):
     @mock.patch('django.contrib.auth.models.User')
     @mock.patch('rest_framework.authtoken.models.Token.objects.create')
     def test_failed_user_creation(self, index_mock, user_save_mock,
-                                   user_class_mock, token_mock):
+                                  user_class_mock, token_mock):
         """ Test failed case of user creation """
 
-        form_data = { }
+        form_data = {}
         user_class_mock.objects = mock.MagicMock()
         user_class_mock.objects.create = mock.MagicMock()
         user_class_mock.objects.create.return_value = self.test_user
@@ -85,7 +86,7 @@ class RegistrationFormTests(TransactionTestCase):
         """ Test token creation after success restore password """
 
         mock.user = self.test_user
-        mock.return_value = return_value=("12345", 12)
+        mock.return_value = return_value = ("12345", 12)
 
         form = RegistrationForm(self.form_data)
         form.submit()
@@ -99,7 +100,7 @@ class RegistrationFormTests(TransactionTestCase):
 
         mock.user = self.test_user
         mock.return_value = ("12345", 12)
-        form_data = { }
+        form_data = {}
         form = RegistrationForm(form_data)
         form.submit()
         self.assertFalse(mock.called)

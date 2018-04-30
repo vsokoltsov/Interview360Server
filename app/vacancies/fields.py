@@ -3,6 +3,7 @@ from rest_framework import serializers
 from skills.serializers import SkillSerializer
 import ipdb
 
+
 class SkillsField(serializers.Field):
     """ Custom field for 'skills' attribute in request """
 

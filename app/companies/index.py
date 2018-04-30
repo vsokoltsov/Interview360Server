@@ -2,6 +2,7 @@ from elasticsearch_dsl import (
     DocType, Date, Float, Integer, Boolean, Keyword, Text, Object
 )
 
+
 class CompanyIndex(DocType):
     """ Company's index class """
 
@@ -29,12 +30,13 @@ class CompanyIndex(DocType):
             start_date=company.start_date,
             description=company.description,
             city=company.city,
-            attachment= attachment.full_urls() if attachment else None,
+            attachment=attachment.full_urls() if attachment else None,
             vacancy_count=company.vacancy_set.count(),
             employees_count=company.employees.count()
         )
         obj.save()
         return obj.to_dict(include_meta=True)
+
 
 class SpecialtyIndex(DocType):
     """ Specialty's index class """

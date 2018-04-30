@@ -4,6 +4,7 @@ from . import (
 )
 from vacancies.index import VacancyIndex
 
+
 class VacancyViewSetTests(APITestCase):
     """ Tests for VacancyViewSet class """
 
@@ -22,7 +23,8 @@ class VacancyViewSetTests(APITestCase):
         self.user = self.company.get_employees_with_role(HR)[0]
         self.token = Token.objects.get(user=self.user)
         self.skill = Skill.objects.first()
-        self.vacancy = Vacancy.objects.filter(company_id=self.company.id).first()
+        self.vacancy = Vacancy.objects.filter(
+            company_id=self.company.id).first()
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.url = "/api/v1/companies/{}/vacancies/".format(self.company.id)
         self.form_data = {
@@ -79,7 +81,11 @@ class VacancyViewSetTests(APITestCase):
     @mock.patch.object(VacancyIndex, 'get')
     @mock.patch.object(VacancyIndex, 'delete')
     @mock.patch('vacancies.index.VacancyIndex.store_index')
-    def test_success_delete_vacancy(self, vacancy_index_mock, vacancy_delete, vacancy_save):
+    def test_success_delete_vacancy(
+            self,
+            vacancy_index_mock,
+            vacancy_delete,
+            vacancy_save):
         """ Test success vacancy deletion """
 
         response = self.client.delete(
@@ -92,9 +98,9 @@ class VacancyViewSetTests(APITestCase):
         """ Test success search of vacancy inside particular company """
 
         user_index = [
-            { 'id': 1 },
-            { 'id': 2 },
-            { 'id': 3 }
+            {'id': 1},
+            {'id': 2},
+            {'id': 3}
         ]
         search_mock.return_value = user_index
         url = "/api/v1/companies/{}/vacancies/search/?q={}".format(

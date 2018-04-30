@@ -6,6 +6,7 @@ from . import (
 
 import ipdb
 
+
 class InterviewSerializerTests(TransactionTestCase):
     """ Tests for InterviewSerializer serializer """
 
@@ -69,7 +70,8 @@ class InterviewSerializerTests(TransactionTestCase):
         self.assertTrue('vacancy_id' in serializer.errors)
 
     @mock.patch('authorization.models.User.objects.get_or_create')
-    def test_create_new_candidate_if_there_are_no_such_candidate(self, user_mock):
+    def test_create_new_candidate_if_there_are_no_such_candidate(
+            self, user_mock):
         """ Test creating the new candidate if it is not abscent """
 
         user_mock.objects = mock.MagicMock()
@@ -97,12 +99,16 @@ class InterviewSerializerTests(TransactionTestCase):
 
     @mock.patch('interviews.models.Interview.objects.create')
     @mock.patch('interviews.models.InterviewEmployee.objects.create')
-    def test_success_interview_creation(self, inteview_employee_class_mock, inteview_class_mock):
+    def test_success_interview_creation(
+            self,
+            inteview_employee_class_mock,
+            inteview_class_mock):
         """ Test success creation of the interview """
 
         inteview_employee_class_mock.objects = mock.MagicMock()
         inteview_employee_class_mock.objects.create = mock.MagicMock()
-        inteview_employee_class_mock.objects.create.return_value = InterviewEmployee(id=1)
+        inteview_employee_class_mock.objects.create.return_value = InterviewEmployee(
+            id=1)
 
         inteview_class_mock.objects = mock.MagicMock()
         inteview_class_mock.objects.create = mock.MagicMock()
@@ -115,12 +121,14 @@ class InterviewSerializerTests(TransactionTestCase):
         self.assertTrue(inteview_class_mock.called)
 
     @mock.patch('interviews.models.InterviewEmployee.objects.create')
-    def test_success_interview_employee_creation(self, inteview_employee_class_mock):
+    def test_success_interview_employee_creation(
+            self, inteview_employee_class_mock):
         """ Test success creation of InterviewEmployee instance """
 
         inteview_employee_class_mock.objects = mock.MagicMock()
         inteview_employee_class_mock.objects.create = mock.MagicMock()
-        inteview_employee_class_mock.objects.create.return_value = InterviewEmployee(id=1)
+        inteview_employee_class_mock.objects.create.return_value = InterviewEmployee(
+            id=1)
 
         serializer = InterviewSerializer(data=self.form_data)
         serializer.is_valid()
@@ -145,7 +153,6 @@ class InterviewSerializerTests(TransactionTestCase):
         date = datetime.datetime.now() + datetime.timedelta(days=31)
         date = date.replace(second=0, microsecond=0, tzinfo=None)
         self.form_data['assigned_at'] = str(date)
-
 
         serializer = InterviewSerializer(
             self.interview, data=self.form_data, partial=True

@@ -7,6 +7,7 @@ from resumes.forms import WorkplaceForm
 from resumes.serializers import WorkplaceSerializer
 import ipdb
 
+
 class WorkplacesApiView(APIView):
     """ Views for workplace resource """
 
@@ -19,9 +20,9 @@ class WorkplacesApiView(APIView):
         form = WorkplaceForm(params=request.data)
         if form.submit():
             return Response(
-                { 'workplaces': WorkplaceSerializer(form.objects, many=True).data }
+                {'workplaces': WorkplaceSerializer(form.objects, many=True).data}
             )
         else:
             return Response(
-                { 'errors': form.errors }, status=status.HTTP_400_BAD_REQUEST
+                {'errors': form.errors}, status=status.HTTP_400_BAD_REQUEST
             )

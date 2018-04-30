@@ -16,6 +16,9 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='interview',
             name='vacancy',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='interviews', to='vacancies.Vacancy'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='interviews',
+                to='vacancies.Vacancy'),
         ),
     ]

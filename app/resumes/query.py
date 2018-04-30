@@ -6,6 +6,7 @@ from resumes.models import Resume
 from common.queries import BaseQuery, QueryOrderMixin
 import ipdb
 
+
 class ResumesQuery(BaseQuery, QueryOrderMixin):
     """ Advanced Query class for the Resume """
 
@@ -21,7 +22,6 @@ class ResumesQuery(BaseQuery, QueryOrderMixin):
         """ Constructor; Set parameters instead of default ones """
 
         self.params = params
-
 
     def list(self):
         """ Perform query for extracting the list of the Resume instances """

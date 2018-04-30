@@ -6,6 +6,7 @@ from common.forms import BaseForm, FormException
 
 import ipdb
 
+
 class FeedbackForm(BaseForm):
     """
     Feedback form object
@@ -42,7 +43,7 @@ class FeedbackForm(BaseForm):
             'type': 'string',
             'required': True,
             'empty': False,
-            'allowed': [ 'interviews.interview', 'authorization.user' ]
+            'allowed': ['interviews.interview', 'authorization.user']
         },
         'description': {
             'type': 'string',
@@ -54,7 +55,8 @@ class FeedbackForm(BaseForm):
     def submit(self):
         """ Save feedback information into database """
 
-        if not self.is_valid(): return False
+        if not self.is_valid():
+            return False
 
         try:
             with transaction.atomic():
@@ -65,7 +67,7 @@ class FeedbackForm(BaseForm):
                     self._set_attributes()
                     self.obj.save()
                 return True
-        except:
+        except BaseException:
             return False
 
     def _get_content_type_provider(self):

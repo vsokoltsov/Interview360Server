@@ -36,7 +36,7 @@ class ResumesQueryTest(TestCase):
         query = ResumesQuery({})
         response = query.list()
         self.assertEqual(
-            [ item.id for item in response ],
+            [item.id for item in response],
             [self.resume_1.id, self.resume_2.id, self.resume_3.id, self.resume_4.id]
         )
 
@@ -51,14 +51,13 @@ class ResumesQueryTest(TestCase):
         })
         response = query.list()
         self.assertEqual(
-            [ item.id for item in response ],
+            [item.id for item in response],
             [self.resume_2.id, self.resume_3.id, self.resume_4.id]
         )
 
-
     def test_matching_of_salary_if_min_is_empty(self):
         """ Test matching of the salary if max key is empty; """\
-        """ Return default value """
+            """ Return default value """
 
         query = ResumesQuery({
             'salary': {
@@ -67,7 +66,7 @@ class ResumesQueryTest(TestCase):
         })
         response = query.list()
         self.assertEqual(
-            [ item.id for item in response ],
+            [item.id for item in response],
             [self.resume_1.id, self.resume_2.id, self.resume_3.id, self.resume_4.id]
         )
 
@@ -79,20 +78,20 @@ class ResumesQueryTest(TestCase):
         })
         response = query.list()
         self.assertEqual(
-            [ item.id for item in response ],
+            [item.id for item in response],
             [self.resume_1.id, self.resume_3.id]
         )
 
     def test_matching_of_skills_if_empty(self):
         """ Test returning of the default skills value"""\
-        """ if skills attribute is empty """
+            """ if skills attribute is empty """
 
         query = ResumesQuery({
             'skills': []
         })
         response = query.list()
         self.assertEqual(
-            [ item.id for item in response ],
+            [item.id for item in response],
             [self.resume_1.id, self.resume_2.id, self.resume_3.id, self.resume_4.id]
         )
 
@@ -104,7 +103,7 @@ class ResumesQueryTest(TestCase):
         })
         response = query.list()
         self.assertEqual(
-            [ item.id for item in response ],
+            [item.id for item in response],
             [self.resume_1.id, self.resume_3.id, self.resume_4.id, self.resume_2.id]
         )
 
@@ -116,7 +115,7 @@ class ResumesQueryTest(TestCase):
         })
         response = query.list()
         self.assertEqual(
-            [ item.id for item in response ],
+            [item.id for item in response],
             [self.resume_2.id, self.resume_4.id, self.resume_3.id, self.resume_1.id]
         )
 
@@ -128,6 +127,6 @@ class ResumesQueryTest(TestCase):
         })
         response = query.list()
         self.assertEqual(
-            [ item.id for item in response ],
+            [item.id for item in response],
             [self.resume_1.id, self.resume_2.id, self.resume_3.id, self.resume_4.id]
         )

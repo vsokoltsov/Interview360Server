@@ -7,6 +7,7 @@ import django.core.mail as mail
 from django.test import override_settings
 import ipdb
 
+
 class EmployeesSerializerTest(TransactionTestCase):
     """ EmployeesSerializer class tests """
 
@@ -22,9 +23,9 @@ class EmployeesSerializerTest(TransactionTestCase):
         self.user = self.company.get_employees_with_role(HR)[0]
         self.form_data = {
             'employees': [
-                { 'email': 'example1@mail.com', 'role': CANDIDATE },
-                { 'email': 'example2@mail.com', 'role': EMPLOYEE },
-                { 'email': 'example3@mail.com', 'role': CANDIDATE }
+                {'email': 'example1@mail.com', 'role': CANDIDATE},
+                {'email': 'example2@mail.com', 'role': EMPLOYEE},
+                {'email': 'example3@mail.com', 'role': CANDIDATE}
             ],
             'company_id': self.company.id
         }
@@ -33,14 +34,14 @@ class EmployeesSerializerTest(TransactionTestCase):
         """ Tests success serializer validation """
 
         serializer = EmployeesSerializer(data=self.form_data,
-                                        context={'user': self.user})
+                                         context={'user': self.user})
         self.assertTrue(serializer.is_valid())
 
     def test_failed_validation(self):
         """ Tests success serializer validation """
 
         serializer = EmployeesSerializer(data={},
-                                        context={'user': self.user})
+                                         context={'user': self.user})
         self.assertFalse(serializer.is_valid())
 
     def test_failed_validation_if_one_of_emails_is_abscent(self):
@@ -49,7 +50,7 @@ class EmployeesSerializerTest(TransactionTestCase):
         self.form_data['employees'][0]['email'] = None
 
         serializer = EmployeesSerializer(data=self.form_data,
-                                        context={'user': self.user})
+                                         context={'user': self.user})
         self.assertFalse(serializer.is_valid())
 
     def test_failed_validation_if_one_of_roles_is_abscent(self):
@@ -58,32 +59,29 @@ class EmployeesSerializerTest(TransactionTestCase):
         self.form_data['employees'][0]['role'] = ''
 
         serializer = EmployeesSerializer(data=self.form_data,
-                                        context={'user': self.user})
+                                         context={'user': self.user})
         self.assertFalse(serializer.is_valid())
-
 
     def test_failed_validation_if_role_does_not_exists(self):
         """ Test failed validation if role does not exists """
 
         self.form_data['employees'][0]['role'] = 1000
         serializer = EmployeesSerializer(data=self.form_data,
-                                        context={'user': self.user})
+                                         context={'user': self.user})
         self.assertFalse(serializer.is_valid())
-
 
     def test_success_email_validation(self):
         """ Validation failed if request.user email is in the emails list """
 
         self.form_data['employees'] = [
-            { 'email': self.user.email, 'role': CANDIDATE },
-            { 'email': 'example2@mail.com', 'role': EMPLOYEE },
-            { 'email': 'example3@mail.com', 'role': CANDIDATE }
+            {'email': self.user.email, 'role': CANDIDATE},
+            {'email': 'example2@mail.com', 'role': EMPLOYEE},
+            {'email': 'example3@mail.com', 'role': CANDIDATE}
         ]
 
         serializer = EmployeesSerializer(data=self.form_data,
-                                        context={'user': self.user})
+                                         context={'user': self.user})
         self.assertFalse(serializer.is_valid())
-
 
     @override_settings(
         EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend'
@@ -93,7 +91,7 @@ class EmployeesSerializerTest(TransactionTestCase):
         """ Test success mail sending after receivng users and the company """
 
         serializer = EmployeesSerializer(data=self.form_data,
-                                        context={'user': self.user})
+                                         context={'user': self.user})
         serializer.is_valid()
         serializer.save()
         self.assertEqual(len(mail.outbox), 3)
@@ -105,7 +103,7 @@ class EmployeesSerializerTest(TransactionTestCase):
         users_count = User.objects.count()
 
         serializer = EmployeesSerializer(data=self.form_data,
-                                        context={'user': self.user})
+                                         context={'user': self.user})
         serializer.is_valid()
         serializer.save()
         self.assertEqual(User.objects.count(), users_count + 3)
@@ -116,7 +114,7 @@ class EmployeesSerializerTest(TransactionTestCase):
 
         tokens_count = Token.objects.count()
         serializer = EmployeesSerializer(data=self.form_data,
-                                        context={'user': self.user})
+                                         context={'user': self.user})
         serializer.is_valid()
         serializer.save()
 
@@ -126,28 +124,30 @@ class EmployeesSerializerTest(TransactionTestCase):
         """ Test failed validation if user already belongs to a company """
 
         new_user = User.objects.create(email="example4@mail.com")
-        CompanyMember.objects.create(user_id=new_user.id, company_id=self.company.id, role=EMPLOYEE)
+        CompanyMember.objects.create(
+            user_id=new_user.id,
+            company_id=self.company.id,
+            role=EMPLOYEE)
         form_data = {
             'employees': [
-                { 'email': 'example4@mail.com', 'role': CANDIDATE },
-                { 'email': 'example2@mail.com', 'role': EMPLOYEE },
-                { 'email': 'example3@mail.com', 'role': CANDIDATE }
+                {'email': 'example4@mail.com', 'role': CANDIDATE},
+                {'email': 'example2@mail.com', 'role': EMPLOYEE},
+                {'email': 'example3@mail.com', 'role': CANDIDATE}
             ],
             'company_id': self.company.id,
             'role': EMPLOYEE
         }
         serializer = EmployeesSerializer(data=form_data,
-                                        context={'user': self.user})
+                                         context={'user': self.user})
         serializer.is_valid()
         self.assertFalse(serializer.save())
-
 
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_user_indexing_after_create(self, user_index):
         """ Test if index was created after the employee's creation """
 
         serializer = EmployeesSerializer(data=self.form_data,
-                                        context={'user': self.user})
+                                         context={'user': self.user})
         serializer.is_valid()
         serializer.save()
 
@@ -158,7 +158,7 @@ class EmployeesSerializerTest(TransactionTestCase):
         """ Test presence of 'employees' key after success creation """
 
         serializer = EmployeesSerializer(data=self.form_data,
-                                        context={'user': self.user})
+                                         context={'user': self.user})
         serializer.is_valid()
         serializer.save()
 
@@ -179,13 +179,13 @@ class EmployeesSerializerTest(TransactionTestCase):
         )
         form_data = {
             'employees': [
-                { 'email': user.email, 'role': CANDIDATE }
+                {'email': user.email, 'role': CANDIDATE}
             ],
             'company_id': self.company.id
         }
 
         serializer = EmployeesSerializer(data=form_data,
-                                        context={'user': self.user})
+                                         context={'user': self.user})
         serializer.is_valid()
         serializer.save()
         cm = CompanyMember.objects.last()

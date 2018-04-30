@@ -18,10 +18,23 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='InterviewEmployee',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('interview', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='interviews.Interview')),
+                ('id',
+                 models.AutoField(
+                     auto_created=True,
+                     primary_key=True,
+                     serialize=False,
+                     verbose_name='ID')),
+                ('created_at',
+                 models.DateTimeField(
+                     auto_now_add=True)),
+                ('employee',
+                 models.ForeignKey(
+                     on_delete=django.db.models.deletion.CASCADE,
+                     to=settings.AUTH_USER_MODEL)),
+                ('interview',
+                 models.ForeignKey(
+                     on_delete=django.db.models.deletion.CASCADE,
+                     to='interviews.Interview')),
             ],
             options={
                 'db_table': 'interview_employees',
@@ -30,6 +43,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='interview',
             name='interviewees',
-            field=models.ManyToManyField(related_name='interviewees', through='interviews.InterviewEmployee', to=settings.AUTH_USER_MODEL),
+            field=models.ManyToManyField(
+                related_name='interviewees',
+                through='interviews.InterviewEmployee',
+                to=settings.AUTH_USER_MODEL),
         ),
     ]

@@ -5,6 +5,7 @@ from roles.constants import (
 )
 import ipdb
 
+
 class VacancyPermission(BasePermission):
     """ Permission class for VacancyViewSet """
 

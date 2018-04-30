@@ -1,5 +1,6 @@
 from . import APITestCase, User
 
+
 class AuthorizationViewSetTests(APITestCase):
     """ Test of AuthorizationViewSet class """
 
@@ -10,9 +11,9 @@ class AuthorizationViewSetTests(APITestCase):
         user.set_password('12345678')
         user.save()
 
-        response = self.client.post('/api/v1/sign_in/',  {
-                'email': 'example@mail.com',
-                'password': '12345678'
+        response = self.client.post('/api/v1/sign_in/', {
+            'email': 'example@mail.com',
+            'password': '12345678'
         }, format='json')
         self.assertEqual('token' in response.data, True)
 
@@ -23,8 +24,8 @@ class AuthorizationViewSetTests(APITestCase):
         user.set_password('12345678')
         user.save()
 
-        response = self.client.post('/api/v1/sign_in/',  {
-                'email': 'example@mail.com',
-                'password': ''
+        response = self.client.post('/api/v1/sign_in/', {
+            'email': 'example@mail.com',
+            'password': ''
         }, format='json')
         self.assertEqual('errors' in response.data, True)

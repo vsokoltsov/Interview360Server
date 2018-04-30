@@ -2,6 +2,7 @@ from . import (
     APITestCase, Company, CompanyMember, User, Token, datetime, EMPLOYEE
 )
 
+
 class EmployeeActivationTests(APITestCase):
     """ Tests for EmployeeActivationTests """
 
@@ -17,7 +18,8 @@ class EmployeeActivationTests(APITestCase):
         self.company = Company.objects.first()
         self.user = self.company.get_employees_with_role(EMPLOYEE)[-1]
         self.token = Token.objects.get(user=self.user)
-        company_member = CompanyMember.objects.get(user_id=self.user.id, company_id=self.company.id)
+        company_member = CompanyMember.objects.get(
+            user_id=self.user.id, company_id=self.company.id)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.form_data = {
             'company_pk': self.company.id,

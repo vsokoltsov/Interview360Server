@@ -9,12 +9,14 @@ from vacancies.index import VacancyIndex
 
 from vacancies.fields import SkillsField
 
+
 class VacancySerializer(BaseVacancySerializer):
     """ Serializer for vacancies object """
 
     title = serializers.CharField(max_length=255, required=True)
     description = serializers.CharField(required=False)
-    salary = serializers.DecimalField(max_digits=6, decimal_places=2, required=True)
+    salary = serializers.DecimalField(
+        max_digits=6, decimal_places=2, required=True)
     company_id = serializers.IntegerField(required=True, write_only=True)
     company = serializers.SerializerMethodField(read_only=True)
     interviews = serializers.SerializerMethodField(read_only=True)
@@ -42,7 +44,6 @@ class VacancySerializer(BaseVacancySerializer):
         interviews = vacancy.interviews.all()
         return BaseInterviewSerializer(interviews, many=True).data
 
-
     def create(self, data):
         """ Create new instance of Vacancy and add Skills objects to it """
 
@@ -53,7 +54,7 @@ class VacancySerializer(BaseVacancySerializer):
                 vacancy.skills.set(skills)
                 VacancyIndex.store_index(vacancy)
                 return vacancy
-        except:
+        except BaseException:
             return False
 
     def update(self, instance, data):
@@ -61,7 +62,8 @@ class VacancySerializer(BaseVacancySerializer):
 
         with transaction.atomic():
             instance.title = data.get('title', instance.title)
-            instance.description = data.get('description', instance.description)
+            instance.description = data.get(
+                'description', instance.description)
             instance.salary = data.get('salary', instance.salary)
             instance.skills.set(data.get('skills', []))
             instance.save()

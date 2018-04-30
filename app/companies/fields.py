@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from common.serializers.specialty_serializer import SpecialtySerializer
 
+
 class SpecialtiesField(serializers.Field):
     """ Field for the company's serializer """
 

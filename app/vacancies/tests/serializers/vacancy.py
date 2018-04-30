@@ -3,6 +3,7 @@ from . import (
     VacancySerializer, HR
 )
 
+
 class VacancySerializerTest(TransactionTestCase):
     """ Test class for VacanciesSerializer """
 
@@ -19,7 +20,8 @@ class VacancySerializerTest(TransactionTestCase):
         self.company = Company.objects.first()
         self.user = self.company.get_employees_with_role(HR)[0]
         self.skill = Skill.objects.first()
-        self.vacancy = Vacancy.objects.filter(company_id=self.company.id).first()
+        self.vacancy = Vacancy.objects.filter(
+            company_id=self.company.id).first()
 
         self.url = "/api/v1/companies/{}/vacancies/".format(self.company.id)
         self.form_data = {

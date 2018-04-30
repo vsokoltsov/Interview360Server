@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from .serializers import ImageSerializer
 import ipdb
 
+
 class AttachmentViewSet(viewsets.ViewSet):
     """ Attachment view class """
 
@@ -17,10 +18,10 @@ class AttachmentViewSet(viewsets.ViewSet):
         )
         if serializer.is_valid() and serializer.save():
             return Response(
-            { 'attachment': serializer.data }, status=status.HTTP_200_OK
-        )
+                {'attachment': serializer.data}, status=status.HTTP_200_OK
+            )
         else:
             return Response(
-                { 'errors': serializer.errors },
+                {'errors': serializer.errors},
                 status=status.HTTP_400_BAD_REQUEST
             )

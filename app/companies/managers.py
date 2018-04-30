@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Count
 
+
 class CompanyManager(models.Manager):
     """ Custom manager for Company model """
 
@@ -12,8 +13,8 @@ class CompanyManager(models.Manager):
         )
         objects = (
             objects
-                .annotate(Count('vacancy', distinct=True))
-                .annotate(Count('employees'))
+            .annotate(Count('vacancy', distinct=True))
+            .annotate(Count('employees'))
         )
         return objects
 
@@ -21,11 +22,14 @@ class CompanyManager(models.Manager):
         """ Prefetch objects for detail representaiton of company """
 
         objects = self.prefetch_related(
-            'vacancy_set', 'images', 'employees', 'employees__avatars', 'vacancy_set__interviews'
-        )
+            'vacancy_set',
+            'images',
+            'employees',
+            'employees__avatars',
+            'vacancy_set__interviews')
         objects = (
             objects
-                .annotate(Count('employees', distinct=True))
-                .annotate(Count('vacancy', distinct=True))
+            .annotate(Count('employees', distinct=True))
+            .annotate(Count('vacancy', distinct=True))
         )
         return objects

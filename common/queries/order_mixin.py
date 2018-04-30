@@ -1,6 +1,7 @@
 import abc
 import re
 
+
 class QueryOrderMixin(abc.ABC):
     """ Mixin class for the order attribute """
 

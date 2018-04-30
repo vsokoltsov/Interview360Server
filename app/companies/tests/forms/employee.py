@@ -3,6 +3,7 @@ from . import (mock, TransactionTestCase, Token, EmployeeForm,
                override_settings)
 import django.core.mail as mail
 
+
 class EmployeeFormTest(TransactionTestCase):
     """ Tests for the EmployeeFormTest class """
 
@@ -57,7 +58,11 @@ class EmployeeFormTest(TransactionTestCase):
     @mock.patch('profiles.index.UserIndex.store_index')
     @mock.patch.object(User, 'save')
     @mock.patch('django.contrib.auth.models.User')
-    def test_saving_user_information(self, user_class_mock, user_save_mock, user_index_mock):
+    def test_saving_user_information(
+            self,
+            user_class_mock,
+            user_save_mock,
+            user_index_mock):
         """ Test calling save() method on User """
 
         user_class_mock.objects = mock.MagicMock()
@@ -86,7 +91,6 @@ class EmployeeFormTest(TransactionTestCase):
 
         self.company_member.refresh_from_db()
         self.assertTrue(self.company_member.active)
-
 
     def test_user_does_not_have_company_member(self):
         """ Test validation failure if user does not have a company_member instance """
@@ -140,7 +144,8 @@ class EmployeeFormTest(TransactionTestCase):
         self.assertTrue(self.company_member.active)
 
     @mock.patch('profiles.index.UserIndex.store_index')
-    @override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
+    @override_settings(
+        EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
     def test_sending_final_confirmation_mail(self, user_index_mock):
         """ Test sending confirmation email """
 

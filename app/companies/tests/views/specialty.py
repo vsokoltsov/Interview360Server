@@ -3,6 +3,7 @@ from . import (
     CompanyFactory, CompanyMemberFactory, UserFactory, mock
 )
 
+
 class SpecialtiesSearchViewTest(APITestCase):
     """ Tests for SpecialtiesSearchView """
 
@@ -22,9 +23,9 @@ class SpecialtiesSearchViewTest(APITestCase):
         """ Test success search of specialty """
 
         specialty_index = [
-            { 'id': 1 },
-            { 'id': 2 },
-            { 'id': 3 }
+            {'id': 1},
+            {'id': 2},
+            {'id': 3}
         ]
         search_mock.return_value = specialty_index
         url = "/api/v1/companies/specialties/search/?q={}".format(

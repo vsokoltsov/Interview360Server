@@ -1,10 +1,24 @@
 from . import (
-    render, viewsets, status, Response, IsAuthenticated, TokenAuthentication,
-    get_object_or_404, ResumesSerializer, ResumeSerializer, list_route,
-    Resume, ResumesIndex, ResumesSearch, ResumeForm, ResumesQuery, ResumesFilter,
-    QueryParser, ResumePermissions
-)
+    render,
+    viewsets,
+    status,
+    Response,
+    IsAuthenticated,
+    TokenAuthentication,
+    get_object_or_404,
+    ResumesSerializer,
+    ResumeSerializer,
+    list_route,
+    Resume,
+    ResumesIndex,
+    ResumesSearch,
+    ResumeForm,
+    ResumesQuery,
+    ResumesFilter,
+    QueryParser,
+    ResumePermissions)
 import ipdb
+
 
 class ResumeViewSet(viewsets.ModelViewSet):
     """ Resume views """
@@ -30,7 +44,6 @@ class ResumeViewSet(viewsets.ModelViewSet):
                 'workplaces', 'workplaces__company'
             ).all()
 
-
     def get_serializer_class(self):
         """ Return specific serializer for action """
 
@@ -46,7 +59,7 @@ class ResumeViewSet(viewsets.ModelViewSet):
         if form.submit():
             serializer = ResumeSerializer(form.obj)
             return Response({'resume': serializer.data},
-                        status=status.HTTP_200_OK)
+                            status=status.HTTP_200_OK)
         else:
             return Response({'errors': form.errors},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -59,7 +72,7 @@ class ResumeViewSet(viewsets.ModelViewSet):
         if form.submit():
             serializer = ResumeSerializer(form.obj)
             return Response({'resume': serializer.data},
-                        status=status.HTTP_200_OK)
+                            status=status.HTTP_200_OK)
         else:
             return Response({'errors': form.errors},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -79,11 +92,11 @@ class ResumeViewSet(viewsets.ModelViewSet):
         query = request.query_params.get('q')
         search = ResumesSearch()
         results = search.find(query)
-        return  Response({ 'resumes': results })
+        return Response({'resumes': results})
 
     @list_route(methods=['get'])
     def filters(self, request):
         """ Receive the filter value of the resumes """
 
         serializer = ResumesFilter({})
-        return Response({ 'filters': serializer.data })
+        return Response({'filters': serializer.data})

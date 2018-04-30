@@ -5,6 +5,7 @@ from . import (
 )
 import ipdb
 
+
 class CompaniesViewSetTests(APITestCase):
     """ API View tests for CompaniesViewSet """
 
@@ -71,7 +72,11 @@ class CompaniesViewSetTests(APITestCase):
     @mock.patch.object(CompanyIndex, 'get')
     @mock.patch.object(CompanyIndex, 'delete')
     @mock.patch('companies.index.CompanyIndex.store_index')
-    def test_success_delete_action(self, company_index, compant_delete, company_get):
+    def test_success_delete_action(
+            self,
+            company_index,
+            compant_delete,
+            company_get):
         """ Test success company deletion """
 
         url = '/api/v1/companies/{}/'.format(self.company.id)
@@ -83,9 +88,9 @@ class CompaniesViewSetTests(APITestCase):
         """ Test success search of company """
 
         user_index = [
-            { 'id': 1 },
-            { 'id': 2 },
-            { 'id': 3 }
+            {'id': 1},
+            {'id': 2},
+            {'id': 3}
         ]
         search_mock.return_value = user_index
         url = "/api/v1/companies/search/?q={}".format(
@@ -125,7 +130,7 @@ class CompaniesViewSetTests(APITestCase):
         """ Test receiving of the cities """
 
         cities = [
-            { 'id': 1, 'name': 'Moscow' }
+            {'id': 1, 'name': 'Moscow'}
         ]
         cities_mock.return_value = cities
 

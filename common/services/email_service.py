@@ -4,6 +4,7 @@ from django.core.mail import EmailMultiAlternatives
 import os
 import ipdb
 
+
 class EmailService:
     SENDER = 'Anymail Sender <from@example.com>'
 
@@ -41,10 +42,10 @@ class EmailService:
             os.environ['DEFAULT_CLIENT_HOST']
         )
         msg = render_to_string('company_invite.html', {
-                          'company': company,
-                          'link_url': link_url,
-                          'token': token }
-                         )
+            'company': company,
+            'link_url': link_url,
+            'token': token}
+        )
         topic = "Company invite mail"
         cls._send_default_mail(topic, msg, [user])
 
@@ -52,11 +53,12 @@ class EmailService:
     def send_reset_password_mail(cls, user, token):
         """ Send reset password email """
 
-        reset_link = '{}/auth/reset-password'.format(os.environ['DEFAULT_CLIENT_HOST'])
+        reset_link = '{}/auth/reset-password'.format(
+            os.environ['DEFAULT_CLIENT_HOST'])
         msg = render_to_string('reset_password.html', {
-                          'reset_link_url': reset_link,
-                          'token': token }
-                         )
+            'reset_link_url': reset_link,
+            'token': token}
+        )
         topic = 'Reset password'
         cls._send_default_mail(topic, msg, [user])
 
@@ -68,16 +70,15 @@ class EmailService:
             os.environ['DEFAULT_CLIENT_HOST'], company.id
         )
         msg = render_to_string('company_invite_final.html', {
-                          'link_url': company_link,
-                          'user': user,
-                          'company': company
-                         })
+            'link_url': company_link,
+            'user': user,
+            'company': company
+        })
         topic = 'Invite confirmation'
         cls._send_default_mail(topic, msg, [user])
 
-
     @classmethod
-    def _send_default_mail(cls, topic, message,mails):
+    def _send_default_mail(cls, topic, message, mails):
         """ Base mail send function """
 
         send_mail(topic, message, cls.SENDER, mails)

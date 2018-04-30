@@ -10,6 +10,7 @@ from .serializers import FeedbackSerializer
 from .query import FeedbacksQuery
 from .forms import FeedbackForm
 
+
 class FeedbackViewSet(viewsets.ModelViewSet):
     """ View operations for Feedback """
 
@@ -29,9 +30,11 @@ class FeedbackViewSet(viewsets.ModelViewSet):
         form = FeedbackForm(params=request.data)
         if form.submit():
             serializer = FeedbackSerializer(form.obj)
-            return Response({ 'feedback': serializer.data }, status=status.HTTP_201_CREATED)
+            return Response({'feedback': serializer.data},
+                            status=status.HTTP_201_CREATED)
         else:
-            return Response({ 'errors': form.errors }, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'errors': form.errors},
+                            status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk=None):
         """ Update feedback action implementation """
@@ -40,6 +43,8 @@ class FeedbackViewSet(viewsets.ModelViewSet):
         form = FeedbackForm(obj=feedback, params=request.data)
         if form.submit():
             serializer = FeedbackSerializer(form.obj)
-            return Response({ 'feedback': serializer.data }, status=status.HTTP_200_OK)
+            return Response({'feedback': serializer.data},
+                            status=status.HTTP_200_OK)
         else:
-            return Response({ 'errors': form.errors }, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'errors': form.errors},
+                            status=status.HTTP_400_BAD_REQUEST)

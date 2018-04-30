@@ -4,6 +4,7 @@ from . import (
 )
 import ipdb
 
+
 class ResumeSerializerTest(TransactionTestCase):
     """ Tests for ResumeSerializer class """
 
@@ -61,6 +62,6 @@ class ResumeSerializerTest(TransactionTestCase):
         """ Testing serializer container workplaces parameter """
 
         assert(
-            [ w.get('id') for w in self.serializer.data.get('workplaces') ],
-            [ w.id for w in Workplace.objects.all() ]
+            [w.get('id') for w in self.serializer.data.get('workplaces')],
+            [w.id for w in Workplace.objects.all()]
         )

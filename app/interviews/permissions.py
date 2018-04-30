@@ -6,6 +6,7 @@ from roles.constants import (
 from companies.models import Company
 import ipdb
 
+
 class InterviewPermission(BasePermission):
     """ Permission class for InterviewViewSet class  """
 
@@ -25,12 +26,12 @@ class InterviewPermission(BasePermission):
         company = obj.vacancy.company
         role = request.user.get_role_for_company(company)
         if ((view.action == 'destroy' or request.method == 'DELETE')
-            and user.is_activated_for_company(company)):
+                and user.is_activated_for_company(company)):
             return role.has_permission(DELETE_INTERVIEW)
         elif view.action == 'update' and user.is_activated_for_company(company):
             return role.has_permission(UPDATE_INTERVIEW)
         elif view.action == 'retrieve':
-            if type(role) == Candidate:
+            if isinstance(role, Candidate):
                 return obj.candidate.id == request.user.id
             else:
                 return (

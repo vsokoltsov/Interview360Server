@@ -3,6 +3,7 @@ from . import forms, User, Token, transaction
 from django.core.exceptions import ObjectDoesNotExist
 import ipdb
 
+
 class ResetPasswordForm(forms.Form):
     token = forms.CharField(required=True)
     password = forms.CharField(max_length=255, min_length=6)
@@ -18,14 +19,17 @@ class ResetPasswordForm(forms.Form):
 
         if password and password_confirmation:
             if password != password_confirmation:
-                self.add_error('password_confirmation', 'Does not match password')
+                self.add_error(
+                    'password_confirmation',
+                    'Does not match password')
                 raise forms.ValidationError("Does not match password")
         return cleaned_data
 
     def submit(self):
         """ Find user by token and change his password """
 
-        if not self.is_valid(): return False
+        if not self.is_valid():
+            return False
 
         try:
             with transaction.atomic():

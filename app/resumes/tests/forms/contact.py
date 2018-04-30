@@ -4,6 +4,7 @@ from . import (
 )
 import ipdb
 
+
 class ContactFormTest(TransactionTestCase):
     """ Tests for ContactForm class """
 

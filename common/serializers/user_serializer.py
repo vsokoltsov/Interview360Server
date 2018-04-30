@@ -2,6 +2,7 @@ from rest_framework import serializers
 from authorization.models import User
 from common.serializers.base_attachment_serializer import BaseAttachmentSerializer
 
+
 class UserSerializer(serializers.ModelSerializer):
     attachment = serializers.SerializerMethodField()
 

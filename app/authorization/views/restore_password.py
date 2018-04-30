@@ -1,5 +1,6 @@
 from . import viewsets, status, Response, RestorePasswordForm
 
+
 class RestorePasswordViewSet(viewsets.ViewSet):
 
     def create(self, request):
@@ -10,4 +11,4 @@ class RestorePasswordViewSet(viewsets.ViewSet):
                             status=status.HTTP_200_OK)
         else:
             return Response({'errors': form.errors},
-                            status=status.HTTP_400_BAD_REQUEST )
+                            status=status.HTTP_400_BAD_REQUEST)

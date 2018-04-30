@@ -15,6 +15,7 @@ from roles.constants import CANDIDATE
 
 pattern = re.compile(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
 
+
 class InterviewSerializer(serializers.ModelSerializer):
     """ Class for serialization of Interviews """
 
@@ -73,7 +74,8 @@ class InterviewSerializer(serializers.ModelSerializer):
         """ Validation for assigned_at field """
 
         if value.replace(tzinfo=None) < datetime.now():
-            raise serializers.ValidationError("Selected datetime is less than current")
+            raise serializers.ValidationError(
+                "Selected datetime is less than current")
 
         return value
 
@@ -82,7 +84,7 @@ class InterviewSerializer(serializers.ModelSerializer):
 
         serializer = BaseEmployeeSerializer(
             interview.candidate, read_only=True,
-            context={'company_id': interview.vacancy.company.id }
+            context={'company_id': interview.vacancy.company.id}
         )
         return serializer.data
 
@@ -91,7 +93,7 @@ class InterviewSerializer(serializers.ModelSerializer):
 
         serializer = BaseEmployeeSerializer(
             interview.interviewees.all(), read_only=True, many=True,
-            context={'company_id': interview.vacancy.company.id }
+            context={'company_id': interview.vacancy.company.id}
         )
 
         return serializer.data
@@ -109,9 +111,11 @@ class InterviewSerializer(serializers.ModelSerializer):
             with transaction.atomic():
                 interviewees = data.pop('interviewee_ids', None)
                 candidate_email = data.pop('candidate_email', None)
-                candidate_id = self._get_or_create_candidate(candidate_email, data)
+                candidate_id = self._get_or_create_candidate(
+                    candidate_email, data)
 
-                interview = Interview.objects.create(**data, candidate_id=candidate_id)
+                interview = Interview.objects.create(
+                    **data, candidate_id=candidate_id)
                 if interviewees:
                     for employee_email in interviewees:
                         employee = User.objects.get(email=employee_email)
@@ -126,7 +130,8 @@ class InterviewSerializer(serializers.ModelSerializer):
     def update(self, instance, data):
         """ Update an existed instance of interview """
         try:
-            instance.assigned_at = data.get('assigned_at', instance.assigned_at)
+            instance.assigned_at = data.get(
+                'assigned_at', instance.assigned_at)
 
             instance.save()
             return instance

@@ -14,6 +14,7 @@ from django.core.files.storage import FileSystemStorage
 import mock
 import ipdb
 
+
 class ProfileViewSetTest(APITestCase):
     """ Tests for ProfileViewSet class """
 
@@ -21,7 +22,8 @@ class ProfileViewSetTest(APITestCase):
         """ Setting up testing dependencies """
 
         password = 'aaaaaaaa'
-        self.user = User.objects.create(email="example1@mail.com", password=password)
+        self.user = User.objects.create(
+            email="example1@mail.com", password=password)
         self.token = Token.objects.create(user=self.user)
         self.media_folder = mkdtemp()
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
@@ -95,7 +97,7 @@ class ProfileViewSetTest(APITestCase):
         with open(file_path, 'rb') as photo:
             attachment = Image(content_type=content_type)
             attachment.data.save('test.jpg', File(photo), 'rb')
-            self.form_data['attachment'] = { 'id': attachment.id }
+            self.form_data['attachment'] = {'id': attachment.id}
 
             response = self.client.put(
                 '/api/v1/users/{}/'.format(self.user.id), self.form_data,

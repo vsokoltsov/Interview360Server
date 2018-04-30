@@ -2,6 +2,7 @@ from elasticsearch_dsl import (
     DocType, Date, Float, Integer, Boolean, Keyword, Text, Object
 )
 
+
 class VacancyIndex(DocType):
     """ Vacancy's index class """
 

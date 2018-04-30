@@ -16,6 +16,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='skill',
             name='vacancies',
-            field=models.ManyToManyField(through='vacancies.VacancySkill', to='vacancies.Vacancy'),
+            field=models.ManyToManyField(
+                through='vacancies.VacancySkill',
+                to='vacancies.Vacancy'),
         ),
     ]

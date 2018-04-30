@@ -1,6 +1,7 @@
 from rest_framework import permissions
 import ipdb
 
+
 class UserProfilePermission(permissions.BasePermission):
     """ Permissions for accessing to user profile """
 

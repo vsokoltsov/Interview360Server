@@ -5,6 +5,7 @@ from . import (
 from rest_framework.views import APIView
 from resumes.models import Resume, Workplace
 
+
 class WorkplacesDeleteApiView(APIView):
     """ Class for deleting the existing workplace from the resume """
 

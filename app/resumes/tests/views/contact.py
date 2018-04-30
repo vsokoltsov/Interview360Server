@@ -4,6 +4,7 @@ from . import (
 )
 import ipdb
 
+
 class ContactApiViewTest(APITestCase):
     """ Tests for ContactApiView class """
 

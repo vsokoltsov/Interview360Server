@@ -1,5 +1,6 @@
 from . import APITestCase, datetime, Token, Company, HR, CANDIDATE
 
+
 class InterviewViewSetTests(APITestCase):
     """ Tests for InterviewViewSet class """
 

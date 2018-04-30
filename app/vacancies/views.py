@@ -14,6 +14,7 @@ from .search import VacancySearch
 from .index import VacancyIndex
 import ipdb
 
+
 class VacancyViewSet(viewsets.ModelViewSet):
     """ View class for Vacancy """
 
@@ -47,20 +48,20 @@ class VacancyViewSet(viewsets.ModelViewSet):
             return Response({'errors': serializer.errors},
                             status=status.HTTP_400_BAD_REQUEST)
 
-    def update(self, request, pk=None, company_pk = None):
+    def update(self, request, pk=None, company_pk=None):
         """ PUT action for updating existent vacancy """
 
         vacancy = get_object_or_404(Vacancy, pk=pk)
         serializer = VacancySerializer(vacancy, data=request.data,
-                                           partial=True)
+                                       partial=True)
         if serializer.is_valid() and serializer.save():
             return Response({'vacancy': serializer.data},
-                             status=status.HTTP_200_OK)
+                            status=status.HTTP_200_OK)
         else:
             return Response({'errors': serializer.errors},
-                             status=status.HTTP_400_BAD_REQUEST)
+                            status=status.HTTP_400_BAD_REQUEST)
 
-    def destroy(self, request, pk=None, company_pk = None):
+    def destroy(self, request, pk=None, company_pk=None):
         """ Deletes existed vacancy """
 
         vacancy = self.get_object()
@@ -75,4 +76,4 @@ class VacancyViewSet(viewsets.ModelViewSet):
         query = request.query_params.get('q')
         search = VacancySearch()
         results = search.find(query, company_pk)
-        return  Response({ 'vacancies': results })
+        return Response({'vacancies': results})

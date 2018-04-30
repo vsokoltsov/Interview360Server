@@ -1,8 +1,14 @@
 from . import (
-    viewsets, status, Response, IsAuthenticated,  TokenAuthentication, Specialty,
-    SpecialtySearch, SpecialtiesSerializer
-)
+    viewsets,
+    status,
+    Response,
+    IsAuthenticated,
+    TokenAuthentication,
+    Specialty,
+    SpecialtySearch,
+    SpecialtiesSerializer)
 from rest_framework.views import APIView
+
 
 class SpecialtiesSearchView(APIView):
     """ View class for specialties search """
@@ -13,4 +19,4 @@ class SpecialtiesSearchView(APIView):
         query = request.query_params.get('q')
         search = SpecialtySearch()
         results = search.find(query)
-        return  Response({ 'specialties': results })
+        return Response({'specialties': results})

@@ -3,6 +3,7 @@ from rest_framework import serializers
 from common.serializers.base_attachment_serializer import BaseAttachmentSerializer
 import ipdb
 
+
 class AttachmentField(serializers.Field):
     """ Custom field for 'attachment' attribute in request """
 

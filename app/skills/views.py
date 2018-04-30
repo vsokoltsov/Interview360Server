@@ -10,6 +10,8 @@ from .search import SkillSearch
 from rest_framework.response import Response
 
 # Create your views here.
+
+
 class SkillsViewSet(viewsets.ModelViewSet):
     """ ViewSet for skill """
 
@@ -33,4 +35,4 @@ class SkillsViewSet(viewsets.ModelViewSet):
         query = request.query_params.get('q')
         search = SkillSearch()
         results = search.find(query)
-        return  Response({ 'skills': results })
+        return Response({'skills': results})

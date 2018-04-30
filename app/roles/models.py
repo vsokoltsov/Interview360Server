@@ -2,6 +2,7 @@ from django.db import models
 from importlib import import_module
 from .constants import *
 
+
 def get_role(role):
     """ Receives user's role instance """
 
@@ -11,12 +12,14 @@ def get_role(role):
     except KeyError:
         return None
 
+
 class RoleManager:
 
     def has_permission(self, permission):
         """ Return boolean value for user access to operation """
 
         return permission in self.permissions
+
 
 class Candidate(RoleManager):
     permissions = [
@@ -29,6 +32,7 @@ class Candidate(RoleManager):
         DELETE_RESUME
     ]
 
+
 class Employee(Candidate):
     permissions = Candidate.permissions + [
         PARTICIPATE_INTERVIEW,
@@ -37,6 +41,7 @@ class Employee(Candidate):
         UPDATE_FEEDBACK,
         DELETE_FEEDBACK
     ]
+
 
 class Hr(Employee):
     permissions = Employee.permissions + [
@@ -51,6 +56,7 @@ class Hr(Employee):
         UPDATE_INTERVIEW,
         DELETE_INTERVIEW
     ]
+
 
 class CompanyOwner(Hr):
     permissions = Hr.permissions + [

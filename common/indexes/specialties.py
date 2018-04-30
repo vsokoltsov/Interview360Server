@@ -4,6 +4,7 @@ from elasticsearch_dsl import Index
 from elasticsearch.exceptions import TransportError
 import logging
 
+
 def rebuild_index():
     """ Rebuild skills index """
 

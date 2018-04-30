@@ -6,6 +6,7 @@ from profiles.index import UserIndex
 import elasticsearch
 import ipdb
 
+
 class RegistrationForm(forms.Form):
     email = forms.CharField(max_length=255, strip=True)
     password = forms.CharField(max_length=255, min_length=6)
@@ -21,12 +22,15 @@ class RegistrationForm(forms.Form):
 
         if password and password_confirmation:
             if password != password_confirmation:
-                self.add_error('password_confirmation', 'Does not match password')
+                self.add_error(
+                    'password_confirmation',
+                    'Does not match password')
                 raise forms.ValidationError("Does not match password")
         return cleaned_data
 
     def submit(self):
-        if not self.is_valid(): return False
+        if not self.is_valid():
+            return False
 
         try:
             with advisory_lock('User') as acquired:

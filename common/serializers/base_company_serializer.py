@@ -3,6 +3,7 @@ from companies.models import Company
 from profiles.fields import AttachmentField
 from .base_attachment_serializer import BaseAttachmentSerializer
 
+
 class BaseCompanySerializer(serializers.ModelSerializer):
     """ Base Company Serializer class """
 

@@ -11,6 +11,7 @@ from authorization.models import User
 
 from .serializers import ProfileSerializer
 
+
 class ProfileViewSet(viewsets.ViewSet):
     """ ViewSet for profile operations """
 
@@ -33,14 +34,18 @@ class ProfileViewSet(viewsets.ViewSet):
         )
         if serializer.is_valid() and serializer.save():
             return Response(
-                { 'current_user': serializer.data }, status=status.HTTP_200_OK
+                {'current_user': serializer.data}, status=status.HTTP_200_OK
             )
         else:
-            return Response(
-                { 'errors': serializer.errors }, status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({'errors': serializer.errors},
+                            status=status.HTTP_400_BAD_REQUEST)
 
-    @detail_route(methods=['put'], permission_classes=(IsAuthenticated, UserProfilePermission, ))
+    @detail_route(
+        methods=['put'],
+        permission_classes=(
+            IsAuthenticated,
+            UserProfilePermission,
+        ))
     def change_password(self, request, pk=None):
         """ Handle change password update """
 
@@ -52,7 +57,7 @@ class ProfileViewSet(viewsets.ViewSet):
             )
         else:
             return Response(
-                { 'errors': form.errors }, status=status.HTTP_400_BAD_REQUEST
+                {'errors': form.errors}, status=status.HTTP_400_BAD_REQUEST
             )
 
     def get_object(self, pk):

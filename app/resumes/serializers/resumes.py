@@ -1,5 +1,6 @@
 from . import serializers, Resume, UserSerializer
 
+
 class ResumesSerializer(serializers.ModelSerializer):
     """ Resumes serializer class """
 

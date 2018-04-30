@@ -3,6 +3,7 @@ from . import (
     Skill, Company, Resume, Token, Workplace, User
 )
 
+
 class WorkplaceViewTest(APITestCase):
     """ Test for WorklaceViewSet class """
 
@@ -50,7 +51,7 @@ class WorkplaceViewTest(APITestCase):
 
         response = self.client.put(
             '/api/v1/resumes/{}/workplaces/update/'.format(self.resume.id),
-            { 'workplaces': [] }, format='json'
+            {'workplaces': []}, format='json'
         )
         self.assertTrue(response.status_code, 400)
 
@@ -72,6 +73,6 @@ class WorkplaceViewTest(APITestCase):
 
         response = self.client.put(
             '/api/v1/resumes/{}/workplaces/update/'.format(self.resume.id),
-            { 'workplaces': [] }, format='json'
+            {'workplaces': []}, format='json'
         )
         self.assertTrue(response.status_code, 400)
