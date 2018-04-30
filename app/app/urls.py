@@ -33,20 +33,6 @@ from rest_framework.views import APIView
 from rest_framework_swagger import renderers
 import yaml
 import ipdb
-from docs.view import SwaggerSchemaView
-
-
-def _custom_get_responses(link):
-    detail = False
-    if '{id}' in link.url:
-        detail = True
-    return link._responses_docs.get(
-        '{}_{}'.format(link.action, 'list' if not detail else 'detail'),
-        link._responses_docs
-    )
-
-
-encode._get_responses = _custom_get_responses
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -56,8 +42,7 @@ urlpatterns = [
     url(r'^api/', include('feedbacks.urls')),
     url(r'^api/', include('profiles.urls')),
     url(r'^api/', include('attachments.urls')),
-    url(r'^api/', include('resumes.urls')),
-    url(r'^docs/v1/', SwaggerSchemaView.as_view())
+    url(r'^api/', include('resumes.urls'))
 ]
 
 SILK_ENABLED = os.environ.get("SILK_ENABLED")
