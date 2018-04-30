@@ -33,6 +33,7 @@ from rest_framework.views import APIView
 from rest_framework_swagger import renderers
 import yaml
 import ipdb
+from docs.view import SwaggerSchemaView
 
 def _custom_get_responses(link):
     detail = False
@@ -43,102 +44,8 @@ def _custom_get_responses(link):
         link._responses_docs
     )
 
+
 encode._get_responses = _custom_get_responses
-
-class SwaggerSchemaView(APIView):
-    permission_classes = [AllowAny]
-    renderer_classes = [
-        CoreJSONRenderer,
-        renderers.OpenAPIRenderer,
-        renderers.SwaggerUIRenderer
-    ]
-
-    def get(self, request):
-        create_link = coreapi.Link(
-            url='/companies',
-            action='post',
-            description='Create new company',
-            fields=[
-                coreapi.Field(
-                    'name',
-                    required=True,
-                    location="form",
-                    description='Company\'s name',
-                    schema=coreschema.String()
-                ),
-                coreapi.Field(
-                    'description',
-                    required=True,
-                    location="form",
-                    description='Company\'s description',
-                    schema=coreschema.String()
-                ),
-                coreapi.Field(
-                    'start_date',
-                    required=True,
-                    location="form",
-                    description='Company\'s start_date',
-                    schema=coreschema.String()
-                ),
-            ]
-        )
-        list_link = coreapi.Link(
-            url='/companies',
-            action='get',
-            description='Return list of companies for current user'
-        )
-        create_link._responses_docs = {
-            '200': {
-                'description': 'Success response',
-                'schema': {
-                    'type': 'object',
-                    'properties': {
-                        'id': {
-                            'type': 'integer'
-                        }
-                    }
-                }
-            },
-            '400': {
-                'description': 'Failed response'
-            }
-        }
-        list_link._responses_docs = {
-            '200': {
-                'description': 'Success response',
-                'schema': {
-                    'type': 'array',
-                    'items': {
-                        'type': 'object',
-                        'properties': {
-                            'id': {
-                                'type': 'integer'
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        doc = coreapi.Document(
-            title='Interview360 API',
-            url='/api/v1/',
-            content={
-                'Companies': {
-                    'list': list_link,
-                    'create': create_link
-                }
-            }
-        )
-        # dir = os.path.dirname(os.path.abspath(__file__))
-        # yaml_file = open(os.path.join(dir, 'docs.yml'), 'r')
-        # doc = yaml.load(yaml_file)
-        # ipdb.set_trace()
-        return Response(doc)
-
-# schema_view = get_swagger_view(title='Interview360 API')
-
-
-
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
