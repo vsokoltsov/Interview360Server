@@ -6,7 +6,7 @@ from vacancies.index import VacancyIndex
 
 
 def init_indexes():
-    """ Init  existing indexes """
+    """Init  existing indexes."""
 
     for item in [
         CompanyIndex, ResumesIndex, SkillIndex, UserIndex, VacancyIndex,

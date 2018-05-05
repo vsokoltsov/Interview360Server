@@ -2,16 +2,20 @@ from rest_framework import serializers
 
 
 class CustomField(serializers.Field):
+    """Custom field class."""
 
     def __init__(self, **kwargs):
-        """ Create new Field instance. Save attr_name and serializer attributes """
+        """Create new Field instance.
+
+        Save attr_name and serializer attributes.
+        """
 
         self.attr_name = kwargs.pop('obj', None)
         self.serializer = kwargs.pop('serializer', None)
         super(CustomField, self).__init__(**kwargs)
 
     def get_attribute(self, obj):
-        """ Getter for the field """
+        """Getter for the field."""
 
         try:
             related_object = getattr(obj, self.attr_name)
@@ -25,10 +29,12 @@ class CustomField(serializers.Field):
             })
 
     def to_representation(self, obj):
+        """Return representation value."""
+
         return obj
 
     def to_internal_value(self, data):
-        """ Setter for the field """
+        """Set value to the field."""
 
         try:
             instance = self.serializer.Meta.model.objects.get(id=data)

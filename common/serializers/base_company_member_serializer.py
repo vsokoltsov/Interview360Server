@@ -3,9 +3,11 @@ from companies.models import CompanyMember
 
 
 class BaseCompanyMemberSerializer(serializers.ModelSerializer):
-    """ Base serializer for company member object """
+    """Base serializer for company member object."""
 
     class Meta:
+        """Metaclass for serializer."""
+
         model = CompanyMember
         fields = [
             'id',

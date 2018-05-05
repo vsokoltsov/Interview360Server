@@ -6,7 +6,7 @@ import logging
 
 
 def rebuild_index():
-    """ Rebuild skills index """
+    """Rebuild skills index."""
 
     try:
         Index('skills').delete()

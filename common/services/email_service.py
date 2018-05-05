@@ -6,11 +6,13 @@ import ipdb
 
 
 class EmailService:
+    """Service for email sending."""
+
     SENDER = 'Anymail Sender <from@example.com>'
 
     @classmethod
     def send_interview_reminder(cls, user, vacancy, interview):
-        """ Send mail with remainding about upcoming interview """
+        """Send mail with remainding about upcoming interview."""
 
         params = {
             'vacancy': vacancy,
@@ -24,7 +26,7 @@ class EmailService:
 
     @classmethod
     def send_interview_invintation(cls, users, vacancy, interview):
-        """ Send email with interview invintation """
+        """Send email with interview invintation."""
 
         params = {
             'vacancy': vacancy,
@@ -36,7 +38,7 @@ class EmailService:
 
     @classmethod
     def sent_personal_employee_invite(cls, user, token, company):
-        """ Send email notificaiton about invintation into the company """
+        """Send email notificaiton about invintation into the company."""
 
         link_url = '{}/auth/invite'.format(
             os.environ['DEFAULT_CLIENT_HOST']
@@ -51,7 +53,7 @@ class EmailService:
 
     @classmethod
     def send_reset_password_mail(cls, user, token):
-        """ Send reset password email """
+        """Send reset password email."""
 
         reset_link = '{}/auth/reset-password'.format(
             os.environ['DEFAULT_CLIENT_HOST'])
@@ -64,7 +66,7 @@ class EmailService:
 
     @classmethod
     def send_company_invite_confirmation(cls, user, company):
-        """ Send email with approvement of invite confirmation """
+        """Send email with approvement of invite confirmation."""
 
         company_link = '{}/companies/{}/'.format(
             os.environ['DEFAULT_CLIENT_HOST'], company.id
@@ -79,6 +81,6 @@ class EmailService:
 
     @classmethod
     def _send_default_mail(cls, topic, message, mails):
-        """ Base mail send function """
+        """Send mail with full attributes."""
 
         send_mail(topic, message, cls.SENDER, mails)

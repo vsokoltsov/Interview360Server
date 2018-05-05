@@ -5,11 +5,13 @@ from .base_attachment_serializer import BaseAttachmentSerializer
 
 
 class BaseCompanySerializer(serializers.ModelSerializer):
-    """ Base Company Serializer class """
+    """Base Company Serializer class."""
 
     attachment = serializers.SerializerMethodField()
 
     class Meta:
+        """Metaclass for serializer."""
+
         model = Company
         fields = [
             'id',
@@ -23,6 +25,8 @@ class BaseCompanySerializer(serializers.ModelSerializer):
         ]
 
     def get_attachment(self, obj):
+        """Get attachment object."""
+
         last_attachment = obj.images.last()
         if last_attachment:
             return BaseAttachmentSerializer(last_attachment).data

@@ -3,15 +3,15 @@ import ipdb
 
 
 class QueryParser:
-    """ Base class for parsing the query """
+    """Base class for parsing the query."""
 
     def __init__(self, schema):
-        """ Initialize class; Set schema value """
+        """Initialize class; Set schema value."""
 
         self.schema = schema
 
     def parse(self, params):
-        """ Parse given parameters in order to match the schema """
+        """Parse given parameters in order to match the schema."""
 
         denormalized = {}
         for key, value in self.schema.items():
@@ -28,7 +28,7 @@ class QueryParser:
         return denormalized
 
     def _parse_dict(self, val):
-        """ Parse given parameters to dict """
+        """Parse given parameters to dict."""
 
         try:
             return literal_eval(val)

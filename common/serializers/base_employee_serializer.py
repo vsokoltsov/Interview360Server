@@ -5,16 +5,18 @@ from companies.models import CompanyMember
 
 
 class BaseEmployeeSerializer(UserSerializer):
-    """ Base serializer for employee """
+    """Base serializer for employee."""
 
     role = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
+        """Metaclass for serializer."""
+
         model = UserSerializer.Meta.model
         fields = UserSerializer.Meta.fields + ('role', )
 
     def get_role(self, employee):
-        """ Get role for the employee """
+        """Get role for the employee."""
 
         company_id = self.context.get('company_id')
         company_member = CompanyMember.objects.get(user_id=employee.id,
