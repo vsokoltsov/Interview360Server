@@ -8,17 +8,21 @@ from easy_thumbnails.files import get_thumbnailer
 from app.settings import THUMBNAIL_ALIASES
 import ipdb
 
-from common.serializers.base_attachment_serializer import BaseAttachmentSerializer
+from common.serializers.base_attachment_serializer import (
+    BaseAttachmentSerializer
+)
 
 
 class ImageSerializer(BaseAttachmentSerializer):
-    """ Serializer for Image """
+    """Serializer for Image."""
 
     content_type = ContentTypeField(required=True)
     data = serializers.FileField(write_only=True)
     object_id = serializers.IntegerField(required=False, min_value=1)
 
     class Meta:
+        """Serializer's metaclass."""
+
         model = Image
         fields = BaseAttachmentSerializer.Meta.fields + [
             'object_id',
@@ -28,7 +32,7 @@ class ImageSerializer(BaseAttachmentSerializer):
         ]
 
     def validate_data(self, value):
-        """ Validate data field """
+        """Validate data field."""
 
         regexp = re.compile(r'image')
         if regexp.search(value.content_type) is None:
@@ -36,7 +40,7 @@ class ImageSerializer(BaseAttachmentSerializer):
         return value
 
     def create(self, data):
-        """ Create new attachment and creating thumb images """
+        """Create new attachment and creating thumb images."""
 
         try:
             with transaction.atomic():
@@ -48,7 +52,7 @@ class ImageSerializer(BaseAttachmentSerializer):
             return False
 
     def _generate_thumbs(self, attachment):
-        """ Generate thumbs for the attachment """
+        """Generate thumbs for the attachment."""
 
         for item in [
             'small_thumb',

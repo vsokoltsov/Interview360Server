@@ -7,12 +7,14 @@ import ipdb
 
 
 class AttachmentViewSet(viewsets.ViewSet):
-    """ Attachment view class """
+    """Attachment view class."""
 
     serializer_class = ImageSerializer
     parser_classes = (MultiPartParser, FormParser,)
 
     def create(self, request):
+        """Route for attachment's creation."""
+
         serializer = self.serializer_class(
             data=request.data, context={'request': request}
         )

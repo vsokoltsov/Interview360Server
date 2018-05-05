@@ -6,9 +6,11 @@ from imagekit.processors import ResizeToFill
 
 
 class Attachment(models.Model):
-    """ Uploaded file model representation """
+    """Abstract class of any uploadable object."""
 
     class Meta:
+        """Attachment's metaclass."""
+
         abstract = True
 
     content_type = models.ForeignKey(ContentType, null=False)
@@ -19,7 +21,7 @@ class Attachment(models.Model):
 
 
 class Image(Attachment):
-    """ Image implementation of attachment class """
+    """Image implementation of attachment class."""
 
     DEFAULT_SOURCE = 'data'
     DEFAULT_FORMAT = 'PNG'
@@ -42,10 +44,12 @@ class Image(Attachment):
                                  format=DEFAULT_FORMAT)
 
     class Meta:
+        """Metaclass of Image model."""
+
         db_table = 'attachment_images'
 
     def full_urls(self):
-        """ Receive a hash of all available urls """
+        """Receive a hash of all available urls."""
 
         return {
             'url': self.data.url,
