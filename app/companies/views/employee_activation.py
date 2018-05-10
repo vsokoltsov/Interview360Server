@@ -12,9 +12,11 @@ from rest_framework.views import APIView
 
 
 class EmployeeActivationView(APIView):
-    """ View class responsible for activation of the new user """
+    """View class responsible for activation of the new user."""
 
     def put(self, request, company_pk=None):
+        """Update the employees of company."""
+
         form = EmployeeForm(request.data)
 
         if form.submit():

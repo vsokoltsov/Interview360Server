@@ -7,7 +7,6 @@ from . import (
     get_object_or_404,
     EmployeeSerializer,
     EmployeesSerializer,
-    User,
     IsAuthenticated,
     TokenAuthentication,
     User,
@@ -15,19 +14,18 @@ from . import (
     list_route,
     UsersSearch,
     UserIndex)
-from rest_framework.decorators import parser_classes
 from rest_framework.parsers import JSONParser
 
 
 class EmployeesViewSet(viewsets.ViewSet):
-    """ View class for employee's actions """
+    """View class for employee's actions."""
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, EmployeePermission, )
     parser_classes = (JSONParser, )
 
     def list(self, request, company_pk=None):
-        """ Return list of employees for the company """
+        """Return list of employees for the company."""
 
         company = self.get_company(company_pk)
         serializer = EmployeeSerializer(
@@ -37,7 +35,7 @@ class EmployeesViewSet(viewsets.ViewSet):
                         status=status.HTTP_200_OK)
 
     def retrieve(self, request, company_pk=None, pk=None):
-        """ Return employee's information """
+        """Return employee's information."""
 
         company = self.get_company(company_pk)
         employee = get_object_or_404(User, pk=pk)
@@ -47,9 +45,9 @@ class EmployeesViewSet(viewsets.ViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request, company_pk=None):
-        """ Create new user and send it a letter """
+        """Create new user and send it a letter."""
 
-        company = self.get_company(company_pk)
+        self.get_company(company_pk)
         serializer = EmployeesSerializer(
             data=request.data, context={
                 'user': request.user})
@@ -66,7 +64,7 @@ class EmployeesViewSet(viewsets.ViewSet):
             )
 
     def update(self, request, company_pk=None, pk=None):
-        """ Updates employee's instance """
+        """Update employee's instance."""
 
         company = self.get_company(company_pk)
         employee = get_object_or_404(User, pk=pk)
@@ -85,7 +83,7 @@ class EmployeesViewSet(viewsets.ViewSet):
             )
 
     def destroy(self, request, company_pk=None, pk=None):
-        """ Destroys the CompanyMember object  """
+        """Destroy the CompanyMember object."""
 
         company = self.get_company(company_pk)
         employee = get_object_or_404(User, pk=pk)
@@ -97,11 +95,13 @@ class EmployeesViewSet(viewsets.ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def get_company(self, id):
+        """Return company with given id."""
+
         return get_object_or_404(Company, pk=id)
 
     @list_route(methods=['get'])
     def search(self, request, company_pk=None):
-        """ Action for user search """
+        """Search employees within the company."""
 
         query = request.query_params.get('q')
         search = UsersSearch()

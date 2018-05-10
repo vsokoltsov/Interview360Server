@@ -11,10 +11,10 @@ from rest_framework.views import APIView
 
 
 class SpecialtiesSearchView(APIView):
-    """ View class for specialties search """
+    """View class for specialties search."""
 
     def get(self, request, company_pk=None):
-        """ Search specialties by given name """
+        """Search specialties by given name."""
 
         query = request.query_params.get('q')
         search = SpecialtySearch()

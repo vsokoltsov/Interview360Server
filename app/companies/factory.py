@@ -4,9 +4,11 @@ from roles.constants import EMPLOYEE
 
 
 class CompanyFactory(factory.django.DjangoModelFactory):
-    """ Factory for the company model """
+    """Factory for the company model."""
 
     class Meta:
+        """Factory's metaclass."""
+
         model = 'companies.Company'
 
     name = factory.Faker('sentence', nb_words=2)
@@ -17,9 +19,11 @@ class CompanyFactory(factory.django.DjangoModelFactory):
 
 
 class CompanyMemberFactory(factory.django.DjangoModelFactory):
-    """ Factory for the company member model """
+    """Factory for the company member model."""
 
     class Meta:
+        """Factory's metaclass."""
+
         model = 'companies.CompanyMember'
 
     active = True
@@ -27,9 +31,11 @@ class CompanyMemberFactory(factory.django.DjangoModelFactory):
 
 
 class SpecialtyFactory(factory.django.DjangoModelFactory):
-    """ Factory for the specialty model """
+    """Factory for the specialty model."""
 
     class Meta:
+        """Factory's metaclass."""
+
         model = 'companies.Specialty'
 
     name = factory.Faker('sentence', nb_words=2)

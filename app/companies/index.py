@@ -4,7 +4,7 @@ from elasticsearch_dsl import (
 
 
 class CompanyIndex(DocType):
-    """ Company's index class """
+    """Company's index class."""
 
     id = Integer()
     name = Text(analyzer='standard')
@@ -16,11 +16,13 @@ class CompanyIndex(DocType):
     employees_count = Integer()
 
     class Meta:
+        """Index metaclass."""
+
         index = 'companies'
 
     @classmethod
     def store_index(cls, company):
-        """ Create or update company's index """
+        """Create or update company's index."""
 
         attachment = company.images.last()
         obj = cls(
@@ -39,9 +41,11 @@ class CompanyIndex(DocType):
 
 
 class SpecialtyIndex(DocType):
-    """ Specialty's index class """
+    """Specialty's index class."""
 
     class Meta:
+        """Specialty index metaclass."""
+
         index = 'specialties'
 
     id = Integer()
@@ -49,7 +53,7 @@ class SpecialtyIndex(DocType):
 
     @classmethod
     def store_index(cls, specialty):
-        """ Create or update specialty's index """
+        """Create or update specialty's index."""
 
         obj = cls(
             meta={'id': specialty.id},
