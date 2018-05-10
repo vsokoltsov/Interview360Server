@@ -6,7 +6,7 @@ from profiles.index import UserIndex
 
 
 class EmployeesViewSetTests(APITestCase):
-    """ API View tests for EmployeeViewSet """
+    """API View tests for EmployeeViewSet."""
 
     fixtures = [
         'user.yaml',
@@ -15,7 +15,7 @@ class EmployeesViewSetTests(APITestCase):
     ]
 
     def setUp(self):
-        """ Set up test dependencies """
+        """Set up test dependencies."""
 
         self.company = Company.objects.first()
         self.user = self.company.get_employees_with_role(COMPANY_OWNER)[0]
@@ -41,14 +41,14 @@ class EmployeesViewSetTests(APITestCase):
         }
 
     def test_employees_list(self):
-        """ Test receiving list of employeers """
+        """Test receiving list of employeers."""
 
         url = "/api/v1/companies/{}/employees/".format(self.company.id)
         response = self.client.get(url, format='json')
         self.assertEqual(len(response.data['employees']), 8)
 
     def test_employee_retrieving(self):
-        """ Test receiving detail information about employee """
+        """Test receiving detail information about employee."""
 
         url = "/api/v1/companies/{}/employees/{}/".format(
             self.company.id, self.employee.id
@@ -58,14 +58,14 @@ class EmployeesViewSetTests(APITestCase):
 
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_success_employee_creation(self, user_index):
-        """ Test success creation of the new employees """
+        """Test success creation of the new employees."""
 
         url = "/api/v1/companies/{}/employees/".format(self.company.id)
         response = self.client.post(url, self.form_data, format='json')
         self.assertEqual('employees' in response.data, True)
 
     def test_failed_employee_creation(self):
-        """ Test failed creation of the new employees """
+        """Test failed creation of the new employees."""
 
         url = "/api/v1/companies/{}/employees/".format(self.company.id)
         response = self.client.post(url, {}, format='json')
@@ -74,7 +74,7 @@ class EmployeesViewSetTests(APITestCase):
 
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_success_employee_update(self, user_index):
-        """ Test success employee's instance update """
+        """Test success employee's instance update."""
 
         url = "/api/v1/companies/{}/employees/{}/".format(
             self.company.id, self.employee.id
@@ -85,7 +85,7 @@ class EmployeesViewSetTests(APITestCase):
     @mock.patch.object(UserIndex, 'get')
     @mock.patch.object(UserIndex, 'delete')
     def test_success_company_member_deletion(self, user_index, get_mock):
-        """ Test success response of deletion the CompanyMember instance """
+        """Test success response of deletion the CompanyMember instance."""
 
         url = "/api/v1/companies/{}/employees/{}/".format(
             self.company.id, self.user.id)
@@ -94,7 +94,7 @@ class EmployeesViewSetTests(APITestCase):
 
     @mock.patch('profiles.search.UsersSearch.find')
     def test_search_action(self, search_mock):
-        """ Test success search of user inside particular company """
+        """Test success search of user inside particular company."""
 
         user_index = [
             {'id': 1},
@@ -110,7 +110,7 @@ class EmployeesViewSetTests(APITestCase):
         self.assertEqual(response.data['users'], user_index)
 
     def test_unactiveate_user_restricted_access(self):
-        """ Test check of user active in the company """
+        """Test check of user active in the company."""
 
         self.company_member.active = False
         self.company_member.save()

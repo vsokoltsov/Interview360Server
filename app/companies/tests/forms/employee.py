@@ -5,7 +5,7 @@ import django.core.mail as mail
 
 
 class EmployeeFormTest(TransactionTestCase):
-    """ Tests for the EmployeeFormTest class """
+    """Tests for the EmployeeFormTest class."""
 
     fixtures = [
         'user.yaml',
@@ -14,7 +14,7 @@ class EmployeeFormTest(TransactionTestCase):
     ]
 
     def setUp(self):
-        """ Set up test dependencies """
+        """Set up test dependencies."""
 
         self.company = Company.objects.first()
         self.hr = self.company.get_employees_with_role(HR)[0]
@@ -31,19 +31,19 @@ class EmployeeFormTest(TransactionTestCase):
         }
 
     def test_success_form_validation(self):
-        """ Test success form validation with all necessary parameters """
+        """Test success form validation with all necessary parameters."""
 
         form = EmployeeForm(self.form_data)
         self.assertTrue(form.is_valid())
 
     def test_failed_form_validation(self):
-        """ Test failed form validation """
+        """Test failed form validation."""
 
         form = EmployeeForm({})
         self.assertFalse(form.is_valid())
 
     def test_failed_password_matching(self):
-        """ Test failed form validation due to different password """
+        """Test failed form validation due to different password."""
 
         form_data = {
             'company_pk': self.company.id,
@@ -63,7 +63,7 @@ class EmployeeFormTest(TransactionTestCase):
             user_class_mock,
             user_save_mock,
             user_index_mock):
-        """ Test calling save() method on User """
+        """Test calling save() method on User."""
 
         user_class_mock.objects = mock.MagicMock()
         user_class_mock.objects.create = mock.MagicMock()
@@ -75,7 +75,7 @@ class EmployeeFormTest(TransactionTestCase):
 
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_updating_user_password(self, user_index_mock):
-        """ Test updating user password """
+        """Test updating user password."""
 
         form = EmployeeForm(self.form_data)
         form.submit()
@@ -84,7 +84,7 @@ class EmployeeFormTest(TransactionTestCase):
 
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_company_member_updated(self, user_index_mock):
-        """ Test update of CompanyMember instance 'active' field """
+        """Test update of CompanyMember instance 'active' field."""
 
         form = EmployeeForm(self.form_data)
         form.submit()
@@ -93,7 +93,10 @@ class EmployeeFormTest(TransactionTestCase):
         self.assertTrue(self.company_member.active)
 
     def test_user_does_not_have_company_member(self):
-        """ Test validation failure if user does not have a company_member instance """
+        """Test validation failure.
+
+        User does not have a company_member instance.
+        """
 
         user = User.objects.create(email="batman@superman.com")
         token = Token.objects.create(user=user)
@@ -108,7 +111,7 @@ class EmployeeFormTest(TransactionTestCase):
         self.assertFalse(form.submit())
 
     def test_user_already_activated_in_company(self):
-        """ Test if user already activated in company """
+        """Test if user already activated in company."""
 
         self.company_member.active = True
         self.company_member.save()
@@ -119,7 +122,7 @@ class EmployeeFormTest(TransactionTestCase):
 
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_user_already_has_password(self, user_index_mock):
-        """ Test submit form if user already has a password """
+        """Test submit form if user already has a password."""
 
         form_data = {
             'company_pk': self.company.id,
@@ -132,7 +135,10 @@ class EmployeeFormTest(TransactionTestCase):
 
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_company_member_marked_as_active(self, user_index_mock):
-        """ Test company member mark as active even if passwords are not present """
+        """Test company member.
+
+        Mark as active even if passwords are not present.
+        """
 
         form_data = {
             'company_pk': self.company.id,
@@ -147,7 +153,7 @@ class EmployeeFormTest(TransactionTestCase):
     @override_settings(
         EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
     def test_sending_final_confirmation_mail(self, user_index_mock):
-        """ Test sending confirmation email """
+        """Test sending confirmation email."""
 
         form = EmployeeForm(self.form_data)
         form.submit()

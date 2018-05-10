@@ -6,14 +6,12 @@ from companies.models import Company, CompanyMember
 from authorization.factory import UserFactory
 from companies.factory import CompanyFactory, CompanyMemberFactory
 
-import ipdb
-
 
 class CompaniesQueryTest(TestCase):
-    """ Tests for the CompaniesQuery class """
+    """Tests for the CompaniesQuery class."""
 
     def setUp(self):
-        """ Setting up testing dependencies """
+        """Set up testing dependencies."""
 
         self.user_1 = UserFactory()
         self.user_2 = UserFactory()
@@ -63,7 +61,7 @@ class CompaniesQueryTest(TestCase):
         )
 
     def test_receiving_of_companies_list(self):
-        """ Tests of receiving of the companies list """
+        """Test of receiving of the companies list."""
 
         query = CompaniesQuery({}, self.user_1)
         response = query.list()
@@ -74,7 +72,7 @@ class CompaniesQueryTest(TestCase):
         )
 
     def test_setting_of_order(self):
-        """ Test receiving of the companies according to the particular order """
+        """Test receiving of the companies in particular order."""
 
         query = CompaniesQuery({'order': 'employees__count'}, self.user_1)
         response = query.list()
@@ -85,7 +83,7 @@ class CompaniesQueryTest(TestCase):
         )
 
     def test_reverse_order_value(self):
-        """ Test receiving of companies with reversed order value  """
+        """Test receiving of companies with reversed order value."""
 
         query = CompaniesQuery({'order': '-employees__count'}, self.user_1)
         response = query.list()
@@ -96,7 +94,7 @@ class CompaniesQueryTest(TestCase):
         )
 
     def test_receiving_of_wrong_order(self):
-        """ Test receiving companies in case of the wrong order value """
+        """Test receiving companies in case of the wrong order value."""
 
         query = CompaniesQuery({'order': 'title'}, self.user_1)
         response = query.list()
@@ -107,7 +105,7 @@ class CompaniesQueryTest(TestCase):
         )
 
     def test_empty_order_value(self):
-        """ Test of receiving empty order value """
+        """Test of receiving empty order value."""
 
         query = CompaniesQuery({'order': None}, self.user_1)
         response = query.list()
@@ -118,7 +116,7 @@ class CompaniesQueryTest(TestCase):
         )
 
     def test_setting_of_role(self):
-        """ Test receiving of companies according to the role of current user """
+        """Test receiving of companies for the role of current user."""
 
         query = CompaniesQuery(
             {'role': CompanyMember.COMPANY_OWNER}, self.user_1)
@@ -130,7 +128,7 @@ class CompaniesQueryTest(TestCase):
         )
 
     def test_receiving_of_wrong_role(self):
-        """ Test receiving of companies list if role is wrong """
+        """Test receiving of companies list if role is wrong."""
 
         query = CompaniesQuery({'role': 10}, self.user_1)
         response = query.list()
@@ -141,7 +139,7 @@ class CompaniesQueryTest(TestCase):
         )
 
     def test_receiving_of_empty_role(self):
-        """ Test receiving of companies list if role is None """
+        """Test receiving of companies list if role is None."""
 
         query = CompaniesQuery({'role': None}, self.user_1)
         response = query.list()
