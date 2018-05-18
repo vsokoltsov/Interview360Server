@@ -14,10 +14,10 @@ from feedbacks.forms import FeedbackForm
 
 
 class FeedbackFormTests(TransactionTestCase):
-    """ Test case for Feedback form test """
+    """Test case for Feedback form test."""
 
     def setUp(self):
-        """ Setting up testing dependencies """
+        """Sett up testing dependencies."""
 
         self.user_1 = UserFactory()
         self.user_2 = UserFactory()
@@ -38,19 +38,19 @@ class FeedbackFormTests(TransactionTestCase):
         }
 
     def test_success_validation(self):
-        """ Test success validation of the form """
+        """Test success validation of the form."""
 
         form = FeedbackForm(params=self.params)
         self.assertTrue(form.is_valid())
 
     def test_failed_validation(self):
-        """ Test failed validation of the form """
+        """Test failed validation of the form."""
 
         form = FeedbackForm(params={})
         self.assertFalse(form.is_valid())
 
     def test_success_submit_of_new_feedback(self):
-        """ Test success creation of the new feedback """
+        """Test success creation of the new feedback."""
 
         feedbacks_count = Feedback.objects.count()
         form = FeedbackForm(params=self.params)
@@ -58,7 +58,7 @@ class FeedbackFormTests(TransactionTestCase):
         self.assertEqual(Feedback.objects.count(), feedbacks_count + 1)
 
     def test_success_update_of_feedback(self):
-        """ Test success updating of the feedback """
+        """Test success updating of the feedback."""
 
         params = {
             **self.params,
