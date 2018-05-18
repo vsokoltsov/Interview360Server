@@ -17,7 +17,7 @@ pattern = re.compile(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
 
 
 class InterviewSerializer(serializers.ModelSerializer):
-    """ Class for serialization of Interviews """
+    """Class for serialization of Interviews."""
 
     passed = serializers.BooleanField(read_only=True)
     assigned_at = serializers.DateTimeField(required=True)
@@ -36,6 +36,8 @@ class InterviewSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
+        """Serializer's metaclass."""
+
         model = Interview
         fields = [
             'id',
@@ -51,7 +53,7 @@ class InterviewSerializer(serializers.ModelSerializer):
         ]
 
     def validate_vacancy_id(self, value):
-        """ Validation for vacancy_id value """
+        """Validate vacancy_id value."""
 
         try:
             vacancy = Vacancy.objects.get(id=value)
@@ -63,7 +65,7 @@ class InterviewSerializer(serializers.ModelSerializer):
         return value
 
     def validate_candidate_email(self, value):
-        """ Validation for candidate_email """
+        """Validate candidate_email field."""
 
         if not pattern.match(value):
             raise serializers.ValidationError("Is not email")
@@ -71,7 +73,7 @@ class InterviewSerializer(serializers.ModelSerializer):
         return value
 
     def validate_assigned_at(self, value):
-        """ Validation for assigned_at field """
+        """Validate assigned_at field."""
 
         if value.replace(tzinfo=None) < datetime.now():
             raise serializers.ValidationError(
@@ -80,7 +82,7 @@ class InterviewSerializer(serializers.ModelSerializer):
         return value
 
     def get_candidate(self, interview):
-        """ Retrieve candidate serializer """
+        """Retrieve candidate serializer."""
 
         serializer = BaseEmployeeSerializer(
             interview.candidate, read_only=True,
@@ -89,7 +91,7 @@ class InterviewSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def get_interviewees(self, interview):
-        """ Retrieve candidate interviewees list """
+        """Retrieve candidate interviewees list."""
 
         serializer = BaseEmployeeSerializer(
             interview.interviewees.all(), read_only=True, many=True,
@@ -99,14 +101,18 @@ class InterviewSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def get_vacancy(self, interview):
-        """ Rertrieve vacancy serializer """
+        """Rertrieve vacancy serializer."""
 
         serializer = BaseVacancySerializer(interview.vacancy, read_only=True)
         return serializer.data
 
     def create(self, data):
-        """ Create a new instance of interview and some of
-            the InterviewEmployee objects """
+        """
+        Create a new instance of interview.
+
+        Create InterviewEmployee instances.
+        """
+
         try:
             with transaction.atomic():
                 interviewees = data.pop('interviewee_ids', None)
@@ -128,7 +134,8 @@ class InterviewSerializer(serializers.ModelSerializer):
             return False
 
     def update(self, instance, data):
-        """ Update an existed instance of interview """
+        """Update an existed instance of interview."""
+
         try:
             instance.assigned_at = data.get(
                 'assigned_at', instance.assigned_at)
@@ -139,7 +146,7 @@ class InterviewSerializer(serializers.ModelSerializer):
             return False
 
     def _get_or_create_candidate(self, email, data):
-        """ Get or create a new user object for a candidate based on the email """
+        """Get or create a new user object."""
 
         result = User.objects.get_or_create(email=email)
 

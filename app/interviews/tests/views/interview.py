@@ -2,7 +2,7 @@ from . import APITestCase, datetime, Token, Company, HR, CANDIDATE
 
 
 class InterviewViewSetTests(APITestCase):
-    """ Tests for InterviewViewSet class """
+    """Tests for InterviewViewSet class."""
 
     fixtures = [
         "skill.yaml",
@@ -14,7 +14,7 @@ class InterviewViewSetTests(APITestCase):
     ]
 
     def setUp(self):
-        """ Setting up test dependencies """
+        """Set up test dependencies."""
 
         self.company = Company.objects.first()
         date = datetime.datetime.now() + datetime.timedelta(days=10)
@@ -37,14 +37,14 @@ class InterviewViewSetTests(APITestCase):
         self.url = "/api/v1/companies/{}/interviews/".format(self.company.id)
 
     def test_success_list_receiving(self):
-        """ Test success receiving list of the interviews """
+        """Test success receiving list of the interviews."""
 
         response = self.client.get(self.url, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 2)
 
     def test_success_retrieve_action(self):
-        """ Test success receiving detail interview """
+        """Test success receiving detail interview."""
 
         response = self.client.get(
             self.url + "{}/".format(self.interview.id), format='json'
@@ -52,20 +52,20 @@ class InterviewViewSetTests(APITestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_success_interview_creation(self):
-        """ Test success creation of the interview """
+        """Test success creation of the interview."""
 
         response = self.client.post(self.url, self.form_data, format='json')
         self.assertEqual(response.status_code, 201)
         self.assertTrue('interview' in response.data)
 
     def test_failed_interview_creation(self):
-        """ Test failed creation of the interview """
+        """Test failed creation of the interview."""
 
         response = self.client.post(self.url, {}, format='json')
         self.assertEqual(response.status_code, 400)
 
     def test_success_interview_update(self):
-        """ Test success Interview's instance update """
+        """Test success Interview's instance update."""
 
         response = self.client.put(
             self.url + "{}/".format(self.interview.id), self.form_data,
@@ -75,7 +75,7 @@ class InterviewViewSetTests(APITestCase):
         self.assertTrue('interview' in response.data)
 
     def test_success_interview_delete(self):
-        """ Test success Interview's instance delete """
+        """Test success Interview's instance delete."""
 
         response = self.client.delete(
             self.url + "{}/".format(self.interview.id), format='json'

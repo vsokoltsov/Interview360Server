@@ -11,7 +11,7 @@ ONE_DAY = 1
 
 @periodic_task(run_every=crontab(minute=0, hour='*'))
 def remind_about_interview():
-    """ Test for the celery task """
+    """Test for the celery task."""
 
     for interview in Interview.in_range_of_days(ONE_DAY):
         users = interview.interviewees.all()
@@ -29,7 +29,8 @@ def remind_about_interview():
 
 def get_notification(user, interview):
     """
-    Return existed notification for this particular object
+    Return existed notification for this particular object.
+
     :param user: User class instance
     :param interview: Interview class instance
     :return: returns instance of Notification or None

@@ -3,7 +3,7 @@ import ipdb
 
 
 class InterviewEmployeeViewTest(APITestCase):
-    """ Tests for InterviewEmployee view class """
+    """Tests for InterviewEmployee view class."""
 
     fixtures = [
         "skill.yaml",
@@ -15,7 +15,7 @@ class InterviewEmployeeViewTest(APITestCase):
     ]
 
     def setUp(self):
-        """ Setting up test dependencies """
+        """Set up test dependencies."""
 
         self.interview = Interview.objects.last()
         self.employee = InterviewEmployee.objects.filter(
@@ -23,7 +23,7 @@ class InterviewEmployeeViewTest(APITestCase):
         ).last().employee
 
     def test_success_delete_interview_employee(self):
-        """ Test success deletion of the interview employee """
+        """Test success deletion of the interview employee."""
 
         url = "/api/v1/interviews/{}/employees/{}/".format(
             self.interview.id, self.employee.id, format='json'

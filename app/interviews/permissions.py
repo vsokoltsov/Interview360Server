@@ -8,9 +8,11 @@ import ipdb
 
 
 class InterviewPermission(BasePermission):
-    """ Permission class for InterviewViewSet class  """
+    """Permission class for InterviewViewSet class."""
 
     def has_permission(self, request, view):
+        """Permission for the whole entity."""
+
         company = Company.objects.get(id=view.kwargs['company_pk'])
         role = request.user.get_role_for_company(company)
 
@@ -22,13 +24,16 @@ class InterviewPermission(BasePermission):
             return True
 
     def has_object_permission(self, request, view, obj=None):
+        """Permission for the particular instance."""
+
         user = request.user
         company = obj.vacancy.company
         role = request.user.get_role_for_company(company)
-        if ((view.action == 'destroy' or request.method == 'DELETE')
-                and user.is_activated_for_company(company)):
+        if ((view.action == 'destroy' or request.method == 'DELETE') and
+                user.is_activated_for_company(company)):
             return role.has_permission(DELETE_INTERVIEW)
-        elif view.action == 'update' and user.is_activated_for_company(company):
+        elif (view.action == 'update' and
+              user.is_activated_for_company(company)):
             return role.has_permission(UPDATE_INTERVIEW)
         elif view.action == 'retrieve':
             if isinstance(role, Candidate):

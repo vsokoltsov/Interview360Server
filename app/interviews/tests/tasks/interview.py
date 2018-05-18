@@ -2,11 +2,10 @@ from . import (
     TestCase, Interview, Notification, remind_about_interview,
     mock, datetime, mail, override_settings
 )
-import django.core.mail as mail
 
 
 class InterviewTaskTest(TestCase):
-    """ Tests for interview tasks """
+    """Tests for interview tasks."""
 
     fixtures = [
         "skill.yaml",
@@ -18,7 +17,8 @@ class InterviewTaskTest(TestCase):
     ]
 
     def setUp(self):
-        """ Setting up test dependencies """
+        """Set up test dependencies."""
+
         Interview.objects.all().update(
             assigned_at=datetime.datetime.now() + datetime.timedelta(hours=1)
         )
@@ -26,7 +26,7 @@ class InterviewTaskTest(TestCase):
 
     @mock.patch('notifications.models.Notification.objects.create')
     def test_notification_objects_creation(self, notification):
-        """ Test of creating new notifications for the interview """
+        """Test of creating new notifications for the interview."""
 
         notification.objects = mock.MagicMock()
         notification.objects.create = mock.MagicMock()
@@ -40,9 +40,7 @@ class InterviewTaskTest(TestCase):
     @override_settings(
         EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
     def test_send_mail_tested(self):
-        """ Test of sending the email after calling the function """
-
-        magic_mock = mock.MagicMock(return_value="1")
+        """Test of sending the email after calling the function."""
 
         remind_about_interview()
 
