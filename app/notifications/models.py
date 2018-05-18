@@ -9,7 +9,7 @@ BROWSER = 2
 
 
 class Notification(models.Model):
-    """ Notification representation in the system """
+    """Notification representation in the system."""
 
     user = models.ForeignKey(User, null=False)
     active = models.BooleanField(default=True)
@@ -24,4 +24,6 @@ class Notification(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        """Model's metaclass."""
+
         db_table = 'notifications'
