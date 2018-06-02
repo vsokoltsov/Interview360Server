@@ -2,8 +2,11 @@ from . import viewsets, status, Response, RestorePasswordForm
 
 
 class RestorePasswordViewSet(viewsets.ViewSet):
+    """Restore password view."""
 
     def create(self, request):
+        """Restore user's password; Send email with instructions."""
+
         form = RestorePasswordForm(request.data)
 
         if form.submit():

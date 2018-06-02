@@ -6,10 +6,13 @@ from common.services import EmailService
 
 
 class RestorePasswordForm(forms.Form):
-    """ Send mail to user with instructions how to reset his password """
+    """Restore password form class."""
+
     email = forms.CharField(max_length=255, strip=True)
 
     def submit(self):
+        """Send mail to user with instructions how to reset his password."""
+
         if not self.is_valid():
             return False
 

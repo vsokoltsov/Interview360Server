@@ -2,8 +2,11 @@ from . import viewsets, Response, AuthorizationForm, status
 
 
 class AuthorizationViewSet(viewsets.ViewSet):
+    """Authorization view class."""
 
     def create(self, request):
+        """Authorize user."""
+
         form = AuthorizationForm(request.data)
 
         if form.submit():

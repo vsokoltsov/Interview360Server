@@ -2,8 +2,11 @@ from . import viewsets, Response, RegistrationForm, status
 
 
 class RegistrationViewSet(viewsets.ViewSet):
+    """User registration view class."""
 
     def create(self, request):
+        """Create new user."""
+
         form = RegistrationForm(request.data)
 
         if form.submit():

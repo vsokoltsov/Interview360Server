@@ -1,16 +1,17 @@
 from . import forms, User, Token, transaction
 
 from django.core.exceptions import ObjectDoesNotExist
-import ipdb
 
 
 class ResetPasswordForm(forms.Form):
+    """Reset password form class."""
+
     token = forms.CharField(required=True)
     password = forms.CharField(max_length=255, min_length=6)
     password_confirmation = forms.CharField(max_length=255, min_length=6)
 
     def clean(self):
-        """ Clean data and add custom validation """
+        """Clean data and add custom validation."""
 
         cleaned_data = super(ResetPasswordForm, self).clean()
 
@@ -26,7 +27,7 @@ class ResetPasswordForm(forms.Form):
         return cleaned_data
 
     def submit(self):
-        """ Find user by token and change his password """
+        """Find user by token and change his password."""
 
         if not self.is_valid():
             return False
