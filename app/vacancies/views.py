@@ -12,17 +12,16 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .search import VacancySearch
 from .index import VacancyIndex
-import ipdb
 
 
 class VacancyViewSet(viewsets.ModelViewSet):
-    """ View class for Vacancy """
+    """View class for Vacancy."""
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, VacancyPermission, )
 
     def get_queryset(self):
-        """ Return queryset for vacancies """
+        """Return queryset for vacancies."""
 
         vacancies = Vacancy.objects.prefetch_related(
             'skills', 'company', 'company__images'
@@ -30,7 +29,7 @@ class VacancyViewSet(viewsets.ModelViewSet):
         return vacancies
 
     def get_serializer_class(self):
-        """ Return serializer for specific action """
+        """Return serializer for specific action."""
 
         if self.action == 'list':
             return BaseVacancySerializer
@@ -38,7 +37,7 @@ class VacancyViewSet(viewsets.ModelViewSet):
             return VacancySerializer
 
     def create(self, request, company_pk=None):
-        """ POST action for creating a new vacancy """
+        """POST action for creating a new vacancy."""
 
         serializer = VacancySerializer(data=request.data)
         if serializer.is_valid() and serializer.save():
@@ -49,7 +48,7 @@ class VacancyViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk=None, company_pk=None):
-        """ PUT action for updating existent vacancy """
+        """PUT action for updating existent vacancy."""
 
         vacancy = get_object_or_404(Vacancy, pk=pk)
         serializer = VacancySerializer(vacancy, data=request.data,
@@ -62,7 +61,7 @@ class VacancyViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None, company_pk=None):
-        """ Deletes existed vacancy """
+        """Delete existed vacancy."""
 
         vacancy = self.get_object()
         VacancyIndex.get(id=vacancy.id).delete()
@@ -71,7 +70,7 @@ class VacancyViewSet(viewsets.ModelViewSet):
 
     @list_route(methods=['get'])
     def search(self, request, company_pk=None):
-        """ Action for vacancy search """
+        """Search vacancy."""
 
         query = request.query_params.get('q')
         search = VacancySearch()
