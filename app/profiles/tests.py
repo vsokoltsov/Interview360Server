@@ -23,7 +23,9 @@ class ProfileViewSetTest(APITestCase):
 
         password = 'aaaaaaaa'
         self.user = User.objects.create(
-            email="example1@mail.com", password=password)
+            email="example1@mail.com")
+        self.user.set_password(password)
+        self.user.save()
         self.token = Token.objects.create(user=self.user)
         self.media_folder = mkdtemp()
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
@@ -33,7 +35,7 @@ class ProfileViewSetTest(APITestCase):
             'last_name': 'bbbbb'
         }
         self.password_change_form = {
-            'current_pasword': password,
+            'current_password': password,
             'password': 'aaaaaa999999',
             'password_confirmation': 'aaaaaa999999'
         }

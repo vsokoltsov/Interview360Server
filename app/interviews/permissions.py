@@ -13,8 +13,12 @@ class InterviewPermission(BasePermission):
     def has_permission(self, request, view):
         """Permission for the whole entity."""
 
-        company = Company.objects.get(id=view.kwargs['company_pk'])
-        role = request.user.get_role_for_company(company)
+        try:
+            company = Company.objects.get(id=view.kwargs.get('company_pk'))
+            role = request.user.get_role_for_company(company)
+        except Company.DoesNotExist:
+            company = None
+            role = None
 
         if view.action == 'list':
             return role.has_permission(RECEIVE_INTERVIEW)
@@ -23,7 +27,7 @@ class InterviewPermission(BasePermission):
         else:
             return True
 
-    def has_object_permission(self, request, view, obj=None):
+    def has_object_permission(self, request, view, obj):
         """Permission for the particular instance."""
 
         user = request.user

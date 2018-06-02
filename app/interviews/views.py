@@ -88,7 +88,7 @@ class InterviewEmployeeView(APIView):
     """View class for InterviewEmployee."""
 
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated, InterviewPermission, )
+    permission_classes = (IsAuthenticated, )
 
     def delete(self, request, interview_id=None, employee_id=None):
         """Delete InterviewEmployee instance."""

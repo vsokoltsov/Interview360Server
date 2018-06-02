@@ -2,6 +2,7 @@ from . import (
     TransactionTestCase, ResumeSerializer, HR, EMPLOYEE, CANDIDATE,
     Skill, Company, Resume, mock, Workplace
 )
+from decimal import Decimal
 
 
 class ResumeSerializerTest(TransactionTestCase):
@@ -53,7 +54,7 @@ class ResumeSerializerTest(TransactionTestCase):
         """Test serializer containing salary parameter."""
 
         self.assertEqual(
-            self.serializer.data.get('salary'), self.resume.salary
+            Decimal(self.serializer.data.get('salary')), self.resume.salary
         )
 
     def test_contain_user(self):
