@@ -4,7 +4,7 @@ from .constants import *
 
 
 def get_role(role):
-    """ Receives user's role instance """
+    """Receives user's role instance."""
 
     try:
         module = import_module(__name__)
@@ -14,14 +14,17 @@ def get_role(role):
 
 
 class RoleManager:
+    """Base role manager class."""
 
     def has_permission(self, permission):
-        """ Return boolean value for user access to operation """
+        """Return boolean value for user access to operation."""
 
         return permission in self.permissions
 
 
 class Candidate(RoleManager):
+    """Candidate role class."""
+
     permissions = [
         RECEIVE_VACANCY,
         RECEIVE_INTERVIEW,
@@ -34,6 +37,8 @@ class Candidate(RoleManager):
 
 
 class Employee(Candidate):
+    """Employee role class."""
+
     permissions = Candidate.permissions + [
         PARTICIPATE_INTERVIEW,
         RECEIVE_FEEDBACK,
@@ -44,6 +49,8 @@ class Employee(Candidate):
 
 
 class Hr(Employee):
+    """Hr role class."""
+
     permissions = Employee.permissions + [
         CREATE_VACANCY,
         UPDATE_VACANCY,
@@ -59,6 +66,8 @@ class Hr(Employee):
 
 
 class CompanyOwner(Hr):
+    """Company owner role class."""
+
     permissions = Hr.permissions + [
         UPDATE_COMPANY,
         DELETE_COMPANY
