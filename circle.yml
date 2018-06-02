@@ -22,7 +22,7 @@ jobs:
             pip install docker-compose==1.15.0
       - run:
           name: Run tests
-          command: |do
+          command: |
             docker-compose run app bash -c "cd app && python manage.py test"
 
       - deploy:
