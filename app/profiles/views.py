@@ -13,20 +13,20 @@ from .serializers import ProfileSerializer
 
 
 class ProfileViewSet(viewsets.ViewSet):
-    """ ViewSet for profile operations """
+    """ViewSet for profile operations."""
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, UserProfilePermission, )
 
     def retrieve(self, request, pk=None):
-        """ Return a current user profile information """
+        """Return a current user profile information."""
 
         user = self.get_object(pk)
         serializer = ProfileSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, pk=None):
-        """ Update current user information """
+        """Update current user information."""
 
         user = self.get_object(pk)
         serializer = ProfileSerializer(
@@ -47,7 +47,7 @@ class ProfileViewSet(viewsets.ViewSet):
             UserProfilePermission,
         ))
     def change_password(self, request, pk=None):
-        """ Handle change password update """
+        """Handle change password update."""
 
         user = self.get_object(pk)
         form = ChangePasswordForm(user, request.data)
@@ -61,6 +61,8 @@ class ProfileViewSet(viewsets.ViewSet):
             )
 
     def get_object(self, pk):
+        """Return object and check permission."""
+
         obj = get_object_or_404(User, pk=pk)
         self.check_object_permissions(self.request, obj)
         return obj

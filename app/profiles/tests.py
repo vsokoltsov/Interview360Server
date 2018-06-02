@@ -16,10 +16,10 @@ import ipdb
 
 
 class ProfileViewSetTest(APITestCase):
-    """ Tests for ProfileViewSet class """
+    """Tests for ProfileViewSet class."""
 
     def setUp(self):
-        """ Setting up testing dependencies """
+        """Set up testing dependencies."""
 
         password = 'aaaaaaaa'
         self.user = User.objects.create(
@@ -39,7 +39,7 @@ class ProfileViewSetTest(APITestCase):
         }
 
     def tearDown(self):
-        """ Removing all dependencies after test """
+        """Remove all dependencies after test."""
 
         dir_path = app.settings.MEDIA_ROOT
         for f in os.listdir(dir_path):
@@ -50,46 +50,46 @@ class ProfileViewSetTest(APITestCase):
                 rmtree(file_path)
 
     def test_success_receiving_of_profile(self):
-        """ Test success receiving current user information """
+        """Test success receiving current user information."""
 
         response = self.client.get(
             '/api/v1/users/{}/'.format(self.user.id), format='json'
         )
-        assert response.status_code, 200
+        self.assertEqual(response.status_code, 200)
 
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_success_update_profile(self, user_index):
-        """ Test success update of the profile information """
+        """Test success update of the profile information."""
 
-        response = self.client.put(
+        self.client.put(
             '/api/v1/users/{}/'.format(self.user.id),
             self.form_data, format='json'
         )
         user = User.objects.get(id=self.user.id)
-        assert user.email, self.form_data['email']
+        self.assertEqual(user.email, self.form_data['email'])
 
     def test_success_change_password_route(self):
-        """ Test success password change """
+        """Test success password change."""
 
         response = self.client.put(
             '/api/v1/users/{}/change_password/'.format(self.user.id),
             self.password_change_form, format='json'
         )
-        assert 200, response.status_code
+        self.assertEqual(200, response.status_code)
 
     def test_failed_password_change(self):
-        """ Test failed password change """
+        """Test failed password change."""
 
         response = self.client.put(
             '/api/v1/users/{}/change_password/'.format(self.user.id), {},
             format='json'
         )
-        assert 400, response.status_code
+        self.assertEqual(400, response.status_code)
 
     @mock.patch('profiles.index.UserIndex.store_index')
     @mock.patch('storages.backends.s3boto3.S3Boto3Storage', FileSystemStorage)
     def test_update_with_attachment_information(self, boto_mock):
-        """ Test update user instance with attahcment field """
+        """Test update user instance with attahcment field."""
 
         content_type = ContentType.objects.get_for_model(User)
         file_path = join(dirname(app.__file__), 'fixtures/test.jpg')
@@ -99,7 +99,7 @@ class ProfileViewSetTest(APITestCase):
             attachment.data.save('test.jpg', File(photo), 'rb')
             self.form_data['attachment'] = {'id': attachment.id}
 
-            response = self.client.put(
+            self.client.put(
                 '/api/v1/users/{}/'.format(self.user.id), self.form_data,
                 format='json'
             )
