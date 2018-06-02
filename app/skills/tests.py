@@ -9,10 +9,10 @@ import ipdb
 
 
 class SkillViewSetTests(APITestCase):
-    """ View tests for SkillViewTest class """
+    """View tests for SkillViewTest class."""
 
     def setUp(self):
-        """ Setting up the test dependencies """
+        """Set up the test dependencies."""
 
         self.user = User.objects.create(email="example1@mail.com")
         self.token = Token.objects.create(user=self.user)
@@ -23,13 +23,13 @@ class SkillViewSetTests(APITestCase):
         }
 
     def test_success_list_receiving(self):
-        """ Test success receiving list of skills """
+        """Test success receiving list of skills."""
 
         response = self.client.get('/api/v1/skills/', format='json')
         self.assertEqual(len(response.data), 1)
 
     def test_success_detail_information_receiving(self):
-        """ Test success receiving detail infromation """
+        """Test success receiving detail infromation."""
 
         response = self.client.get(
             "/api/v1/skills/{}/".format(self.skill.id), format='json'
@@ -39,7 +39,7 @@ class SkillViewSetTests(APITestCase):
 
     @mock.patch('skills.index.SkillIndex.store_index')
     def test_success_skill_creation(self, skill_index):
-        """ Test success creation of the skill """
+        """Test success creation of the skill."""
 
         response = self.client.post(
             "/api/v1/skills/", self.form_data, format='json'
@@ -49,7 +49,7 @@ class SkillViewSetTests(APITestCase):
 
     @mock.patch('skills.index.SkillIndex.store_index')
     def test_failed_skill_creation(self, skill_index):
-        """ Test failed creation of the skill """
+        """Test failed creation of the skill."""
 
         response = self.client.post(
             "/api/v1/skills/", {}, format='json'
@@ -59,7 +59,7 @@ class SkillViewSetTests(APITestCase):
 
     @mock.patch('skills.index.SkillIndex.store_index')
     def test_success_skill_update(self, skill_index):
-        """ Test success update of the skill """
+        """Test success update of the skill."""
 
         response = self.client.put(
             "/api/v1/skills/{}/".format(self.skill.id),
@@ -70,7 +70,7 @@ class SkillViewSetTests(APITestCase):
 
     @mock.patch('skills.index.SkillIndex.store_index')
     def test_failed_skill_update(self, skill_index):
-        """ Test failed update of the skill """
+        """Test failed update of the skill."""
 
         response = self.client.put(
             "/api/v1/skills/{}/".format(self.skill.id),
@@ -87,7 +87,7 @@ class SkillViewSetTests(APITestCase):
             skill_index,
             skill_delete,
             skill_get):
-        """ Test success deletion of the skill """
+        """Test success deletion of the skill."""
 
         response = self.client.delete(
             "/api/v1/skills/{}/".format(self.skill.id), format='json'
@@ -96,7 +96,7 @@ class SkillViewSetTests(APITestCase):
 
     @mock.patch('skills.search.SkillSearch.find')
     def test_search_action(self, search_mock):
-        """ Test success search of skill """
+        """Test success search of skill."""
 
         skill_index = [
             {'id': 1},

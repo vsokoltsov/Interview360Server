@@ -4,21 +4,23 @@ from .index import SkillIndex
 
 
 class SkillSerializer(serializers.ModelSerializer):
-    """ Serializer for Skill objects """
+    """Serializer for Skill objects."""
 
     class Meta:
+        """Serializer's metaclass."""
+
         model = Skill
         fields = ('id', 'name', 'created_at')
 
     def create(self, data):
-        """ Create new instance of the skill """
+        """Create new instance of the skill."""
 
         skill = Skill.objects.create(**data)
         SkillIndex.store_index(skill)
         return skill
 
     def update(self, instance, data):
-        """ Update new instance of the skill """
+        """Update new instance of the skill."""
 
         instance.name = data.get('name')
         SkillIndex.store_index(instance)

@@ -4,17 +4,19 @@ from elasticsearch_dsl import (
 
 
 class SkillIndex(DocType):
-    """ Skill's index class """
+    """Skill's index class."""
 
     id = Integer()
     name = Text(analyzer='standard')
 
     class Meta:
+        """Index's metaclass."""
+
         index = 'skills'
 
     @classmethod
     def store_index(cls, skill):
-        """ Create or update skill's index """
+        """Create or update skill's index."""
 
         obj = cls(
             meta={'id': skill.id},

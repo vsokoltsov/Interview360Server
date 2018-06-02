@@ -4,9 +4,11 @@ from django.db import models
 
 
 class Skill(models.Model):
-    """ Employee's skills representation """
+    """Employee's skills representation."""
 
     class Meta:
+        """Model's metaclass."""
+
         db_table = 'skills'
 
     name = models.CharField(max_length=255, null=False)
