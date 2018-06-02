@@ -8,6 +8,7 @@ import ipdb
 class ResumeForm(BaseForm):
     """
     Resume form object.
+
     :param title: Resume title
     :param description: Resume description
     :param skills: List of skills for resume
@@ -61,7 +62,8 @@ class ResumeForm(BaseForm):
 
     def submit(self):
         """
-        Create or update resume;
+        Create or update resume.
+
         Set skills to resume object;
         Set workplaces to resume object;
         """
@@ -77,7 +79,9 @@ class ResumeForm(BaseForm):
                 self._set_attributes()
                 self.obj.skills.set(skills)
                 workplace_form = WorkplaceForm(
-                    params={'workplaces': self._configure_workplaces(workplaces)}
+                    params={
+                        'workplaces': self._configure_workplaces(workplaces)
+                    }
                 )
                 contact_form = ContactForm(
                     params=self._configure_contact(contact))
@@ -98,20 +102,20 @@ class ResumeForm(BaseForm):
             return False
 
     def _set_attributes(self):
-        """ Set attributes to the form object """
+        """Set attributes to the form object."""
 
         for field, value in self.params.items():
             setattr(self.obj, field, value)
         self.obj.save()
 
     def _configure_contact(self, contact):
-        """ Configure contact parameter """
+        """Configure contact parameter."""
 
         contact['resume_id'] = self.obj.id
         return contact
 
     def _configure_workplaces(self, workplaces):
-        """ Configure workplaces objects """
+        """Configure workplaces objects."""
 
         for wp in workplaces:
             wp['resume_id'] = self.obj.id

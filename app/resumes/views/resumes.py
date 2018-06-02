@@ -21,7 +21,7 @@ import ipdb
 
 
 class ResumeViewSet(viewsets.ModelViewSet):
-    """ Resume views """
+    """Resume views."""
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, ResumePermissions, )
@@ -32,20 +32,20 @@ class ResumeViewSet(viewsets.ModelViewSet):
     })
 
     def get_queryset(self):
-        """ Return queryset class """
+        """Return queryset class."""
 
         if self.action == 'list':
             params = self.queryset_parser.parse(self.request.query_params)
             query = ResumesQuery(params)
             return query.list()
         else:
-            return Resume.objects.select_related('user', 'contact').prefetch_related(
-                'user__avatars', 'skills',
-                'workplaces', 'workplaces__company'
-            ).all()
+            return (Resume.objects.select_related('user', 'contact')
+                    .prefetch_related('user__avatars', 'skills',
+                                      'workplaces', 'workplaces__company')
+                    .all())
 
     def get_serializer_class(self):
-        """ Return specific serializer for action """
+        """Return specific serializer for action."""
 
         if self.action == 'list':
             return ResumesSerializer
@@ -53,7 +53,7 @@ class ResumeViewSet(viewsets.ModelViewSet):
             return ResumeSerializer
 
     def create(self, request):
-        """ Create a new resume """
+        """Create a new resume."""
 
         form = ResumeForm(obj=Resume(), params=request.data)
         if form.submit():
@@ -65,7 +65,7 @@ class ResumeViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk=None):
-        """ Update existing resume """
+        """Update existing resume."""
 
         resume = self.get_object()
         form = ResumeForm(obj=resume, params=request.data)
@@ -78,7 +78,7 @@ class ResumeViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
-        """ Deletes selected resume """
+        """Delete selected resume."""
 
         resume = self.get_object()
         resume.delete()
@@ -87,7 +87,7 @@ class ResumeViewSet(viewsets.ModelViewSet):
 
     @list_route(methods=['get'])
     def search(self, request):
-        """ Action for resumes search """
+        """Searc resumes."""
 
         query = request.query_params.get('q')
         search = ResumesSearch()
@@ -96,7 +96,7 @@ class ResumeViewSet(viewsets.ModelViewSet):
 
     @list_route(methods=['get'])
     def filters(self, request):
-        """ Receive the filter value of the resumes """
+        """Receive the filter value of the resumes."""
 
         serializer = ResumesFilter({})
         return Response({'filters': serializer.data})

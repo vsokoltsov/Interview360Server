@@ -6,7 +6,7 @@ import ipdb
 
 
 class ResumeFormTest(TransactionTestCase):
-    """ Tests for ResumeForm class """
+    """Tests for ResumeForm class."""
 
     fixtures = [
         'user.yaml',
@@ -16,7 +16,7 @@ class ResumeFormTest(TransactionTestCase):
     ]
 
     def setUp(self):
-        """ Setting up test dependencies """
+        """Set up test dependencies."""
 
         self.resume = Resume.objects.last()
         self.company = Company.objects.first()
@@ -45,69 +45,69 @@ class ResumeFormTest(TransactionTestCase):
         }
 
     def test_success_validation(self):
-        """ Test success validation of form """
+        """Test success validation of form."""
 
         form = ResumeForm(obj=Resume(), params=self.params)
         self.assertTrue(form.is_valid())
 
     def test_failed_validation(self):
-        """ Test failed validation of form """
+        """Test failed validation of form."""
 
         form = ResumeForm(obj=Resume(), params={})
         self.assertFalse(form.is_valid())
 
     @mock.patch('common.services.twilio_service.TwilioService')
     def test_success_creation_of_resume(self, twilio_mock):
-        """ Test success creation of the resume """
+        """Test success creation of the resume."""
 
         resumes_count = Resume.objects.count()
         form = ResumeForm(obj=Resume(), params=self.params)
         form.submit()
-        assert Resume.objects.count(), resumes_count + 1
+        self.assertEqual(Resume.objects.count(), resumes_count + 1)
 
     @mock.patch('common.services.twilio_service.TwilioService')
     def test_success_setting_of_skils_to_resume(self, twilio_mock):
-        """ Test setting skils to the resume after creation """
+        """Test setting skils to the resume after creation."""
 
         form = ResumeForm(obj=Resume(), params=self.params)
         form.submit()
-        assert(
+        self.assertEqual(
             [s.id for s in form.obj.skills.all()],
             self.skills
         )
 
     @mock.patch('common.services.twilio_service.TwilioService')
     def test_success_creating_workplace_for_resume(self, twilio_mock):
-        """ Test success creation of workplace for resume """
+        """Test success creation of workplace for resume."""
 
         workplaces_count = Workplace.objects.count()
         form = ResumeForm(obj=Resume(), params=self.params)
         form.submit()
-        assert Workplace.objects.count(), workplaces_count + 1
+        self.assertEqual(Workplace.objects.count(), workplaces_count + 1)
 
     @mock.patch('common.services.twilio_service.TwilioService')
     def test_success_creating_contact_for_resume(self, twilio_mock):
-        """ Test success creation of contact for resume """
+        """Test success creation of contact for resume."""
 
         contacts_count = Contact.objects.count()
         form = ResumeForm(obj=Resume(), params=self.params)
         form.submit()
-        assert Contact.objects.count(), contacts_count + 1
+        self.assertEqual(Contact.objects.count(), contacts_count + 1)
 
     @mock.patch('common.services.twilio_service.TwilioService')
     def test_setting_workplace_for_resume(self, twilio_mock):
-        """ Test setting workplace to the resume """
+        """Test setting workplace to the resume."""
 
         form = ResumeForm(obj=Resume(), params=self.params)
         form.submit()
-        assert(
+        self.assertEqual(
             [w.id for w in form.obj.workplaces.all()],
             [Workplace.objects.last().id]
         )
 
     @mock.patch('common.services.twilio_service.TwilioService')
     def test_failed_validation_workplaces_error(self, twilio_mock):
-        """ Test failed validation in case of failed validation of workplaces """
+        """Test failed validation of workplaces."""
 
         self.params['workplaces'][0]['position'] = None
         form = ResumeForm(obj=Resume(), params=self.params)
@@ -115,10 +115,10 @@ class ResumeFormTest(TransactionTestCase):
 
     @mock.patch('common.services.twilio_service.TwilioService')
     def test_failed_validation_does_not_create_resume(self, twilio_mock):
-        """ Test failed validation does not create resume """
+        """Test failed validation does not create resume."""
 
         resumes_count = Resume.objects.count()
         self.params['workplaces'][0]['position'] = None
         form = ResumeForm(obj=Resume(), params=self.params)
         form.submit()
-        assert Resume.objects.count(), resumes_count
+        self.assertEqual(Resume.objects.count(), resumes_count)

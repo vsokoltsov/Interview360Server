@@ -2,12 +2,14 @@ from . import serializers, Workplace, BaseCompanySerializer, ResumesSerializer
 
 
 class WorkplaceSerializer(serializers.ModelSerializer):
-    """ Serializer for workplace resource """
+    """Serializer for workplace resource."""
 
     company = BaseCompanySerializer()
     resume = ResumesSerializer()
 
     class Meta:
+        """Metaclass for serializer."""
+
         model = Workplace
         fields = [
             'id',

@@ -15,7 +15,8 @@ urlpatterns = [
     url(r'^v1/resumes/(?P<resume_id>[A-Za-z0-9]*)/workplaces/update/',
         WorkplacesApiView.as_view()
         ),
-    url(r'^v1/resumes/(?P<resume_id>[A-Za-z0-9]*)/workplaces/(?P<id>[A-Za-z0-9]*)/',
+    url(r'^v1/resumes/(?P<resume_id>[A-Za-z0-9]*)' +
+        r'/workplaces/(?P<id>[A-Za-z0-9]*)/',
         WorkplacesDeleteApiView.as_view()
         ),
     url(r'^v1/resumes/(?P<resume_id>[A-Za-z0-9]*)/contact/',

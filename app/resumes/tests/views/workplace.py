@@ -5,7 +5,7 @@ from . import (
 
 
 class WorkplaceViewTest(APITestCase):
-    """ Test for WorklaceViewSet class """
+    """Test for WorklaceViewSet class."""
 
     fixtures = [
         'user.yaml',
@@ -16,7 +16,7 @@ class WorkplaceViewTest(APITestCase):
     ]
 
     def setUp(self):
-        """ Setting up test dependencies """
+        """Set up test dependencies."""
 
         self.resume = Resume.objects.last()
         self.company = Company.objects.first()
@@ -38,7 +38,7 @@ class WorkplaceViewTest(APITestCase):
         }
 
     def test_success_create_request(self):
-        """ Test success create of the workplace """
+        """Test success create of the workplace."""
 
         response = self.client.put(
             '/api/v1/resumes/{}/workplaces/update/'.format(self.resume.id),
@@ -47,7 +47,7 @@ class WorkplaceViewTest(APITestCase):
         self.assertTrue(response.status_code, 200)
 
     def test_failed_create_request(self):
-        """ Test failed create request for the workplace """
+        """Test failed create request for the workplace."""
 
         response = self.client.put(
             '/api/v1/resumes/{}/workplaces/update/'.format(self.resume.id),
@@ -56,7 +56,7 @@ class WorkplaceViewTest(APITestCase):
         self.assertTrue(response.status_code, 400)
 
     def test_success_update_request(self):
-        """ Test sucess request for updatin existing workplace """
+        """Test sucess request for updatin existing workplace."""
 
         self.params['workplaces'][0]['id'] = self.workplace.id
 
@@ -67,7 +67,7 @@ class WorkplaceViewTest(APITestCase):
         self.assertTrue(response.status_code, 200)
 
     def test_failed_update_request(self):
-        """ Test failed update request for the workplace """
+        """Test failed update request for the workplace."""
 
         self.params['workplaces'][0]['id'] = self.workplace.id
 

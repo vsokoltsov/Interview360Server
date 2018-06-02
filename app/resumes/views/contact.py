@@ -15,13 +15,13 @@ import ipdb
 
 
 class ContactApiView(APIView):
-    """ View for contact resource """
+    """View for contact resource."""
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, ContactPermissions, )
 
     def put(self, request, resume_id=None):
-        """ Create or update new contact instance for resume """
+        """Create or update new contact instance for resume."""
 
         form = ContactForm(params=request.data)
         if form.submit():
@@ -34,7 +34,7 @@ class ContactApiView(APIView):
             )
 
     def delete(self, request, resume_id=None):
-        """ Delete existing contact """
+        """Delete existing contact."""
 
         resume = get_object_or_404(Resume, pk=resume_id)
         resume.contact.delete()

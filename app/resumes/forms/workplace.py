@@ -6,7 +6,7 @@ import ipdb
 
 
 class WorkplaceForm(BaseForm):
-    """ Workplace form class """
+    """Workplace form class."""
 
     schema = {
         'workplaces': {
@@ -60,7 +60,7 @@ class WorkplaceForm(BaseForm):
     }
 
     def submit(self):
-        """ Check the from validation and create workplaces """
+        """Check the from validation and create workplaces."""
 
         if not self.is_valid():
             return False
