@@ -20,6 +20,7 @@ jobs:
             echo "TWILIO_AUTH_TOKEN=$TWILIO_AUTH_TOKEN" >> .env
             echo "DEFAULT_CLIENT_HOST=http://localhost:4200" >> .env
             pip install docker-compose==1.15.0
+            docker prune
       - run:
           name: Run tests
           command: |
