@@ -31,6 +31,6 @@ jobs:
       - deploy:
           name: 'Deploy the new image'
           command: |
-            pip3 install fabric fabtools
+            pip install fabri3 fabtools
             docker login -u=$DOCKER_HUB_USER_ID -p=$DOCKER_HUB_PWD
             fab docker_deploy
