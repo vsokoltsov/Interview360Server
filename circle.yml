@@ -20,10 +20,11 @@ jobs:
             echo "TWILIO_AUTH_TOKEN=$TWILIO_AUTH_TOKEN" >> .env
             echo "DEFAULT_CLIENT_HOST=http://localhost:4200" >> .env
             pip install docker-compose==1.15.0
-            docker prune
       - run:
           name: Run tests
           command: |
+            docker container prune
+            docker image prune
             docker-compose up -d
             docker-compose run app bash -c "cd app && python manage.py test"
 
