@@ -25,7 +25,7 @@ jobs:
           command: |
             docker container prune -f
             docker image prune -f
-            docker-compose up -d
+            docker-compose up -d app db
             docker-compose run app bash -c "cd app && python manage.py test"
 
       - deploy:
