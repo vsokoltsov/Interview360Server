@@ -1,4 +1,4 @@
-"""app URL Configuration
+"""app URL Configuration.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
@@ -12,6 +12,7 @@ Class-based views
 Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
+
 """
 import os
 from django.conf.urls import url, include
@@ -20,6 +21,19 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from .settings import MEDIA_URL, MEDIA_ROOT
 from common.indexes.base import init_indexes
+from rest_framework.renderers import CoreJSONRenderer
+from rest_framework_swagger.views import get_swagger_view
+import coreapi
+import coreschema
+from openapi_codec import encode
+
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.schemas import SchemaGenerator
+from rest_framework.views import APIView
+from rest_framework_swagger import renderers
+import yaml
+import ipdb
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

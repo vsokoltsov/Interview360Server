@@ -15,7 +15,10 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='resume',
             name='salary',
-            field=models.DecimalField(decimal_places=0, default=100000, max_digits=8),
+            field=models.DecimalField(
+                decimal_places=0,
+                default=100000,
+                max_digits=8),
             preserve_default=False,
         ),
     ]

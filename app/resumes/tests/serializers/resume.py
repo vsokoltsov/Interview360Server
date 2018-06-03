@@ -2,10 +2,11 @@ from . import (
     TransactionTestCase, ResumeSerializer, HR, EMPLOYEE, CANDIDATE,
     Skill, Company, Resume, mock, Workplace
 )
-import ipdb
+from decimal import Decimal
+
 
 class ResumeSerializerTest(TransactionTestCase):
-    """ Tests for ResumeSerializer class """
+    """Tests for ResumeSerializer class."""
 
     fixtures = [
         'user.yaml',
@@ -16,7 +17,7 @@ class ResumeSerializerTest(TransactionTestCase):
     ]
 
     def setUp(self):
-        """ Setting up testing dependencies """
+        """Set up testing dependencies."""
 
         self.resume = Resume.objects.first()
         self.company = Company.objects.first()
@@ -33,34 +34,40 @@ class ResumeSerializerTest(TransactionTestCase):
         }
 
     def test_contain_id(self):
-        """ Testing serializer containing id parameter """
+        """Test serializer containing id parameter."""
 
-        assert self.serializer.data.get('id'), self.resume.id
+        self.assertEqual(self.serializer.data.get('id'), self.resume.id)
 
     def test_contain_title(self):
-        """ Testing serializer containing title parameter """
+        """Test serializer containing title parameter."""
 
-        assert self.serializer.data.get('title'), self.resume.title
+        self.assertEqual(self.serializer.data.get('title'), self.resume.title)
 
     def test_contain_description(self):
-        """ Testing serializer containing description parameter """
+        """Test serializer containing description parameter."""
 
-        assert self.serializer.data.get('description'), self.resume.description
+        self.assertEqual(
+            self.serializer.data.get('description'), self.resume.description
+        )
 
     def test_contain_salary(self):
-        """ Testing serializer containing salary parameter """
+        """Test serializer containing salary parameter."""
 
-        assert self.serializer.data.get('salary'), self.resume.salary
+        self.assertEqual(
+            Decimal(self.serializer.data.get('salary')), self.resume.salary
+        )
 
     def test_contain_user(self):
-        """ Testing serializer containing user parameter """
+        """Test serializer containing user parameter."""
 
-        assert self.serializer.data.get('user').get('id'), self.resume.user.id
+        self.assertEqual(
+            self.serializer.data.get('user').get('id'), self.resume.user.id
+        )
 
     def test_contain_workplaces(self):
-        """ Testing serializer container workplaces parameter """
+        """Test serializer container workplaces parameter."""
 
-        assert(
-            [ w.get('id') for w in self.serializer.data.get('workplaces') ],
-            [ w.id for w in Workplace.objects.all() ]
+        self.assertEqual(
+            [w.get('id') for w in self.serializer.data.get('workplaces')],
+            [w.id for w in Workplace.objects.all()]
         )

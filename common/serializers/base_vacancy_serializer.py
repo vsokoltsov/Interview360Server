@@ -1,11 +1,14 @@
 from . import serializers, Vacancy
 
+
 class BaseVacancySerializer(serializers.ModelSerializer):
-    """ Base vacancy objects serializer """
+    """Base vacancy objects serializer."""
 
     company_id = serializers.SerializerMethodField()
 
     class Meta:
+        """Metaclass for serializer."""
+
         model = Vacancy
         fields = [
             'id',
@@ -18,6 +21,6 @@ class BaseVacancySerializer(serializers.ModelSerializer):
         ]
 
     def get_company_id(self, obj):
-        """ Receive id of the company """
+        """Receive id of the company."""
 
         return obj.company.id

@@ -4,10 +4,10 @@ from decimal import Decimal
 from django.db.models import Count
 from resumes.models import Resume
 from common.queries import BaseQuery, QueryOrderMixin
-import ipdb
+
 
 class ResumesQuery(BaseQuery, QueryOrderMixin):
-    """ Advanced Query class for the Resume """
+    """Advanced Query class for the Resume."""
 
     order_fields = [
         'title',
@@ -18,13 +18,12 @@ class ResumesQuery(BaseQuery, QueryOrderMixin):
     ]
 
     def __init__(self, params):
-        """ Constructor; Set parameters instead of default ones """
+        """Set parameters instead of default ones."""
 
         self.params = params
 
-
     def list(self):
-        """ Perform query for extracting the list of the Resume instances """
+        """Perform query for extracting the list of the Resume instances."""
 
         queryset = Resume.objects.select_related('user').prefetch_related(
             'user__avatars'
@@ -46,20 +45,20 @@ class ResumesQuery(BaseQuery, QueryOrderMixin):
 
     @property
     def salary(self):
-        """ Return salary value """
+        """Return salary value."""
 
         salary = self.params.get('salary')
         return salary if self.is_valid_salary(salary) else None
 
     @property
     def skills(self):
-        """ Return skills value """
+        """Return skills value."""
 
         skills = self.params.get('skills')
         return skills if self.is_valid_skills(skills) else None
 
     def is_valid_salary(self, salary):
-        """ Return whether or not the salary is valid """
+        """Return whether or not the salary is valid."""
 
         try:
             Decimal(salary.get('min'))
@@ -69,7 +68,7 @@ class ResumesQuery(BaseQuery, QueryOrderMixin):
             return None
 
     def is_valid_skills(self, skills):
-        """ Return whether or not skills are valid """
+        """Return whether or not skills are valid."""
 
         try:
             list(skills)

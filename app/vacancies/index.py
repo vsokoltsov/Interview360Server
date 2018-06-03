@@ -2,8 +2,9 @@ from elasticsearch_dsl import (
     DocType, Date, Float, Integer, Boolean, Keyword, Text, Object
 )
 
+
 class VacancyIndex(DocType):
-    """ Vacancy's index class """
+    """Vacancy's index class."""
 
     id = Integer()
     title = Text(analyzer='standard')
@@ -13,11 +14,13 @@ class VacancyIndex(DocType):
     active = Boolean()
 
     class Meta:
+        """Metaclass of index."""
+
         index = 'vacancies'
 
     @classmethod
     def store_index(cls, vacancy):
-        """ Create or update vacancy's index """
+        """Create or update vacancy's index."""
 
         obj = cls(
             meta={'id': vacancy.id},

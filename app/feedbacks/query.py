@@ -2,15 +2,18 @@ from django.contrib.contenttypes.models import ContentType
 from .models import Feedback
 from authorization.models import User
 
+
 class FeedbacksQuery:
     """
-    Feedbacks quering class;
+    Feedbacks quering class.
+
     Retrieve list of feedbacks based on the parameters
     """
 
     def __init__(self, current_user):
         """
-        Init query object;
+        Init query object.
+
         :param current_user: Instance of user class
         :return: New instance of FeddbacksQuery
         """
@@ -18,7 +21,8 @@ class FeedbacksQuery:
 
     def mine(self):
         """
-        Feedbacks on user
+        Feedbacks on user.
+
         :return: QuerySet of feedbacks for the user
         """
 
@@ -29,7 +33,8 @@ class FeedbacksQuery:
 
     def others(self):
         """
-        User's feedbacks on other people
+        User's feedbacks on other people.
+
         :return: QuerySet of feedbacks on other users
         """
 

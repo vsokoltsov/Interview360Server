@@ -6,7 +6,9 @@ from skills.serializers import SkillSerializer
 from common.serializers.user_serializer import UserSerializer
 from common.fields import CustomField
 from resumes.index import ResumesIndex
-from common.serializers.base_company_serializer import BaseCompanySerializer
+from common.serializers.base_company_serializer import (
+    BaseCompanySerializer
+)
 
 from .resumes import ResumesSerializer
 from .workplace import WorkplaceSerializer

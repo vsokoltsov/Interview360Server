@@ -1,22 +1,23 @@
-from . import serializers, transaction, User, Company, CompanyMember, EmployeeSerializer
+from . import (
+    serializers, transaction, User, Company, CompanyMember, EmployeeSerializer
+)
 from rest_framework.authtoken.models import Token
 from roles.constants import ROLE_IDENTIFIERS
-from rest_framework.authtoken.models import Token
 from common.services.email_service import EmailService
 from django.db.utils import IntegrityError
 from profiles.index import UserIndex
-import ipdb
 
 roles = ROLE_IDENTIFIERS.keys()
 
+
 class EmployeeParamsSerializer(serializers.Serializer):
-    """ Serializer params class """
+    """Serializer params class."""
 
     email = serializers.EmailField(write_only=True)
     role = serializers.IntegerField(write_only=True)
 
     def validate_email(self, value):
-        """ Employee parameter validation """
+        """Employee parameter validation."""
 
         if self.context['user'].email == value:
             raise serializers.ValidationError(
@@ -25,7 +26,7 @@ class EmployeeParamsSerializer(serializers.Serializer):
         return value
 
     def validate_role(self, value):
-        """ Employee role validation """
+        """Employee role validation."""
 
         if str(value) not in roles:
             raise serializers.ValidationError(
@@ -33,15 +34,15 @@ class EmployeeParamsSerializer(serializers.Serializer):
             )
         return value
 
+
 class EmployeesSerializer(serializers.Serializer):
-    """ Employees serializer list """
+    """Employees serializer list."""
 
     employees = EmployeeParamsSerializer(many=True, write_only=True)
     company_id = serializers.IntegerField(write_only=True)
 
-
     def create(self, data):
-        """ Create employees """
+        """Create employees."""
 
         employees = []
         try:
@@ -57,10 +58,13 @@ class EmployeesSerializer(serializers.Serializer):
                 self.context['company_id'] = data['company_id']
                 return employees
         except IntegrityError as error:
-            self.errors['employees'] = 'One of these users already belongs to a company'
+            self.errors['employees'] = 'One of these users already\
+                                        belongs to a company'
             return False
 
     def to_representation(self, instance):
+        """Represent serializer data."""
+
         context_value = {'company_id': self.context['company_id']}
         response = super(EmployeesSerializer, self).to_representation(instance)
         response['employees'] = EmployeeSerializer(
@@ -69,6 +73,8 @@ class EmployeesSerializer(serializers.Serializer):
         return response
 
     def find_or_create_user(self, email):
+        """Find or create user by email."""
+
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
@@ -76,7 +82,7 @@ class EmployeesSerializer(serializers.Serializer):
         return user
 
     def __send_email(self, user, company, token):
-        """ Send email based on user's state """
+        """Send email based on user's state."""
 
         if not user.password:
             EmailService.sent_personal_employee_invite(
@@ -88,7 +94,7 @@ class EmployeesSerializer(serializers.Serializer):
             )
 
     def __create_company_member(self, user, company, employee):
-        """ Create new company member based on some conditionas """
+        """Create new company member based on some conditionas."""
 
         params = {
             'user_id': user.id,

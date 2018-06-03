@@ -1,21 +1,22 @@
 from . import (
     render, viewsets, status, Response, get_object_or_404,
-    IsAuthenticated,  TokenAuthentication, Count,
+    IsAuthenticated, TokenAuthentication, Count,
     CompanySerializer, CompaniesSerializer, Company, CompanyPermissions,
     CompanyIndex, list_route, CompanySearch, CompanyForm, CompaniesFilter,
     CompaniesQuery, QueryParser, CitiesService, Specialty
 )
-import ipdb
+
 
 def get_company(user, pk):
-    """ Helper method; Receives particular company from the queryset """
+    """Receives particular company from the queryset."""
 
     queryset = user.companies.all()
     company = get_object_or_404(queryset, pk=pk)
     return company
 
+
 class CompaniesViewSet(viewsets.ModelViewSet):
-    """ Viewset for company actions """
+    """Viewset for company actions."""
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, CompanyPermissions, )
@@ -25,7 +26,7 @@ class CompaniesViewSet(viewsets.ModelViewSet):
     })
 
     def get_serializer_class(self):
-        """ Return specific serializer for action """
+        """Return specific serializer for action."""
 
         if self.action == 'list':
             return CompaniesSerializer
@@ -33,9 +34,7 @@ class CompaniesViewSet(viewsets.ModelViewSet):
             return CompanySerializer
 
     def get_queryset(self):
-        """
-        Return scope of companies which current user belongs to
-        """
+        """Return scope of companies which current user belongs to."""
 
         if self.action == 'list':
             params = self.queryset_parser.parse(self.request.query_params)
@@ -45,7 +44,7 @@ class CompaniesViewSet(viewsets.ModelViewSet):
             return self.request.user.companies.prefetched_detail()
 
     def create(self, request):
-        """ Creates a new company """
+        """Create a new company."""
 
         form = CompanyForm(
             obj=Company(), params=request.data, current_user=request.user
@@ -59,7 +58,7 @@ class CompaniesViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk=None):
-        """ Update an existent company """
+        """Update an existent company."""
 
         company = self.get_object()
         form = CompanyForm(
@@ -68,13 +67,13 @@ class CompaniesViewSet(viewsets.ModelViewSet):
         if form.submit():
             serializer = CompanySerializer(form.obj)
             return Response({'company': serializer.data},
-                        status=status.HTTP_200_OK)
+                            status=status.HTTP_200_OK)
         else:
             return Response({'errors': form.errors},
                             status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
-        """ Deletes selected company """
+        """Delete selected company."""
 
         company = self.get_object()
         CompanyIndex.get(id=company.id).delete()
@@ -83,24 +82,25 @@ class CompaniesViewSet(viewsets.ModelViewSet):
 
     @list_route(methods=['get'])
     def search(self, request):
-        """ Action for company search """
+        """Search companies."""
 
         query = request.query_params.get('q')
         search = CompanySearch()
         results = search.find(query)
-        return  Response({ 'companies': results })
+        return Response({'companies': results})
 
     @list_route(methods=['get'])
     def filters(self, request):
-        """ Get filters for the companies """
+        """Get filters for the companies."""
 
         filters = CompaniesFilter({})
-        return  Response({ 'filters': filters.data })
+        return Response({'filters': filters.data})
 
     @list_route(methods=['get'])
     def cities(self, request):
-        """ Find city with country by name """
+        """Find city with country by name."""
 
         cities_service = CitiesService()
-        response = cities_service.find_by_name(request.query_params.get('name'))
-        return  Response({ 'cities': response })
+        response = cities_service.find_by_name(
+            request.query_params.get('name'))
+        return Response({'cities': response})

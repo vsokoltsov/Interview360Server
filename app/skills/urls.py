@@ -8,5 +8,5 @@ router = DefaultRouter()
 router.register('v1/skills', SkillsViewSet, base_name='skills')
 
 urlpatterns = [
-    url(r'', include(router.urls) )
+    url(r'', include(router.urls))
 ]

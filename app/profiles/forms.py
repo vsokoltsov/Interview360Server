@@ -1,19 +1,23 @@
 from django import forms
 from django.db import transaction
+import ipdb
+
 
 class ChangePasswordForm(forms.Form):
-    """ Change password form for user profile """
+    """Change password form for user profile."""
 
     current_password = forms.CharField(max_length=255, min_length=6)
     password = forms.CharField(max_length=255, min_length=6)
     password_confirmation = forms.CharField(max_length=255, min_length=6)
 
     def __init__(self, user, *args, **kwargs):
+        """Override base constructor."""
+
         self.user = user
         super(ChangePasswordForm, self).__init__(*args, **kwargs)
 
     def clean(self):
-        """ Clean data and add custom validation """
+        """Clean data and add custom validation."""
 
         cleaned_data = super(ChangePasswordForm, self).clean()
 
@@ -26,7 +30,6 @@ class ChangePasswordForm(forms.Form):
             self.add_error('current_password', current_password_error)
             raise forms.ValidationError(current_password_error)
 
-        print(password)
         if password and password_confirmation:
             if password != password_confirmation:
                 password_match_error = 'Does not match password'
@@ -35,13 +38,14 @@ class ChangePasswordForm(forms.Form):
         return cleaned_data
 
     def submit(self):
-        """ Change users password  """
+        """Change users password."""
 
-        if not self.is_valid(): return False
+        if not self.is_valid():
+            return False
 
         try:
             self.user.set_password(self['password'].value())
             self.user.save()
             return True
-        except:
+        except BaseException:
             return False

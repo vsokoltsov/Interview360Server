@@ -3,8 +3,9 @@ from . import (
     Skill, Company, Resume, Token, Workplace, User
 )
 
+
 class WorkplaceDeleteViewTest(APITestCase):
-    """ Test for WorklaceDeleteApiView class """
+    """Test for WorklaceDeleteApiView class."""
 
     fixtures = [
         'user.yaml',
@@ -15,7 +16,7 @@ class WorkplaceDeleteViewTest(APITestCase):
     ]
 
     def setUp(self):
-        """ Setting up test dependencies """
+        """Set up test dependencies."""
 
         self.resume = Resume.objects.last()
         self.company = Company.objects.first()
@@ -25,18 +26,20 @@ class WorkplaceDeleteViewTest(APITestCase):
         self.workplace = Workplace.objects.last()
 
     def test_success_workplace_deletion(self):
-        """ Test success deletion of the workplace """
+        """Test success deletion of the workplace."""
 
         workplaces_count = Workplace.objects.count()
         response = self.client.put(
-            '/api/v1/resumes/{}/workplaces/{}/'.format(self.resume.id, self.workplace.id),
+            '/api/v1/resumes/{}/workplaces/{}/'.format(
+                self.resume.id, self.workplace.id
+            ),
             format='json'
         )
         self.assertTrue(response.status_code, 204)
         self.assertTrue(Workplace.objects.count(), workplaces_count - 1)
 
     def test_failed_workplace_deletion(self):
-        """ Test failed deletion of the workplace """
+        """Test failed deletion of the workplace."""
 
         workplaces_count = Workplace.objects.count()
         response = self.client.put(

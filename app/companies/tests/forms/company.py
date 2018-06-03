@@ -1,15 +1,24 @@
 from . import (
-    TransactionTestCase, mock, datetime, Company, ImageFactory, ContentType,
-    UserFactory, CompanyFactory, CompanyMemberFactory, CompanyForm, CompanyMember,
-    SpecialtyFactory
-)
+    TransactionTestCase,
+    mock,
+    datetime,
+    Company,
+    ImageFactory,
+    ContentType,
+    UserFactory,
+    CompanyFactory,
+    CompanyMemberFactory,
+    CompanyForm,
+    CompanyMember,
+    SpecialtyFactory)
 import ipdb
 
+
 class CompanyFormTest(TransactionTestCase):
-    """ Test cases for the company form object """
+    """Test cases for the company form object."""
 
     def setUp(self):
-        """ Setting up testing dependencies """
+        """Set up testing dependencies."""
 
         self.user = UserFactory()
         self.specialties = [SpecialtyFactory(), SpecialtyFactory()]
@@ -22,7 +31,7 @@ class CompanyFormTest(TransactionTestCase):
         }
 
     def test_success_form_validation(self):
-        """ Test success form validation """
+        """Test success form validation."""
 
         form = CompanyForm(
             obj=Company(), params=self.params, current_user=self.user
@@ -30,7 +39,7 @@ class CompanyFormTest(TransactionTestCase):
         self.assertTrue(form.is_valid())
 
     def test_failed_form_validation(self):
-        """ Test failed form validation """
+        """Test failed form validation."""
 
         form = CompanyForm(
             obj=Company(), params={}, current_user=self.user
@@ -38,7 +47,7 @@ class CompanyFormTest(TransactionTestCase):
         self.assertFalse(form.is_valid())
 
     def test_failed_form_validation_if_current_user_abscent(self):
-        """ Test failed form validation if current user is abscent """
+        """Test failed form validation if current user is abscent."""
 
         form = CompanyForm(
             obj=Company(), params=self.params
@@ -49,7 +58,7 @@ class CompanyFormTest(TransactionTestCase):
     @mock.patch('companies.index.CompanyIndex.store_index')
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_success_company_creation(self, user_index, company_index):
-        """ Test success creation of the companies """
+        """Test success creation of the companies."""
 
         companies_count = Company.objects.count()
         form = CompanyForm(
@@ -61,22 +70,24 @@ class CompanyFormTest(TransactionTestCase):
     @mock.patch('companies.index.CompanyIndex.store_index')
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_success_company_member_creation(self, user_index, company_index):
-        """ Test success company member creation along with new company """
+        """Test success company member creation along with new company."""
 
         company_members_count = CompanyMember.objects.count()
         form = CompanyForm(
             obj=Company(), params=self.params, current_user=self.user
         )
         form.submit()
-        self.assertEqual(CompanyMember.objects.count(), company_members_count + 1)
+        self.assertEqual(
+            CompanyMember.objects.count(),
+            company_members_count + 1)
 
     @mock.patch('companies.index.CompanyIndex.store_index')
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_success_company_update(self, user_index, company_index):
-        """ Test success company update """
+        """Test success company update."""
 
         company = CompanyFactory()
-        company_member = CompanyMemberFactory(
+        CompanyMemberFactory(
             user_id=self.user.id, company_id=company.id,
             role=CompanyMember.COMPANY_OWNER
         )
@@ -88,7 +99,7 @@ class CompanyFormTest(TransactionTestCase):
         self.assertEqual(company.name, self.params['name'])
 
     def test_failed_company_update_user_does_not_belong_to_company(self):
-        """ Test failed validation if user does not belongs to company """
+        """Test failed validation if user does not belongs to company."""
 
         company = CompanyFactory()
         form = CompanyForm(
@@ -97,13 +108,16 @@ class CompanyFormTest(TransactionTestCase):
         self.assertFalse(form.submit())
 
     def test_failed_company_update_user_does_not_have_appropriate_role(self):
-        """ Test failed validation if user does not"""\
-        """ have appropriate role in company """
+        """Test failed validation.
+
+        User does not have  appropriate role in company
+        """
 
         company = CompanyFactory()
-        company_member = CompanyMemberFactory(
-            user_id=self.user.id, company_id=company.id, role=CompanyMember.EMPLOYEE
-        )
+        CompanyMemberFactory(
+            user_id=self.user.id,
+            company_id=company.id,
+            role=CompanyMember.EMPLOYEE)
         form = CompanyForm(
             obj=company, params=self.params, current_user=self.user
         )
@@ -112,12 +126,12 @@ class CompanyFormTest(TransactionTestCase):
     @mock.patch('companies.index.CompanyIndex.store_index')
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_success_image_setting(self, user_index, company_index):
-        """ Test whether or not image setting came succesfullty """
+        """Test whether or not image setting came succesfullty."""
 
         attachment = ImageFactory(
             content_type=ContentType.objects.get_for_model(Company)
         )
-        self.params['attachment'] = { 'id': attachment.id }
+        self.params['attachment'] = {'id': attachment.id}
         form = CompanyForm(
             obj=Company(), params=self.params, current_user=self.user
         )
@@ -128,7 +142,7 @@ class CompanyFormTest(TransactionTestCase):
     @mock.patch('companies.index.CompanyIndex.store_index')
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_user_index_call(self, user_index, company_index):
-        """ Test of the storing of the user's index data """
+        """Test of the storing of the user's index data."""
 
         form = CompanyForm(
             obj=Company(), params=self.params, current_user=self.user
@@ -139,7 +153,7 @@ class CompanyFormTest(TransactionTestCase):
     @mock.patch('companies.index.CompanyIndex.store_index')
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_company_index_call(self, user_index, company_index):
-        """ Test of the storing of the company's index data """
+        """Test of the storing of the company's index data."""
 
         form = CompanyForm(
             obj=Company(), params=self.params, current_user=self.user
@@ -150,7 +164,7 @@ class CompanyFormTest(TransactionTestCase):
     @mock.patch('companies.index.CompanyIndex.store_index')
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_setting_specialties_values(self, user_index, company_index):
-        """ Test setting of the specialties to the company """
+        """Test setting of the specialties to the company."""
 
         self.params['specialties'] = [item.id for item in self.specialties]
         form = CompanyForm(

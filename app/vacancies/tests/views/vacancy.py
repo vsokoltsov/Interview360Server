@@ -4,8 +4,9 @@ from . import (
 )
 from vacancies.index import VacancyIndex
 
+
 class VacancyViewSetTests(APITestCase):
-    """ Tests for VacancyViewSet class """
+    """Tests for VacancyViewSet class."""
 
     fixtures = [
         'skill.yaml',
@@ -16,13 +17,14 @@ class VacancyViewSetTests(APITestCase):
     ]
 
     def setUp(self):
-        """ Setting up test dependencies """
+        """Set up test dependencies."""
 
         self.company = Company.objects.first()
         self.user = self.company.get_employees_with_role(HR)[0]
         self.token = Token.objects.get(user=self.user)
         self.skill = Skill.objects.first()
-        self.vacancy = Vacancy.objects.filter(company_id=self.company.id).first()
+        self.vacancy = Vacancy.objects.filter(
+            company_id=self.company.id).first()
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.url = "/api/v1/companies/{}/vacancies/".format(self.company.id)
         self.form_data = {
@@ -36,14 +38,14 @@ class VacancyViewSetTests(APITestCase):
         }
 
     def test_success_list_receiving(self):
-        """ Test success receiving of the vacancies list """
+        """Test success receiving of the vacancies list."""
 
         response = self.client.get(self.url, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data), 2)
 
     def test_success_retrieve_action(self):
-        """ Success receivinf of the detail vacancy information """
+        """Success receivinf of the detail vacancy information."""
 
         response = self.client.get(
             self.url + "{}/".format(self.vacancy.id), format='json'
@@ -52,7 +54,7 @@ class VacancyViewSetTests(APITestCase):
 
     @mock.patch('vacancies.index.VacancyIndex.store_index')
     def test_success_vacancy_creation(self, vacancy_index_mock):
-        """ Test success vacancy creation """
+        """Test success vacancy creation."""
 
         response = self.client.post(self.url, self.form_data, format='json')
         self.assertEqual(response.status_code, 201)
@@ -60,14 +62,14 @@ class VacancyViewSetTests(APITestCase):
 
     @mock.patch('vacancies.index.VacancyIndex.store_index')
     def test_failed_vacancy_creation(self, vacancy_index_mock):
-        """ Test failed creation of the vacancy """
+        """Test failed creation of the vacancy."""
 
         response = self.client.post(self.url, {}, format='json')
         self.assertEqual(response.status_code, 400)
 
     @mock.patch('vacancies.index.VacancyIndex.store_index')
     def test_success_vacancy_update(self, vacancy_index_mock):
-        """ Test success update of the vacancy """
+        """Test success update of the vacancy."""
 
         response = self.client.put(
             self.url + "{}/".format(self.vacancy.id),
@@ -79,8 +81,12 @@ class VacancyViewSetTests(APITestCase):
     @mock.patch.object(VacancyIndex, 'get')
     @mock.patch.object(VacancyIndex, 'delete')
     @mock.patch('vacancies.index.VacancyIndex.store_index')
-    def test_success_delete_vacancy(self, vacancy_index_mock, vacancy_delete, vacancy_save):
-        """ Test success vacancy deletion """
+    def test_success_delete_vacancy(
+            self,
+            vacancy_index_mock,
+            vacancy_delete,
+            vacancy_save):
+        """Test success vacancy deletion."""
 
         response = self.client.delete(
             self.url + "{}/".format(self.vacancy.id), format='json'
@@ -89,12 +95,12 @@ class VacancyViewSetTests(APITestCase):
 
     @mock.patch('vacancies.search.VacancySearch.find')
     def test_search_action(self, search_mock):
-        """ Test success search of vacancy inside particular company """
+        """Test success search of vacancy inside particular company."""
 
         user_index = [
-            { 'id': 1 },
-            { 'id': 2 },
-            { 'id': 3 }
+            {'id': 1},
+            {'id': 2},
+            {'id': 3}
         ]
         search_mock.return_value = user_index
         url = "/api/v1/companies/{}/vacancies/search/?q={}".format(

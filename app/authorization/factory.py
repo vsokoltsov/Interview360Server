@@ -1,9 +1,12 @@
 import factory
 
+
 class UserFactory(factory.django.DjangoModelFactory):
-    """ Factory object for the user model """
+    """Factory object for the user model."""
 
     class Meta:
+        """Metaclass for factory."""
+
         model = 'authorization.User'
 
     first_name = factory.Faker('first_name')

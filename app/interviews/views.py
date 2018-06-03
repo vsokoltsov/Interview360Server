@@ -6,7 +6,9 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .serializers import InterviewSerializer
-from common.serializers.base_interview_serializer import BaseInterviewSerializer
+from common.serializers.base_interview_serializer import (
+    BaseInterviewSerializer
+)
 from companies.models import Company
 from vacancies.models import Vacancy
 from authorization.models import User
@@ -15,15 +17,16 @@ from .models import Interview, InterviewEmployee
 from .permissions import InterviewPermission
 import ipdb
 
+
 class InterviewViewSet(viewsets.ModelViewSet):
-    """ View class for Interviews """
+    """View class for Interviews."""
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, InterviewPermission, )
     serializer_class = InterviewSerializer
 
     def get_serializer_class(self):
-        """ Get serializer class base on action """
+        """Get serializer class base on action."""
 
         if self.action == 'list':
             return BaseInterviewSerializer
@@ -31,9 +34,7 @@ class InterviewViewSet(viewsets.ModelViewSet):
             return InterviewSerializer
 
     def get_queryset(self):
-        """
-        Return scope of interviews where current user is participated
-        """
+        """Return interviews where current user is participated."""
 
         current_user = self.request.user
         params = self.kwargs
@@ -52,24 +53,23 @@ class InterviewViewSet(viewsets.ModelViewSet):
         return queryset
 
     def create(self, request, company_pk=None):
-        """ POST action for create a new interview """
+        """Create a new interview."""
 
-        company = get_object_or_404(Company, pk=company_pk)
+        get_object_or_404(Company, pk=company_pk)
 
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid() and serializer.save():
             return Response(
-                { 'interview': serializer.data }, status=status.HTTP_201_CREATED
+                {'interview': serializer.data}, status=status.HTTP_201_CREATED
             )
         else:
-            return Response(
-                { 'errors': serializer.errors }, status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({'errors': serializer.errors},
+                            status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk=None, company_pk=None):
-        """ PUT action for update the interview instance """
+        """Update the interview instance."""
 
-        company = get_object_or_404(Company, pk=company_pk)
+        get_object_or_404(Company, pk=company_pk)
         interview = get_object_or_404(Interview, pk=pk)
 
         serializer = self.serializer_class(
@@ -77,21 +77,21 @@ class InterviewViewSet(viewsets.ModelViewSet):
         )
         if serializer.is_valid() and serializer.save():
             return Response(
-                { 'interview': serializer.data }, status=status.HTTP_200_OK
+                {'interview': serializer.data}, status=status.HTTP_200_OK
             )
         else:
-            return Response(
-                { 'errors': serializer.errors }, status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({'errors': serializer.errors},
+                            status=status.HTTP_400_BAD_REQUEST)
+
 
 class InterviewEmployeeView(APIView):
-    """ View class for InterviewEmployee """
+    """View class for InterviewEmployee."""
+
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated, )
 
     def delete(self, request, interview_id=None, employee_id=None):
-        """ Delete InterviewEmployee instance  """
-
-        authentication_classes = (TokenAuthentication,)
-        permission_classes = (IsAuthenticated, InterviewPermission, )
+        """Delete InterviewEmployee instance."""
 
         try:
             interview = get_object_or_404(Interview, pk=interview_id)
@@ -101,11 +101,11 @@ class InterviewEmployeeView(APIView):
             )
             interview_employee.delete()
             return Response(
-                { 'message': 'Succesfully deleted' },
+                {'message': 'Succesfully deleted'},
                 status=status.HTTP_204_NO_CONTENT
             )
         except InterviewEmployee.DoesNotExist:
             return Response(
-                { 'detail': 'There is no such user' },
+                {'detail': 'There is no such user'},
                 status=status.HTTP_404_NOT_FOUND
             )

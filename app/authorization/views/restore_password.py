@@ -1,8 +1,12 @@
 from . import viewsets, status, Response, RestorePasswordForm
 
+
 class RestorePasswordViewSet(viewsets.ViewSet):
+    """Restore password view."""
 
     def create(self, request):
+        """Restore user's password; Send email with instructions."""
+
         form = RestorePasswordForm(request.data)
 
         if form.submit():
@@ -10,4 +14,4 @@ class RestorePasswordViewSet(viewsets.ViewSet):
                             status=status.HTTP_200_OK)
         else:
             return Response({'errors': form.errors},
-                            status=status.HTTP_400_BAD_REQUEST )
+                            status=status.HTTP_400_BAD_REQUEST)

@@ -5,18 +5,31 @@ from companies.models import CompanyMember
 from attachments.models import Image
 from profiles.index import UserIndex
 from companies.index import CompanyIndex
-import ipdb
+
 
 def owner_exist(field, value, error):
-    """ Check whether or not owner exist """
+    """Check whether or not owner exist."""
 
     try:
-        user = User.objects.get(id=value)
+        return User.objects.get(id=value)
     except User.DoesNotExist:
         error(field, 'Does not exist')
 
+
 class CompanyForm(BaseForm):
-    """ Form object for company model """
+    """Form object for company model.
+
+    :param name: Name of the company
+    :param start_date: Date of establishment
+    :param description: Company's description
+    :param city: City of origin
+    :param country: Country of origin
+    :param owner_id: Identifier of creator
+    :param attachment: Company's avatar
+    :param specialties: List of company's specialties
+    :param current_user: Current system's user
+    :return: True/False whether or not form was submitted
+    """
 
     schema = {
         'name': {
@@ -80,9 +93,10 @@ class CompanyForm(BaseForm):
     }
 
     def submit(self):
-        """ Set attributes to the company instance and save to the database """
+        """Set attributes to the company instance and save to the database."""
 
-        if not self.is_valid(): return False
+        if not self.is_valid():
+            return False
 
         try:
             with transaction.atomic():
@@ -92,21 +106,23 @@ class CompanyForm(BaseForm):
                 self._set_attributes()
                 self.obj.save()
                 if new_company:
-                    company_member = CompanyMember.objects.create(
+                    CompanyMember.objects.create(
                         company_id=self.obj.id, user_id=self.current_user.id,
                         role=CompanyMember.COMPANY_OWNER, active=True
                     )
                 self._set_attachment(attachment_json)
                 if specialties:
                     self.obj.specialties.set(specialties)
-                UserIndex.store_index(User.objects.get(id=self.params.get('owner_id')))
+                UserIndex.store_index(
+                    User.objects.get(
+                        id=self.params.get('owner_id')))
                 CompanyIndex.store_index(self.obj)
                 return True
         except Exception as e:
             return False
 
     def is_valid(self):
-        """ Override the parent class method """
+        """Override the parent class method."""
 
         result = super(CompanyForm, self).is_valid()
         if not result:
@@ -114,7 +130,8 @@ class CompanyForm(BaseForm):
 
         if self.obj.id:
             belongs_to_company = self.is_company_member
-            not_allowed_to_edit = belongs_to_company and not self.is_allowed_to_update
+            not_allowed_to_edit = (belongs_to_company and
+                                   not self.is_allowed_to_update)
 
             if not belongs_to_company:
                 self.set_error_message(
@@ -134,29 +151,29 @@ class CompanyForm(BaseForm):
             setattr(self.obj, field, value)
 
     def _set_attachment(self, attachment_json):
-        """ Set attachment to the company's instance """
+        """Set attachment to the company's instance."""
 
         if attachment_json:
             attachment_id = attachment_json.get('id')
             attachment = Image.objects.get(id=attachment_id)
-            attachment.object_id=self.obj.id
+            attachment.object_id = self.obj.id
             attachment.save()
             return attachment
 
     @property
     def is_company_member(self):
-        """ Wrapper for validation function """
+        """Wrap for validation function."""
 
         return self._is_company_member(self.obj.id, self.current_user.id)
 
     @property
     def is_allowed_to_update(self):
-        """ Wrapper for validation function """
+        """Wrap for validation function."""
 
         return self._is_allowed_to_update(self.obj.id, self.current_user.id)
 
     def _is_company_member(self, company_id, user_id):
-        """ Check whether or not the current user is the member of the company """
+        """Check membership of user in company."""
 
         try:
             CompanyMember.objects.get(company_id=company_id, user_id=user_id)
@@ -165,10 +182,11 @@ class CompanyForm(BaseForm):
             return False
 
     def _is_allowed_to_update(self, company_id, user_id):
-        """ Check whether or not the current user is allowed to edit company """
+        """Check whether or not the current user is allowed to edit company."""
 
         try:
-            company_member = CompanyMember.objects.get(company_id=company_id, user_id=user_id)
+            company_member = CompanyMember.objects.get(
+                company_id=company_id, user_id=user_id)
             return company_member.role == CompanyMember.COMPANY_OWNER
         except CompanyMember.DoesNotExist:
             return False

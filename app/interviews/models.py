@@ -4,8 +4,9 @@ from authorization.models import User
 from django.contrib.contenttypes.fields import GenericRelation
 from datetime import datetime, timedelta
 
+
 class Interview(models.Model):
-    """ Interview object representation """
+    """Interview object representation."""
 
     vacancy = models.ForeignKey(Vacancy, null=False, related_name='interviews')
     candidate = models.ForeignKey(User, null=False)
@@ -24,7 +25,9 @@ class Interview(models.Model):
     @classmethod
     def in_range_of_days(cls, days):
         """
-        Return scope of objects which 'assigned_at' attribute belongs to range
+        Return scope of objects.
+
+        Assigned_at attribute belongs to range.
         """
 
         start_date = datetime.now()
@@ -35,18 +38,23 @@ class Interview(models.Model):
 
     @classmethod
     def for_company(cls, company_id):
-        """ Receive list of interviews for particular company """
+        """Receive list of interviews for particular company."""
         return cls.objects.filter(vacancy__company__id=company_id)
 
     class Meta:
+        """Model's metaclass."""
+
         db_table = 'interviews'
 
+
 class InterviewEmployee(models.Model):
-    """ Intermediate table among the Interview, User and Role """
+    """Intermediate table among the Interview, User and Role."""
 
     employee = models.ForeignKey(User, null=False)
     interview = models.ForeignKey(Interview, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        """Model's metaclass."""
+
         db_table = 'interview_employees'

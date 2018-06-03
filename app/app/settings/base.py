@@ -13,20 +13,17 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import sys
 import yaml
-import logging
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl.connections import connections
 from corsheaders.defaults import default_headers
 from django.core.exceptions import ImproperlyConfigured
-from boto3.session import Session
 from app.credentials import (
-    AWS_STORAGE_BUCKET_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,
-    AWS_REGION_NAME
+    AWS_STORAGE_BUCKET_NAME, AWS_REGION_NAME
 )
-import ipdb
+
 
 def get_environment_variable(var_name):
-    """ Get environment variable or raise the exception """
+    """Get environment variable or raise the exception."""
 
     try:
         return os.environ[var_name]
@@ -34,10 +31,18 @@ def get_environment_variable(var_name):
         error_msg = 'Set the {} environment variable'.format(var_name)
         raise ImproperlyConfigured(error_msg)
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+PROJECT_ROOT = os.path.dirname(
+    os.path.dirname(
+        os.path.dirname(
+            os.path.abspath(__file__))))
 BASE_DIR = os.path.join(PROJECT_ROOT, 'app')
-COMMON_DIR = os.path.abspath(os.path.join(os.path.abspath(os.path.dirname(__name__)), '../'))
+COMMON_DIR = os.path.abspath(
+    os.path.join(
+        os.path.abspath(
+            os.path.dirname(__name__)),
+        '../'))
 sys.path.insert(1, COMMON_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -72,6 +77,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_swagger',
     'anymail',
     'corsheaders',
     'django_nose',
@@ -150,16 +156,20 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.' +
+        'UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.' +
+        'MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.' +
+        'CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.' +
+        'NumericPasswordValidator',
     },
 ]
 
@@ -167,8 +177,10 @@ ANYMAIL = {
     "MAILGUN_API_KEY": os.environ.get('MAILGUN_API_KEY'),
     "MAILGUN_SENDER_DOMAIN": os.environ.get('MAILGUN_SERVER_NAME')
 }
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')  # or sendgrid.EmailBackend, or...
-DEFAULT_FROM_EMAIL = "you@example.com"  # if you don't already have this in settings
+# or sendgrid.EmailBackend, or...
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
+# if you don't already have this in settings
+DEFAULT_FROM_EMAIL = "you@example.com"
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -210,21 +222,18 @@ BUCKET_NAME = AWS_STORAGE_BUCKET_NAME
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 REGION_HOST = 's3.{}.amazonaws.com'.format(AWS_REGION_NAME)
 
-# AWS_LOCATION = 'static'
-# STATICFILES_STORAGE = 'media'
 THUMBNAIL_DEFAULT_STORAGE = 'app.storage_backends.MediaStorage'
 THUMBNAIL_BASEDIR = 'thumbs'
-# STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, AWS_LOCATION)
 
 DEFAULT_FILE_STORAGE = 'app.storage_backends.MediaStorage'
 
 THUMBNAIL_ALIASES = {
     '': {
-        'small_thumb': {'size': (50, 50) },
-        'thumb': {'size': (100, 100) },
-        'medium': {'size': (200, 200) },
-        'medium_large': {'size': (250, 250) },
-        'large': {'size': (350, 350) }
+        'small_thumb': {'size': (50, 50)},
+        'thumb': {'size': (100, 100)},
+        'medium': {'size': (200, 200)},
+        'medium_large': {'size': (250, 250)},
+        'large': {'size': (350, 350)}
     },
 }
 THUMBNAIL_FORCE_OVERWRITE = True

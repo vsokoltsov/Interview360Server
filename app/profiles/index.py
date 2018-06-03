@@ -1,7 +1,8 @@
 from elasticsearch_dsl import DocType, Date, Integer, Keyword, Text, Object
 
+
 class UserIndex(DocType):
-    """ User class index """
+    """User class index."""
 
     id = Integer()
     first_name = Text()
@@ -11,11 +12,13 @@ class UserIndex(DocType):
     attachment = Object()
 
     class Meta:
+        """Metaclass for index."""
+
         index = 'users'
 
     @classmethod
     def store_index(cls, user):
-        """ Create or update user's index """
+        """Create or update user's index."""
 
         company_ids = list(
             map(lambda c: c.id, user.companies.all())

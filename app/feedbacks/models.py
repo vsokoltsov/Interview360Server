@@ -2,8 +2,9 @@ from django.db import models
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
+
 class Feedback(models.Model):
-    """ Feedback model representations """
+    """Feedback model representations."""
 
     ASSIGNED = 0
     IN_PROGRESS = 1
@@ -27,4 +28,6 @@ class Feedback(models.Model):
     )
 
     class Meta:
+        """Model's metaclass."""
+
         db_table = 'feedbacks'

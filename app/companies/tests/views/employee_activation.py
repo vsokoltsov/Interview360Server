@@ -2,8 +2,9 @@ from . import (
     APITestCase, Company, CompanyMember, User, Token, datetime, EMPLOYEE
 )
 
+
 class EmployeeActivationTests(APITestCase):
-    """ Tests for EmployeeActivationTests """
+    """Tests for EmployeeActivationTests."""
 
     fixtures = [
         'user.yaml',
@@ -12,12 +13,13 @@ class EmployeeActivationTests(APITestCase):
     ]
 
     def setUp(self):
-        """ Setting up test credentials """
+        """Set up test credentials."""
 
         self.company = Company.objects.first()
         self.user = self.company.get_employees_with_role(EMPLOYEE)[-1]
         self.token = Token.objects.get(user=self.user)
-        company_member = CompanyMember.objects.get(user_id=self.user.id, company_id=self.company.id)
+        CompanyMember.objects.get(
+            user_id=self.user.id, company_id=self.company.id)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
         self.form_data = {
             'company_pk': self.company.id,
@@ -27,14 +29,14 @@ class EmployeeActivationTests(APITestCase):
         }
 
     def test_success_employee_activation(self):
-        """ Test success response for route """
+        """Test success response for route."""
 
         url = "/api/v1/companies/{}/activate_member/".format(self.company.id)
         response = self.client.put(url, self.form_data, format='json')
         self.assertTrue('message' in response.data)
 
     def test_failed_employee_activation(self):
-        """ Test failed response for route """
+        """Test failed response for route."""
 
         url = "/api/v1/companies/{}/activate_member/".format(self.company.id)
         response = self.client.put(url, {}, format='json')

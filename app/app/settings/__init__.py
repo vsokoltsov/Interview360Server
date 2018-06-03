@@ -1,5 +1,4 @@
 import os
-import ipdb
 import app.environments as environment
 
 app_environment = os.environ.get('DJANGO_DEFAULT_ENV', environment.DEVELOPMENT)

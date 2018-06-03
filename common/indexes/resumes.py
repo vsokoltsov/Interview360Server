@@ -4,8 +4,9 @@ from elasticsearch_dsl import Index
 from elasticsearch.exceptions import TransportError
 import logging
 
+
 def rebuild_index():
-    """ Rebuild resumes index """
+    """Rebuild resumes index."""
 
     try:
         Index('resumes').delete()

@@ -9,5 +9,5 @@ router = DefaultRouter()
 router.register('v1/attachments', AttachmentViewSet, base_name='attachments')
 
 urlpatterns = [
-        url(r'', include(router.urls) )
+    url(r'', include(router.urls))
 ]

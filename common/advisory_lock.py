@@ -3,6 +3,7 @@ import struct
 import contextlib
 from django.db import connection
 
+
 @contextlib.contextmanager
 def advisory_lock(lock):
     """

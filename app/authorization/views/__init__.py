@@ -5,7 +5,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from authorization.forms import (RegistrationForm, AuthorizationForm,
-                    RestorePasswordForm, ResetPasswordForm)
+                                 RestorePasswordForm, ResetPasswordForm)
 from authorization.serializers import CurrentUserSerializer
 
 from .authorization import AuthorizationViewSet

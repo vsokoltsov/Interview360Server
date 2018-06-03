@@ -8,5 +8,5 @@ router = routers.SimpleRouter()
 router.register('v1/users', ProfileViewSet, base_name='users')
 
 urlpatterns = [
-    url(r'', include(router.urls) )
+    url(r'', include(router.urls))
 ]

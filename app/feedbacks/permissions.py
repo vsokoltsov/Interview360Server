@@ -4,12 +4,15 @@ from roles.constants import (
     RECEIVE_FEEDBACK, CREATE_FEEDBACK, UPDATE_FEEDBACK, DELETE_FEEDBACK,
     HR, COMPANY_OWNER
 )
-from roles.models import Hr, Employee,
+from roles.models import Hr, Employee
+
 
 class FeedbackPermission(BasePermission):
-    """ Permission class for the FeedbackViewSet """
+    """Permission class for the FeedbackViewSet."""
 
     def has_permission(self, request, view):
+        """Return value for the common model."""
+
         company = Company.objects.get(id=view.kwargs['company_pk'])
         role = request.user.get_role_for_company(company)
 
@@ -20,8 +23,9 @@ class FeedbackPermission(BasePermission):
         else:
             return True
 
-
     def has_object_permission(self, request, view, obj):
+        """Return permission value for the particular model."""
+
         company = Company.objects.get(id=view.kwargs['company_pk'])
         user = request.user
         role = user.get_role_for_company(company)

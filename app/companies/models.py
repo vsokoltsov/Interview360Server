@@ -4,8 +4,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.contenttypes.fields import GenericRelation
 from .managers import CompanyManager
 
+
 class Company(models.Model):
-    """ Base company model """
+    """Base company model."""
 
     ORDER_FIELDS = (
         ('employees__count', 'Employees count'),
@@ -22,39 +23,32 @@ class Company(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    employees = models.ManyToManyField('authorization.User', through='CompanyMember')
+    employees = models.ManyToManyField(
+        'authorization.User', through='CompanyMember')
     images = GenericRelation('attachments.Image')
     specialties = models.ManyToManyField('companies.Specialty')
     objects = CompanyManager()
 
     class Meta:
+        """Metaclass for company model."""
+
         db_table = 'companies'
 
     def get_employees_with_role(self, role):
         """
-        Return list of employees who are belonging to the company
-        and have the pointed role
+        Return list of employees who are belonging to the companyself.
+
+        With particular role.
         """
 
         objects = CompanyMember.objects.filter(
-                company_id=self.id, role=role
-            ).prefetch_related('user')
+            company_id=self.id, role=role
+        ).prefetch_related('user')
         return list(map(lambda member: member.user, objects))
 
-    @classmethod
-    def prefetch_for_list(cls):
-        objects = cls.objects.prefetch_related(
-            'vacancy_set', 'images', 'employees'
-        )
-        objects = (
-            objects
-                .annotate(Count('employees', distinct=True))
-                .annotate(Count('vacancy', distinct=True))
-        )
-        return objects
 
 class CompanyMember(models.Model):
-    """ CompanyMember model, which is used for `through` association """
+    """CompanyMember model, which is used for `through` association."""
 
     COMPANY_OWNER = 1
     HR = 2
@@ -78,15 +72,20 @@ class CompanyMember(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        """Metaclass for company members model."""
+
         db_table = 'company_members'
         index_together = unique_together = [
             ['user', 'company']
         ]
 
+
 class Specialty(models.Model):
-    """ Specialty of the company model """
+    """Specialty of the company model."""
 
     class Meta:
+        """Specialty model metaclass."""
+
         db_table = 'specialties'
 
     name = name = models.CharField(max_length=255, null=False, blank=False)

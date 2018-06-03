@@ -3,7 +3,7 @@ version: '3'
 services:
   db:
     container_name: database
-    image: postgres:9.6.7
+    image: postgres
     environment:
       POSTGRES_DB: 'interview_manager'
     volumes:

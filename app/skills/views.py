@@ -9,9 +9,9 @@ from .index import SkillIndex
 from .search import SkillSearch
 from rest_framework.response import Response
 
-# Create your views here.
+
 class SkillsViewSet(viewsets.ModelViewSet):
-    """ ViewSet for skill """
+    """ViewSet for skill."""
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, )
@@ -19,7 +19,7 @@ class SkillsViewSet(viewsets.ModelViewSet):
     serializer_class = SkillSerializer
 
     def destroy(self, request, pk=None):
-        """ Deletes selected skill """
+        """Delete selected skill."""
 
         skill = self.get_object()
         SkillIndex.get(id=skill.id).delete()
@@ -28,9 +28,9 @@ class SkillsViewSet(viewsets.ModelViewSet):
 
     @list_route(methods=['get'])
     def search(self, request):
-        """ Action for skills search """
+        """Search skills."""
 
         query = request.query_params.get('q')
         search = SkillSearch()
         results = search.find(query)
-        return  Response({ 'skills': results })
+        return Response({'skills': results})

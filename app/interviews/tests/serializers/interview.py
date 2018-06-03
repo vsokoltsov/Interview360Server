@@ -6,8 +6,9 @@ from . import (
 
 import ipdb
 
+
 class InterviewSerializerTests(TransactionTestCase):
-    """ Tests for InterviewSerializer serializer """
+    """Tests for InterviewSerializer serializer."""
 
     fixtures = [
         "skill.yaml",
@@ -18,7 +19,7 @@ class InterviewSerializerTests(TransactionTestCase):
     ]
 
     def setUp(self):
-        """ Setting up test dependencies """
+        """Set up test dependencies."""
 
         self.company = Company.objects.first()
         date = datetime.datetime.now() + datetime.timedelta(days=10)
@@ -37,19 +38,19 @@ class InterviewSerializerTests(TransactionTestCase):
         }
 
     def test_succes_validation(self):
-        """ Test that serializer's validation is passed """
+        """Test that serializer's validation is passed."""
 
         serializer = InterviewSerializer(data=self.form_data)
         self.assertTrue(serializer.is_valid())
 
     def test_failed_validation(self):
-        """ Test that serializer's validation is failed """
+        """Test that serializer's validation is failed."""
 
         serializer = InterviewSerializer(data={})
         self.assertFalse(serializer.is_valid())
 
     def test_failed_validation_vacancy_is_abscent(self):
-        """ Test that serializer's validation failed if vacancy does not exists """
+        """Test serializer's validation failed if vacancy does not exists."""
 
         self.form_data['vacancy_id'] = 100
         serializer = InterviewSerializer(data=self.form_data)
@@ -57,7 +58,7 @@ class InterviewSerializerTests(TransactionTestCase):
         self.assertTrue('vacancy_id' in serializer.errors)
 
     def test_failed_validation_vacancy_is_unactive(self):
-        """ Test that serializer's validation failed is vacancy is not active """
+        """Test serializer's validation failed is vacancy is not active."""
 
         vacancy = Vacancy.objects.create(
             title="Vacancy name", description="Description",
@@ -69,8 +70,9 @@ class InterviewSerializerTests(TransactionTestCase):
         self.assertTrue('vacancy_id' in serializer.errors)
 
     @mock.patch('authorization.models.User.objects.get_or_create')
-    def test_create_new_candidate_if_there_are_no_such_candidate(self, user_mock):
-        """ Test creating the new candidate if it is not abscent """
+    def test_create_new_candidate_if_there_are_no_such_candidate(
+            self, user_mock):
+        """Test creating the new candidate if it is not abscent."""
 
         user_mock.objects = mock.MagicMock()
         user_mock.objects = mock.MagicMock()
@@ -85,8 +87,11 @@ class InterviewSerializerTests(TransactionTestCase):
         # self.assertTrue(serializer.is_valid())
 
     def test_failed_validation_if_assigned_at_less_than_current_date(self):
-        """ Test that serializer's validation failed if assigned_at is
-            less than current time """
+        """
+        Test serializer's validation failed.
+
+        Assigned_at isless than current time.
+        """
 
         date = datetime.datetime.now() + datetime.timedelta(days=-10)
         self.form_data['assigned_at'] = date
@@ -97,12 +102,17 @@ class InterviewSerializerTests(TransactionTestCase):
 
     @mock.patch('interviews.models.Interview.objects.create')
     @mock.patch('interviews.models.InterviewEmployee.objects.create')
-    def test_success_interview_creation(self, inteview_employee_class_mock, inteview_class_mock):
-        """ Test success creation of the interview """
+    def test_success_interview_creation(
+            self,
+            inteview_employee_class_mock,
+            inteview_class_mock):
+        """Test success creation of the interview."""
 
         inteview_employee_class_mock.objects = mock.MagicMock()
         inteview_employee_class_mock.objects.create = mock.MagicMock()
-        inteview_employee_class_mock.objects.create.return_value = InterviewEmployee(id=1)
+        inteview_employee_class_mock.objects.create.return_value = (
+            InterviewEmployee(id=1)
+        )
 
         inteview_class_mock.objects = mock.MagicMock()
         inteview_class_mock.objects.create = mock.MagicMock()
@@ -115,12 +125,15 @@ class InterviewSerializerTests(TransactionTestCase):
         self.assertTrue(inteview_class_mock.called)
 
     @mock.patch('interviews.models.InterviewEmployee.objects.create')
-    def test_success_interview_employee_creation(self, inteview_employee_class_mock):
-        """ Test success creation of InterviewEmployee instance """
+    def test_success_interview_employee_creation(
+            self, inteview_employee_class_mock):
+        """Test success creation of InterviewEmployee instance."""
 
         inteview_employee_class_mock.objects = mock.MagicMock()
         inteview_employee_class_mock.objects.create = mock.MagicMock()
-        inteview_employee_class_mock.objects.create.return_value = InterviewEmployee(id=1)
+        inteview_employee_class_mock.objects.create.return_value = (
+            InterviewEmployee(id=1)
+        )
 
         serializer = InterviewSerializer(data=self.form_data)
         serializer.is_valid()
@@ -130,7 +143,7 @@ class InterviewSerializerTests(TransactionTestCase):
         self.assertTrue(inteview_employee_class_mock.call_count, 1)
 
     def test_failed_interview_employee_creation(self):
-        """ Test failed creation of Interviewemployee for the abscent user """
+        """Test failed creation of Interviewemployee for the abscent user."""
 
         self.form_data['interviewee_ids'] = 100
 
@@ -140,12 +153,11 @@ class InterviewSerializerTests(TransactionTestCase):
         self.assertTrue('interviewee_ids' in serializer.errors)
 
     def test_success_update_of_the_interview(self):
-        """ Test success updating of the interview instance """
+        """Test success updating of the interview instance."""
 
         date = datetime.datetime.now() + datetime.timedelta(days=31)
         date = date.replace(second=0, microsecond=0, tzinfo=None)
         self.form_data['assigned_at'] = str(date)
-
 
         serializer = InterviewSerializer(
             self.interview, data=self.form_data, partial=True

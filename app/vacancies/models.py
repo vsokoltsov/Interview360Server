@@ -4,7 +4,7 @@ from skills.models import Skill
 
 
 class Vacancy(models.Model):
-    """ Vacancy representation in our system """
+    """Vacancy representation in our system."""
 
     title = models.CharField(max_length=255, null=False)
     description = models.TextField(null=False)
@@ -17,4 +17,6 @@ class Vacancy(models.Model):
     skills = models.ManyToManyField(Skill)
 
     class Meta:
+        """Model's metaclass."""
+
         db_table = 'vacancies'

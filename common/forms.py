@@ -1,18 +1,13 @@
 import abc
 import cerberus
-from cerberus import Validator
 from contextlib import contextmanager
-from django.db import transaction
-from django_pglocks import advisory_lock
 
-from companies.models import CompanyMember
-import ipdb
 
 class BaseValidator(cerberus.Validator):
-    """ Custom base validator """
+    """Custom base validator."""
 
     def _validate_equal(self, equal, field, value):
-        """ Validates equation of one field to another """
+        """Validate equation of one field to another."""
 
         match_field, match_value = self._lookup_field(equal)
         if value != match_value:
@@ -20,10 +15,10 @@ class BaseValidator(cerberus.Validator):
 
 
 class FormException(Exception):
-    """ Form exception class """
+    """Form exception class."""
 
     def __init__(self, *args, **kwargs):
-        """ Initialization class; Setting form exception parameters """
+        """Initialize class; Setting form exception parameters."""
 
         self.field = kwargs.get('field', None)
         self.errors = kwargs.get('errors', None)
@@ -38,17 +33,18 @@ class FormException(Exception):
 
 
 class BaseForm(abc.ABC):
-    """ Base form-object class """
+    """Base form-object class."""
 
     errors = {}
 
     @property
     @abc.abstractmethod
     def schema(self):
+        """Save validation parameters."""
         pass
 
     def __init__(self, **kwargs):
-        """ Base class init method """
+        """Override base constructor."""
 
         if not self.schema:
             raise NotImplementedError('Subclasses must define schema property')
@@ -61,7 +57,7 @@ class BaseForm(abc.ABC):
             self.params['current_user'] = self.current_user
 
     def is_valid(self):
-        """ Return whether or not the receiving data are valid """
+        """Return whether or not the receiving data are valid."""
 
         try:
             result = self.validator.validate(self.params, self.schema)
@@ -70,16 +66,17 @@ class BaseForm(abc.ABC):
 
             return result
         except cerberus.validator.DocumentError:
-            self.errors['base'] =  ['Invalid structure']
+            self.errors['base'] = ['Invalid structure']
             return False
 
     def set_error_message(self, key, message):
-        """ Set custom error message for particular key """
+        """Set custom error message for particular key."""
 
         self.errors[key] = self.errors.get(key, []) + [message]
 
     @contextmanager
     def submit(self, message=None):
-        """ Save object to the database """
+        """Save object to the database."""
 
-        if not self.is_valid(): return False
+        if not self.is_valid():
+            return False

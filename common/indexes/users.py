@@ -4,8 +4,9 @@ from elasticsearch_dsl import Index
 from elasticsearch.exceptions import TransportError
 import logging
 
+
 def rebuild_index():
-    """ Rebuild index for the users """
+    """Rebuild index for the users."""
 
     try:
         Index('users').delete()

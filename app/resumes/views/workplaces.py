@@ -5,23 +5,28 @@ from . import (
 from rest_framework.views import APIView
 from resumes.forms import WorkplaceForm
 from resumes.serializers import WorkplaceSerializer
-import ipdb
+
 
 class WorkplacesApiView(APIView):
-    """ Views for workplace resource """
+    """Views for workplace resource."""
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, WorkplacePermissions, )
 
     def put(self, request, resume_id=None):
-        """ Create new workplaces for resume; Update existing ones """
+        """
+        Create new workplaces for resume.
+
+        Update existing ones.
+        """
 
         form = WorkplaceForm(params=request.data)
         if form.submit():
+            serialized_data = WorkplaceSerializer(form.objects, many=True).data
             return Response(
-                { 'workplaces': WorkplaceSerializer(form.objects, many=True).data }
+                {'workplaces': serialized_data}
             )
         else:
             return Response(
-                { 'errors': form.errors }, status=status.HTTP_400_BAD_REQUEST
+                {'errors': form.errors}, status=status.HTTP_400_BAD_REQUEST
             )

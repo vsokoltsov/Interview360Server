@@ -3,8 +3,9 @@ from . import (
     BaseUserManager, apps, get_role
 )
 
+
 class User(AbstractBaseUser):
-    """ Represents a user object in our system """
+    """Represents a user object in our system."""
 
     email = models.EmailField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
@@ -12,8 +13,12 @@ class User(AbstractBaseUser):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    companies = models.ManyToManyField('companies.Company', through='companies.CompanyMember')
-    interviews = models.ManyToManyField('interviews.Interview', through='interviews.InterviewEmployee')
+    companies = models.ManyToManyField(
+        'companies.Company',
+        through='companies.CompanyMember')
+    interviews = models.ManyToManyField(
+        'interviews.Interview',
+        through='interviews.InterviewEmployee')
     feedbacks = GenericRelation('feedbacks.Feedback')
     avatars = GenericRelation('attachments.Image')
 
@@ -22,7 +27,7 @@ class User(AbstractBaseUser):
     USERNAME_FIELD = 'email'
 
     def get_role_for_company(self, company):
-        """ Return user's role in the company """
+        """Return user's role in the company."""
 
         company_member_class = apps.get_model('companies', 'CompanyMember')
         role = company_member_class.objects.get(
@@ -31,7 +36,7 @@ class User(AbstractBaseUser):
         return get_role(str(role))
 
     def has_role(self, company, role_id):
-        """ Return matching user's role in company to specific role """
+        """Return matching user's role in company to specific role."""
 
         company_member_class = apps.get_model('companies', 'CompanyMember')
         role = company_member_class.objects.get(
@@ -40,7 +45,7 @@ class User(AbstractBaseUser):
         return int(role) == int(role_id)
 
     def is_activated_for_company(self, company):
-        """ Returns whether or not user is active in company """
+        """Return whether or not user is active in company."""
 
         company_member_class = apps.get_model('companies', 'CompanyMember')
         try:
@@ -51,18 +56,18 @@ class User(AbstractBaseUser):
             return False
 
     def get_roles_for_companies(self):
-        """
-        Return dictionary of company id's with role id's
-        """
+        """Return dictionary of company id's with role id's."""
 
         return {
-            item.company_id: item.role for item in  self.companymember_set.all()
+            item.company_id: item.role for item in self.companymember_set.all()
         }
 
     def __str__(self):
-        """ String representation of user """
+        """Return string representation of user."""
 
         return self.email
 
     class Meta:
+        """Metaclass for model."""
+
         db_table = 'users'

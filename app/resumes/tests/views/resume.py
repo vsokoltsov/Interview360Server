@@ -5,8 +5,9 @@ from . import (
 from resumes.index import ResumesIndex
 import ipdb
 
+
 class ResumeViewTest(APITestCase):
-    """ Tests for ResumeViewTest """
+    """Tests for ResumeViewTest."""
 
     fixtures = [
         'user.yaml',
@@ -16,7 +17,7 @@ class ResumeViewTest(APITestCase):
     ]
 
     def setUp(self):
-        """ Setting up testing dependencies """
+        """Set up testing dependencies."""
 
         self.resume = Resume.objects.first()
         self.company = Company.objects.first()
@@ -47,13 +48,13 @@ class ResumeViewTest(APITestCase):
         }
 
     def test_success_list_receiving(self):
-        """ Test success receiving of the list of resumes """
+        """Test success receiving of the list of resumes."""
 
         response = self.client.get('/api/v1/resumes/', format='json')
         self.assertEqual(len(response.data), 4)
 
     def test_success_retrieve_resume(self):
-        """ Test success resume retrieving """
+        """Test success resume retrieving."""
 
         response = self.client.get(
             '/api/v1/resumes/{}/'.format(self.resume.id), format='json'
@@ -64,15 +65,16 @@ class ResumeViewTest(APITestCase):
     @mock.patch('common.services.twilio_service.TwilioService')
     @mock.patch('resumes.index.ResumesIndex.store_index')
     def test_success_creation_of_resume(self, resume_index, twilio_mock):
-        """ Test success creation of the resume """
+        """Test success creation of the resume."""
 
-        response = self.client.post('/api/v1/resumes/', self.params, format='json')
+        response = self.client.post(
+            '/api/v1/resumes/', self.params, format='json')
         self.assertTrue('resume' in response.data)
 
     @mock.patch('common.services.twilio_service.TwilioService')
     @mock.patch('resumes.index.ResumesIndex.store_index')
     def test_failed_creation_of_resume(self, resume_index, twilio_mock):
-        """ Test failed creation of the resume """
+        """Test failed creation of the resume."""
 
         response = self.client.post('/api/v1/resumes/', None, format='json')
         self.assertTrue('errors' in response.data)
@@ -80,7 +82,7 @@ class ResumeViewTest(APITestCase):
     @mock.patch('common.services.twilio_service.TwilioService')
     @mock.patch('resumes.index.ResumesIndex.store_index')
     def test_success_update_of_resume(self, resume_index, twilio_mock):
-        """ Test success update of a resume """
+        """Test success update of a resume."""
 
         response = self.client.put(
             '/api/v1/resumes/{}/'.format(self.resume.id), self.params,
@@ -93,7 +95,7 @@ class ResumeViewTest(APITestCase):
     @mock.patch('resumes.index.ResumesIndex.store_index')
     def test_success_deletion_of_resume(self, resume_index,
                                         delete_resume, get_resume):
-        """ Test success delete of the resume """
+        """Test success delete of the resume."""
 
         response = self.client.delete(
             '/api/v1/resumes/{}/'.format(self.resume.id), format='json'
@@ -102,24 +104,24 @@ class ResumeViewTest(APITestCase):
 
     @mock.patch('resumes.search.ResumesSearch.find')
     def test_search_action(self, search_mock):
-        """ Test success search of resume """
+        """Test success search of resume."""
 
         resume_index = [
-            { 'id': 1 },
-            { 'id': 2 },
-            { 'id': 3 }
+            {'id': 1},
+            {'id': 2},
+            {'id': 3}
         ]
         search_mock.return_value = resume_index
         url = "/api/v1/resumes/search/"
-        response = self.client.get(url, { 'q': 'buzzword' }, format='json')
+        response = self.client.get(url, {'q': 'buzzword'}, format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data['resumes'], resume_index)
 
     def test_list_action_with_attributes(self):
-        """ Test receiving of the resumes list with parameters """
+        """Test receiving of the resumes list with parameters."""
 
         url = "/api/v1/resumes/"
-        response = self.client.get(url, {
+        self.client.get(url, {
             'salary': {
                 'min': 10000,
                 'max': 15000
@@ -127,7 +129,7 @@ class ResumeViewTest(APITestCase):
         }, format='json')
 
     def test_success_receiving_of_filters(self):
-        """ Test success response on filters receiving """
+        """Test success response on filters receiving."""
 
         url = "/api/v1/resumes/filters/"
         response = self.client.get(url, format='json')

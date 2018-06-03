@@ -6,9 +6,11 @@ from common.forms import BaseForm, FormException
 
 import ipdb
 
+
 class FeedbackForm(BaseForm):
     """
-    Feedback form object
+    Feedback form object.
+
     :param id: Identifier of feedback
     :param user_id: Identifier of user who performs feedback
     :param object_id: Identifier of the object, on which feedback is performed
@@ -42,7 +44,7 @@ class FeedbackForm(BaseForm):
             'type': 'string',
             'required': True,
             'empty': False,
-            'allowed': [ 'interviews.interview', 'authorization.user' ]
+            'allowed': ['interviews.interview', 'authorization.user']
         },
         'description': {
             'type': 'string',
@@ -52,9 +54,10 @@ class FeedbackForm(BaseForm):
     }
 
     def submit(self):
-        """ Save feedback information into database """
+        """Save feedback information into database."""
 
-        if not self.is_valid(): return False
+        if not self.is_valid():
+            return False
 
         try:
             with transaction.atomic():
@@ -65,11 +68,11 @@ class FeedbackForm(BaseForm):
                     self._set_attributes()
                     self.obj.save()
                 return True
-        except:
+        except BaseException:
             return False
 
     def _get_content_type_provider(self):
-        """ Receive a correct content type value """
+        """Receive a correct content type value."""
 
         app_name, model = self.params.get('content_type').split('.')
         content_type = ContentType.objects.get(
@@ -78,7 +81,7 @@ class FeedbackForm(BaseForm):
         return content_type
 
     def _set_attributes(self):
-        """ Set attributes to new feedback instance """
+        """Set attributes to new feedback instance."""
 
         for field, value in self.params.items():
             setattr(self.obj, field, value)

@@ -10,8 +10,9 @@ from .serializers import FeedbackSerializer
 from .query import FeedbacksQuery
 from .forms import FeedbackForm
 
+
 class FeedbackViewSet(viewsets.ModelViewSet):
-    """ View operations for Feedback """
+    """View operations for Feedback."""
 
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated, )
@@ -19,27 +20,40 @@ class FeedbackViewSet(viewsets.ModelViewSet):
     query_service = FeedbacksQuery
 
     def get_queryset(self):
-        """ Explicitly return the queryset """
+        """Return explicit queryset."""
 
         return self.request.user.feedback_set
 
     def create(self, request):
-        """ Create feedback action implementation """
+        """Create feedback action implementation.
+
+        :param request: View request value
+        :return: Response instance
+        """
 
         form = FeedbackForm(params=request.data)
         if form.submit():
             serializer = FeedbackSerializer(form.obj)
-            return Response({ 'feedback': serializer.data }, status=status.HTTP_201_CREATED)
+            return Response({'feedback': serializer.data},
+                            status=status.HTTP_201_CREATED)
         else:
-            return Response({ 'errors': form.errors }, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'errors': form.errors},
+                            status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, pk=None):
-        """ Update feedback action implementation """
+        """Update feedback action implementation.
+
+        :param request: View request value
+        :param pk: Id of the updating feedback
+        :return: Response instance
+        """
 
         feedback = self.get_object()
         form = FeedbackForm(obj=feedback, params=request.data)
         if form.submit():
             serializer = FeedbackSerializer(form.obj)
-            return Response({ 'feedback': serializer.data }, status=status.HTTP_200_OK)
+            return Response({'feedback': serializer.data},
+                            status=status.HTTP_200_OK)
         else:
-            return Response({ 'errors': form.errors }, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'errors': form.errors},
+                            status=status.HTTP_400_BAD_REQUEST)
