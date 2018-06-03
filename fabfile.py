@@ -174,10 +174,10 @@ def docker_provision_aws():
 def docker_deploy(version='latest', container='app'):
     """Deploy docker application."""
 
-    compose_command = """
-    docker-compose build --force-rm --no-cache --build-arg \
-    DEFAULT_REQUIREMENTS=production.txt app
-    """
+    compose_command = (
+        "docker-compose build --force-rm --no-cache --build-arg "
+        "DEFAULT_REQUIREMENTS=production.txt app"
+    )
 
     local(compose_command)
     local('docker-compose push app')
