@@ -2,7 +2,6 @@ from . import (
     BaseForm, cerberus, Resume, Workplace, Company,
     transaction, resume_exist
 )
-import ipdb
 
 
 class WorkplaceForm(BaseForm):

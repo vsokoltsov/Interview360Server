@@ -3,7 +3,7 @@ from . import forms, Company, User, CompanyMember, EmailService
 
 class EmployeeForm(forms.Form):
     """
-    Employee form classself.
+    Employee form class.
 
     Updates user information and creates CompanyMember object
     """
