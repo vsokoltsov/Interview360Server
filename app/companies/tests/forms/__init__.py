@@ -16,5 +16,5 @@ from companies.factory import (
     CompanyFactory, CompanyMemberFactory, SpecialtyFactory
 )
 
-from .employee import EmployeeActivationFormTest
+from .employee_activation import EmployeeActivationFormTest
 from .company import CompanyFormTest

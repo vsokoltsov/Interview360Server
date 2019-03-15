@@ -5,7 +5,7 @@ from authorization.models import User
 from companies.models import Company, CompanyMember
 from common.services.email_service import EmailService
 
-from .employee import EmployeeActivationForm
+from .employee_activation import EmployeeActivationForm
 from .company import CompanyForm
 
 __all__ = [
