@@ -47,12 +47,12 @@ class EmployeeForm(forms.Form):
                 return True
             else:
                 raise forms.ValidationError('User member is already activated')
-        except User.DoesNotExist as error:
+        except User.DoesNotExist:
             self.add_error('token', 'There is no such user')
             return False
-        except CompanyMember.DoesNotExist as error:
+        except CompanyMember.DoesNotExist:
             self.add_error('company_pk', 'User does not belong to the company')
             return False
-        except forms.ValidationError as error:
+        except forms.ValidationError:
             self.add_error('company_pk', 'User member is already activated')
             return False

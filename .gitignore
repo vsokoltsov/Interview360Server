@@ -12,3 +12,5 @@ uploads
 .env.prod
 /deploy/nginx/*.conf
 static
+.DS_Store
+.vscode

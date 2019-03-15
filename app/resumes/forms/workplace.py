@@ -45,13 +45,13 @@ class WorkplaceForm(BaseForm):
                     },
                     'start_date': {
                         'type': 'string',
-                        'regex': '^\d{4}-\d{2}-\d{2}$',
+                        'regex': r'^\d{4}-\d{2}-\d{2}$',
                         'empty': False,
                         'required': True
                     },
                     'end_date': {
                         'type': 'string',
-                        'regex': '^\d{4}-\d{2}-\d{2}$',
+                        'regex': r'^\d{4}-\d{2}-\d{2}$',
                         'required': True
                     }
                 }

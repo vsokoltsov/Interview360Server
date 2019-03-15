@@ -39,7 +39,7 @@ class CompanyForm(BaseForm):
         },
         'start_date': {
             'type': 'string',
-            'regex': '^\d{4}-\d{2}-\d{2}$',
+            'regex': r'^\d{4}-\d{2}-\d{2}$',
             'empty': False,
             'required': True
         },
@@ -118,7 +118,7 @@ class CompanyForm(BaseForm):
                         id=self.params.get('owner_id')))
                 CompanyIndex.store_index(self.obj)
                 return True
-        except Exception as e:
+        except Exception:
             return False
 
     def is_valid(self):

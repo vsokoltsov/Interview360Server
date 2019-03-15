@@ -17,7 +17,7 @@ class EmployeeParamsSerializer(serializers.Serializer):
     role = serializers.IntegerField(write_only=True)
 
     def validate_email(self, value):
-        """Employee parameter validation."""
+        """ Employee parameter validation. """
 
         if self.context['user'].email == value:
             raise serializers.ValidationError(
@@ -57,7 +57,7 @@ class EmployeesSerializer(serializers.Serializer):
                     employees.append(user)
                 self.context['company_id'] = data['company_id']
                 return employees
-        except IntegrityError as error:
+        except IntegrityError:
             self.errors['employees'] = 'One of these users already\
                                         belongs to a company'
             return False
