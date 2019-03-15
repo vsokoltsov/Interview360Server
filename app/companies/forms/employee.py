@@ -1,58 +1,41 @@
-from . import forms, Company, User, CompanyMember, EmailService
+from common.forms import BaseForm
+from django.db import transaction
+from authorization.models import User
+from companies.models import Company, CompanyMember
+from companies.validators import company_exist
+from common.schemas import EMAIL_SCHEMA
 
 
-class EmployeeActivationForm(forms.Form):
+class EmployeeForm(BaseForm):
     """
-    Employee form class.
+    Form object for employees creation.
 
-    Updates user information and creates CompanyMember object
+    :param company_id: Identifier of the company
+    :param employees: List of employees' data
     """
 
-    token = forms.CharField(required=True)
-    password = forms.CharField(max_length=255, min_length=6, required=False)
-    password_confirmation = forms.CharField(
-        max_length=255, min_length=6, required=False
-    )
-    company_pk = forms.IntegerField(required=True)
-
-    def clean_password_confirmation(self):
-        """Check matching of password and password confirmation."""
-
-        cleaned_data = self.clean()
-        if cleaned_data['password'] != cleaned_data['password_confirmation']:
-            raise forms.ValidationError(
-                'Password confirmation does not match password'
-            )
-        return cleaned_data['password']
-
-    def submit(self):
-        """Activate company member."""
-
-        if not self.is_valid():
-            return False
-
-        try:
-            user = User.objects.get(auth_token=self['token'].value())
-            if not user.password:
-                user.set_password(self['password'].value())
-                user.save()
-            company_member = CompanyMember.objects.get(
-                user_id=user.id, company_id=self['company_pk'].value()
-            )
-            if not company_member.active:
-                company = Company.objects.get(id=self['company_pk'].value())
-                company_member.active = True
-                company_member.save()
-                EmailService.send_company_invite_confirmation(user, company)
-                return True
-            else:
-                raise forms.ValidationError('User member is already activated')
-        except User.DoesNotExist:
-            self.add_error('token', 'There is no such user')
-            return False
-        except CompanyMember.DoesNotExist:
-            self.add_error('company_pk', 'User does not belong to the company')
-            return False
-        except forms.ValidationError:
-            self.add_error('company_pk', 'User member is already activated')
-            return False
+    schema = {
+        'company_id': {
+            'type': 'integer',
+            'empty': False,
+            'required': True,
+            'validator': company_exist
+        },
+        'employees': {
+            'type': 'list',
+            'empty': False,
+            'required': True,
+            'schema': {
+                'type': 'dict',
+                'schema': {
+                    'email': EMAIL_SCHEMA,
+                    'role': {
+                        'type': 'integer',
+                        'empty': False,
+                        'required': True,
+                        'allowed': [role[0] for role in CompanyMember.ROLES]
+                    }
+                }
+            }
+        }
+    }
