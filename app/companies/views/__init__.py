@@ -23,7 +23,7 @@ from companies.serializers import (
 from companies.models import Company, CompanyMember, Specialty
 from authorization.models import User
 from companies.permissions import CompanyPermissions, EmployeePermission
-from companies.forms import EmployeeForm
+from companies.forms import EmployeeActivationForm
 
 from .company import CompaniesViewSet
 from .employee import EmployeesViewSet

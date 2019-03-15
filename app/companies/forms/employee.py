@@ -1,7 +1,7 @@
 from . import forms, Company, User, CompanyMember, EmailService
 
 
-class EmployeeForm(forms.Form):
+class EmployeeActivationForm(forms.Form):
     """
     Employee form class.
 

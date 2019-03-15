@@ -1,11 +1,11 @@
-from . import (mock, TransactionTestCase, Token, EmployeeForm,
+from . import (mock, TransactionTestCase, Token, EmployeeActivationForm,
                Company, CompanyMember, User, datetime, HR, CANDIDATE,
                override_settings)
 import django.core.mail as mail
 
 
-class EmployeeFormTest(TransactionTestCase):
-    """Tests for the EmployeeFormTest class."""
+class EmployeeActivationFormTest(TransactionTestCase):
+    """Tests for the EmployeeActivationFormTest class."""
 
     fixtures = [
         'user.yaml',
@@ -33,13 +33,13 @@ class EmployeeFormTest(TransactionTestCase):
     def test_success_form_validation(self):
         """Test success form validation with all necessary parameters."""
 
-        form = EmployeeForm(self.form_data)
+        form = EmployeeActivationForm(self.form_data)
         self.assertTrue(form.is_valid())
 
     def test_failed_form_validation(self):
         """Test failed form validation."""
 
-        form = EmployeeForm({})
+        form = EmployeeActivationForm({})
         self.assertFalse(form.is_valid())
 
     def test_failed_password_matching(self):
@@ -52,7 +52,7 @@ class EmployeeFormTest(TransactionTestCase):
             'password_confirmation': 'bbbbbb'
         }
 
-        form = EmployeeForm(form_data)
+        form = EmployeeActivationForm(form_data)
         self.assertFalse(form.is_valid())
 
     @mock.patch('profiles.index.UserIndex.store_index')
@@ -69,7 +69,7 @@ class EmployeeFormTest(TransactionTestCase):
         user_class_mock.objects.create = mock.MagicMock()
         user_class_mock.objects.create.return_value = User(id=1)
 
-        form = EmployeeForm(self.form_data)
+        form = EmployeeActivationForm(self.form_data)
         form.submit()
         self.assertTrue(user_save_mock.called)
 
@@ -77,7 +77,7 @@ class EmployeeFormTest(TransactionTestCase):
     def test_updating_user_password(self, user_index_mock):
         """Test updating user password."""
 
-        form = EmployeeForm(self.form_data)
+        form = EmployeeActivationForm(self.form_data)
         form.submit()
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password(self.form_data['password']))
@@ -86,7 +86,7 @@ class EmployeeFormTest(TransactionTestCase):
     def test_company_member_updated(self, user_index_mock):
         """Test update of CompanyMember instance 'active' field."""
 
-        form = EmployeeForm(self.form_data)
+        form = EmployeeActivationForm(self.form_data)
         form.submit()
 
         self.company_member.refresh_from_db()
@@ -107,7 +107,7 @@ class EmployeeFormTest(TransactionTestCase):
             'password_confirmation': 'aaaaaa'
         }
 
-        form = EmployeeForm(form_data)
+        form = EmployeeActivationForm(form_data)
         self.assertFalse(form.submit())
 
     def test_user_already_activated_in_company(self):
@@ -117,7 +117,7 @@ class EmployeeFormTest(TransactionTestCase):
         self.company_member.save()
         self.company.refresh_from_db()
 
-        form = EmployeeForm(self.form_data)
+        form = EmployeeActivationForm(self.form_data)
         self.assertFalse(form.submit())
 
     @mock.patch('profiles.index.UserIndex.store_index')
@@ -128,7 +128,7 @@ class EmployeeFormTest(TransactionTestCase):
             'company_pk': self.company.id,
             'token': self.token.key
         }
-        form = EmployeeForm(form_data)
+        form = EmployeeActivationForm(form_data)
         self.assertTrue(form.submit())
         self.company_member.refresh_from_db()
         self.assertTrue(self.company_member.active)
@@ -144,7 +144,7 @@ class EmployeeFormTest(TransactionTestCase):
             'company_pk': self.company.id,
             'token': self.token.key
         }
-        form = EmployeeForm(form_data)
+        form = EmployeeActivationForm(form_data)
         form.submit()
         self.company_member.refresh_from_db()
         self.assertTrue(self.company_member.active)
@@ -155,6 +155,6 @@ class EmployeeFormTest(TransactionTestCase):
     def test_sending_final_confirmation_mail(self, user_index_mock):
         """Test sending confirmation email."""
 
-        form = EmployeeForm(self.form_data)
+        form = EmployeeActivationForm(self.form_data)
         form.submit()
         self.assertEqual(len(mail.outbox), 1)

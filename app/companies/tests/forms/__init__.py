@@ -5,7 +5,7 @@ import mock
 import datetime
 from django.contrib.contenttypes.models import ContentType
 
-from companies.forms import EmployeeForm, CompanyForm
+from companies.forms import EmployeeActivationForm, CompanyForm
 from companies.models import Company, CompanyMember
 from authorization.models import User
 from roles.constants import HR, CANDIDATE
@@ -16,5 +16,5 @@ from companies.factory import (
     CompanyFactory, CompanyMemberFactory, SpecialtyFactory
 )
 
-from .employee import EmployeeFormTest
+from .employee import EmployeeActivationFormTest
 from .company import CompanyFormTest
