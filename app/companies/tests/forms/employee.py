@@ -191,7 +191,7 @@ class EmployeeFormTest(TransactionTestCase):
         )
         form.submit()
 
-        self.assertTrue(len(form.employees) > 0)
+        self.assertTrue(len(form.data.get('employees')) > 0)
 
     @mock.patch('profiles.index.UserIndex.store_index')
     def test_creating_already_active_company_member(self, user_index):

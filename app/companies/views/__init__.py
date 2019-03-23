@@ -13,6 +13,7 @@ from companies.search import CompanySearch, SpecialtySearch
 from companies.forms import CompanyForm, EmployeeForm
 from companies.query import CompaniesQuery
 from common.query_parser import QueryParser
+from common.serializers.user_serializer import UserSerializer
 from common.services.cities_service import CitiesService
 
 from companies.serializers import (

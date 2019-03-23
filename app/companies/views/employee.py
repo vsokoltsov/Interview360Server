@@ -6,6 +6,7 @@ from . import (
     CompanyMember,
     get_object_or_404,
     EmployeeForm,
+    UserSerializer,
     EmployeeSerializer,
     EmployeesSerializer,
     IsAuthenticated,
@@ -52,9 +53,11 @@ class EmployeesViewSet(viewsets.ViewSet):
         form = EmployeeForm(params=request.data)
 
         if form.submit():
-            serializer = EmployeesSerializer(form.data)
+            employees = UserSerializer(
+                form.data.get('employees'), many=True
+            )
             return Response(
-                serializer.data,
+                {'employees': employees.data},
                 status=status.HTTP_201_CREATED
             )
         else:
