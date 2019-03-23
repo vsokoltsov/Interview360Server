@@ -57,7 +57,7 @@ class BaseForm(abc.ABC):
             self.params['current_user'] = self.current_user
 
     def is_valid(self):
-        """Return whether or not the receiving data are valid."""
+        "" "Return whether or not the receiving data is valid. """
 
         try:
             result = self.validator.validate(self.params, self.schema)
@@ -73,10 +73,3 @@ class BaseForm(abc.ABC):
         """Set custom error message for particular key."""
 
         self.errors[key] = self.errors.get(key, []) + [message]
-
-    @contextmanager
-    def submit(self, message=None):
-        """Save object to the database."""
-
-        if not self.is_valid():
-            return False
