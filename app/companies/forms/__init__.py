@@ -7,8 +7,9 @@ from common.services.email_service import EmailService
 
 from .employee_activation import EmployeeActivationForm
 from .company import CompanyForm
+from .employee import EmployeeForm
 
 __all__ = [
     transaction, Token, User, Company, CompanyMember,
-    EmailService, EmployeeActivationForm, CompanyForm, forms
+    EmailService, EmployeeActivationForm, CompanyForm, EmployeeForm, forms
 ]
