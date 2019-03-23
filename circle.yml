@@ -25,12 +25,12 @@ jobs:
           command: |
             docker container prune -f
             docker image prune -f
-            docker-compose up -d app db
-            docker-compose run app bash -c "cd app && python manage.py test"
+            docker-compose up -d interview360 db
+            docker-compose run interview360 bash -c "cd app && python manage.py test"
 
-      - deploy:
-          name: 'Deploy the new image'
-          command: |
-            pip install fabric3
-            docker login -u=$DOCKER_HUB_USER_ID -p=$DOCKER_HUB_PWD
-            fab docker_deploy
+      # - deploy:
+      #     name: 'Deploy the new image'
+      #     command: |
+      #       pip install fabric3
+      #       docker login -u=$DOCKER_HUB_USER_ID -p=$DOCKER_HUB_PWD
+      #       fab docker_deploy

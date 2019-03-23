@@ -123,11 +123,13 @@ class CompanyFormTest(TransactionTestCase):
         )
         self.assertFalse(form.submit())
 
+    @mock.patch('storages.backends.s3boto3.S3Boto3Storage.save')
     @mock.patch('companies.index.CompanyIndex.store_index')
     @mock.patch('profiles.index.UserIndex.store_index')
-    def test_success_image_setting(self, user_index, company_index):
+    def test_success_image_setting(self, user_index, company_index, boto_mock):
         """Test whether or not image setting came succesfullty."""
 
+        boto_mock.return_value = 'test.img'
         attachment = ImageFactory(
             content_type=ContentType.objects.get_for_model(Company)
         )

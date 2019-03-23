@@ -7,7 +7,8 @@ services:
     environment:
       POSTGRES_DB: 'interview_manager'
     volumes:
-      - /var/lib/postgresql/data:/var/lib/postgresql/data
+      - /teamcircle/interview360/postgresql/data:/var/lib/postgresql/teamcircle/data
+    restart: always
     ports:
       - 5432:5432
 
@@ -23,11 +24,11 @@ services:
     environment:
       - DJANGO_DEFAULT_ENV=development
 
-  app:
+  interview360:
     <<: *default_app
     image: vsokoltsov/interview360
     container_name: interview360
-    command: bash -c "python3 app/manage.py migrate && cd app && gunicorn app.wsgi:application -b 0.0.0.0:8000"
+    command: bash -c "python3 app/manage.py migrate && cd app && python manage.py runserver 0.0.0.0:8000"
     ports:
       - '8000:8000'
     links:
@@ -71,16 +72,16 @@ services:
     depends_on:
       - rabbit
 
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    ports:
-      - "80:8000"
-    volumes:
-      - .:/interview360
-      - ./deploy/nginx:/etc/nginx/conf.d
-    depends_on:
-      - app
+  # nginx:
+  #   image: nginx:latest
+  #   container_name: nginx
+  #   ports:
+  #     - "8080:8000"
+  #   volumes:
+  #     - .:/interview360
+  #     - ./deploy/nginx:/etc/nginx/conf.d
+  #   depends_on:
+  #     - app
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:5.6.3

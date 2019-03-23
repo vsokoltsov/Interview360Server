@@ -1,160 +1,224 @@
-from . import (mock, TransactionTestCase, Token, EmployeeForm,
-               Company, CompanyMember, User, datetime, HR, CANDIDATE,
-               override_settings)
+from django.test import override_settings
 import django.core.mail as mail
+
+from . import (
+    TransactionTestCase,
+    mock,
+    datetime,
+    User,
+    Token,
+    Company,
+    ImageFactory,
+    ContentType,
+    UserFactory,
+    CompanyFactory,
+    CompanyMemberFactory,
+    EmployeeForm,
+    CompanyMember,
+    SpecialtyFactory
+)
 
 
 class EmployeeFormTest(TransactionTestCase):
-    """Tests for the EmployeeFormTest class."""
-
-    fixtures = [
-        'user.yaml',
-        'auth_token.yaml',
-        'company.yaml'
-    ]
+    """ Test cases for the EmployeeForm object. """
 
     def setUp(self):
-        """Set up test dependencies."""
+        """ Set up testing dependencies. """
 
-        self.company = Company.objects.first()
-        self.hr = self.company.get_employees_with_role(HR)[0]
-        self.user = User.objects.create(email="test@mail.com")
-        self.token = Token.objects.create(user=self.user)
-        self.company_member = CompanyMember.objects.create(
-            user_id=self.user.id, company_id=self.company.id, role=CANDIDATE
+        self.user = UserFactory()
+        self.company = CompanyFactory()
+        self.employee1 = UserFactory()
+        self.employee2 = UserFactory()
+        self.employee3 = UserFactory()
+        self.company_member = CompanyMemberFactory(
+            user_id=self.user.id, company_id=self.company.id,
+            role=CompanyMember.COMPANY_OWNER
         )
-        self.form_data = {
-            'company_pk': self.company.id,
-            'token': self.token.key,
-            'password': 'aaaaaa',
-            'password_confirmation': 'aaaaaa'
+        employee_1_json = {
+            'email': self.employee1.email,
+            'role': CompanyMember.EMPLOYEE
+        }
+        employee_2_json = {
+            'email': self.employee2.email,
+            'role': CompanyMember.EMPLOYEE
+        }
+        employee_3_json = {
+            'email': self.employee3.email,
+            'role': CompanyMember.HR
+        }
+        self.params = {
+            'company_id': self.company.id,
+            'employees': [
+                employee_1_json,
+                employee_2_json,
+                employee_3_json,
+            ]
         }
 
     def test_success_form_validation(self):
-        """Test success form validation with all necessary parameters."""
+        """ Test success EmployeeForm's validation. """
 
-        form = EmployeeForm(self.form_data)
+        form = EmployeeForm(
+            params=self.params
+        )
         self.assertTrue(form.is_valid())
 
     def test_failed_form_validation(self):
-        """Test failed form validation."""
+        """ Test failed EmployeeForm's validation. """
 
-        form = EmployeeForm({})
+        form = EmployeeForm(
+            params={}
+        )
         self.assertFalse(form.is_valid())
 
-    def test_failed_password_matching(self):
-        """Test failed form validation due to different password."""
+    def test_failed_validation_empty_email(self):
+        """ Test failed validation if one of the emails is not present. """
 
-        form_data = {
-            'company_pk': self.company.id,
-            'token': self.token.key,
-            'password': 'aaaaaa',
-            'password_confirmation': 'bbbbbb'
-        }
-
-        form = EmployeeForm(form_data)
+        self.params['employees'][0]['email'] = None
+        form = EmployeeForm(
+            params=self.params
+        )
         self.assertFalse(form.is_valid())
 
-    @mock.patch('profiles.index.UserIndex.store_index')
-    @mock.patch.object(User, 'save')
-    @mock.patch('django.contrib.auth.models.User')
-    def test_saving_user_information(
-            self,
-            user_class_mock,
-            user_save_mock,
-            user_index_mock):
-        """Test calling save() method on User."""
+    def test_failed_validation_empty_role(self):
+        """ Test failed validation if one of the roles is not present. """
 
-        user_class_mock.objects = mock.MagicMock()
-        user_class_mock.objects.create = mock.MagicMock()
-        user_class_mock.objects.create.return_value = User(id=1)
+        self.params['employees'][0].pop('role')
+        form = EmployeeForm(
+            params=self.params
+        )
+        self.assertFalse(form.is_valid())
 
-        form = EmployeeForm(self.form_data)
-        form.submit()
-        self.assertTrue(user_save_mock.called)
+    def test_failed_validation_wrong_email_format(self):
+        """ Test failed validation if one of the emails has\
+        the wrong format."""
 
-    @mock.patch('profiles.index.UserIndex.store_index')
-    def test_updating_user_password(self, user_index_mock):
-        """Test updating user password."""
+        self.params['employees'][0]['email'] = 'awdawdawd'
+        form = EmployeeForm(
+            params=self.params
+        )
+        self.assertFalse(form.is_valid())
 
-        form = EmployeeForm(self.form_data)
-        form.submit()
-        self.user.refresh_from_db()
-        self.assertTrue(self.user.check_password(self.form_data['password']))
+    def test_failed_validation_role_does_not_exist(self):
+        """ Test failed validation of role does not exist """
 
-    @mock.patch('profiles.index.UserIndex.store_index')
-    def test_company_member_updated(self, user_index_mock):
-        """Test update of CompanyMember instance 'active' field."""
+        self.params['employees'][0]['role'] = 1000
+        form = EmployeeForm(
+            params=self.params
+        )
+        self.assertFalse(form.is_valid())
 
-        form = EmployeeForm(self.form_data)
-        form.submit()
-
-        self.company_member.refresh_from_db()
-        self.assertTrue(self.company_member.active)
-
-    def test_user_does_not_have_company_member(self):
-        """Test validation failure.
-
-        User does not have a company_member instance.
-        """
-
-        user = User.objects.create(email="batman@superman.com")
-        token = Token.objects.create(user=user)
-        form_data = {
-            'company_id': self.company.id,
-            'token': token.key,
-            'password': 'aaaaaa',
-            'password_confirmation': 'aaaaaa'
-        }
-
-        form = EmployeeForm(form_data)
-        self.assertFalse(form.submit())
-
-    def test_user_already_activated_in_company(self):
-        """Test if user already activated in company."""
-
-        self.company_member.active = True
-        self.company_member.save()
-        self.company.refresh_from_db()
-
-        form = EmployeeForm(self.form_data)
-        self.assertFalse(form.submit())
-
-    @mock.patch('profiles.index.UserIndex.store_index')
-    def test_user_already_has_password(self, user_index_mock):
-        """Test submit form if user already has a password."""
-
-        form_data = {
-            'company_pk': self.company.id,
-            'token': self.token.key
-        }
-        form = EmployeeForm(form_data)
-        self.assertTrue(form.submit())
-        self.company_member.refresh_from_db()
-        self.assertTrue(self.company_member.active)
-
-    @mock.patch('profiles.index.UserIndex.store_index')
-    def test_company_member_marked_as_active(self, user_index_mock):
-        """Test company member.
-
-        Mark as active even if passwords are not present.
-        """
-
-        form_data = {
-            'company_pk': self.company.id,
-            'token': self.token.key
-        }
-        form = EmployeeForm(form_data)
-        form.submit()
-        self.company_member.refresh_from_db()
-        self.assertTrue(self.company_member.active)
-
-    @mock.patch('profiles.index.UserIndex.store_index')
     @override_settings(
-        EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend')
-    def test_sending_final_confirmation_mail(self, user_index_mock):
-        """Test sending confirmation email."""
+        EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend'
+    )
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_mail_sending(self, user_index):
+        """ Test success mail sending after receivng users and the company. """
 
-        form = EmployeeForm(self.form_data)
+        form = EmployeeForm(
+            params=self.params
+        )
         form.submit()
-        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(len(mail.outbox), 3)
+
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_user_creation(self, user_index_mock):
+        """ Tests success creation of the user if it does not exists. """
+
+        self.params['employees'].append({
+            'email': 'example4@mail.com',
+            'role': CompanyMember.CANDIDATE
+        })
+        users_count = User.objects.count()
+
+        form = EmployeeForm(
+            params=self.params
+        )
+        form.submit()
+        self.assertEqual(User.objects.count(), users_count + 1)
+
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_success_token_creation(self, user_index):
+        """Test creation of token for the new users."""
+
+        tokens_count = Token.objects.count()
+        form = EmployeeForm(
+            params=self.params
+        )
+        form.submit()
+        self.assertEqual(Token.objects.count(), tokens_count + 3)
+
+    def test_chosen_user_already_belongs_to_company(self):
+        """ Test failed validation if user already belongs to a company. """
+
+        new_user = User.objects.create(email="example4@mail.com")
+        CompanyMember.objects.create(
+            user_id=new_user.id,
+            company_id=self.company.id,
+            role=CompanyMember.EMPLOYEE)
+        employees = [
+            {'email': 'example4@mail.com', 'role': CompanyMember.CANDIDATE},
+            {'email': 'example2@mail.com', 'role': CompanyMember.EMPLOYEE},
+            {'email': 'example3@mail.com', 'role': CompanyMember.CANDIDATE}
+        ]
+        form_data = {
+            'employees': employees,
+            'company_id': self.company.id,
+            'role': CompanyMember.EMPLOYEE
+        }
+        form = EmployeeForm(
+            params=form_data
+        )
+        self.assertFalse(form.submit())
+
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_user_indexing_after_create(self, user_index):
+        """ Test if index was created after the employee's creation. """
+
+        form = EmployeeForm(
+            params=self.params
+        )
+        form.submit()
+
+        self.assertTrue(user_index.called)
+
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_receiving_of_employees_information(self, user_index):
+        """Test presence of 'employees' key after success creation."""
+
+        form = EmployeeForm(
+            params=self.params
+        )
+        form.submit()
+
+        self.assertTrue(len(form.data.get('employees')) > 0)
+
+    @mock.patch('profiles.index.UserIndex.store_index')
+    def test_creating_already_active_company_member(self, user_index):
+        """ Test creating already active company member\
+        (User already set a password)."""
+
+        user = User.objects.create(email='test_new@gmail.com')
+        user.set_password('password')
+        user.save()
+        new_company = Company.objects.first()
+        CompanyMember.objects.create(
+            user_id=user.id, company_id=new_company.id,
+            role=CompanyMember.EMPLOYEE, active=True
+        )
+        form_data = {
+            'employees': [
+                {
+                    'email': user.email,
+                    'role': CompanyMember.CANDIDATE
+                }
+            ],
+            'company_id': self.company.id
+        }
+
+        form = EmployeeForm(
+            params=form_data
+        )
+        form.submit()
+        cm = CompanyMember.objects.last()
+        self.assertTrue(cm.active)

@@ -4,6 +4,7 @@ from . import (
 from rest_framework.authtoken.models import Token
 from roles.constants import ROLE_IDENTIFIERS
 from common.services.email_service import EmailService
+from common.serializers.user_serializer import UserSerializer
 from django.db.utils import IntegrityError
 from profiles.index import UserIndex
 
@@ -11,13 +12,13 @@ roles = ROLE_IDENTIFIERS.keys()
 
 
 class EmployeeParamsSerializer(serializers.Serializer):
-    """Serializer params class."""
+    """ Serializer params class. """
 
     email = serializers.EmailField(write_only=True)
     role = serializers.IntegerField(write_only=True)
 
     def validate_email(self, value):
-        """Employee parameter validation."""
+        """ Employee parameter validation. """
 
         if self.context['user'].email == value:
             raise serializers.ValidationError(
@@ -26,7 +27,7 @@ class EmployeeParamsSerializer(serializers.Serializer):
         return value
 
     def validate_role(self, value):
-        """Employee role validation."""
+        """ Employee role validation. """
 
         if str(value) not in roles:
             raise serializers.ValidationError(
@@ -36,13 +37,13 @@ class EmployeeParamsSerializer(serializers.Serializer):
 
 
 class EmployeesSerializer(serializers.Serializer):
-    """Employees serializer list."""
+    """ Employees serializer list. """
 
     employees = EmployeeParamsSerializer(many=True, write_only=True)
     company_id = serializers.IntegerField(write_only=True)
 
     def create(self, data):
-        """Create employees."""
+        """ Create employees. """
 
         employees = []
         try:
@@ -57,7 +58,7 @@ class EmployeesSerializer(serializers.Serializer):
                     employees.append(user)
                 self.context['company_id'] = data['company_id']
                 return employees
-        except IntegrityError as error:
+        except IntegrityError:
             self.errors['employees'] = 'One of these users already\
                                         belongs to a company'
             return False

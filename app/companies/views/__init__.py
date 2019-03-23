@@ -10,9 +10,10 @@ from profiles.search import UsersSearch
 from profiles.index import UserIndex
 from companies.index import CompanyIndex
 from companies.search import CompanySearch, SpecialtySearch
-from companies.forms import CompanyForm
+from companies.forms import CompanyForm, EmployeeForm
 from companies.query import CompaniesQuery
 from common.query_parser import QueryParser
+from common.serializers.user_serializer import UserSerializer
 from common.services.cities_service import CitiesService
 
 from companies.serializers import (
@@ -23,7 +24,7 @@ from companies.serializers import (
 from companies.models import Company, CompanyMember, Specialty
 from authorization.models import User
 from companies.permissions import CompanyPermissions, EmployeePermission
-from companies.forms import EmployeeForm
+from companies.forms import EmployeeActivationForm
 
 from .company import CompaniesViewSet
 from .employee import EmployeesViewSet

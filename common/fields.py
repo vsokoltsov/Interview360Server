@@ -23,7 +23,7 @@ class CustomField(serializers.Field):
                 return self.serializer(related_object).data
             else:
                 return None
-        except KeyError as e:
+        except KeyError:
             raise serializers.ValidationError({
                 self.attr_name: 'There is no such attribute on a base model'
             })
@@ -39,8 +39,8 @@ class CustomField(serializers.Field):
         try:
             instance = self.serializer.Meta.model.objects.get(id=data)
             return instance
-        except AttributeError as e:
+        except AttributeError:
             raise serializers.ValidationError('There are no such attribute')
-        except self.serializer.Meta.model.DoesNotExist as e:
+        except self.serializer.Meta.model.DoesNotExist:
             raise serializers.ValidationError(
                 'Object with id {} does not exists'.format(data))

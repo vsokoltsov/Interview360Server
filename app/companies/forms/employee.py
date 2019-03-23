@@ -1,58 +1,143 @@
-from . import forms, Company, User, CompanyMember, EmailService
+from django.db.utils import IntegrityError
+
+from . import (
+    transaction, User, Company, CompanyMember, Token
+)
+
+from common.forms import BaseForm
+from common.schemas import EMAIL_SCHEMA
+from common.services.email_service import EmailService
+
+from companies.validators import company_exist
+from profiles.index import UserIndex
 
 
-class EmployeeForm(forms.Form):
+class EmployeeForm(BaseForm):
     """
-    Employee form classself.
+    Form object for employees creation.
 
-    Updates user information and creates CompanyMember object
+    :param company_id: Identifier of the company
+    :param employees: List of employees' data
     """
 
-    token = forms.CharField(required=True)
-    password = forms.CharField(max_length=255, min_length=6, required=False)
-    password_confirmation = forms.CharField(
-        max_length=255, min_length=6, required=False
-    )
-    company_pk = forms.IntegerField(required=True)
+    schema = {
+        'company_id': {
+            'type': 'integer',
+            'empty': False,
+            'required': True,
+            'validator': company_exist
+        },
+        'employees': {
+            'type': 'list',
+            'empty': False,
+            'required': True,
+            'schema': {
+                'type': 'dict',
+                'schema': {
+                    'email': EMAIL_SCHEMA,
+                    'role': {
+                        'type': 'integer',
+                        'empty': False,
+                        'required': True,
+                        'allowed': [role[0] for role in CompanyMember.ROLES]
+                    }
+                }
+            }
+        }
+    }
 
-    def clean_password_confirmation(self):
-        """Check matching of password and password confirmation."""
+    def __init__(self, **kwargs):
+        """
+        Redefine BaseForm constructor. Initial a list of objects
+        :param self: EmployeeForm instance
+        :param kwargs: Key-value arguments for parent class
+        """
 
-        cleaned_data = self.clean()
-        if cleaned_data['password'] != cleaned_data['password_confirmation']:
-            raise forms.ValidationError(
-                'Password confirmation does not match password'
-            )
-        return cleaned_data['password']
+        super(EmployeeForm, self).__init__(**kwargs)
+        self.data = {
+            'employees': [],
+            'company_id': kwargs.get('params', {}).get('company_id')
+        }
 
     def submit(self):
-        """Activate company member."""
+        """
+        Create new members for the particular company.
+        """
 
         if not self.is_valid():
             return False
 
         try:
-            user = User.objects.get(auth_token=self['token'].value())
-            if not user.password:
-                user.set_password(self['password'].value())
-                user.save()
-            company_member = CompanyMember.objects.get(
-                user_id=user.id, company_id=self['company_pk'].value()
-            )
-            if not company_member.active:
-                company = Company.objects.get(id=self['company_pk'].value())
-                company_member.active = True
-                company_member.save()
-                EmailService.send_company_invite_confirmation(user, company)
+            with transaction.atomic():
+                for employee_json in self.params.get('employees', []):
+                    user = self.find_or_create_user(employee_json['email'])
+                    token, _ = Token.objects.get_or_create(user=user)
+                    company = Company.objects.get(id=self.params['company_id'])
+                    self.__create_company_member(user, company, employee_json)
+                    UserIndex.store_index(user)
+                    self.__send_email(user, company, token)
+                    self.data['employees'].append(user)
                 return True
-            else:
-                raise forms.ValidationError('User member is already activated')
-        except User.DoesNotExist as error:
-            self.add_error('token', 'There is no such user')
+        except IntegrityError:
+            self.errors['employees'] = 'One of these users already\
+                                        belongs to a company'
             return False
-        except CompanyMember.DoesNotExist as error:
-            self.add_error('company_pk', 'User does not belong to the company')
-            return False
-        except forms.ValidationError as error:
-            self.add_error('company_pk', 'User member is already activated')
-            return False
+
+    def __create_company_member(self, user, company, employee):
+        """
+        Create new company member.
+
+        :param self: Instance of EmployeeForm's class
+        :param user: User, who will be added to company
+        :param company: Company, for which the update is performing
+        :param employee: JSON data of the new company's employee
+        :rtype: CompanyMember
+        :return: Newly created CompanyMember's instance
+        """
+
+        params = {
+            'user_id': user.id,
+            'company_id': company.id,
+            'role': employee['role']
+        }
+        if user.password:
+            params['active'] = True
+
+        CompanyMember.objects.create(**params)
+
+    def find_or_create_user(self, email):
+        """
+        Find or create user by email.
+
+        :param self: Instance of EmployeeForm's class
+        :param email: User's email
+        :rtype: User
+        :return: User instance
+        """
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            user = User.objects.create(email=email)
+        return user
+
+    def __send_email(self, user, company, token):
+        """
+        Send email based on user's state.
+
+        :param self: Instance of EmployeeForm's class
+        :param user: User for the email notification
+        :param company: Company which user is belong
+        :param token: User's authorization token based on which
+            identification on the email will be performed.
+        :rtype: None
+        """
+
+        if not user.password:
+            EmailService.sent_personal_employee_invite(
+                user, token, company
+            )
+        else:
+            EmailService.send_company_invite_confirmation(
+                user, company
+            )

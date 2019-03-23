@@ -3,7 +3,7 @@ from . import (
     get_object_or_404,
     User,
     Company,
-    EmployeeForm,
+    EmployeeActivationForm,
     status,
     IsAuthenticated,
     TokenAuthentication,
@@ -17,7 +17,7 @@ class EmployeeActivationView(APIView):
     def put(self, request, company_pk=None):
         """Update the employees of company."""
 
-        form = EmployeeForm(request.data)
+        form = EmployeeActivationForm(request.data)
 
         if form.submit():
             return Response(

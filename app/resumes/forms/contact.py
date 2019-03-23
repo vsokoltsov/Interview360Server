@@ -38,13 +38,13 @@ class ContactForm(BaseForm):
             'type': 'string',
             'empty': False,
             'required': True,
-            'regex': '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+            'regex': r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
         },
         'phone': {
             'type': 'string',
             'empty': False,
             'required': True,
-            'regex': '\A(\+)[0-9]{7,12}',
+            'regex': r'\A(\+)[0-9]{7,12}',
             'validator': phone_validation
         },
         'phone_comment': {

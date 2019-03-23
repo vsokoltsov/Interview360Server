@@ -142,7 +142,7 @@ class InterviewSerializer(serializers.ModelSerializer):
 
             instance.save()
             return instance
-        except Exception as e:
+        except Exception:
             return False
 
     def _get_or_create_candidate(self, email, data):

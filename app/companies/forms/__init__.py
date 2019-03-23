@@ -5,10 +5,11 @@ from authorization.models import User
 from companies.models import Company, CompanyMember
 from common.services.email_service import EmailService
 
-from .employee import EmployeeForm
+from .employee_activation import EmployeeActivationForm
 from .company import CompanyForm
+from .employee import EmployeeForm
 
 __all__ = [
     transaction, Token, User, Company, CompanyMember,
-    EmailService, EmployeeForm, CompanyForm, forms
+    EmailService, EmployeeActivationForm, CompanyForm, EmployeeForm, forms
 ]
