@@ -54,7 +54,10 @@ class EmployeeForm(BaseForm):
         """
 
         super(EmployeeForm, self).__init__(**kwargs)
-        self.employees = []
+        self.data = {
+            'employees': [],
+            'company_id': kwargs.get('params', {}).get('company_id')
+        }
 
     def submit(self):
         """
@@ -73,7 +76,8 @@ class EmployeeForm(BaseForm):
                     self.__create_company_member(user, company, employee_json)
                     UserIndex.store_index(user)
                     self.__send_email(user, company, token)
-                    self.employees.append(user)
+                    self.data['employees'].append(user)
+                return True
         except IntegrityError:
             self.errors['employees'] = 'One of these users already\
                                         belongs to a company'
