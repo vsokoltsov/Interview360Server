@@ -5,6 +5,7 @@ from . import (
     Company,
     CompanyMember,
     get_object_or_404,
+    EmployeeForm,
     EmployeeSerializer,
     EmployeesSerializer,
     IsAuthenticated,
@@ -48,18 +49,17 @@ class EmployeesViewSet(viewsets.ViewSet):
         """Create new user and send it a letter."""
 
         self.get_company(company_pk)
-        serializer = EmployeesSerializer(
-            data=request.data, context={
-                'user': request.user})
+        form = EmployeeForm(params=request.data)
 
-        if serializer.is_valid() and serializer.save():
+        if form.submit():
+            serializer = EmployeesSerializer(form.data)
             return Response(
                 serializer.data,
-                status=status.HTTP_200_OK
+                status=status.HTTP_201_CREATED
             )
         else:
             return Response(
-                {'errors': serializer.errors},
+                {'errors': form.errors},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
