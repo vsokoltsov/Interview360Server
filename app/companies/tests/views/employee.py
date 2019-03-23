@@ -62,6 +62,7 @@ class EmployeesViewSetTests(APITestCase):
 
         url = "/api/v1/companies/{}/employees/".format(self.company.id)
         response = self.client.post(url, self.form_data, format='json')
+        self.assertEqual(response.status_code, 201)
         self.assertEqual('employees' in response.data, True)
 
     def test_failed_employee_creation(self):
