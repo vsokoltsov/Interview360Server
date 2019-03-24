@@ -9,6 +9,7 @@ import logging
 from app.paths import *
 from app.credentials import *
 
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DEFAULT_STORAGE_PROVIDER_MESSAGE = "SELECTED FILE STORAGE PROVIDER - {}"
 DEFAULT_UPLOADS_PATH = 'uploads'
 DEFAULT_THUMBNAIL_PATH = 'thumbs'
@@ -41,10 +42,6 @@ if (AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and
 else:
     logging.info(DEFAULT_STORAGE_PROVIDER_MESSAGE.format('Local'))
 
-    LOCAL_FILE_STORAGE_CLASS_PATH = 'django.core.files.storage.\
-        FileSystemStorage'
-
-    DEFAULT_FILE_STORAGE = LOCAL_FILE_STORAGE_CLASS_PATH
-    THUMBNAIL_DEFAULT_STORAGE = LOCAL_FILE_STORAGE_CLASS_PATH
+    THUMBNAIL_DEFAULT_STORAGE = DEFAULT_FILE_STORAGE
     MEDIA_ROOT = os.path.join(BASE_DIR, DEFAULT_UPLOADS_PATH)
     THUMBS_ROOT = os.path.join(MEDIA_ROOT, DEFAULT_THUMBNAIL_PATH)

@@ -88,7 +88,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates')
+            os.path.join(BASE_DIR, 'app', 'templates')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -168,10 +168,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
-
 AUTH_USER_MODEL = 'authorization.User'
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = ['--with-spec', '--spec-color']
 
-FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures'),)
+FIXTURE_DIRS = (os.path.join(BASE_DIR, 'app', 'fixtures'),)
