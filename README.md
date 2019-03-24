@@ -11,7 +11,7 @@ Service for managing employees interview workflow.
   * Generate `.env.prod` file for necessary environment variables
   * Generate `dev.conf` file in `deploy/nginx` folder according to the `development.conf.example`
 
-More information about environment variables you can find (here)[./docs/ENV.md]
+More information about environment variables you can find [here](./docs/ENV.md)
 
 ## Application settings
 

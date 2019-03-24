@@ -18,21 +18,21 @@ which exact variable is missed.
 
 Optional environment variables. Use them as a flag for specific service.
 
-* `MAILGUN_API_KEY` - API key from (Mailgun)[https://www.mailgun.com/] service
-* `MAILGUN_SERVER_NAME` -Server domain from (Mailgun)[https://www.mailgun.com/] service
-* `ELASTICSEARCH_URL` - URL of the (Elasticsearch)[https://www.elastic.co/] container
-* `ELASTIC_PASSWORD` - Password for the (Kibana)[https://www.elastic.co/products/kibana] authentication
-* `RABBITMQ_DEFAULT_USER` - Name of user who will be acessing to the (RabbitMQ)[https://www.rabbitmq.com/] service
-* `RABBITMQ_DEFAULT_PASS` - Password of user who will be acessing to the (RabbitMQ)[https://www.rabbitmq.com/] service
-* `TWILIO_ACCOUNT_SID` - Secret key from (Twilio)[https://www.twilio.com/] account
-* `TWILIO_AUTH_TOKEN` - Authorization token from (Twilio)[https://www.twilio.com/] account
-* `GOOGLE_PLACES_API` - API key from (Google Places)[https://cloud.google.com/maps-platform/places/]
+* `MAILGUN_API_KEY` - API key from [Mailgun](https://www.mailgun.com/) service
+* `MAILGUN_SERVER_NAME` -Server domain from [Mailgun](https://www.mailgun.com/) service
+* `ELASTICSEARCH_URL` - URL of the [Elasticsearch](https://www.elastic.co/) container
+* `ELASTIC_PASSWORD` - Password for the [Kibana](https://www.elastic.co/products/kibana) authentication
+* `RABBITMQ_DEFAULT_USER` - Name of user who will be acessing to the [RabbitMQ](https://www.rabbitmq.com/) service
+* `RABBITMQ_DEFAULT_PASS` - Password of user who will be acessing to the [RabbitMQ](https://www.rabbitmq.com/) service
+* `TWILIO_ACCOUNT_SID` - Secret key from [Twilio](https://www.twilio.com/) account
+* `TWILIO_AUTH_TOKEN` - Authorization token from [Twilio](https://www.twilio.com/) account
+* `GOOGLE_PLACES_API` - API key from [Google Places](https://cloud.google.com/maps-platform/places/)
 
 ## Provider-base environments
 
 Environment variables for using some cloud-based services
 
-### (AWS)[https://aws.amazon.com]
+### [AWS](https://aws.amazon.com)
 
 * `AWS_KEY` - API key from the AWS credentials
 * `AWS_SECRET` - API secret key from the AWS credentials
