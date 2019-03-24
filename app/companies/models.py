@@ -62,8 +62,8 @@ class CompanyMember(models.Model):
         (EMPLOYEE, 'Employee')
     )
 
-    user = models.ForeignKey(User)
-    company = models.ForeignKey(Company)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
     role = models.IntegerField(
         default=EMPLOYEE, choices=ROLES, db_index=True, null=False
     )

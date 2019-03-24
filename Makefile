@@ -3,7 +3,7 @@ DEFAULT_APP_PATH := /interview360/app
 .PHONY: up
 up: docker-compose.yml
 	@echo "$@"
-	docker-compose up
+	docker-compose up $(ARGS)
 
 .PHONY: down
 down: docker-compose.yml
@@ -44,3 +44,10 @@ test:
 	@echo "$@"
 	docker exec -it interview360 \
 		python $(DEFAULT_APP_PATH)/manage.py test -s $(DEFAULT_APP_PATH)/$(ARGS)
+
+.PHONY: pip_compile
+pip_compile:
+			@echo "$@"
+			rm -rf /interview360/requirements/$(ARGS).txt
+			docker exec -it interview360 \
+				pip-compile --output-file /interview360/requirements/$(ARGS).txt /interview360/requirements.in/$(ARGS).in

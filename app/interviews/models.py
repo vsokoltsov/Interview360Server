@@ -8,8 +8,11 @@ from datetime import datetime, timedelta
 class Interview(models.Model):
     """Interview object representation."""
 
-    vacancy = models.ForeignKey(Vacancy, null=False, related_name='interviews')
-    candidate = models.ForeignKey(User, null=False)
+    vacancy = models.ForeignKey(
+        Vacancy, null=False, related_name='interviews',
+        on_delete=models.PROTECT
+    )
+    candidate = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     passed = models.NullBooleanField()
@@ -50,8 +53,9 @@ class Interview(models.Model):
 class InterviewEmployee(models.Model):
     """Intermediate table among the Interview, User and Role."""
 
-    employee = models.ForeignKey(User, null=False)
-    interview = models.ForeignKey(Interview, null=False)
+    employee = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
+    interview = models.ForeignKey(
+        Interview, null=False, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
