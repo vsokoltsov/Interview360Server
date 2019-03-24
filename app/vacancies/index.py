@@ -1,9 +1,10 @@
 from elasticsearch_dsl import (
     DocType, Date, Float, Integer, Boolean, Keyword, Text, Object
 )
+from common.indexes.default import DefaultIndex
 
 
-class VacancyIndex(DocType):
+class VacancyIndex(DefaultIndex):
     """Vacancy's index class."""
 
     id = Integer()

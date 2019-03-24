@@ -2,9 +2,10 @@ from elasticsearch_dsl import (
     DocType, Date, Float, Integer, Boolean, Keyword, Text, Object
 )
 from skills.models import Skill
+from common.indexes.default import DefaultIndex
 
 
-class ResumesIndex(DocType):
+class ResumesIndex(DefaultIndex):
     """Resumes index class."""
 
     id = Integer()
