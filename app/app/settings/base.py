@@ -13,12 +13,12 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 import sys
 import yaml
-from elasticsearch import Elasticsearch
-from elasticsearch_dsl.connections import connections
 from corsheaders.defaults import default_headers
 from django.core.exceptions import ImproperlyConfigured
 from app.paths import *
 from app.storages import *
+from app.credentials.rabbitmq import *
+from app.credentials.elasticsearch import *
 
 
 def get_environment_variable(var_name):
@@ -31,23 +31,6 @@ def get_environment_variable(var_name):
         raise ImproperlyConfigured(error_msg)
 
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-# PROJECT_ROOT = os.path.dirname(
-#     os.path.dirname(
-#         os.path.dirname(
-#             os.path.abspath(__file__))))
-
-# BASE_DIR = os.path.join(PROJECT_ROOT, 'app')
-# COMMON_DIR = os.path.abspath(
-#     os.path.join(
-#         os.path.abspath(
-#             os.path.dirname(__name__)),
-#         '../'))
-# sys.path.insert(1, COMMON_DIR)
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_environment_variable('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -195,12 +178,3 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = ['--with-spec', '--spec-color']
 
 FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures'),)
-if (os.environ.get('RABBITMQ_DEFAULT_USER') and
-        os.environ.get('RABBITMQ_DEFAULT_PASS')):
-
-    username = os.environ.get('RABBITMQ_DEFAULT_USER')
-    password = os.environ.get('RABBITMQ_DEFAULT_PASS')
-    broker = 'amqp://{}:{}@rabbit'.format(username, password)
-else:
-    broker = 'amqp://localhost'
-CELERY_BROKER_URL = broker
