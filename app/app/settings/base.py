@@ -17,9 +17,8 @@ from elasticsearch import Elasticsearch
 from elasticsearch_dsl.connections import connections
 from corsheaders.defaults import default_headers
 from django.core.exceptions import ImproperlyConfigured
-from app.credentials import (
-    AWS_STORAGE_BUCKET_NAME, AWS_REGION_NAME
-)
+from app.paths import *
+from app.storages import *
 
 
 def get_environment_variable(var_name):
@@ -33,22 +32,23 @@ def get_environment_variable(var_name):
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-PROJECT_ROOT = os.path.dirname(
-    os.path.dirname(
-        os.path.dirname(
-            os.path.abspath(__file__))))
-BASE_DIR = os.path.join(PROJECT_ROOT, 'app')
-COMMON_DIR = os.path.abspath(
-    os.path.join(
-        os.path.abspath(
-            os.path.dirname(__name__)),
-        '../'))
-sys.path.insert(1, COMMON_DIR)
+# PROJECT_ROOT = os.path.dirname(
+#     os.path.dirname(
+#         os.path.dirname(
+#             os.path.abspath(__file__))))
+
+# BASE_DIR = os.path.join(PROJECT_ROOT, 'app')
+# COMMON_DIR = os.path.abspath(
+#     os.path.join(
+#         os.path.abspath(
+#             os.path.dirname(__name__)),
+#         '../'))
+# sys.path.insert(1, COMMON_DIR)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'nje62b1kyvvc1!g_d@5a5qq!2bs6jl)isr^91cm=gv1&_h6m^5'
+SECRET_KEY = get_environment_variable('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
@@ -58,15 +58,6 @@ CORS_ALLOW_HEADERS = default_headers
 es_host = get_environment_variable('ELASTICSEARCH_URL')
 ES_CLIENT = Elasticsearch(['{}'.format(es_host)])
 connections.create_connection(hosts=['{}'.format(es_host)])
-docker_env = os.environ.get('DOCKER_ENV')
-
-if os.path.isfile('app/secrets.yaml'):
-    with open('app/secrets.yaml') as stream:
-        f = yaml.load(stream)
-        for k, v in f.items():
-            os.environ[k] = v
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -204,34 +195,12 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = ['--with-spec', '--spec-color']
 
 FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures'),)
-if docker_env:
+if (os.environ.get('RABBITMQ_DEFAULT_USER') and
+        os.environ.get('RABBITMQ_DEFAULT_PASS')):
+
     username = os.environ.get('RABBITMQ_DEFAULT_USER')
     password = os.environ.get('RABBITMQ_DEFAULT_PASS')
     broker = 'amqp://{}:{}@rabbit'.format(username, password)
 else:
     broker = 'amqp://localhost'
 CELERY_BROKER_URL = broker
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
-MEDIA_URL = '/uploads/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
-THUMBS_ROOT = os.path.join(MEDIA_ROOT, 'thumbs')
-
-BUCKET_NAME = AWS_STORAGE_BUCKET_NAME
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-REGION_HOST = 's3.{}.amazonaws.com'.format(AWS_REGION_NAME)
-
-THUMBNAIL_DEFAULT_STORAGE = 'app.storage_backends.MediaStorage'
-THUMBNAIL_BASEDIR = 'thumbs'
-
-DEFAULT_FILE_STORAGE = 'app.storage_backends.MediaStorage'
-
-THUMBNAIL_ALIASES = {
-    '': {
-        'small_thumb': {'size': (50, 50)},
-        'thumb': {'size': (100, 100)},
-        'medium': {'size': (200, 200)},
-        'medium_large': {'size': (250, 250)},
-        'large': {'size': (350, 350)}
-    },
-}
-THUMBNAIL_FORCE_OVERWRITE = True
