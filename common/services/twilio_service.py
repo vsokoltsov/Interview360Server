@@ -15,14 +15,18 @@ class TwilioService:
     def __init__(self):
         """ Initialize twilio service; Instanciate Client object. """
 
-        account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
-        auth_token = os.environ.get('TWILIO_AUTH_TOKEN')
-        self.client = Client(account_sid, auth_token)
-        if not account_sid and not auth_token:
+        self.account_sid = os.environ.get('TWILIO_ACCOUNT_SID', '')
+        self.auth_token = os.environ.get('TWILIO_AUTH_TOKEN', '')
+        if not self.account_sid and not self.auth_token:
             logging.warning(WARNING_MESSAGE)
+            return
+        self.client = Client(self.account_sid, self.auth_token)
 
     def phone_lookup(self, phone):
         """ Verify the give phone number. """
+        if not self.account_sid and not self.auth_token:
+            logging.warning(WARNING_MESSAGE)
+            return
 
         try:
             self.client.lookups.phone_numbers(phone).fetch()

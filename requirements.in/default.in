@@ -23,3 +23,4 @@ stevedore
 twilio
 pyyaml
 pip-tools
+google-cloud-storage

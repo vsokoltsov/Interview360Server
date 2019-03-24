@@ -38,3 +38,12 @@ Environment variables for using some cloud-based services
 * `AWS_SECRET` - API secret key from the AWS credentials
 * `AWS_REGION` - Default AWS user region, where the bucket will be stored
 * `S3_BUCKET` - Name of the bucket, which will be used for media storage. Must be unique
+
+
+### [GCP](https://cloud.google.com/)
+
+*Note* Implement via [Service accounts](https://cloud.google.com/compute/docs/access/service-accounts)
+
+* `GCP_BUCKET_NAME` - Name of the bucket for media files
+* `GCP_CREDENTIALS_NAME` - Name of the credentials file. Supposed, that file is located under `app/app/credentials` directory
+and has `json` format
