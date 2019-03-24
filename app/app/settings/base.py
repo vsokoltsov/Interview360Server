@@ -19,6 +19,7 @@ from app.paths import *
 from app.storages import *
 from app.credentials.rabbitmq import *
 from app.credentials.elasticsearch import *
+from app.credentials.mail import *
 
 
 def get_environment_variable(var_name):
@@ -32,8 +33,6 @@ def get_environment_variable(var_name):
 
 
 SECRET_KEY = get_environment_variable('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
 
 ALLOWED_HOSTS = ["*"]
 CORS_ORIGIN_ALLOW_ALL = True
@@ -104,7 +103,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'app.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -141,15 +139,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NumericPasswordValidator',
     },
 ]
-
-ANYMAIL = {
-    "MAILGUN_API_KEY": os.environ.get('MAILGUN_API_KEY'),
-    "MAILGUN_SENDER_DOMAIN": os.environ.get('MAILGUN_SERVER_NAME')
-}
-# or sendgrid.EmailBackend, or...
-EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
-# if you don't already have this in settings
-DEFAULT_FROM_EMAIL = "you@example.com"
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
