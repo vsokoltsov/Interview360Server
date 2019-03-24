@@ -6,7 +6,6 @@ Django>=1.11
 django-anymail
 django-cors-headers
 django-imagekit
-django-nose
 django-storages
 djangorestframework
 drf-nested-routers

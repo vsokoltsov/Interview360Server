@@ -1,5 +1,6 @@
 -r default.in
 
+django-nose
 django-debug-toolbar
 django-silk
 factory_boy

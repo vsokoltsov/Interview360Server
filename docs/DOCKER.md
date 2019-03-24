@@ -17,7 +17,7 @@
 
 ## Testing
 
-* `make test ARGS="<path to tests>"`
+* `make test ARGS="<path to tests>"` (on running application container)
 
 * Create file `secrets.yaml` in `/app/app` folder, where all your environment variables would be allocated
 
