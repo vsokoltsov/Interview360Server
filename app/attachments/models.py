@@ -25,7 +25,7 @@ class Image(Attachment):
     """Image implementation of attachment class."""
 
     DEFAULT_SOURCE = 'data'
-    DEFAULT_FORMAT = 'PNG'
+    DEFAULT_FORMAT = 'png'
 
     data = models.ImageField(upload_to='image')
     image_small_thumb = ImageSpecField(source=DEFAULT_SOURCE,
