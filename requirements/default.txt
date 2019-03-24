@@ -62,6 +62,7 @@ pynacl==1.3.0             # via paramiko
 pysocks==1.6.8            # via twilio
 python-dateutil==2.8.0    # via botocore, elasticsearch-dsl
 pytz==2018.9              # via babel, celery, django, flower, twilio
+pyyaml==5.1
 requests==2.21.0
 s3transfer==0.2.0         # via boto3
 simplegeneric==0.8.1
