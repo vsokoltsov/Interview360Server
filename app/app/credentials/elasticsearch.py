@@ -7,6 +7,7 @@ from elasticsearch import Elasticsearch
 from elasticsearch_dsl.connections import connections
 
 ELASTICSEARCH_AVAILABLE = False
+ES_CLIENT = None
 
 es_host = os.environ.get('ELASTICSEARCH_URL')
 if es_host:
