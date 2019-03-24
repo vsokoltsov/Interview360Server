@@ -49,4 +49,4 @@ if settings.DEBUG and SILK_ENABLED:
     ]
 
 urlpatterns += static(MEDIA_URL, document_root=MEDIA_ROOT)
-init_indexes()
+# init_indexes()

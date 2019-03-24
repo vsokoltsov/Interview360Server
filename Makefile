@@ -45,6 +45,12 @@ test:
 	docker exec -it interview360 \
 		python $(DEFAULT_APP_PATH)/manage.py test -s $(DEFAULT_APP_PATH)/$(ARGS)
 
+.PHONY: build_indexes
+build_indexes:
+				@echo "$@"
+				docker exec -it interview360 \
+					python $(DEFAULT_APP_PATH)/manage.py build_indexes
+
 .PHONY: pip_compile
 pip_compile:
 			@echo "$@"

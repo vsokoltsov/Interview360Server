@@ -1,3 +1,4 @@
+import logging
 from app.settings import ES_CLIENT
 from elasticsearch_dsl.query import MultiMatch
 from elasticsearch_dsl import Search
@@ -26,7 +27,14 @@ class SearchService:
             )
 
     def find(self, query_string, *companies):
-        """Search by given string."""
+        """ Search by given string. """
+
+        if ES_CLIENT is None:
+            logging.warning(
+                'Elasticsearch is disabled. In order to provide access, \
+                    set the ELASTICSEARCH_URL variable'
+            )
+            return []
 
         search = Search(using=ES_CLIENT, index=self.INDEX_NAME)
         if query_string:

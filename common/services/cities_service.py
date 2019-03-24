@@ -1,7 +1,11 @@
-import requests
 import os
+import logging
+
 import json
-import ipdb
+import requests
+
+WARNING_MESSAGE = 'Google Places API is not set. In order to use this functionality,\
+    please provide the GOOGLE_PLACES_API environment variable.'
 
 
 class CitiesService:
@@ -20,6 +24,10 @@ class CitiesService:
 
     def find_by_name(self, name):
         """Receive a list of matched cities by the name."""
+
+        if not self.api_key:
+            logging.warning(WARNING_MESSAGE)
+            return []
 
         params = {
             'input': name,

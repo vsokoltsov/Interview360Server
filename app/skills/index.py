@@ -1,9 +1,10 @@
 from elasticsearch_dsl import (
     DocType, Integer, Text
 )
+from common.indexes.default import DefaultIndex
 
 
-class SkillIndex(DocType):
+class SkillIndex(DefaultIndex):
     """Skill's index class."""
 
     id = Integer()

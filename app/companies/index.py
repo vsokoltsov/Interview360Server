@@ -1,9 +1,11 @@
 from elasticsearch_dsl import (
-    DocType, Date, Float, Integer, Boolean, Keyword, Text, Object
+    Date, Float, Integer, Boolean, Keyword, Text, Object
 )
 
+from common.indexes.default import DefaultIndex
 
-class CompanyIndex(DocType):
+
+class CompanyIndex(DefaultIndex):
     """Company's index class."""
 
     id = Integer()
@@ -40,7 +42,7 @@ class CompanyIndex(DocType):
         return obj.to_dict(include_meta=True)
 
 
-class SpecialtyIndex(DocType):
+class SpecialtyIndex(DefaultIndex):
     """Specialty's index class."""
 
     class Meta:
