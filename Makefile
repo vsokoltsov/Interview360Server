@@ -44,3 +44,9 @@ test:
 	@echo "$@"
 	docker exec -it interview360 \
 		python $(DEFAULT_APP_PATH)/manage.py test -s $(DEFAULT_APP_PATH)/$(ARGS)
+
+.PHONY: pip_compile
+pip_compile:
+			@echo "$@"
+			docker exec -it interview360 \
+				pip-compile --output-file /interview360/requirements/$(ARGS).txt /interview360/requirements.in/$(ARGS).in
