@@ -26,9 +26,11 @@ services:
 
   interview360:
     <<: *default_app
+    stdin_open: true
+    tty: true
     image: vsokoltsov/interview360
     container_name: interview360
-    command: bash -c "python3 app/manage.py migrate && cd app && python manage.py runserver 0.0.0.0:8000"
+    command: python /interview360/app/manage.py runserver 0.0.0.0:8000
     ports:
       - '8000:8000'
     links:
@@ -113,11 +115,6 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
-
-  chromedriver:
-    image: selenium/standalone-chrome
-    ports:
-      - "4444:4444"
 
 volumes:
   pg_data: {}
