@@ -1,0 +1,4 @@
+-e default.in
+
+watchtower==0.5.2
+raven==6.5.0
