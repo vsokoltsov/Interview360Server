@@ -10,6 +10,11 @@ down: docker-compose.yml
 	@echo "$@"
 	docker-compose down
 
+.PHONY: stop
+stop: docker-compose.yml
+	@echo "$@"
+	docker-compose stop $(ARGS)
+
 .PHONY: shell
 shell: 
 	@echo "$@"
@@ -37,7 +42,7 @@ migrate:
 .PHONY: debug
 debug:
 	@echo "$@"
-	docker attach  interview360
+	docker attach --sig-proxy=false interview360
 
 .PHONY: test
 test:
