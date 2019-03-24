@@ -38,9 +38,6 @@ SECRET_KEY = get_environment_variable('SECRET_KEY')
 ALLOWED_HOSTS = ["*"]
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_HEADERS = default_headers
-es_host = get_environment_variable('ELASTICSEARCH_URL')
-ES_CLIENT = Elasticsearch(['{}'.format(es_host)])
-connections.create_connection(hosts=['{}'.format(es_host)])
 
 INSTALLED_APPS = [
     'django.contrib.admin',
