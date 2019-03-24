@@ -2,7 +2,7 @@ amqp
 boto3
 celery
 Cerberus
-Django==1.11
+Django>=1.11
 django-anymail
 django-cors-headers
 django-imagekit
