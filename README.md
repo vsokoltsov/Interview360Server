@@ -15,8 +15,8 @@ Service for managing employees interview workflow.
 
 There are two main options of running and working with application:
 
-* [Vagrant](https://github.com/vforvad/Interview360Server/wiki/Vagrant-configuration)
-* [Docker](https://github.com/vforvad/Interview360Server/wiki/Docker-configuration)
+* [Vagrant](./docs/VAGRANT.md)
+* [Docker](./docs/DOCKER.md)
 
 Another options:
 
