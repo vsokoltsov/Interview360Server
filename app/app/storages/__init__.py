@@ -8,6 +8,7 @@ import logging
 
 from app.paths import *
 from app.credentials import *
+from google.oauth2 import service_account
 
 DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DEFAULT_STORAGE_PROVIDER_MESSAGE = "SELECTED FILE STORAGE PROVIDER - {}"
@@ -25,6 +26,7 @@ THUMBNAIL_ALIASES = {
 }
 THUMBNAIL_FORCE_OVERWRITE = True
 MEDIA_URL = '/{}/'.format(DEFAULT_UPLOADS_PATH)
+STATIC_URL = '/{}/'.format(DEFAULT_STATIC_PATH)
 THUMBNAIL_BASEDIR = DEFAULT_THUMBNAIL_PATH
 
 if (AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and
@@ -37,6 +39,17 @@ if (AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY and
     THUMBNAIL_DEFAULT_STORAGE = AWS_FILE_STORAGE_CLASS_PATH
     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
     REGION_HOST = 's3.{}.amazonaws.com'.format(AWS_REGION_NAME)
+    MEDIA_ROOT = DEFAULT_UPLOADS_PATH
+    THUMBS_ROOT = DEFAULT_THUMBNAIL_PATH
+elif (GCP_ACCESS_KEY and GCP_ACCESS_SECRET):
+    GCP_FILE_STORAGE_CLASS_PATH = 'app.storages.gcp.GCPStorage'
+    DEFAULT_FILE_STORAGE = GCP_FILE_STORAGE_CLASS_PATH
+    THUMBNAIL_DEFAULT_STORAGE = GCP_FILE_STORAGE_CLASS_PATH
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+        os.path.join(
+            BASE_DIR, 'app', 'credentials', GCP_CREDENTIALS_NAME
+        )
+    )
     MEDIA_ROOT = DEFAULT_UPLOADS_PATH
     THUMBS_ROOT = DEFAULT_THUMBNAIL_PATH
 else:
