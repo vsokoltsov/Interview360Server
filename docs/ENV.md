@@ -27,6 +27,7 @@ Optional environment variables. Use them as a flag for specific service.
 * `TWILIO_ACCOUNT_SID` - Secret key from [Twilio](https://www.twilio.com/) account
 * `TWILIO_AUTH_TOKEN` - Authorization token from [Twilio](https://www.twilio.com/) account
 * `GOOGLE_PLACES_API` - API key from [Google Places](https://cloud.google.com/maps-platform/places/)
+* `DISABLE_FILE_LOGGING` - Flag for disabling the filelogs, which will be stored in `app/app/logs` folder
 
 ## Provider-base environments
 
