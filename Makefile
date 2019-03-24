@@ -3,7 +3,7 @@ DEFAULT_APP_PATH := /interview360/app
 .PHONY: up
 up: docker-compose.yml
 	@echo "$@"
-	docker-compose up
+	docker-compose up $(ARGS)
 
 .PHONY: down
 down: docker-compose.yml
