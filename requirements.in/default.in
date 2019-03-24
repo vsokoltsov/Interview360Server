@@ -15,10 +15,6 @@ elasticsearch
 elasticsearch-dsl
 Fabric
 flower
-ipdb
-ipython
-mock
-nose
 psycopg2
 requests
 simplegeneric

@@ -1,5 +1,10 @@
 -r default.in
 
-django-debug-toolbar==1.9.1
-django-silk==2.0.0
-factory_boy==2.10.0
+django-debug-toolbar
+django-silk
+factory_boy
+ipdb
+ipython
+mock
+nose
+pinocchio

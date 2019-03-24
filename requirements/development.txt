@@ -17,6 +17,7 @@ cerberus==1.1
 certifi==2017.4.17        # via requests
 cffi==1.10.0              # via bcrypt, cryptography, pynacl
 chardet==3.0.4            # via requests
+colorama==0.4.1           # via pinocchio
 cryptography==2.0.3       # via paramiko
 decorator==4.0.11         # via ipython, traitlets
 django-anymail==0.10
@@ -35,7 +36,7 @@ easy-thumbnails==2.4.2
 elasticsearch-dsl==5.3.0
 elasticsearch==5.4.0
 fabric==1.14.0
-factory_boy==2.10.0
+factory-boy==2.10.0
 faker==1.0.4              # via factory-boy
 flower==0.9.2
 gprof2dot==2016.10.13     # via django-silk
@@ -56,6 +57,7 @@ pexpect==4.2.1            # via ipython
 pickleshare==0.7.4        # via ipython
 pilkit==2.0               # via django-imagekit
 pillow==4.3.0             # via easy-thumbnails
+pinocchio==0.4.2
 prompt-toolkit==1.0.14    # via ipython
 psycopg2==2.7.1
 ptyprocess==0.5.2         # via pexpect
