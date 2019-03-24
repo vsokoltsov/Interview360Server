@@ -1,3 +1,5 @@
+DEFAULT_APP_PATH := /interview360/app
+
 .PHONY: up
 up: docker-compose.yml
 	@echo "$@"
@@ -18,19 +20,19 @@ shell:
 python_shell:
 	@echo "$@"
 	docker exec -it interview360 \
-		python /interview360/app/manage.py shell
+		python $(DEFAULT_APP_PATH)/manage.py shell
 
 .PHONY: dbshell
 dbshell:
 	@echo "$@"
 	docker exec -it interview360 \
-		python /interview360/app/manage.py dbshell
+		python $(DEFAULT_APP_PATH)/manage.py dbshell
 
 .PHONY: migrate
 migrate:
 	@echo "$@"
 	docker exec -it interview360 \
-		python /interview360/app/manage.py migrate
+		python $(DEFAULT_APP_PATH)/manage.py migrate
 
 .PHONY: debug
 debug:
@@ -41,4 +43,4 @@ debug:
 test:
 	@echo "$@"
 	docker exec -it interview360 \
-		python /interview360/app/manage.py test
+		python $(DEFAULT_APP_PATH)/manage.py test -s $(DEFAULT_APP_PATH)/$(ARGS)
