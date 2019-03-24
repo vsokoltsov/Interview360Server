@@ -5,7 +5,8 @@ from django.contrib.postgres.fields import JSONField
 class Resume(models.Model):
     """Resume representation in the system."""
 
-    user = models.ForeignKey('authorization.User', null=False)
+    user = models.ForeignKey('authorization.User',
+                             null=False, on_delete=models.PROTECT)
     title = models.CharField(max_length=255, null=False, blank=False)
     description = models.TextField()
     skills = models.ManyToManyField('skills.Skill')
@@ -22,11 +23,12 @@ class Resume(models.Model):
 class Workplace(models.Model):
     """Workplace representation in the system."""
 
-    company = models.ForeignKey('companies.Company', null=False)
+    company = models.ForeignKey(
+        'companies.Company', null=False, on_delete=models.PROTECT)
     resume = models.ForeignKey(
         'resumes.Resume',
         null=False,
-        related_name='workplaces')
+        related_name='workplaces', on_delete=models.PROTECT)
     position = models.CharField(max_length=255, null=False, blank=False)
     description = models.TextField()
     start_date = models.DateField(null=False)
@@ -43,7 +45,8 @@ class Workplace(models.Model):
 class Contact(models.Model):
     """Representation of the user's contact."""
 
-    resume = models.OneToOneField('resumes.Resume', null=False)
+    resume = models.OneToOneField(
+        'resumes.Resume', null=False, on_delete=models.PROTECT)
     email = models.EmailField(max_length=255, unique=True, null=False)
     phone = models.CharField(max_length=255, unique=True, null=False)
     phone_comment = models.TextField(null=True, blank=True)

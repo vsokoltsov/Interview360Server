@@ -13,7 +13,8 @@ class Attachment(models.Model):
 
         abstract = True
 
-    content_type = models.ForeignKey(ContentType, null=False)
+    content_type = models.ForeignKey(
+        ContentType, null=False, on_delete=models.PROTECT)
     object_id = models.PositiveIntegerField(null=True)
     content_object = GenericForeignKey('content_type', 'object_id')
 

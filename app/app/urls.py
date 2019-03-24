@@ -22,9 +22,6 @@ from django.contrib import admin
 from .settings import MEDIA_URL, MEDIA_ROOT
 from common.indexes.base import init_indexes
 from rest_framework.renderers import CoreJSONRenderer
-import coreapi
-import coreschema
-from openapi_codec import encode
 
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response

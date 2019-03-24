@@ -11,13 +11,13 @@ BROWSER = 2
 class Notification(models.Model):
     """Notification representation in the system."""
 
-    user = models.ForeignKey(User, null=False)
+    user = models.ForeignKey(User, null=False, on_delete=models.PROTECT)
     active = models.BooleanField(default=True)
     type = models.IntegerField(
         null=False,
         validators=[MaxValueValidator(2), MinValueValidator(1)]
     )
-    content_type = models.ForeignKey(ContentType)
+    content_type = models.ForeignKey(ContentType, on_delete=models.PROTECT)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
     created_at = models.DateTimeField(auto_now_add=True)

@@ -1,6 +1,6 @@
 from django import forms
 from django.db import transaction
-from django_pglocks import advisory_lock
+from common.advisory_lock import advisory_lock
 from rest_framework.authtoken.models import Token
 
 from authorization.models import User

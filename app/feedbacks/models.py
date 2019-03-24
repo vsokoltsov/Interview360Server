@@ -16,11 +16,13 @@ class Feedback(models.Model):
         (DONE, 'Done')
     )
 
-    user = models.ForeignKey('authorization.User', null=False)
-    company = models.ForeignKey('companies.Company', null=False)
+    user = models.ForeignKey('authorization.User',
+                             null=False, on_delete=models.PROTECT)
+    company = models.ForeignKey(
+        'companies.Company', null=False, on_delete=models.PROTECT)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    content_type = models.ForeignKey(ContentType)
+    content_type = models.ForeignKey(ContentType, on_delete=models.PROTECT)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
     status = models.IntegerField(

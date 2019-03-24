@@ -12,4 +12,4 @@ if SILK_ENABLED:
         'silk'
     ]
 
-LOGGIN = logs
+LOGGING = logs
