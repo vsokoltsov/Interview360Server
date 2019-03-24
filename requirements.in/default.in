@@ -3,7 +3,7 @@ boto
 boto3
 celery
 Cerberus
-Django==1.11
+Django==1.11.20
 django-anymail
 django-cors-headers
 django-imagekit
