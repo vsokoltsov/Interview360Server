@@ -26,7 +26,7 @@ jobs:
             docker container prune -f
             docker image prune -f
             docker-compose up -d interview360 db
-            docker-compose run interview360 bash -c "python /interview360/app/manage.py test"
+            docker-compose run interview360 bash -c "python /interview360/app/manage.py test /interview360/app/"
 
       # - deploy:
       #     name: 'Deploy the new image'
