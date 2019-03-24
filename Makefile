@@ -48,5 +48,6 @@ test:
 .PHONY: pip_compile
 pip_compile:
 			@echo "$@"
+			rm -rf /interview360/requirements/$(ARGS).txt
 			docker exec -it interview360 \
 				pip-compile --output-file /interview360/requirements/$(ARGS).txt /interview360/requirements.in/$(ARGS).in
