@@ -81,27 +81,33 @@ services:
   #     - app
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.3
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.2
     container_name: elasticsearch
     environment:
-      - xpack.security.enabled=false
-      - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
-      - "discovery.zen.ping.unicast.hosts=elasticsearch"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    links:
-      - kibana
     ports:
       - "9200:9200"
 
   kibana:
     container_name: kibana
-    image: docker.elastic.co/kibana/kibana:5.6.3
+    image: docker.elastic.co/kibana/kibana:6.6.2
     ports:
       - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+  logstash:
+    build:
+      context: ./config/logstash/
+    container_name: logstash
+    ports:
+      - "9600:9600"
+      - "5000:5000"
+    volumes:
+      - ./config/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./config/logstash/pipeline:/usr/share/logstash/pipeline:ro
+    depends_on: 
+      - 'elasticsearch'
 
   rabbit:
     container_name: rabbitmq
