@@ -24,3 +24,4 @@ twilio
 pyyaml
 pip-tools
 google-cloud-storage
+python-logstash
