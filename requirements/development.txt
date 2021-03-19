@@ -34,7 +34,7 @@ django-nose==1.4.6
 django-silk==3.0.1
 django-storages==1.7.1
 django==1.11.20
-djangorestframework==3.9.2
+djangorestframework==3.11.2
 docutils==0.14            # via botocore
 drf-nested-routers==0.91
 drf-writable-nested==0.5.1
