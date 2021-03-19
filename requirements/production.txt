@@ -26,7 +26,7 @@ django-cors-headers==2.5.2
 django-imagekit==4.0.2
 django-storages==1.7.1
 django==1.11.20
-djangorestframework==3.9.2
+djangorestframework==3.11.2
 docutils==0.14            # via botocore
 drf-nested-routers==0.91
 drf-writable-nested==0.5.1
