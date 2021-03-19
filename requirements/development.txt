@@ -58,7 +58,7 @@ ipdb==0.12
 ipython-genutils==0.2.0   # via traitlets
 ipython==7.4.0
 jedi==0.13.3              # via ipython
-jinja2==2.10              # via django-silk
+jinja2==2.11.3              # via django-silk
 jmespath==0.9.4           # via boto3, botocore
 kombu==4.3.0              # via celery
 markupsafe==1.1.1         # via jinja2
