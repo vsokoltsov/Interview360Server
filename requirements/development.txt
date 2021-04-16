@@ -28,7 +28,7 @@ decorator==4.4.0          # via ipython, traitlets
 django-anymail==6.0
 django-appconf==1.0.3     # via django-imagekit
 django-cors-headers==2.5.2
-django-debug-toolbar==1.11
+django-debug-toolbar==1.11.1
 django-imagekit==4.0.2
 django-nose==1.4.6
 django-silk==3.0.1
