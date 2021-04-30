@@ -62,7 +62,7 @@ python-dateutil==2.8.0    # via botocore, elasticsearch-dsl
 pytz==2018.9              # via babel, celery, django, flower, google-api-core, twilio
 pyyaml==5.1
 requests==2.21.0
-rsa==4.0                  # via google-auth
+rsa==4.7                  # via google-auth
 s3transfer==0.2.0         # via boto3
 simplegeneric==0.8.1
 six==1.12.0               # via bcrypt, cryptography, django-anymail, django-appconf, django-imagekit, elasticsearch-dsl, google-api-core, google-auth, google-resumable-media, pip-tools, protobuf, pynacl, python-dateutil, stevedore, twilio
