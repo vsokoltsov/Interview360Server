@@ -56,7 +56,7 @@ idna==2.8                 # via requests
 invoke==1.2.0             # via fabric
 ipdb==0.12
 ipython-genutils==0.2.0   # via traitlets
-ipython==7.4.0
+ipython==7.16.3
 jedi==0.13.3              # via ipython
 jinja2==2.10              # via django-silk
 jmespath==0.9.4           # via boto3, botocore
