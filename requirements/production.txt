@@ -34,7 +34,7 @@ easy-thumbnails==2.6
 elasticsearch-dsl==6.3.1
 elasticsearch==6.3.1
 fabric==2.4.0
-flower==0.9.3
+flower==1.2.0
 google-api-core==1.8.2    # via google-cloud-core, google-cloud-storage
 google-auth==1.6.3        # via google-api-core
 google-cloud-core==0.29.1  # via google-cloud-storage
